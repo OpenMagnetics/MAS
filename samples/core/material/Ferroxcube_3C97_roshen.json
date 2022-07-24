@@ -1,0 +1,74 @@
+{
+    "type": "commercial",
+    "composition": "ferrite",
+    "name": "Ferroxcube 3C97",
+    "permeability": {
+        "initial": [
+            {
+                "value": 3000,
+                "tolerance": 0.20,
+                "temperature": 25,
+                "magneticFluxDensityPeak": 0.00025
+            }
+        ]
+    },
+    "volumetricLosses": {
+        "method": "roshen",
+        "remanence": [
+            {
+                "magneticFluxDensity": 0.13258847770214024,
+                "magneticField": 0,
+                "temperature": 25
+            },
+            {
+                "magneticFluxDensity": 0.05772561749292473,
+                "magneticField": 0,
+                "temperature": 100
+            }
+        ],
+        "coercive_force": [
+            {
+                "magneticFluxDensity": 0,
+                "magneticField": 14.418946774162618,
+                "temperature": 25
+            },
+            {
+                "magneticFluxDensity": 0,
+                "magneticField": 8.669621596391217,
+                "temperature": 100
+            }
+        ],
+        "saturation": [
+            {
+                "magneticFluxDensity": 0.3912714191587269,
+                "magneticField": 80,
+                "temperature": 25
+            },
+            {
+                "magneticFluxDensity": 0.35221929492417337,
+                "magneticField": 75,
+                "temperature": 100
+            }
+        ],
+        "resistivity": {
+            "value": 5,
+            "temperature": 25
+        },
+        "referenceVolumetricLosses": [
+            {
+                "magneticFluxDensity": 0.2,
+                "frequency": 100000,
+                "temperature": 25,
+                "volumetricLosses": 350000
+            },
+            {
+                "magneticFluxDensity": 0.2,
+                "frequency": 100000,
+                "temperature": 100,
+                "volumetricLosses": 290000
+            }
+        ]
+    }
+}
+
+

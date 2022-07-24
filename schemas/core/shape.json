@@ -1,0 +1,29 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/alfvii/mal/schemas/core/shape.json",
+    "title": "core/shape",
+    "description": "A shape for the magnetic cores",
+    "type": "object",
+    "properties": {
+        "type": {
+            "description": "The type of a magnetic shape",
+            "type": "string",
+            "enum": ["commercial", "custom"]
+        },
+        "family": {
+            "description": "The family of a magnetic shape",
+            "type": "string",
+            "enum": ["u", "e", "etd", "eer", "p", "rm", "ep", "pm", "el", "er", "pq", "efd", "planarE"]
+        },
+        "name": {
+            "description": "The name of a magnetic shape, according to EN 62317",
+            "type": "string"
+        },
+        "dimensions": {
+            "description": "The dimensions of a magnetic shape, keys must be as defined in EN 62317",
+            "type": "object",
+            "additionalProperties": {"type": "number"}
+        }
+    },
+    "required": ["type", "family"]
+}

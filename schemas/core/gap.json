@@ -1,0 +1,53 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/alfvii/mal/schemas/core/gap.json",
+    "title": "core/gap",
+    "description": "A gap for the magnetic cores",
+    "type": "object",
+    "properties": {
+        "type": {
+            "description": "The type of a gap",
+            "type": "string",
+            "enum": ["additive", "subtractive", "residual"]
+        },
+        "length": {
+            "description": "The length of the gap",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "coordinates": {
+            "description": "The coordinates of the center of the gap, referred to the center of thw main column",
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+        },
+        "shape": {
+            "description": "The shape of the gap",
+            "type": "string",
+            "enum": ["circular", "square"]
+        },
+        "distanceClosestNormalSurface": {
+            "description": "The distance where the closest perpendicular surface is. This usually is half the winding height",
+            "type": "number",
+            "minimum": 0
+        },
+        "area": {
+            "description": "Geometrical area of the gap",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "sectionDimensions": {
+            "description": "Dimension of the section normal to the magnetic flux",
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2,
+        }
+    },
+    "required": ["length", "type"]
+}

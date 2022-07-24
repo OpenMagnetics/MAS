@@ -1,0 +1,48 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/alfvii/mal/schemas/core.json",
+    "title": "core",
+    "description": "The description of a magnetic core",
+    "type": "object",
+    "properties": {
+        "functionalDescription":{
+            "description": "The data from the core only based on its function, in a way that can be used by analytical models.",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "description": "The type of core",
+                    "type": "string",
+                    "enum": ["two-piece set", "toroidal"]
+                },
+                "material": {
+                    "oneOf": [
+                        {"$ref": "core/material.json"},
+                        {
+                            "description": "The name of the material used in the core",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "shape": {
+                    "oneOf": [
+                        {"$ref": "core/shape.json"},
+                        {
+                            "description": "The name of the shape used in the core",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "gap": {
+                    "$ref": "core/gap.json"
+                },
+                "number_stacks": {
+                    "description": "The number of stacked cores",
+                    "type": "integer",
+                    "minimum": 1
+                }
+            },
+            "required": ["type", "material", "shape", "gap"]
+        }
+    },
+    "required": ["functionalDescription"]
+}
