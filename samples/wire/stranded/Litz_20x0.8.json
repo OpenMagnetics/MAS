@@ -1,0 +1,31 @@
+{
+    "type": "litz",
+    "numberConductors": 20,
+    "manufacturer": "Elektrisola",
+    "strand": {
+        "type": "round",
+        "material": "copper",
+        "numberConductors": 1,
+        "conductingDiameter": {
+            "nominal": 0.00008
+        },
+        "outerDiameter": {
+            "minimum": 0.000095,
+            "maximum": 0.000101
+        },
+        "coating":{
+            "type": "enamelled",
+            "maximumThickness": 0.0000105,
+            "grade": 2,
+            "breakdownVoltage": 850
+        }
+    },
+    "outerDiameter": {
+        "minimum": 0.540,
+        "maximum": 0.574
+    },
+    "coating": {
+        "type": "served",
+        "serving": "single"
+    }
+}

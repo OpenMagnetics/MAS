@@ -1,0 +1,73 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "insulation/wireCoating",
+    "description": "A coating for a wire",
+    "type": "object",
+    "properties": {
+        "type": {
+            "description": "The type of the coating",
+            "type": "string",
+            "enum": ["bare", "enamelled", "insulated", "served", "taped", "extruded"]
+        },
+        "maximumThickness": {
+            "description": "The maximum thickness of the insulation around the wire, in m",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "material": {
+            "oneOf": [
+                {"$ref": "file://schemas/insulation/material.json"},
+                {
+                    "description": "The name of the material used in the insulation",
+                    "type": "string"
+                }
+            ]
+        },
+        "grade": {
+            "description": "The grade of the insulation around the wire",
+            "type": "integer",
+            "exclusiveMinimum": 0
+        },
+        "numberLayers": {
+            "description": "The number of layers of the insulation around the wire",
+            "type": "integer",
+            "exclusiveMinimum": 0
+        },
+        "thicknessLayers": {
+            "description": "The thickness of the layers of the insulation around the wire, in m",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "breakdownVoltage": {
+            "description": "The thickness of the insulation aorund the wire, in V",
+            "type": "number",
+            "exclusiveMinimum": 0
+        }
+    },
+    "allOf": [
+        {
+            "if": {
+                "properties": { "type": { "const": "bare" } }
+            },
+            "then": {
+                "required": ["type"]
+            }
+        },
+        {
+            "if": {
+                "properties": { "type": { "const": "insulated" } }
+            },
+            "then": {
+                "required": ["type", "material", "numberLayers", "thicknessLayers"]
+            }
+        },
+        {
+            "if": {
+                "properties": { "type": { "const": "enamelled" } }
+            },
+            "then": {
+                "required": ["type", "grade"]
+            }
+        }
+    ]
+}

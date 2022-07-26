@@ -1,14 +1,18 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://github.com/alfvii/mal/schemas/core.json",
+    "$id": "resource:/schemas/core#",
     "title": "core",
     "description": "The description of a magnetic core",
     "type": "object",
     "properties": {
         "functionalDescription":{
-            "description": "The data from the core only based on its function, in a way that can be used by analytical models.",
+            "description": "The data from the core based on its function, in a way that can be used by analytical models.",
             "type": "object",
             "properties": {
+                "name": {
+                    "description": "The name of core",
+                    "type": "string"
+                },
                 "type": {
                     "description": "The type of core",
                     "type": "string",
@@ -16,7 +20,7 @@
                 },
                 "material": {
                     "oneOf": [
-                        {"$ref": "core/material.json"},
+                        {"$ref": "file://schemas/core/material.json"},
                         {
                             "description": "The name of the material used in the core",
                             "type": "string"
@@ -25,7 +29,7 @@
                 },
                 "shape": {
                     "oneOf": [
-                        {"$ref": "core/shape.json"},
+                        {"$ref": "file://schemas/core/shape.json"},
                         {
                             "description": "The name of the shape used in the core",
                             "type": "string"
@@ -33,7 +37,12 @@
                     ]
                 },
                 "gap": {
-                    "$ref": "core/gap.json"
+                    "description": "The lists of gaps in the magnetic core",
+                    "type": "array",
+                    "items": {
+                        "$ref": "file://schemas/core/gap.json"
+                    },
+                    "uniqueItems": true
                 },
                 "number_stacks": {
                     "description": "The number of stacked cores",
@@ -42,7 +51,121 @@
                 }
             },
             "required": ["type", "material", "shape", "gap"]
+        },
+        "geometricalDescription":{
+            "description": "The data from the core based on its geometrical description, in a way that can be used by CAD models.",
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {"$ref": "#/$defs/piece"},
+                    {"$ref": "#/$defs/spacer"}
+                ]
+            },
+            "uniqueItems": true
         }
     },
-    "required": ["functionalDescription"]
+    "required": ["functionalDescription"],
+
+    "$defs": {
+        "spacer":{
+            "description": "Data describing the spacer used to separate cores in additive gaps",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "spacer"
+                },
+                "material": {
+                    "oneOf": [
+                        {"$ref": "file://schemas/insulation/material.json"},
+                        {
+                            "description": "The name of the material used in the insulation",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "dimensions": {
+                    "description": "Dimensions of the cube defining the spacer",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                },
+                "coordinates": {
+                    "description": "The coordinates of the center of the gap, referred to the center of the main column",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                }
+            },
+            "required": ["type", "material", "dimensions", "coordinates"]
+        },
+        "machining":{
+            "description": "Data describing the machining applied to a piece",
+            "type": "object",
+            "properties": {
+                "length": {
+                    "description": "Length of the machining",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "coordinates": {
+                    "description": "The coordinates of the start of the machining, referred to the top of the main column of the piece",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3,
+                    "default": [0, 0, 0]
+                }
+            },
+            "required": ["length", "coordinates"]
+        },
+        "piece":{
+            "description": "Data describing the a piece of a core",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "description": "The type of piece",
+                    "type": "string",
+                    "enum": ["half set", "toroidal", "sheet"]
+                },
+                "material": {
+                    "oneOf": [
+                        {"$ref": "file://schemas/core/material.json"},
+                        {
+                            "description": "The name of the material used in the piece",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "shape": {
+                    "oneOf": [
+                        {"$ref": "file://schemas/core/shape.json"},
+                        {
+                            "description": "The name of the shape used in the piece",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "coordinates": {
+                    "description": "The coordinates of the top of the piece, referred to the center of the main column",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                },
+                "machining": {"$ref": "#/$defs/machining"}
+            },
+            "required": ["type", "material", "shape", "coordinates"]
+        }
+    }
 }

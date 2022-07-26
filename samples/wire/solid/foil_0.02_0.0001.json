@@ -1,0 +1,28 @@
+{
+    "type": "foil",
+    "material": "copper",
+    "numberConductors": 1,
+    "conductingHeight": {
+        "minimum": 0.0193,
+        "nominal": 0.02,
+        "maximum": 0.0207
+    },
+    "conductingThickness": {
+        "nominal": 0.0001
+    },
+    "outerHeight": {
+        "minimum": 0.0193,
+        "nominal": 0.02,
+        "maximum": 0.0207
+    },
+    "outerThickness": {
+        "minimum": 0.00009,
+        "maximum": 0.00011
+    },
+    "coating":{
+        "type": "enamelled",
+        "maximumThickness": 0.00016,
+        "grade": 1,
+        "breakdownVoltage": 1600
+    }
+}

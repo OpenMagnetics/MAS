@@ -1,0 +1,28 @@
+{
+    "type": "rectangular",
+    "material": "copper",
+    "numberConductors": 1,
+    "conductingWidth": {
+        "minimum": 0.00393,
+        "nominal": 0.004,
+        "maximum": 0.00407
+    },
+    "conductingThickness": {
+        "minimum": 0.00135,
+        "nominal": 0.0014,
+        "maximum": 0.00145
+    },
+    "outerWidth": {
+        "nominal": 0.00405
+    },
+    "outerThickness": {
+        "minimum": 0.00138,
+        "maximum": 0.00161
+    },
+    "coating":{
+        "type": "enamelled",
+        "maximumThickness": 0.00016,
+        "grade": 1,
+        "breakdownVoltage": 1600
+    }
+}

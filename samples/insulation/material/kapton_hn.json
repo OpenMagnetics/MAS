@@ -1,0 +1,50 @@
+{
+    "composition": "polyimide",
+    "name": "Kapton HN",
+    "manufacturer": "DuPont",
+    "thermalConductivity": 0.2,
+    "dielectricStrength": [
+        {
+            "value": 303e6,
+            "thickness": 25e-6,
+            "humidity": 0.5
+        },
+        {
+            "value": 240e6,
+            "thickness": 50e-6,
+            "humidity": 0.5
+        },
+        {
+            "value": 205e6,
+            "thickness": 75e-6,
+            "humidity": 0.5
+        },
+        {
+            "value": 154e6,
+            "thickness": 125e-6,
+            "humidity": 0.5
+        },
+        {
+            "value": 339e6,
+            "thickness": 25e-6,
+            "humidity": 0
+        },
+        {
+            "value": 315e6,
+            "thickness": 25e-6,
+            "humidity": 0.3
+        },
+        {
+            "value": 280e6,
+            "thickness": 25e-6,
+            "humidity": 0.8
+        },
+        {
+            "value": 268e6,
+            "thickness": 25e-6,
+            "humidity": 1
+        }
+    ]
+}
+
+

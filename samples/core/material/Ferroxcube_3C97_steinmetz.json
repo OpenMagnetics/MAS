@@ -1,7 +1,8 @@
 {
     "type": "commercial",
     "composition": "ferrite",
-    "name": "Ferroxcube 3C97",
+    "name": "3C97",
+    "manufacturer": "Ferroxcube",
     "permeability": {
         "initial": [
             {

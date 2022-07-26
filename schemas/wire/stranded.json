@@ -1,0 +1,84 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "resource:/schemas/wire/strand#",
+    "title": "wire/strand",
+    "description": "The description of a strand magnet wire",
+    "type": "object",
+    "properties": {
+        "type": {
+            "description": "The type of wire",
+            "type": "string",
+            "const": "litz"
+        },
+        "standard": {
+            "description": "The standard of wire",
+            "type": "string",
+            "enum": ["IEC 60317", "JIS C3202", "NEMA MW 1000C"]
+        },
+        "manufacturer": {
+            "description": "The manufacturer of the wire",
+            "type": "string"
+        },
+        "manufacturerPartNumber": {
+            "description": "The part number of manufacturer for the wire",
+            "type": "string"
+        },
+        "strand": {
+            "description": "The wire used as strands",
+            "oneOf": [
+                {"$ref": "file://schemas/wire/solid.json"},
+                {
+                    "description": "The name of the wire used as strand",
+                    "type": "string"
+                }
+            ]
+        },
+        "numberConductors": {
+            "description": "The number of conductors in the wire",
+            "type": "number",
+            "exclusiveMinimum": 1
+        },
+        "outerDiameter": {
+            "description": "The outer diameter of the wire, in m",
+            "$ref": "#/$defs/dimension"
+        },
+        "coating": {
+            "oneOf": [
+                {"$ref": "file://schemas/insulation/wireCoating.json"},
+                {
+                    "description": "The name of the coating used in the wire",
+                    "type": "string"
+                }
+            ]
+        }
+    },
+    "required": ["type", "strand", "numberConductors", "outerDiameter", "coating"],
+
+    "$defs": {
+        "dimension": {
+            "description": "A dimension of the wire, in m",
+            "type": "object",
+            "properties": {
+                "minimum": {
+                    "description": "The minimum value of the dimension, in m",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "nominal": {
+                    "description": "The nominal value of the dimension, in m",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "maximum": {
+                    "description": "The maximum value of the dimension, in m",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                    }
+                },
+            "anyOf": [
+                {"required": ["nominal"]},
+                {"required": ["maximum"]}
+            ]
+        }
+    }
+}

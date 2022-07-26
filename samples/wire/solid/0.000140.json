@@ -1,0 +1,18 @@
+{
+    "type": "round",
+    "material": "copper",
+    "numberConductors": 1,
+    "conductingDiameter": {
+        "nominal": 0.000140
+    },
+    "outerDiameter": {
+        "minimum": 0.000151,
+        "maximum": 0.000160
+    },
+    "coating":{
+        "type": "enamelled",
+        "maximumThickness": 0.00002,
+        "grade": 1,
+        "breakdownVoltage": 1600
+    }
+}

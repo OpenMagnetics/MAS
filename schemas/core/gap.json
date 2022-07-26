@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://github.com/alfvii/mal/schemas/core/gap.json",
+    "$id": "resource:/schemas/core/gap#",
     "title": "core/gap",
     "description": "A gap for the magnetic cores",
     "type": "object",
@@ -8,7 +8,8 @@
         "type": {
             "description": "The type of a gap",
             "type": "string",
-            "enum": ["additive", "subtractive", "residual"]
+            "enum": ["additive", "subtractive", "residual"],
+            "default": "subtractive"
         },
         "length": {
             "description": "The length of the gap",
@@ -22,7 +23,7 @@
                 "type": "number"
             },
             "minItems": 3,
-            "maxItems": 3,
+            "maxItems": 3
         },
         "shape": {
             "description": "The shape of the gap",
@@ -46,7 +47,7 @@
                 "type": "number"
             },
             "minItems": 2,
-            "maxItems": 2,
+            "maxItems": 2
         }
     },
     "required": ["length", "type"]

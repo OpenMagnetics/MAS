@@ -1,0 +1,50 @@
+{
+    "type": "litz",
+    "numberConductors": 550,
+    "manufacturer": "Rubadue",
+    "manufacturerPartNumber": "TXXL550/44FXXX-3(MWXX)",
+    "strand": {
+        "type": "round",
+        "material": "copper",
+        "numberConductors": 1,
+        "conductingDiameter": {
+            "nominal": 5.08e-5
+        },
+        "outerDiameter": {
+            "nominal": 6.35e-5
+        },
+        "coating":{
+            "type": "enamelled",
+            "maximumThickness": 2.54e-6,
+            "grade": 1,
+            "breakdownVoltage": 1600
+        }
+    },
+    "outerDiameter": {
+        "maximum": 0.00220726
+    },
+    "coating": {
+        "type": "insulated",
+        "material": {
+            "composition": "teflon",
+            "name": "FEP",
+            "manufacturer": "Rubadue",
+            "dielectricStrength":[
+                {
+                    "value": 260e6,
+                    "thickness": 0.0000254
+                },
+                {
+                    "value": 70e6,
+                    "thickness": 0.005
+                }
+            ],
+            "rating": {
+                "temperature": 155,
+                "voltage": 1000
+            }
+        },
+        "numberLayers": 3,
+        "thicknessLayers": 7.62e-5
+    }
+}

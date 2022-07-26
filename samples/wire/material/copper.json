@@ -1,0 +1,39 @@
+{
+    "name": "copper",
+    "permeability": 0.999994,
+    "resistivity": {
+        "referenceValue": 1.678e-08,
+        "referenceTemperature": 20.0,
+        "temperatureCoefficient": 0.004041
+    },
+    "thermalConductivity": [
+        {
+            "value": 413,
+            "temperature": -73
+        },
+        {
+            "value": 401,
+            "temperature": 0
+        },
+        {
+            "value": 392,
+            "temperature": 127
+        },
+        {
+            "value": 383,
+            "temperature": 327
+        },
+        {
+            "value": 371,
+            "temperature": 527
+        },
+        {
+            "value": 357,
+            "temperature": 727
+        },
+        {
+            "value": 342,
+            "temperature": 927
+        }
+    ]
+}

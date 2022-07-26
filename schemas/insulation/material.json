@@ -1,0 +1,75 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "insulation/material",
+    "description": "A material for insulation",
+    "type": "object",
+    "properties": {
+        "composition": {
+            "description": "The composition of a insulation material",
+            "type": "string",
+            "enum": ["polyimide", "bakelite", "nylon", "paper", "polystyrene", "teflon", "air"]
+        },
+        "name": {
+            "description": "The name of a insulation material",
+            "type": "string"
+        },
+        "manufacturer": {
+            "description": "The manufacturer of the insulation material",
+            "type": "string"
+        },
+        "dielectricStrength":{
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/dieletricStrengthPoint"
+            },
+            "minItems": 1
+        },
+        "thermalConductivity": {
+            "description": "The thermal conductivity of the insulation material, in W / m * K",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "rating": {
+            "description": "The rating of the material",
+            "type": "object",
+            "properties": {
+                "temperature": {
+                    "description": "The temperature rating of the material",
+                    "type": "number"
+                },
+                "voltage": {
+                    "description": "The voltage rating of the material",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            }
+        }
+    },
+    "required": ["name", "dielectricStrength"],
+
+    "$defs": {
+        "dieletricStrengthPoint": {
+            "description": "data for describing one point of dieletric strength",
+            "type": "object",
+            "properties": {
+                "value": {
+                    "description": "Dieletric strength value, in V / m",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "thickness": {
+                    "description": "Thickness of the material",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "humidity": {
+                    "description": "Humidity for the field value, in proportion over 1",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                }
+            },
+            "required": ["value"]
+        }
+    }
+}
