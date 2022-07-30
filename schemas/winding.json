@@ -1,0 +1,251 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "resource:/schemas/winding#",
+    "title": "winding",
+    "description": "The description of a magnetic winding",
+    "type": "object",
+    "properties": {
+        "functionalDescription":{
+            "description": "The data from the winding based on its function, in a way that can be used by analytical models of only Magnetism.",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/winding"
+            },
+            "minItems": 1
+        },
+        "sectionsDescription":{
+            "description": "The data from the winding at the section level, in a way that can be used by more advanced analytical and finite element models",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/section"
+            },
+            "minItems": 1
+        },
+        "layersDescription":{
+            "description": "The data from the winding at the layer level, in a way that can be used by more advanced analytical and finite element models",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/layer"
+            },
+            "minItems": 1
+        },
+        "turnsDescription":{
+            "description": "The data from the winding at the turn level, in a way that can be used by the most advanced analytical and finite element models",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/section"
+            },
+            "minItems": 1
+        }
+    },
+    "anyOf": [
+        {"required": ["functionalDescription", "sectionsDescription"]},
+        {"required": ["functionalDescription", "layersDescription"]},
+        {"required": ["functionalDescription", "turnsDescription"]}
+    ],
+
+    "$defs": {
+        "turn":{
+            "description": "Data describing one turn in a magnetic",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name given to the turn",
+                    "type": "string"
+                },
+                "winding": {
+                    "description": "The name of the winding that this turn belongs to",
+                    "type": "string"
+                },
+                "parallel": {
+                    "description": "The name of the parallel that this turn belongs to",
+                    "type": "string"
+                },
+                "layer": {
+                    "description": "The name of the layer that this turn belongs to",
+                    "type": "string"
+                },
+                "section": {
+                    "description": "The name of the section that this turn belongs to",
+                    "type": "string"
+                },
+                "orientation": {
+                    "description": "Way in which the turn is wound",
+                    "type": "string",
+                    "enum": ["clockwire", "counterClockwise"]
+                },
+                "length": {
+                    "description": "The length of the turn, referred from the center of the section, in m",
+                    "type": "number"
+                },
+                "angle": {
+                    "description": "The angle that the turn does, usful for partial turns, in degrees",
+                    "type": "number",
+                    "default": 360
+                },
+                "coordinates": {
+                    "description": "The coordinates of the center of the section, referred to the center of the main column",
+                    "$ref": "file://schemas/utils.json#/$defs/coordinates"
+                }
+            },
+            "required": ["name", "winding", "parallel", "length", "coordinates"]
+        },
+        "layer":{
+            "description": "Data describing one layer in a magnetic",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name given to the layer",
+                    "type": "string"
+                },
+                "section": {
+                    "description": "The name of the section that this layer belongs to",
+                    "type": "string"
+                },
+                "orientation": {
+                    "description": "Way in which the layer is oriented inside the section",
+                    "type": "string",
+                    "enum": ["horizontal", "vertical", "radial"]
+                },
+                "partialWindings": {
+                    "description": "List of partial windings in this section",
+                    "type": "array",
+                    "items":{
+                        "$ref": "#/$defs/piece"
+                    }
+                },
+                "dimensions": {
+                    "description": "Dimensions of the rectangle defining the section",
+                    "$ref": "file://schemas/utils.json#/$defs/dimensions"
+                },
+                "coordinates": {
+                    "description": "The coordinates of the center of the section, referred to the center of the main column",
+                    "$ref": "file://schemas/utils.json#/$defs/coordinates"
+                }
+            },
+            "required": ["name", "orientation", "partialWindings", "dimensions", "coordinates"]
+        },
+        "section":{
+            "description": "Data describing one section in a magnetic",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name given to the winding",
+                    "type": "string"
+                },
+                "layersOrientation": {
+                    "description": "Way in which the layers are oriented inside the section",
+                    "type": "string",
+                    "enum": ["horizontal", "vertical", "radial"]
+                },
+                "partialWindings": {
+                    "description": "List of partial windings in this section",
+                    "type": "array",
+                    "items":{
+                        "$ref": "#/$defs/piece"
+                    }
+                },
+                "dimensions": {
+                    "description": "Dimensions of the rectangle defining the section",
+                    "$ref": "file://schemas/utils.json#/$defs/dimensions"
+                },
+                "coordinates": {
+                    "description": "The coordinates of the center of the section, referred to the center of the main column",
+                    "$ref": "file://schemas/utils.json#/$defs/coordinates"
+                }
+            },
+            "required": ["name", "layersOrientation", "partialWindings", "dimensions", "coordinates"]
+        },
+        "partialWinding":{
+            "description": "Data describing one part of winding, described by a list with the proportion of each parallel in the winding that is contained here",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name given to the partial winding",
+                    "type": "string"
+                },
+                "winding": {
+                    "description": "The name of the winding that this part belongs to",
+                    "type": "string"
+                },
+                "parallelsProportion": {
+                    "description": "Number of parallels in winding",
+                    "type": "array",
+                    "items": {
+                        "description": "Proportion of turns that are contained in this part for the parallel in this index",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                    },
+                    "uniqueItems": false
+                }
+            },
+            "required": ["name", "winding", "parallelsProportion"]
+        },
+        "winding":{
+            "description": "Data describing one winding associated with a magnetic",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name given to the winding",
+                    "type": "string"
+                },
+                "numberTurns": {
+                    "description": "Number of turns in winding",
+                    "type": "integer",
+                    "exclusiveMinimum": 0
+                },
+                "numberParallels": {
+                    "description": "Number of parallels in winding",
+                    "type": "integer",
+                    "exclusiveMinimum": 0
+                },
+                "isolationSide": {
+                    "description": "Tag to identify windings that are sharing the same ground",
+                    "type": "string",
+                    "enum": ["primary", "secondary", "tertiary", "quaternary", "quinary", "senary", "septenary", "octonary", "nonary", "denary", "undenary", "duodenary"]
+                },
+                "wire": {
+                    "oneOf": [
+                        {"$ref": "file://schemas/wire/solid.json"},
+                        {"$ref": "file://schemas/wire/stranded.json"},
+                        {
+                            "description": "The name of the wire",
+                            "type": "string"
+                        }
+                    ]
+                }
+            },
+            "required": ["name", "numberTurns", "numberParallels", "isolationSide", "wire"]
+        },
+        "connection": {
+            "description": "Data describing the connection of the a wire",
+            "type": "object",
+            "properties": {
+                "flyingLead": {
+                    "description": "True if the wire flying, false if connected to pin",
+                    "type": "boolean"
+                },
+                "terminal": {
+                    "description": "Data describing the terminal of a connection",
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type of connector",
+                            "type": "string",
+                            "enum": ["tinned", "pin", "screw", "ring"]
+                        },
+                        "metric": {
+                            "description": "Metric of the terminal, if applicable",
+                            "type": "integer"
+                        }
+                    }
+                },
+                "length": {
+                    "description": "Length of the connection, counted from the exit of the last turn until the terminal, in m",
+                    "type": "number"
+                }
+            }
+        }
+    }
+}

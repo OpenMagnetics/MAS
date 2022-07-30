@@ -1,0 +1,24 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Some definition utils",
+    "$defs": {
+        "coordinates":{
+            "description": "Data describing coordinates in cartesian 2 or 3 dimensional space",
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 3
+        },
+        "dimensions":{
+            "description": "Data describing a dimensions in cartesian 2 or 3 dimensional space",
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 3
+        }
+    }
+}
