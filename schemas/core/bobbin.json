@@ -12,10 +12,17 @@
         "family": {
             "description": "The family of a magnetic shape",
             "type": "string",
-            "enum": ["u", "e", "etd", "p", "rm", "ep", "pm", "el", "er", "pq", "efd", "planar e", "planar er", "planar el", "ec"]
+            "enum": ["u", "e", "etd", "eer", "p", "rm", "ep", "pm", "el", "er", "pq", "efd", "ec"]
+        },
+        "manunfacturerInfo": {
+            "$ref": "file://schemas/utils.json#/$defs/manunfacturerInfo"
         },
         "name": {
             "description": "The name of a magnetic shape, according to EN 62317",
+            "type": "string"
+        },
+        "shape": {
+            "description": "The name of a magnetic shape that this bobbin belongs to",
             "type": "string"
         },
         "familySubtype": {

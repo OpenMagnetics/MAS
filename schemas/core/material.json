@@ -18,18 +18,12 @@
             "description": "The name of a magnetic material",
             "type": "string"
         },
-        "manufacturer": {
-            "description": "The manufacturer of the magnetic material",
-            "type": "string"
+        "manunfacturerInfo": {
+            "$ref": "file://schemas/utils.json#/$defs/manunfacturerInfo"
         },
         "family": {
             "description": "The family of a magnetic material according to its manufacturer",
             "type": "string"
-        },
-        "status": {
-            "description": "The production status of a magnetic material according to its manufacturer",
-            "type": "string",
-            "enum": ["production", "prototype", "obsolete"]
         },
         "permeability":{
             "description": "The data regarding the permeability of a magnetic material",

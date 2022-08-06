@@ -2,6 +2,30 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "description": "Some definition utils",
     "$defs": {
+        "manunfacturerInfo":{
+            "description": "Data from the manufacturer for a given part",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "The name of the manufacturer of the part",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "The production status of a part according to its manufacturer",
+                    "type": "string",
+                    "enum": ["production", "prototype", "obsolete"]
+                },
+                "reference": {
+                    "description": "The manufacturer's reference of this part",
+                    "type": "string"
+                },
+                "cost": {
+                    "description": "The manufacturer's price for this part",
+                    "type": "string"
+                }
+            },
+            "required": ["name"]
+        },
         "coordinates":{
             "description": "Data describing coordinates in cartesian 2 or 3 dimensional space",
             "type": "array",
@@ -19,6 +43,29 @@
             },
             "minItems": 2,
             "maxItems": 3
+        },
+        "dimensionWithTolerance": {
+            "description": "A dimension of the wire, in m",
+            "type": "object",
+            "properties": {
+                "minimum": {
+                    "description": "The minimum value of the dimension, in m",
+                    "type": "number"
+                },
+                "nominal": {
+                    "description": "The nominal value of the dimension, in m",
+                    "type": "number"
+                },
+                "maximum": {
+                    "description": "The maximum value of the dimension, in m",
+                    "type": "number"
+                }
+            },
+            "anyOf": [
+                {"required": ["minimum"]},
+                {"required": ["nominal"]},
+                {"required": ["maximum"]}
+            ]
         }
     }
 }
