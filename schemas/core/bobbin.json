@@ -1,5 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://example.com/MAS/schemas/core/bobbin.json",
     "title": "core/shape",
     "description": "A shape for the magnetic cores",
     "type": "object",
@@ -15,7 +16,7 @@
             "enum": ["u", "e", "etd", "eer", "p", "rm", "ep", "pm", "el", "er", "pq", "efd", "ec"]
         },
         "manunfacturerInfo": {
-            "$ref": "file://schemas/utils.json#/$defs/manunfacturerInfo"
+            "$ref": "/schemas/utils.json#/$defs/manunfacturerInfo"
         },
         "name": {
             "description": "The name of a magnetic shape, according to EN 62317",
@@ -34,7 +35,7 @@
             "type": "object",
             "additionalProperties": {
                 "oneOf": [
-                    {"$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"},
+                    {"$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"},
                     {
                         "type": "number"
                     }

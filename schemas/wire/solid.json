@@ -38,19 +38,19 @@
         },
         "conductingDiameter": {
             "description": "The conducting diameter of the wire, in m",
-            "$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "conductingWidth": {
             "description": "The conducting width of the wire, in m",
-            "$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "conductingHeight": {
             "description": "The conducting height of the wire, in m",
-            "$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "conductingThickness": {
             "description": "The conducting thickness of the wire, in m",
-            "$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "numberConductors": {
             "description": "The number of conductors in the wire",
@@ -59,19 +59,19 @@
         },
         "outerDiameter": {
             "description": "The outer diameter of the wire, in m",
-            "$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "outerWidth": {
             "description": "The outer width of the wire, in m",
-            "$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "outerHeight": {
             "description": "The outer height of the wire, in m",
-            "$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "outerThickness": {
             "description": "The outer thickness of the wire, in m",
-            "$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "coating": {
             "oneOf": [

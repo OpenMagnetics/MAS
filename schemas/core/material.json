@@ -1,5 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://example.com/MAS/schemas/core/material.json",
     "title": "core/material",
     "description": "A material for the magnetic cores",
     "type": "object",
@@ -19,7 +20,7 @@
             "type": "string"
         },
         "manunfacturerInfo": {
-            "$ref": "file://schemas/utils.json#/$defs/manunfacturerInfo"
+            "$ref": "/schemas/utils.json#/$defs/manunfacturerInfo"
         },
         "family": {
             "description": "The family of a magnetic material according to its manufacturer",

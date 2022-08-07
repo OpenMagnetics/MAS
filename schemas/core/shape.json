@@ -1,11 +1,12 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://example.com/MAS/schemas/core/shape.json",
     "title": "core/shape",
     "description": "A shape for the magnetic cores",
     "type": "object",
     "properties": {
-        "type": {
-            "description": "The type of a magnetic shape",
+        "origin": {
+            "description": "The origin   of a magnetic shape",
             "type": "string",
             "enum": ["standard", "custom"]
         },
@@ -27,7 +28,7 @@
             "type": "object",
             "additionalProperties": {
                 "oneOf": [
-                    {"$ref": "file://schemas/utils.json#/$defs/dimensionWithTolerance"},
+                    {"$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"},
                     {
                         "type": "number"
                     }
@@ -35,5 +36,5 @@
             }
         }
     },
-    "required": ["type", "family"]
+    "required": ["origin", "family"]
 }

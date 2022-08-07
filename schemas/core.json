@@ -86,11 +86,11 @@
                 },
                 "dimensions": {
                     "description": "Dimensions of the cube defining the spacer",
-                    "$ref": "file://schemas/utils.json#/$defs/dimensions"
+                    "$ref": "/schemas/utils.json#/$defs/dimensions"
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the gap, referred to the center of the main column",
-                    "$ref": "file://schemas/utils.json#/$defs/coordinates"
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
             "required": ["type", "material", "dimensions", "coordinates"]
@@ -106,7 +106,7 @@
                 },
                 "coordinates": {
                     "description": "The coordinates of the start of the machining, referred to the top of the main column of the piece",
-                    "$ref": "file://schemas/utils.json#/$defs/coordinates"
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
             "required": ["length", "coordinates"]
@@ -140,7 +140,7 @@
                 },
                 "coordinates": {
                     "description": "The coordinates of the top of the piece, referred to the center of the main column",
-                    "$ref": "file://schemas/utils.json#/$defs/coordinates"
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 },
                 "machining": {"$ref": "#/$defs/machining"}
             },

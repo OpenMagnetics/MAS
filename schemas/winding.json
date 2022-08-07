@@ -85,7 +85,7 @@
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the section, referred to the center of the main column",
-                    "$ref": "file://schemas/utils.json#/$defs/coordinates"
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
             "required": ["name", "winding", "parallel", "length", "coordinates"]
@@ -116,11 +116,11 @@
                 },
                 "dimensions": {
                     "description": "Dimensions of the rectangle defining the section",
-                    "$ref": "file://schemas/utils.json#/$defs/dimensions"
+                    "$ref": "/schemas/utils.json#/$defs/dimensions"
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the section, referred to the center of the main column",
-                    "$ref": "file://schemas/utils.json#/$defs/coordinates"
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
             "required": ["name", "orientation", "partialWindings", "dimensions", "coordinates"]
@@ -147,11 +147,11 @@
                 },
                 "dimensions": {
                     "description": "Dimensions of the rectangle defining the section",
-                    "$ref": "file://schemas/utils.json#/$defs/dimensions"
+                    "$ref": "/schemas/utils.json#/$defs/dimensions"
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the section, referred to the center of the main column",
-                    "$ref": "file://schemas/utils.json#/$defs/coordinates"
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
             "required": ["name", "layersOrientation", "partialWindings", "dimensions", "coordinates"]
