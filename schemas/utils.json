@@ -1,9 +1,25 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://example.com/MAS/schemas/utils.json",
+    "$id": "http://openmagnetics.com/schemas/utils.json",
     "description": "Some definition utils",
+    "title": "utils",
+    "type": "object",
+    "properties": {
+        "manufacturerInfo": {
+            "$ref": "#/$defs/manufacturerInfo"
+        },
+        "coordinates": {
+            "$ref": "#/$defs/coordinates"
+        },
+        "dimensions": {
+            "$ref": "#/$defs/dimensions"
+        },
+        "dimensionWithTolerance": {
+            "$ref": "#/$defs/dimensionWithTolerance"
+        }
+    },
     "$defs": {
-        "manunfacturerInfo":{
+        "manufacturerInfo":{
             "description": "Data from the manufacturer for a given part",
             "type": "object",
             "properties": {

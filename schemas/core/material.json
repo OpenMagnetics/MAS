@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://example.com/MAS/schemas/core/material.json",
+    "$id": "http://openmagnetics.com/schemas/core/material.json",
     "title": "core/material",
     "description": "A material for the magnetic cores",
     "type": "object",
@@ -19,8 +19,8 @@
             "description": "The name of a magnetic material",
             "type": "string"
         },
-        "manunfacturerInfo": {
-            "$ref": "/schemas/utils.json#/$defs/manunfacturerInfo"
+        "manufacturerInfo": {
+            "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
         },
         "family": {
             "description": "The family of a magnetic material according to its manufacturer",
@@ -74,7 +74,7 @@
             ]
         }
     },
-    "required": ["composition", "type", "name", "volumetricLosses", "manufacturer"],
+    "required": ["composition", "type", "name", "volumetricLosses", "manufacturerInfo"],
 
     "$defs": {
         "resistivityPoint": {
@@ -145,6 +145,7 @@
             "properties": {
                 "method": {
                     "description": "Name of this method",
+                    "type": "string",
                     "const": "steinmetz"
                 },
                 "minimumFrequency": {
@@ -161,7 +162,6 @@
                     "description": "Proportional coefficient k",
                     "type": "number",
                     "exclusiveMinimum": 0
-
                 },
                 "alpha": {
                     "description": "frequency power coefficient alpha",
@@ -226,6 +226,7 @@
             "properties": {
                 "method": {
                     "description": "Name of this method",
+                    "type": "string",
                     "const": "roshen"
                 },
                 "remanence": {

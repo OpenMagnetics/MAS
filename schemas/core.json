@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "resource:/schemas/core#",
+    "$id": "http://openmagnetics.com/schemas/core.json",
     "title": "core",
     "description": "The description of a magnetic core",
     "type": "object",
@@ -20,16 +20,25 @@
                 },
                 "material": {
                     "oneOf": [
-                        {"$ref": "file://schemas/core/material.json"},
+                        {"$ref": "/schemas/core/material.json"},
                         {
                             "description": "The name of the material used in the core",
                             "type": "string"
                         }
                     ]
                 },
+                "bobbin": {
+                    "oneOf": [
+                        {"$ref": "/schemas/core/bobbin.json"},
+                        {
+                            "description": "The name of the bobbin used in the core",
+                            "type": "string"
+                        }
+                    ]
+                },
                 "shape": {
                     "oneOf": [
-                        {"$ref": "file://schemas/core/shape.json"},
+                        {"$ref": "/schemas/core/shape.json"},
                         {
                             "description": "The name of the shape used in the core",
                             "type": "string"
@@ -40,7 +49,7 @@
                     "description": "The lists of gaps in the magnetic core",
                     "type": "array",
                     "items": {
-                        "$ref": "file://schemas/core/gap.json"
+                        "$ref": "/schemas/core/gap.json"
                     },
                     "uniqueItems": true
                 },
@@ -51,6 +60,57 @@
                 }
             },
             "required": ["type", "material", "shape", "gap"]
+        },
+        "processedDescription":{
+            "description": "The data from the core after been processed, and ready to use by the analytical models",
+            "type": "object",
+            "properties": {
+                "effectiveParameters": {
+                    "$ref": "#/$defs/effectiveParameters"
+                },
+                "width": {
+                    "description": "Total width of the core",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "height": {
+                    "description": "Total height of the core",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "depth": {
+                    "description": "Total depth of the core",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "windingWindows": {
+                    "description": "List of winding windows, all elements in the list must be of the same type",
+                    "oneOf": [
+                        {
+                            "description": "List of rectangular winding windows",
+                            "type": "array",
+                            "items": {"$ref": "#/$defs/rectangularWindingWindow"},
+                            "minItems": 1,
+                            "uniqueItems": false
+                        },
+                        {
+                            "description": "List of radial winding windows",
+                            "type": "array",
+                            "items": {"$ref": "#/$defs/radialWindingWindow"},
+                            "minItems": 1,
+                            "uniqueItems": false
+                        }
+                    ]
+                },
+                "columns": {
+                    "description": "List of columns in the core",
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/columnData"},
+                    "minItems": 1,
+                    "uniqueItems": false
+                }
+            },
+            "required": ["effectiveParameters", "width", "height", "depth", "windingWindows", "columns"]
         },
         "geometricalDescription":{
             "description": "The data from the core based on its geometrical description, in a way that can be used by CAD models.",
@@ -77,7 +137,7 @@
                 },
                 "material": {
                     "oneOf": [
-                        {"$ref": "file://schemas/insulation/material.json"},
+                        {"$ref": "/schemas/insulation/material.json"},
                         {
                             "description": "The name of the material used in the insulation",
                             "type": "string"
@@ -122,7 +182,7 @@
                 },
                 "material": {
                     "oneOf": [
-                        {"$ref": "file://schemas/core/material.json"},
+                        {"$ref": "/schemas/core/material.json"},
                         {
                             "description": "The name of the material used in the piece",
                             "type": "string"
@@ -131,7 +191,7 @@
                 },
                 "shape": {
                     "oneOf": [
-                        {"$ref": "file://schemas/core/shape.json"},
+                        {"$ref": "/schemas/core/shape.json"},
                         {
                             "description": "The name of the shape used in the piece",
                             "type": "string"
@@ -145,6 +205,104 @@
                 "machining": {"$ref": "#/$defs/machining"}
             },
             "required": ["type", "material", "shape", "coordinates"]
+        },
+        "effectiveParameters":{
+            "description": "Effective data of the magnetic core",
+            "type": "object",
+            "properties": {
+                "effectiveLength": {
+                    "description": "This is the equivalent length that the magnetic flux travels through the core.",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "effectiveArea": {
+                    "description": "This is the equivalent section the that magnetic flux traverses, because the shape of the core is not uniform and its section changes along the path",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "minimumArea": {
+                    "description": "This is the minimum area seen by the magnetic flux along its path",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "effectiveVolume": {
+                    "description": "This is the product of the effective length by the effective area, and represents the equivalent volume that is magnetized by the field",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["effectiveLength", "effectiveArea", "minimumArea", "effectiveVolume"]
+        },
+        "rectangularWindingWindow":{
+            "description": "It is the area between the winding column and the closest lateral column, and it represents the area where all the wires of the magnetic will have to fit, and equivalently, where all the current must circulate once, in the case of inductors, or twice, in the case of transformers",
+            "type": "object",
+            "properties": {
+                "width": {
+                    "description": "Horizontal width of the winding window",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "height": {
+                    "description": "Vertical height of the winding window",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "area": {
+                    "description": "Area of the winding window",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["width", "height"]
+        },
+        "radialWindingWindow":{
+            "description": "It is the area between the delimited between a height from the surface of the toroidal core at a given angle, and it represents the area where all the wires of the magnetic will have to fit, and equivalently, where all the current must circulate once, in the case of inductors, or twice, in the case of transformers",
+            "type": "object",
+            "properties": {
+                "angle": {
+                    "description": "Total angle of the window",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "height": {
+                    "description": "Vertical height of the winding window",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "area": {
+                    "description": "Area of the winding window",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["angle", "height"]
+        },
+        "columnData":{
+            "description": "Data describing a column of the core",
+            "type": "object",
+            "properties": {
+                "shape": {
+                    "description": "Shape of the column",
+                    "type": "string",
+                    "enum": ["oblong", "round", "rectangular", "irregular"]
+                },
+                "area": {
+                    "description": "Area of the section column, normal to the magnetic flux direction",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "width": {
+                    "description": "Width of the column",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "depth": {
+                    "description": "Depth of the column",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["shape", "width", "depth"]
         }
     }
 }

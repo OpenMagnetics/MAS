@@ -25,7 +25,17 @@ FetchContent_MakeAvailable(UnitTest++ json json-schema-validator)
 
 SET(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/MAS")
+
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/MAS/Core.cpp"
+  COMMAND quicktype -s schema ../schemas/core.json -S ../schemas/utils.json -S ../schemas/core/gap.json -S ../schemas/core/shape.json -S ../schemas/core/material.json -S ../schemas/insulation/material.json -S ../schemas/insulation/wireCoating.json -S schemas/core/bobbin.json -o MAS/Core.cpp --namespace OpenMagnetics --source-style multi-source --type-style pascal-case --member-style underscore-case --enumerator-style upper-underscore-case --no-boost
+  VERBATIM)
 include_directories("${CMAKE_BINARY_DIR}/_deps/unittest++-src/UnitTest++/")
+include_directories("${CMAKE_BINARY_DIR}/MAS/")
+
+
+
 
 file(GLOB MAS_sources
     "tests/*.cpp")
