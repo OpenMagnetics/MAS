@@ -5,8 +5,8 @@
     "description": "A shape for the magnetic cores",
     "type": "object",
     "properties": {
-        "origin": {
-            "description": "The origin of a magnetic shape",
+        "type": {
+            "description": "The type of a magnetic shape",
             "type": "string",
             "enum": ["standard", "custom"]
         },
@@ -36,5 +36,5 @@
             }
         }
     },
-    "required": ["origin", "family"]
+    "required": ["type", "family"]
 }

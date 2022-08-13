@@ -1,5 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/insulation/wireCoating.json",
     "title": "insulation/wireCoating",
     "description": "A coating for a wire",
     "type": "object",
@@ -16,7 +17,7 @@
         },
         "material": {
             "oneOf": [
-                {"$ref": "file://schemas/insulation/material.json"},
+                {"$ref": "/schemas/insulation/material.json"},
                 {
                     "description": "The name of the material used in the insulation",
                     "type": "string"

@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "resource:/schemas/wire/solid#",
+    "$id": "http://openmagnetics.com/schemas/wire/solid.json",
     "title": "wire/solid",
     "description": "The description of a solid magnet wire",
     "type": "object",
@@ -29,7 +29,7 @@
         },
         "material": {
             "oneOf": [
-                {"$ref": "file://schemas/wire/material.json"},
+                {"$ref": "/schemas/wire/material.json"},
                 {
                     "description": "The name of the material used in the wire",
                     "type": "string"
@@ -75,7 +75,7 @@
         },
         "coating": {
             "oneOf": [
-                {"$ref": "file://schemas/insulation/wireCoating.json"},
+                {"$ref": "/schemas/insulation/wireCoating.json"},
                 {
                     "description": "The name of the coating used in the wire",
                     "type": "string"

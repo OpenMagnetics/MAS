@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title": "insulation/material",
     "$id": "http://openmagnetics.com/schemas/insulation/material.json",
+    "title": "insulation/material",
     "description": "A material for insulation",
     "type": "object",
     "properties": {
