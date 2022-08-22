@@ -53,7 +53,7 @@
                     },
                     "uniqueItems": true
                 },
-                "number_stacks": {
+                "numberStacks": {
                     "description": "The number of stacked cores",
                     "type": "integer",
                     "minimum": 1
@@ -116,7 +116,7 @@
             "description": "The data from the core based on its geometrical description, in a way that can be used by CAD models.",
             "type": "array",
             "items": {
-                "anyOf": [
+                "oneOf": [
                     {"$ref": "#/$defs/piece"},
                     {"$ref": "#/$defs/spacer"}
                 ]
@@ -264,8 +264,8 @@
                     "type": "number",
                     "exclusiveMinimum": 0
                 },
-                "height": {
-                    "description": "Vertical height of the winding window",
+                "radialHeight": {
+                    "description": "Radial height of the winding window",
                     "type": "number",
                     "exclusiveMinimum": 0
                 },
@@ -275,7 +275,7 @@
                     "exclusiveMinimum": 0
                 }
             },
-            "required": ["angle", "height"]
+            "required": ["angle", "radialHeight"]
         },
         "columnData":{
             "description": "Data describing a column of the core",
@@ -302,7 +302,7 @@
                     "exclusiveMinimum": 0
                 }
             },
-            "required": ["shape", "width", "depth"]
+            "required": ["shape", "width", "depth", "area"]
         }
     }
 }

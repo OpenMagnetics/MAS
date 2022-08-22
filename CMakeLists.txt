@@ -21,7 +21,11 @@ FetchContent_Declare(json-schema-validator
         GIT_REPOSITORY https://github.com/pboettch/json-schema-validator.git
         GIT_TAG  tags/2.1.0)
 
-FetchContent_MakeAvailable(UnitTest++ json json-schema-validator)
+FetchContent_Declare(magic-enum
+        GIT_REPOSITORY https://github.com/Neargye/magic_enum
+        GIT_TAG  tags/v0.8.1)
+
+FetchContent_MakeAvailable(UnitTest++ json json-schema-validator magic-enum)
 
 SET(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
@@ -35,13 +39,20 @@ add_custom_command(
   USES_TERMINAL)
 include_directories("${CMAKE_BINARY_DIR}/_deps/unittest++-src/UnitTest++/")
 include_directories("${CMAKE_BINARY_DIR}/_deps/json-src/include/nlohmann/")
+include_directories("${CMAKE_BINARY_DIR}/_deps/magic-enum-src/include")
 include_directories("${CMAKE_BINARY_DIR}/MAS/")
 
 add_custom_target(run ALL
     DEPENDS "${CMAKE_BINARY_DIR}/MAS/CoreTemplate.hpp")
 
+add_library(Core STATIC src/Core.cpp)
+target_link_libraries(Core nlohmann_json::nlohmann_json nlohmann_json_schema_validator UnitTest++)
+target_include_directories(Core PUBLIC src/)
+
+
+
 file(GLOB MAS_sources
-    "src/*.cpp")
+    "tests/*.cpp")
 
 add_executable(MAS_tests ${MAS_sources})
-target_link_libraries(MAS_tests nlohmann_json::nlohmann_json nlohmann_json_schema_validator UnitTest++)
+target_link_libraries(MAS_tests Core)

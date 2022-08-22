@@ -1,0 +1,16 @@
+{
+    "functionalDescription": {
+        "name": "core_E_55_21_N97_additive",
+        "type": "two-piece set",
+        "material": "N97",
+        "shape": "E 55/21",
+        "gap": [{
+            "type": "additive",
+            "length": 0.001
+        },{
+            "type": "residual",
+            "length": 0.00001
+        }],
+        "numberStacks": 2
+    }
+}

@@ -11,20 +11,20 @@
             "type": "residual",
             "length": 0.00001
         }],
-        "number_stacks": 2
+        "numberStacks": 2
     },
     "geometricalDescription": [
         {
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, -0.035, -0.01]
+            "coordinates": [0, -0.0355, -0.01]
         },
         {
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, 0.035, -0.01]
+            "coordinates": [0, 0.0355, -0.01]
         },
         {
             "type": "spacer",
@@ -36,13 +36,13 @@
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, -0.035, 0.01]
+            "coordinates": [0, -0.0355, 0.01]
         },
         {
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, 0.035, 0.01]
+            "coordinates": [0, 0.0355, 0.01]
         }
     ]
 }

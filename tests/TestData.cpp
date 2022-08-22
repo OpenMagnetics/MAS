@@ -10,7 +10,7 @@ using nlohmann::json_schema::json_validator;
 using json = nlohmann::json;
 
 
-SUITE(SampleTest)
+SUITE(Samples)
 {
     std::string file_path = __FILE__;
     auto mas_path = file_path.substr(0, file_path.rfind("/")).append("/../");
@@ -108,7 +108,7 @@ SUITE(SampleTest)
 }
 
 
-SUITE(DataTest)
+SUITE(Data)
 {
     std::string file_path = __FILE__;
     auto mas_path = file_path.substr(0, file_path.rfind("/")).append("/../");
@@ -203,9 +203,4 @@ SUITE(DataTest)
         auto schema_file_path = mas_path + "schemas/core/material.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
-}
-
-int main(int, const char *[])
-{
-    return UnitTest::RunAllTests();
 }

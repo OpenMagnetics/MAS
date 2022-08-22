@@ -4,13 +4,13 @@
         "material": "N97",
         "shape": "PQ 35/35",
         "gap": [{
-            "type": "additive",
+            "type": "subtractive",
             "length": 0.001
         },{
             "type": "residual",
             "length": 0.00001
         }],
-        "number_stacks": 2
+        "numberStacks": 2
     },
     "geometricalDescription": [
         {

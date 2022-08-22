@@ -16,8 +16,15 @@
             "enum": ["u", "e", "etd", "p", "rm", "ep", "pm", "el", "er", "pq", "efd", "planar e", "planar er", "planar el", "ec"]
         },
         "name": {
-            "description": "The name of a magnetic shape, according to EN 62317",
+            "description": "The name of a magnetic shape",
             "type": "string"
+        },
+        "aliases": {
+            "description": "Alternative names of a magnetic shape",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         },
         "familySubtype": {
             "description": "The subtype of the shape, in case there are more than one",
