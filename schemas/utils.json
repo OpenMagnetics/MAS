@@ -83,6 +83,11 @@
                 {"required": ["nominal"]},
                 {"required": ["maximum"]}
             ]
+        },
+        "columnShape": {
+            "description": "Shape of the column, also used for gaps",
+            "type": "string",
+            "enum": ["oblong", "round", "rectangular", "irregular"]
         }
     }
 }

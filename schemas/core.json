@@ -45,13 +45,13 @@
                         }
                     ]
                 },
-                "gap": {
+                "gapping": {
                     "description": "The lists of gaps in the magnetic core",
                     "type": "array",
                     "items": {
                         "$ref": "/schemas/core/gap.json"
                     },
-                    "uniqueItems": true
+                    "uniqueItems": false
                 },
                 "numberStacks": {
                     "description": "The number of stacked cores",
@@ -59,7 +59,7 @@
                     "minimum": 1
                 }
             },
-            "required": ["type", "material", "shape", "gap"]
+            "required": ["type", "material", "shape", "gapping"]
         },
         "processedDescription":{
             "description": "The data from the core after been processed, and ready to use by the analytical models",
@@ -132,8 +132,9 @@
             "type": "object",
             "properties": {
                 "type": {
+                    "description": "The type of spacer",
                     "type": "string",
-                    "const": "spacer"
+                    "enum": ["spacer"]
                 },
                 "material": {
                     "oneOf": [
@@ -202,7 +203,13 @@
                     "description": "The coordinates of the top of the piece, referred to the center of the main column",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
                 },
-                "machining": {"$ref": "#/$defs/machining"}
+                "machining": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/machining"
+                    },
+                    "uniqueItems": true
+                }
             },
             "required": ["type", "material", "shape", "coordinates"]
         },
@@ -251,6 +258,10 @@
                     "description": "Area of the winding window",
                     "type": "number",
                     "exclusiveMinimum": 0
+                },
+                "coordinates": {
+                    "description": "The coordinates of the center of the winding window, referred to the center of the main column. In the case of half-sets, the center will be in the top point, where it would join another half-set",
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
             "required": ["width", "height"]
@@ -273,6 +284,10 @@
                     "description": "Area of the winding window",
                     "type": "number",
                     "exclusiveMinimum": 0
+                },
+                "coordinates": {
+                    "description": "The coordinates of the point of the winding window where the middle height touches the main column, referred to the center of the main column. In the case of half-sets, the center will be in the top point, where it would join another half-set",
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
             "required": ["angle", "radialHeight"]
@@ -281,10 +296,13 @@
             "description": "Data describing a column of the core",
             "type": "object",
             "properties": {
-                "shape": {
-                    "description": "Shape of the column",
+                "type": {
+                    "description": "Name of the column",
                     "type": "string",
-                    "enum": ["oblong", "round", "rectangular", "irregular"]
+                    "enum": ["central", "lateral"]
+                },
+                "shape": {
+                    "$ref": "/schemas/utils.json#/$defs/columnShape"
                 },
                 "area": {
                     "description": "Area of the section column, normal to the magnetic flux direction",
@@ -300,9 +318,18 @@
                     "description": "Depth of the column",
                     "type": "number",
                     "exclusiveMinimum": 0
+                },
+                "height": {
+                    "description": "Height of the column",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "coordinates": {
+                    "description": "The coordinates of the center of the column, referred to the center of the main column. In the case of half-sets, the center will be in the top point, where it would join another half-set",
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
-            "required": ["shape", "width", "depth", "area"]
+            "required": ["type", "shape", "width", "depth", "height", "area", "coordinates"]
         }
     }
 }

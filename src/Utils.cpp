@@ -39,4 +39,12 @@ namespace OpenMagnetics {
         T datum(json::parse("{}"));
         return datum;
     }
+
+    template <int decimals>
+    double roundFloat(double value){
+        if (value < 0) 
+            return floor(value * pow(10, decimals)) / pow(10, decimals);
+        else
+            return ceil(value * pow(10, decimals)) / pow(10, decimals);
+    }
 }

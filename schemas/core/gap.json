@@ -26,9 +26,7 @@
             "maxItems": 3
         },
         "shape": {
-            "description": "The shape of the gap",
-            "type": "string",
-            "enum": ["circular", "square"]
+            "$ref": "/schemas/utils.json#/$defs/columnShape"
         },
         "distanceClosestNormalSurface": {
             "description": "The distance where the closest perpendicular surface is. This usually is half the winding height",

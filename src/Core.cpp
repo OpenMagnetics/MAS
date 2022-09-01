@@ -17,6 +17,7 @@ using json = nlohmann::json;
 
 namespace OpenMagnetics {
     using nlohmann::json;
+    using ColumnShape = ShapeEnum;
 
     enum class DimensionalValues : int { MAXIMUM, NOMINAL, MINIMUM };
 
@@ -52,7 +53,8 @@ namespace OpenMagnetics {
                     else if (std::get<OpenMagnetics::Utils>(dimensionValue).get_maximum() != nullptr)
                         doubleValue = *(std::get<OpenMagnetics::Utils>(dimensionValue).get_maximum());
                     break;
-                default: throw "This should not happen";
+                default: throw std::runtime_error("Unknown type of dimension, options are {MAXIMUM, NOMINAL, MINIMUM}");
+
             }
         }
         else {
@@ -157,6 +159,7 @@ namespace OpenMagnetics {
                 jsonWindingWindow["height"] = std::get<double>((*dimensions)["D"]);
                 jsonWindingWindow["width"] = (std::get<double>((*dimensions)["E"]) - std::get<double>((*dimensions)["F"])) / 2;
                 jsonWindingWindow["area"] = jsonWindingWindow["height"].get<double>() * jsonWindingWindow["width"].get<double>();
+                jsonWindingWindow["coordinates"] = {std::get<double>((*dimensions)["F"]) / 2, 0};
                 set_winding_window(jsonWindingWindow);
             }
 
@@ -166,16 +169,23 @@ namespace OpenMagnetics {
                 json jsonWindingWindows = json::array();
                 json jsonMainColumn;
                 json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
                 jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::RECTANGULAR;
-                jsonMainColumn["width"] = std::get<double>((*dimensions)["F"]);
-                jsonMainColumn["depth"] = std::get<double>((*dimensions)["C"]);
-                jsonMainColumn["area"] = jsonMainColumn["width"].get<double>() * jsonMainColumn["depth"].get<double>();
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>((*dimensions)["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>((*dimensions)["C"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>((*dimensions)["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(jsonMainColumn["width"].get<double>() * jsonMainColumn["depth"].get<double>());
+                jsonMainColumn["coordinates"] = {0, 0, 0};
                 jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
                 jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::RECTANGULAR;
-                jsonLateralColumn["width"] = (std::get<double>((*dimensions)["A"]) - std::get<double>((*dimensions)["E"])) / 2;
-                jsonLateralColumn["depth"] = std::get<double>((*dimensions)["C"]);
-                jsonLateralColumn["area"] = jsonLateralColumn["width"].get<double>() * jsonLateralColumn["depth"].get<double>();
+                jsonLateralColumn["width"] = roundFloat<6>((std::get<double>((*dimensions)["A"]) - std::get<double>((*dimensions)["E"])) / 2);
+                jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>((*dimensions)["C"]));
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>((*dimensions)["D"]));
+                jsonLateralColumn["area"] = roundFloat<6>(jsonLateralColumn["width"].get<double>() * jsonLateralColumn["depth"].get<double>());
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>((*dimensions)["E"]) / 2 + (std::get<double>((*dimensions)["A"]) - std::get<double>((*dimensions)["E"])) / 4), 0, 0};
                 jsonWindingWindows.push_back(jsonLateralColumn);
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>((*dimensions)["E"]) / 2 - (std::get<double>((*dimensions)["A"]) - std::get<double>((*dimensions)["E"])) / 4), 0, 0};
                 jsonWindingWindows.push_back(jsonLateralColumn);
                 set_columns(jsonWindingWindows);
             }
@@ -261,42 +271,123 @@ namespace OpenMagnetics {
         //     return new RM;
         // else if (family == CoreShapeFamily::U)
         //     return new U;
-        else throw "Unknown shape";
+        else throw std::runtime_error("Unknown shape family, available options are: {E, EC, EFD, EL, EP, ER, ETD, P, PLANAR_E, PLANAR_EL, PLANAR_ER, PM, PQ, RM, U}");
     }
 
     class Core:public CoreTemplate {
         public:
-        Core() = default;
+        Core(const json & j) {
+            from_json(j, *this);
+            process_data();
+            process_gap();
+        }
         virtual ~Core() = default;
 
         std::shared_ptr<std::vector<GeometricalDescription>> create_geometrical_description()
         {
             std::vector<GeometricalDescription> geometricalDescription;
-            this->get_processed_description();
-            auto coreWidth = get_processed_description()->get_width();
-            auto coreHeight = get_processed_description()->get_height();
-            auto coreDepth = get_processed_description()->get_depth();
             auto numberStacks = *(get_functional_description().get_number_stacks());
-            auto gap = get_functional_description().get_gap();
+            auto gapping = get_functional_description().get_gapping();
 
-            // std::cout << "coreWidth: " << coreWidth << std::endl;
-            // std::cout << "coreHeight: " << coreHeight << std::endl;
-            // std::cout << "coreDepth: " << coreDepth << std::endl;
-            // std::cout << "numberStacks: " << numberStacks << std::endl;
+            auto corePiece = OpenMagnetics::CorePiece::factory(std::get<OpenMagnetics::CoreShape>(get_functional_description().get_shape()));
+            auto corePieceHeight = corePiece->get_height();
+            auto corePieceDepth = corePiece->get_depth();
 
+            json jsonSpacer;
+            json jsonMachining = json::array();
+            json jsonGeometricalDescription;
+            double currentDepth = roundFloat<6>((-corePieceDepth * (numberStacks - 1)) / 2);
+            double spacerThickness = 0;
 
-        // private:
-        // std::vector<double> coordinates;
-        // std::shared_ptr<Machining> machining;
-        // GeometricalDescriptionMaterial material;
-        // std::shared_ptr<ShapeUnion> shape;
-        // std::string type;
-        // std::shared_ptr<std::vector<double>> dimensions;
+            for ( auto &gap : gapping) {
+                if (gap.get_type() == OpenMagnetics::GappingType::ADDITIVE){
+                    spacerThickness = gap.get_length();
+                }
+                else if (gap.get_type() == OpenMagnetics::GappingType::SUBTRACTIVE){
+                    json aux;
+                    aux["length"] = gap.get_length();
+                    aux["coordinates"] = gap.get_coordinates();
+                    if (aux["coordinates"][0] == nullptr) {
+                        aux["coordinates"] = {0, 0, 0};
+                    }
+                    else {  // Gap coordinates are centered in the gap, while machining coordinates start at the base of the central column surface, therefore, we must correct them
+                        aux["coordinates"][1] = aux["coordinates"].at(1).get<double>() - gap.get_length() / 2;
+                    }
+                    jsonMachining.push_back(aux);
+                }
+
+            }
+
+            jsonGeometricalDescription["material"] = get_functional_description().get_material();
+            jsonGeometricalDescription["shape"] = std::get<OpenMagnetics::CoreShape>(get_functional_description().get_shape()).get_name();
+            switch (get_functional_description().get_type()) {
+                case OpenMagnetics::FunctionalDescriptionType::TOROIDAL:
+                    jsonGeometricalDescription["type"] = OpenMagnetics::GeometricalDescriptionType::TOROIDAL;
+
+                    //TODO add for toroids
+                    break;
+                case OpenMagnetics::FunctionalDescriptionType::TWO_PIECE_SET:
+                    jsonGeometricalDescription["type"] = OpenMagnetics::GeometricalDescriptionType::HALF_SET;
+                    for (auto i = 0; i < numberStacks; ++i) {
+                        double currentHeight = roundFloat<6>(spacerThickness / 2 + corePieceHeight);
+                        std::vector<double> coordinates = {0, currentHeight, currentDepth};
+                        jsonGeometricalDescription["coordinates"] = coordinates;
+                        if (jsonMachining.size() > 0) {
+                            jsonGeometricalDescription["machining"] = jsonMachining;
+                        }
+                        geometricalDescription.push_back(GeometricalDescription(jsonGeometricalDescription));
+
+                        if (jsonGeometricalDescription.find("machining") != jsonGeometricalDescription.end())
+                        {
+                            jsonGeometricalDescription.erase("machining");
+                        }
+
+                        currentHeight = -currentHeight;
+                        coordinates = {0, currentHeight, currentDepth};
+                        jsonGeometricalDescription["coordinates"] = coordinates;
+                        geometricalDescription.push_back(GeometricalDescription(jsonGeometricalDescription));
+
+                        currentDepth = roundFloat<6>(currentDepth + corePieceDepth);
+                    }
+
+                    if (spacerThickness > 0) {
+                        for ( auto &column : corePiece->get_columns()) {
+                            if (column.get_type() == OpenMagnetics::ColumnType::LATERAL) {
+                                jsonSpacer["type"] = OpenMagnetics::GeometricalDescriptionType::SPACER;
+                                jsonSpacer["material"] = "plastic";
+                                jsonSpacer["dimensions"] = {column.get_width(), spacerThickness, column.get_depth() * numberStacks};
+                                jsonSpacer["coordinates"] = column.get_coordinates();
+                                geometricalDescription.push_back(GeometricalDescription(jsonSpacer));
+                            }
+                        }
+                    }
+                    break;
+                default: throw std::runtime_error("Unknown type of core, options are {TOROIDAL, TWO_PIECE_SET}");
+            }
 
             return std::make_shared<std::vector<GeometricalDescription>>(geometricalDescription);
 
         }
 
+        std::vector<ColumnElement> find_columns_by_type(ColumnType columnType) {
+            std::vector<ColumnElement> foundColumns;
+            for (auto &column : get_processed_description()->get_columns()) {
+                if (column.get_type() == columnType) {
+                    foundColumns.push_back(column);
+                }
+            }
+            return foundColumns;
+        }
+
+        std::vector<CoreGap> find_gaps_by_type(GappingType gappingType) {
+            std::vector<CoreGap> foundGaps;
+            for (auto &gap : get_functional_description().get_gapping()) {
+                if (gap.get_type() == gappingType) {
+                    foundGaps.push_back(gap);
+                }
+            }
+            return foundGaps;
+        }
 
         void scale_to_stacks(int64_t numberStacks)
         {
@@ -310,6 +401,92 @@ namespace OpenMagnetics {
             }
         }
 
+        void process_gap()
+        {
+            json jsonGap;
+            json jsonGapping = json::array();
+            auto gapping = get_functional_description().get_gapping();
+            double centralColumnGapsHeightOffset;
+            double distanceClosestNormalSurface;
+            double coreChunkSizePlusGap;
+            auto nonResidualGaps = find_gaps_by_type(GappingType::SUBTRACTIVE);
+            auto additiveGaps = find_gaps_by_type(GappingType::ADDITIVE);
+            nonResidualGaps.insert(nonResidualGaps.end(), additiveGaps.begin(), additiveGaps.end());
+            auto residualGaps = find_gaps_by_type(GappingType::RESIDUAL);
+            int numberNonResidualGaps = nonResidualGaps.size();
+            int numberResidualGaps = residualGaps.size();
+            int numberGaps = numberNonResidualGaps + numberResidualGaps;
+            int numberColumns = get_processed_description()->get_columns().size();
+
+
+            // Check if current information is valid
+            if (numberNonResidualGaps + numberResidualGaps < numberColumns) {
+                if (!(get_functional_description().get_type() == OpenMagnetics::FunctionalDescriptionType::TOROIDAL && numberColumns == 1)) {
+                    throw std::runtime_error("A TWO_PIECE_SET core cannot have less gaps than columns");
+                }
+            }
+
+            if ((numberResidualGaps == numberColumns || numberNonResidualGaps == numberColumns) && (numberGaps == numberColumns)) {
+                for (size_t i = 0; i < get_processed_description()->get_columns().size(); ++i) {
+                    jsonGap["type"] = gapping[i].get_type();
+                    jsonGap["length"] = gapping[i].get_length();
+                    jsonGap["coordinates"] = get_processed_description()->get_columns()[i].get_coordinates();
+                    jsonGap["shape"] = get_processed_description()->get_columns()[i].get_shape();
+                    jsonGap["distanceClosestNormalSurface"] = get_processed_description()->get_columns()[i].get_height() / 2;
+                    jsonGap["area"] = get_processed_description()->get_columns()[i].get_area();
+                    jsonGap["sectionDimensions"] = {get_processed_description()->get_columns()[i].get_width(), get_processed_description()->get_columns()[i].get_depth()};
+                    jsonGapping.push_back(jsonGap);
+                }
+            }
+            else {
+
+                auto lateralColumns = find_columns_by_type(ColumnType::LATERAL);
+                auto centralColumns = find_columns_by_type(ColumnType::CENTRAL);
+                if (numberGaps == numberColumns) {
+                    centralColumnGapsHeightOffset = roundFloat<6>(nonResidualGaps[0].get_length() / 2);
+                    distanceClosestNormalSurface = roundFloat<6>(centralColumns[0].get_height() / 2 - nonResidualGaps[0].get_length() / 2) ;
+                }
+                else {
+                    coreChunkSizePlusGap = roundFloat<6>(centralColumns[0].get_height() / (nonResidualGaps.size() + 1));
+                    centralColumnGapsHeightOffset = roundFloat<6>(-coreChunkSizePlusGap * (nonResidualGaps.size() - 1) / 2);
+                    distanceClosestNormalSurface = roundFloat<6>(coreChunkSizePlusGap - nonResidualGaps[0].get_length() / 2);
+                }
+
+                for (size_t i = 0; i < nonResidualGaps.size(); ++i) {
+                    jsonGap["type"] = nonResidualGaps[i].get_type();
+                    jsonGap["length"] = nonResidualGaps[i].get_length();
+                    jsonGap["coordinates"] = {centralColumns[0].get_coordinates()[0], centralColumns[0].get_coordinates()[0] + centralColumnGapsHeightOffset, centralColumns[0].get_coordinates()[2]};
+                    jsonGap["shape"] = centralColumns[0].get_shape();
+                    jsonGap["distanceClosestNormalSurface"] = distanceClosestNormalSurface;
+                    jsonGap["area"] = centralColumns[0].get_area();
+                    jsonGap["sectionDimensions"] = {centralColumns[0].get_width(), centralColumns[0].get_depth()};
+                    jsonGapping.push_back(jsonGap);
+
+                    centralColumnGapsHeightOffset += roundFloat<6>(centralColumns[0].get_height() / (nonResidualGaps.size() + 1));
+                    if (i < nonResidualGaps.size() / 2. - 1) {
+                        distanceClosestNormalSurface = roundFloat<6>(distanceClosestNormalSurface + coreChunkSizePlusGap);
+                    }
+                    else if (i > nonResidualGaps.size() / 2. - 1) {
+                        distanceClosestNormalSurface = roundFloat<6>(distanceClosestNormalSurface - coreChunkSizePlusGap);
+                    }
+                }
+
+                for (size_t i = 0; i < lateralColumns.size(); ++i) {
+                    jsonGap["type"] = residualGaps[i].get_type();
+                    jsonGap["length"] = residualGaps[i].get_length();
+                    jsonGap["coordinates"] = lateralColumns[i].get_coordinates();
+                    jsonGap["shape"] = lateralColumns[i].get_shape();
+                    jsonGap["distanceClosestNormalSurface"] = lateralColumns[i].get_height() / 2;
+                    jsonGap["area"] = lateralColumns[i].get_area();
+                    jsonGap["sectionDimensions"] = {lateralColumns[i].get_width(), lateralColumns[i].get_depth()};
+                    jsonGapping.push_back(jsonGap);
+                }
+            }
+
+            get_mutable_functional_description().set_gapping(jsonGapping);
+
+        }
+
         void process_data() { 
             // If the shape is a string, we have to load its dta from the database
             if (std::holds_alternative<std::string>(get_functional_description().get_shape())) {
@@ -319,11 +496,12 @@ namespace OpenMagnetics {
 
             auto corePiece = OpenMagnetics::CorePiece::factory(std::get<OpenMagnetics::CoreShape>(get_functional_description().get_shape()));
             ProcessedDescription processedDescription;
-            processedDescription.set_columns(corePiece->get_columns());
             json coreEffectiveParameters;
             json coreWindingWindow;
-            switch (this->get_functional_description().get_type()) {
+            auto coreColumns = corePiece->get_columns();
+            switch (get_functional_description().get_type()) {
                 case OpenMagnetics::FunctionalDescriptionType::TOROIDAL:
+                    processedDescription.set_columns(coreColumns);
                     to_json(coreEffectiveParameters, corePiece->get_partial_effective_parameters());
                     processedDescription.set_effective_parameters(coreEffectiveParameters);
                     to_json(coreWindingWindow, corePiece->get_winding_window());
@@ -334,12 +512,18 @@ namespace OpenMagnetics {
                     break;
 
                 case OpenMagnetics::FunctionalDescriptionType::TWO_PIECE_SET:
+                    for ( auto &column : coreColumns) {
+                        column.set_height(2 * column.get_height());
+                    }
+                    processedDescription.set_columns(coreColumns);
+
                     to_json(coreEffectiveParameters, corePiece->get_partial_effective_parameters());
                     coreEffectiveParameters["effectiveLength"] = 2 * coreEffectiveParameters.at("effectiveLength").get<double>();
                     coreEffectiveParameters["effectiveArea"] = coreEffectiveParameters.at("effectiveArea").get<double>();
                     coreEffectiveParameters["effectiveVolume"] = 2 * coreEffectiveParameters.at("effectiveVolume").get<double>();
                     coreEffectiveParameters["minimumArea"] = coreEffectiveParameters.at("minimumArea").get<double>();
                     processedDescription.set_effective_parameters(coreEffectiveParameters);
+
                     to_json(coreWindingWindow, corePiece->get_winding_window());
                     coreWindingWindow.at("area") = 2 * coreWindingWindow.at("area").get<double>();
                     coreWindingWindow.at("height") = 2 * coreWindingWindow.at("height").get<double>();
@@ -348,14 +532,16 @@ namespace OpenMagnetics {
                     processedDescription.set_height(corePiece->get_height() * 2);
                     processedDescription.set_width(corePiece->get_width());
                     break;
-                default: throw "This should not happen";
+                default: throw std::runtime_error("Unknown type of core, available options are {TOROIDAL, TWO_PIECE_SET}");
             }
-            this->set_processed_description(std::make_shared<ProcessedDescription>(processedDescription));
-            scale_to_stacks(*(this->get_functional_description().get_number_stacks()));
+            set_processed_description(std::make_shared<ProcessedDescription>(processedDescription));
+            scale_to_stacks(*(get_functional_description().get_number_stacks()));
 
-            auto geometricalDescription = create_geometrical_description();
+            if (get_geometrical_description() == nullptr) {
+                auto geometricalDescription = create_geometrical_description();
 
-            // this->set_geometrical_description(geometricalDescription);
+                set_geometrical_description(geometricalDescription);
+            }
         }
     };
 }
@@ -373,7 +559,7 @@ namespace OpenMagnetics {
 //     std::cout << jf["functionalDescription"] << "\n";
 //     OpenMagnetics::Core core(jf);
     
-//     core.process_data();
+//     // core.process_data();
 
 //     // auto processed_description = *core.get_processed_description();
 //     std::cout << *(core.get_mutable_functional_description().get_name()) << "\n";
@@ -383,14 +569,19 @@ namespace OpenMagnetics {
 //     // std::cout << "minimum_area: " << core.get_processed_description()->get_effective_parameters().get_minimum_area() << "\n";
 //     // std::cout << "winding window height: " << *(core.get_processed_description()->get_winding_windows()[0].get_height()) << "\n";
 //     // std::cout << "winding window depth: " << *(core.get_processed_description()->get_winding_windows()[0].get_width()) << "\n";
-//     // std::cout << "main column width: " << core.get_processed_description()->get_columns()[0].get_width() << "\n";
-//     // std::cout << "main column height: " << core.get_processed_description()->get_columns()[0].get_depth() << "\n";
-//     // std::cout << "lateral column width: " << core.get_processed_description()->get_columns()[1].get_width() << "\n";
-//     // std::cout << "lateral column height: " << core.get_processed_description()->get_columns()[1].get_depth() << "\n";
+//     std::cout << "main column width: " << core.get_processed_description()->get_columns()[0].get_width() << "\n";
+//     std::cout << "main column depth: " << core.get_processed_description()->get_columns()[0].get_depth() << "\n";
+//     std::cout << "main column height: " << core.get_processed_description()->get_columns()[0].get_height() << "\n";
+//     std::cout << "lateral column width: " << core.get_processed_description()->get_columns()[1].get_width() << "\n";
+//     std::cout << "lateral column depth: " << core.get_processed_description()->get_columns()[1].get_depth() << "\n";
+//     std::cout << "lateral column height: " << core.get_processed_description()->get_columns()[1].get_height() << "\n";
 //     // std::cout << "lateral column width: " << core.get_processed_description()->get_columns()[2].get_width() << "\n";
 //     // std::cout << "lateral column height: " << core.get_processed_description()->get_columns()[2].get_depth() << "\n";
 //     // std::cout << core.get_mutable_functional_description().get_shape() << "\n";
 //     // std::cout << effective_parameters.get_effective_volume() << "\n";
+//     // json ea;
+//     // to_json(ea, core);
+//     // std::cout << ea.dump(4) << "\n";
 
 //     // auto ea = *core.get_geometrical_description();
 //     // std::cout << "geometrical_description: " << ()[0].get_type() << "\n";

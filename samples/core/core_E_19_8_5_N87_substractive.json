@@ -4,11 +4,14 @@
         "type": "two-piece set",
         "material": "N87",
         "shape": "E 19/8/5",
-        "gap": [{
+        "gapping": [{
             "type": "subtractive",
             "length": 0.0005
         },
         {
+            "type": "residual",
+            "length": 0.00001
+        },{
             "type": "residual",
             "length": 0.00001
         }],

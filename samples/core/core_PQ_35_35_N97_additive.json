@@ -4,9 +4,12 @@
         "type": "two-piece set",
         "material": "N97",
         "shape": "PQ 35/35",
-        "gap": [{
+        "gapping": [{
             "type": "additive",
             "length": 0.001
+        },{
+            "type": "residual",
+            "length": 0.00001
         },{
             "type": "residual",
             "length": 0.00001

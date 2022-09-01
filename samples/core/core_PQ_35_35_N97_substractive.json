@@ -3,9 +3,12 @@
         "type": "two-piece set",
         "material": "N97",
         "shape": "PQ 35/35",
-        "gap": [{
+        "gapping": [{
             "type": "subtractive",
             "length": 0.001
+        },{
+            "type": "residual",
+            "length": 0.00001
         },{
             "type": "residual",
             "length": 0.00001
@@ -24,10 +27,12 @@
             "material": "N97",
             "shape": "PQ 35/35",
             "coordinates": [0, 0.035, -0.01],
-            "machining": {
-                "length": 0.001,
-                "coordinates": [0, 0, 0]
-            }
+            "machining": [
+                {
+                    "length": 0.001,
+                    "coordinates": [0, 0, 0]
+                }
+            ]
         },
         {
             "type": "half set",
@@ -40,10 +45,12 @@
             "material": "N97",
             "shape": "PQ 35/35",
             "coordinates": [0, 0.035, 0.01],
-            "machining": {
-                "length": 0.001,
-                "coordinates": [0, 0, 0]
-            }
+            "machining": [
+                {
+                    "length": 0.001,
+                    "coordinates": [0, 0, 0]
+                }
+            ]
         }
     ]
 }
