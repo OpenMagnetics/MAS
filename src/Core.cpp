@@ -19,6 +19,8 @@ namespace OpenMagnetics {
     using nlohmann::json;
     using ColumnShape = ShapeEnum;
 
+    const double residualGap = 0.00001;
+
     enum class DimensionalValues : int { MAXIMUM, NOMINAL, MINIMUM };
 
     template <OpenMagnetics::DimensionalValues preferredValue> 
@@ -77,10 +79,16 @@ namespace OpenMagnetics {
             using dimensions_map = std::shared_ptr<std::map<std::string, Dimension>>;
         public:
             virtual std::tuple<double, double, double> get_shape_constants() = 0;
-            virtual void process_winding_window() = 0;
             virtual void process_columns() = 0;
+            virtual void process_winding_window() = 0;
             virtual void process_extra_data() = 0;
-            virtual void flatten_dimensions() = 0;
+
+            void flatten_dimensions()
+            {
+                for ( auto &dimension : *get_mutable_shape().get_dimensions() ) {
+                    dimension.second = resolve_dimensional_values<OpenMagnetics::DimensionalValues::NOMINAL>(dimension.second);
+                }
+            }
 
             /**
              * List of columns in the piece
@@ -145,78 +153,71 @@ namespace OpenMagnetics {
     class E: public CorePiece
     {
         public:
-            void flatten_dimensions()
+            void process_extra_data()
             {
-                for ( auto &dimension : *get_mutable_shape().get_dimensions() ) {
-                    dimension.second = resolve_dimensional_values<OpenMagnetics::DimensionalValues::NOMINAL>(dimension.second);
-                }
+                auto dimensions = *get_shape().get_dimensions();
+                set_width(std::get<double>(dimensions["A"]));
+                set_height(std::get<double>(dimensions["B"]));
+                set_depth(std::get<double>(dimensions["C"]));
             }
 
             void process_winding_window()
             {
-                auto dimensions = get_shape().get_dimensions();
+                auto dimensions = *get_shape().get_dimensions();
                 json jsonWindingWindow;
-                jsonWindingWindow["height"] = std::get<double>((*dimensions)["D"]);
-                jsonWindingWindow["width"] = (std::get<double>((*dimensions)["E"]) - std::get<double>((*dimensions)["F"])) / 2;
+                jsonWindingWindow["height"] = std::get<double>(dimensions["D"]);
+                jsonWindingWindow["width"] = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2;
                 jsonWindingWindow["area"] = jsonWindingWindow["height"].get<double>() * jsonWindingWindow["width"].get<double>();
-                jsonWindingWindow["coordinates"] = {std::get<double>((*dimensions)["F"]) / 2, 0};
+                jsonWindingWindow["coordinates"] = {std::get<double>(dimensions["F"]) / 2, 0};
                 set_winding_window(jsonWindingWindow);
             }
 
             void process_columns()
             {
-                auto dimensions = get_shape().get_dimensions();
+                auto dimensions = *get_shape().get_dimensions();
                 json jsonWindingWindows = json::array();
                 json jsonMainColumn;
                 json jsonLateralColumn;
                 jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
                 jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::RECTANGULAR;
-                jsonMainColumn["width"] = roundFloat<6>(std::get<double>((*dimensions)["F"]));
-                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>((*dimensions)["C"]));
-                jsonMainColumn["height"] = roundFloat<6>(std::get<double>((*dimensions)["D"]));
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
                 jsonMainColumn["area"] = roundFloat<6>(jsonMainColumn["width"].get<double>() * jsonMainColumn["depth"].get<double>());
                 jsonMainColumn["coordinates"] = {0, 0, 0};
                 jsonWindingWindows.push_back(jsonMainColumn);
                 jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
                 jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::RECTANGULAR;
-                jsonLateralColumn["width"] = roundFloat<6>((std::get<double>((*dimensions)["A"]) - std::get<double>((*dimensions)["E"])) / 2);
-                jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>((*dimensions)["C"]));
-                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>((*dimensions)["D"]));
+                jsonLateralColumn["width"] = roundFloat<6>((std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 2);
+                jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]));
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
                 jsonLateralColumn["area"] = roundFloat<6>(jsonLateralColumn["width"].get<double>() * jsonLateralColumn["depth"].get<double>());
-                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>((*dimensions)["E"]) / 2 + (std::get<double>((*dimensions)["A"]) - std::get<double>((*dimensions)["E"])) / 4), 0, 0};
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + (std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 4), 0, 0};
                 jsonWindingWindows.push_back(jsonLateralColumn);
-                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>((*dimensions)["E"]) / 2 - (std::get<double>((*dimensions)["A"]) - std::get<double>((*dimensions)["E"])) / 4), 0, 0};
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - (std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 4), 0, 0};
                 jsonWindingWindows.push_back(jsonLateralColumn);
                 set_columns(jsonWindingWindows);
             }
 
-            void process_extra_data()
-            {
-                auto dimensions = get_shape().get_dimensions();
-                set_width(std::get<double>((*dimensions)["A"]));
-                set_height(std::get<double>((*dimensions)["B"]));
-                set_depth(std::get<double>((*dimensions)["C"]));
-            }
-
             std::tuple<double, double, double> get_shape_constants()
             {
-                auto dimensions = get_shape().get_dimensions();
+                auto dimensions = *get_shape().get_dimensions();
                 std::vector<double> lengths;
                 std::vector<double> areas;
 
-                double h = std::get<double>((*dimensions)["B"]) - std::get<double>((*dimensions)["D"]);
-                double q = std::get<double>((*dimensions)["C"]);
-                double s = std::get<double>((*dimensions)["F"]) / 2;
-                double p = (std::get<double>((*dimensions)["A"]) - std::get<double>((*dimensions)["E"])) / 2;
+                double h = std::get<double>(dimensions["B"]) - std::get<double>(dimensions["D"]);
+                double q = std::get<double>(dimensions["C"]);
+                double s = std::get<double>(dimensions["F"]) / 2;
+                double p = (std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 2;
 
 
-                lengths.push_back(std::get<double>((*dimensions)["D"]));
-                lengths.push_back((std::get<double>((*dimensions)["E"]) - std::get<double>((*dimensions)["F"])) / 2);
-                lengths.push_back(std::get<double>((*dimensions)["D"]));
+                lengths.push_back(std::get<double>(dimensions["D"]));
+                lengths.push_back((std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2);
+                lengths.push_back(std::get<double>(dimensions["D"]));
                 lengths.push_back(std::numbers::pi / 8 * (p + h));
                 lengths.push_back(std::numbers::pi / 8 * (s + h));
 
-                areas.push_back(2 * q * h);
+                areas.push_back(2 * q * p);
                 areas.push_back(2 * q * h);
                 areas.push_back(2 * s * q);
                 areas.push_back((areas[0] + areas[1]) / 2);
@@ -234,6 +235,1042 @@ namespace OpenMagnetics {
             }
     };
 
+    class ETD: public E
+    {
+        public:
+            double get_lateral_leg_area() {
+                auto dimensions = *get_shape().get_dimensions();
+                double tetha;
+                double aperture;
+                if (dimensions.find("G") == dimensions.end()) {
+                    tetha = asin(std::get<double>(dimensions["C"]) / std::get<double>(dimensions["E"]));
+                    aperture = std::get<double>(dimensions["E"]) / 2 * cos(tetha);
+                } else {
+                    aperture = std::get<double>(dimensions["G"]) / 2;
+                    tetha = acos(aperture / (std::get<double>(dimensions["E"]) / 2));
+                }
+                double segmentArea = pow(std::get<double>(dimensions["E"]) / 2, 2) / 2 * (2 * tetha - sin(2 * tetha));
+                double area = std::get<double>(dimensions["C"]) * (std::get<double>(dimensions["A"]) / 2 - aperture) - segmentArea;
+                return area;
+            }
+
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::ROUND;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2));
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
+                jsonLateralColumn["width"] = roundFloat<6>(std::get<double>(dimensions["A"]) / 2 - std::get<double>(dimensions["E"]) / 2);
+                jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]));
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                set_columns(jsonWindingWindows);
+            }
+
+            std::tuple<double, double, double> get_shape_constants()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                std::vector<double> lengths;
+                std::vector<double> areas;
+
+                double h = std::get<double>(dimensions["B"]) - std::get<double>(dimensions["D"]);
+                double q = std::get<double>(dimensions["C"]);
+                double s = std::get<double>(dimensions["F"]) / 2;
+                double s1 = 0.5959 * s;
+                double p = get_lateral_leg_area() / std::get<double>(dimensions["C"]);
+
+                lengths.push_back(std::get<double>(dimensions["D"]));
+                lengths.push_back((std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2);
+                lengths.push_back(std::get<double>(dimensions["D"]));
+                lengths.push_back(std::numbers::pi / 8 * (p + h));
+                lengths.push_back(std::numbers::pi / 8 * (2 * s1 + h));
+
+                areas.push_back(2 * q * p);
+                areas.push_back(2 * q * h);
+                areas.push_back(std::numbers::pi * pow(s, 2));
+                areas.push_back((areas[0] + areas[1]) / 2);
+                areas.push_back((areas[1] + areas[2]) / 2);
+
+                double c1 = 0, c2 = 0;
+                for (size_t i = 0; i < lengths.size(); ++i)
+                {
+                    c1 += lengths[i] / areas[i];
+                    c2 += lengths[i] / pow(areas[i], 2);
+                }
+                auto minimumArea = *min_element(areas.begin(), areas.end());
+
+                return {c1, c2, minimumArea};
+            }
+    };
+
+    class EL: public E
+    {
+        public:
+            void process_winding_window()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindow;
+                jsonWindingWindow["height"] = std::get<double>(dimensions["D"]);
+                jsonWindingWindow["width"] = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F1"])) / 2;
+                jsonWindingWindow["area"] = jsonWindingWindow["height"].get<double>() * jsonWindingWindow["width"].get<double>();
+                jsonWindingWindow["coordinates"] = {std::get<double>(dimensions["F1"]) / 2, 0};
+                set_winding_window(jsonWindingWindow);
+            }
+
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::OBLONG;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F1"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F2"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2) + (std::get<double>(dimensions["F2"]) - std::get<double>(dimensions["F1"])) * std::get<double>(dimensions["F1"]));
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::RECTANGULAR;
+                jsonLateralColumn["width"] = roundFloat<6>((std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 2);
+                jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]));
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonLateralColumn["area"] = roundFloat<6>(jsonLateralColumn["width"].get<double>() * jsonLateralColumn["depth"].get<double>());
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + (std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 4), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - (std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 4), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                set_columns(jsonWindingWindows);
+            }
+
+            std::tuple<double, double, double> get_shape_constants()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                std::vector<double> lengths;
+                std::vector<double> areas;
+
+                double a = std::get<double>(dimensions["A"]);
+                double b = std::get<double>(dimensions["B"]);
+                double c = std::get<double>(dimensions["C"]);
+                double d = std::get<double>(dimensions["D"]);
+                double e = std::get<double>(dimensions["E"]);
+                double f1 = std::get<double>(dimensions["F1"]);
+                double f2 = std::get<double>(dimensions["F2"]);
+                double r = std::get<double>(dimensions["R"]);
+                double a21 = (b - d) * c;
+                double a23 = (f2 - f1 + std::numbers::pi * f1 / 2) * (b - d);
+                double a3 = 1. / 2 * (1. / 4 * std::numbers::pi * pow(f1, 2) + (f2 - f1) * f1);
+
+                lengths.push_back(d);
+                lengths.push_back(e / 2 - f1 / 2);
+                lengths.push_back(d);
+                lengths.push_back(std::numbers::pi / 8 * (a / 2 - e / 2 + b - d));
+                lengths.push_back(std::numbers::pi / 8 * (a3 / f2 + b - d));
+
+                areas.push_back(1. / 2 * (a - e) * c - 4 * (pow(r, 2) - 1. / 4 * std::numbers::pi * pow(r, 2)));
+                areas.push_back(1. / 2 * (c + f2 - f1 + std::numbers::pi * f1 / 2) * (b - d));
+                areas.push_back(a3);
+                areas.push_back((areas[0] + a21) / 2);
+                areas.push_back((a23 + areas[2]) / 2);
+
+                double c1 = 0, c2 = 0;
+                for (size_t i = 0; i < lengths.size(); ++i)
+                {
+                    c1 += lengths[i] / areas[i] / 2;
+                    c2 += lengths[i] / (2 * pow(areas[i], 2)) / 2;
+                }
+                auto minimumArea = 2 * (*min_element(areas.begin(), areas.end()));
+
+                return {c1, c2, minimumArea};
+            }
+    };
+
+    class EFD: public EL
+    {
+        public:
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F1"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F2"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(jsonMainColumn["width"].get<double>() * jsonMainColumn["depth"].get<double>());
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::RECTANGULAR;
+                jsonLateralColumn["width"] = roundFloat<6>((std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 2);
+                jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]));
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonLateralColumn["area"] = roundFloat<6>(jsonLateralColumn["width"].get<double>() * jsonLateralColumn["depth"].get<double>());
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + (std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 4),
+                                                    0,
+                                                    roundFloat<6>(-std::get<double>(dimensions["F2"]) / 2 - std::get<double>(dimensions["K"]) + std::get<double>(dimensions["C"]) / 2)};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - (std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 4),
+                                                    0,
+                                                    roundFloat<6>(-std::get<double>(dimensions["F2"]) / 2 - std::get<double>(dimensions["K"]) + std::get<double>(dimensions["C"]) / 2)};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                set_columns(jsonWindingWindows);
+            }
+
+            void process_extra_data()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                set_width(std::get<double>(dimensions["A"]));
+                set_height(std::get<double>(dimensions["B"]));
+                set_depth(std::get<double>(dimensions["C"]) + std::max(0., std::get<double>(dimensions["K"])));
+            }
+
+            std::tuple<double, double, double> get_shape_constants()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                std::vector<double> lengths;
+                std::vector<double> areas;
+
+                double a = std::get<double>(dimensions["A"]);
+                double b = std::get<double>(dimensions["B"]);
+                double c = std::get<double>(dimensions["C"]);
+                double d = std::get<double>(dimensions["D"]);
+                double e = std::get<double>(dimensions["E"]);
+                double f1 = std::get<double>(dimensions["F1"]);
+                double f2 = std::get<double>(dimensions["F2"]);
+                double k = std::get<double>(dimensions["K"]);
+                double q = std::get<double>(dimensions["q"]);
+
+                lengths.push_back(d);
+                lengths.push_back((e - f1) / 2);
+                lengths.push_back(d);
+                lengths.push_back(std::numbers::pi / 8 * ((a - e) / 2 + b - d));
+                lengths.push_back(std::numbers::pi / 4 * (f1 / 4 + sqrt(pow((c - f2 - 2 * k) / 2, 2) + pow((b - d) / 2 , 2))));
+
+                areas.push_back(c * (a - e) / 2);
+                areas.push_back(c * (b - d));
+                areas.push_back((f1 * f2 - 2 * pow(q, 2)) / 2);
+                areas.push_back((areas[0] + areas[1]) / 2);
+                areas.push_back((areas[1] + areas[2]) / 2);
+
+                double c1 = 0, c2 = 0;
+                for (size_t i = 0; i < lengths.size(); ++i)
+                {
+                    c1 += lengths[i] / areas[i] / 2;
+                    c2 += lengths[i] / (2 * pow(areas[i], 2)) / 2;
+                }
+                auto minimumArea = 2 * (*min_element(areas.begin(), areas.end()));
+
+                return {c1, c2, minimumArea};
+            }
+    };
+
+    class ER: public ETD {};
+
+    class PLANAR_ER: public ETD {};
+
+    class PLANAR_E: public E {};
+
+    class PLANAR_EL: public EL {};
+
+    class EC: public ETD {
+        public:
+            double get_lateral_leg_area() {
+                auto dimensions = *get_shape().get_dimensions();
+                double tetha = asin(std::get<double>(dimensions["C"]) / std::get<double>(dimensions["E"]));
+                double aperture = std::get<double>(dimensions["E"]) / 2 * cos(tetha);
+                double segmentArea = pow(std::get<double>(dimensions["E"]) / 2, 2) / 2 * (2 * tetha - sin(2 * tetha));
+                double clipHoleArea =  std::numbers::pi * pow(std::get<double>(dimensions["s"]), 2) / 2;
+                double area = std::get<double>(dimensions["C"]) * (std::get<double>(dimensions["A"]) / 2 - aperture) - segmentArea - clipHoleArea;
+                return area;
+            }
+    };
+
+    class EQ: public ETD {};
+
+    class EP: public E
+    {
+        public:
+            double get_lateral_leg_area() {
+                auto dimensions = *get_shape().get_dimensions();
+
+                double baseArea;
+                double windingArea;
+                double apertureArea;
+                double k;
+                if (dimensions.find("K") == dimensions.end()) {
+                    k = std::get<double>(dimensions["F"]) / 2;
+                } else {
+                    k = std::get<double>(dimensions["K"]);
+                }
+                if (dimensions.find("G") == dimensions.end()) {
+                    baseArea = std::get<double>(dimensions["A"]) * std::get<double>(dimensions["C"]);
+                    windingArea = k * std::get<double>(dimensions["E"]) + 1 / 2 * std::numbers::pi * pow(std::get<double>(dimensions["E"]) / 2, 2);
+                    apertureArea = 0;
+                } else {
+                    double aperture = std::get<double>(dimensions["G"]) / 2;
+                    double tetha = asin(aperture / (std::get<double>(dimensions["E"]) / 2));
+                    double segmentArea = (pow(std::get<double>(dimensions["E"]) / 2, 2) / 2 * (2 * tetha - sin(2 * tetha))) / 2;
+                    double apertureMaximumDepth = std::get<double>(dimensions["C"]) - k - std::get<double>(dimensions["E"]) / 2 * cos(tetha);
+                    apertureArea = aperture * apertureMaximumDepth - segmentArea;
+                    baseArea = std::get<double>(dimensions["A"]) / 2 * std::get<double>(dimensions["C"]);
+                    windingArea = k * std::get<double>(dimensions["E"]) / 2 + 1 / 4 * std::numbers::pi * pow(std::get<double>(dimensions["E"]) / 2, 2);
+
+                }
+                double area = baseArea - windingArea - apertureArea;
+                return area;
+            }
+
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::ROUND;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2));
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
+                if (dimensions.find("G") == dimensions.end()) {
+                    jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]) - std::get<double>(dimensions["E"]) / 2 - std::get<double>(dimensions["K"]));
+                    jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                    jsonLateralColumn["width"] = roundFloat<6>(jsonLateralColumn["area"].get<double>() / jsonLateralColumn["depth"].get<double>());
+                    jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                    jsonLateralColumn["coordinates"] = {0, roundFloat<6>(std::get<double>(dimensions["C"]) - jsonLateralColumn["depth"].get<double>() / 2), 0};
+                    jsonWindingWindows.push_back(jsonLateralColumn);
+                } else {
+                    jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]));
+                    jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                    jsonLateralColumn["width"] = roundFloat<6>(jsonLateralColumn["area"].get<double>() / jsonLateralColumn["depth"].get<double>());
+                    jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                    jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                    jsonWindingWindows.push_back(jsonLateralColumn);
+                    jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                    jsonWindingWindows.push_back(jsonLateralColumn);
+                }
+                set_columns(jsonWindingWindows);
+            }
+
+            std::tuple<double, double, double> get_shape_constants()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                std::vector<double> lengths_areas;
+                std::vector<double> lengths_areas_2;
+                std::vector<double> areas;
+
+                double h1 = 2 * std::get<double>(dimensions["B"]);
+                double h2 = 2 * std::get<double>(dimensions["D"]);
+                double d1 = std::get<double>(dimensions["E"]);
+                double d2 = std::get<double>(dimensions["F"]);
+                double a = std::get<double>(dimensions["A"]);
+                double b = std::get<double>(dimensions["C"]);
+                double k;
+                if (dimensions.find("K") == dimensions.end()) {
+                    k = std::get<double>(dimensions["F"]) / 2;
+                } else {
+                    k = std::get<double>(dimensions["K"]);
+                }
+                double pi = std::numbers::pi;
+                double a1 = a * b  - pi * pow(d1, 2) / 8 - d1 * k;
+                double a3 = pi * pow(d2 / 2, 2) + (k - d2 / 2) * d2;
+                double alpha = atan(std::get<double>(dimensions["E"]) / 2 / k);
+                double gamma = sqrt(((pi - alpha) * pow(d1, 2) + 2 * a1) / (4 * (pi - alpha)));
+                double l4 = pi / 2 * (gamma - d1 / 2 + (h1 - h2) / 4);
+                double a4 = 1. / 2 * (a * b - pi / 8 * pow(d1, 2) - d1 * d2 / 2 + (pi - alpha) * d1 * (h1 / 2 - h2 / 2));
+                double l5 = pi / 2 * (0.29289 * (d2 / 2 + k) / 2 + (h1 - h2) / 4);
+                double a5 = pi / 2 * (pow((d2 / 2 + k), 2) / 4 + (d2 / 2 + k) / 2 * (h1 - h2));
+
+                areas.push_back(a1);
+                areas.push_back(a3);
+                areas.push_back(a4);
+                areas.push_back(a5);
+
+                lengths_areas.push_back(h2 / a1);
+                lengths_areas.push_back(2 / (pi - alpha) / (h1 - h2) * log(d1 / (d2 / 2 + k)));
+                lengths_areas.push_back(h2 / a3);
+                lengths_areas.push_back(l4 / a4);
+                lengths_areas.push_back(l5 / a5);
+
+                lengths_areas_2.push_back(h2 / pow(a1, 2));
+                lengths_areas_2.push_back(4 * (d1 - (d2 / 2 + k)) / pow(pi - alpha, 2) / pow(h1 - h2, 2) / d1 / (d2 / 2 + k));
+                lengths_areas_2.push_back(h2 / pow(a3, 2));
+                lengths_areas_2.push_back(l4 / pow(a4, 2));
+                lengths_areas_2.push_back(l5 / pow(a5, 2));
+
+                double c1 = 0, c2 = 0;
+                for (size_t i = 0; i < lengths_areas.size(); ++i)
+                {
+                    c1 += lengths_areas[i] / 2;
+                    c2 += lengths_areas_2[i] / 2;
+                }
+                auto minimumArea = *min_element(areas.begin(), areas.end());
+
+                return {c1, c2, minimumArea};
+            }
+    };
+
+    class LP: public EP {
+        public:
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::ROUND;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2));
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
+                jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]));
+                jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                jsonLateralColumn["width"] = roundFloat<6>(jsonLateralColumn["area"].get<double>() / jsonLateralColumn["depth"].get<double>());
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                set_columns(jsonWindingWindows);
+            }
+    };
+
+    class EPX: public EP
+    {
+        public:
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::OBLONG;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F"])) / 2 + roundFloat<6>(std::get<double>(dimensions["K"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2) + (std::get<double>(dimensions["K"]) - std::get<double>(dimensions["F"]) / 2) * std::get<double>(dimensions["F"]));
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
+                if (dimensions.find("G") == dimensions.end()) {
+                    jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]) - std::get<double>(dimensions["E"]) / 2 - std::get<double>(dimensions["K"]));
+                    jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                    jsonLateralColumn["width"] = roundFloat<6>(jsonLateralColumn["area"].get<double>() / jsonLateralColumn["depth"].get<double>());
+                    jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                    jsonLateralColumn["coordinates"] = {0, roundFloat<6>(std::get<double>(dimensions["C"]) - jsonLateralColumn["depth"].get<double>() / 2), 0};
+                    jsonWindingWindows.push_back(jsonLateralColumn);
+                } else {
+                    jsonLateralColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["C"]));
+                    jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                    jsonLateralColumn["width"] = roundFloat<6>(jsonLateralColumn["area"].get<double>() / jsonLateralColumn["depth"].get<double>());
+                    jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                    jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                    jsonWindingWindows.push_back(jsonLateralColumn);
+                    jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                    jsonWindingWindows.push_back(jsonLateralColumn);
+                }
+                set_columns(jsonWindingWindows);
+            }
+    };
+
+    class RM: public CorePiece
+    { 
+        public:
+            void process_winding_window()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindow;
+                jsonWindingWindow["height"] = std::get<double>(dimensions["D"]);
+                jsonWindingWindow["width"] = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2;
+                jsonWindingWindow["area"] = jsonWindingWindow["height"].get<double>() * jsonWindingWindow["width"].get<double>();
+                jsonWindingWindow["coordinates"] = {std::get<double>(dimensions["F"]) / 2, 0};
+                set_winding_window(jsonWindingWindow);
+            }
+
+            void process_extra_data()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                set_width(std::get<double>(dimensions["A"]));
+                set_height(std::get<double>(dimensions["B"]));
+                set_depth(std::get<double>(dimensions["E"]));
+            }
+
+            double get_lateral_leg_area() {
+                auto dimensions = *get_shape().get_dimensions();
+
+                double d2 = std::get<double>(dimensions["E"]);
+                double a = std::get<double>(dimensions["J"]);
+                double e = std::get<double>(dimensions["G"]);
+                double p = sqrt(2) * std::get<double>(dimensions["J"]) - std::get<double>(dimensions["A"]);
+                double pi = std::numbers::pi;
+                double alpha = pi / 2;
+                double beta = alpha - asin(e / d2);
+
+                double a1 = 1. / 2 * pow(a, 2) * (1 + tan(beta - pi / 4)) - beta / 2 * pow(d2, 2) - 1. / 2 * pow(p, 2);
+                double area = a1 / 2;
+                return area;
+            }
+
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::ROUND;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2));
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
+                jsonLateralColumn["width"] = roundFloat<6>((std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 2);
+                jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                jsonLateralColumn["depth"] = roundFloat<6>(jsonLateralColumn["area"].get<double>() / jsonLateralColumn["width"].get<double>());
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                set_columns(jsonWindingWindows);
+            }
+
+            std::tuple<double, double, double> get_shape_constants()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                auto familySubtype = *get_shape().get_family_subtype();
+                std::vector<double> lengths_areas;
+                std::vector<double> lengths_areas_2;
+                std::vector<double> areas;
+
+                double d2 = std::get<double>(dimensions["E"]);
+                double d3 = std::get<double>(dimensions["F"]);
+                double d4 = std::get<double>(dimensions["H"]);
+                double a = std::get<double>(dimensions["J"]);
+                double c = std::get<double>(dimensions["C"]);
+                double e = std::get<double>(dimensions["G"]);
+                double h = std::get<double>(dimensions["B"]) - std::get<double>(dimensions["D"]);
+                double p = sqrt(2) * std::get<double>(dimensions["J"]) - std::get<double>(dimensions["A"]);
+                double b = 0;
+                double pi = std::numbers::pi;
+                double alpha = pi / 2;
+                double gamma = pi / 2;
+                double beta = alpha - asin(e / d2);
+                double lmin = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2;
+                double lmax;
+                double a7;
+                double a8 = alpha / 8 * (pow(d2, 2) - pow(d3, 2));
+                if (familySubtype == "1") {
+                    lmax = sqrt(1. / 4 * (pow(d2, 2) + pow(d3, 2)) - 1. / 2 * d2 * d3 * cos(alpha - beta));
+                    a7 = 1. / 4 * (beta / 2 * pow(d2, 2) + 1. / 2 * pow(e, 2) * tan(beta) - 1. / 2 * pow(e, 2) * tan(alpha - gamma / 2) - pi / 4 * pow(d3, 2));
+                } else if (familySubtype == "2") {
+                    lmax = sqrt(1. / 4 * (pow(d2, 2) + pow(d3, 2)) - 1. / 2 * d2 * d3 * cos(alpha - beta)) - b / (2 * sin(gamma / 2));
+                    a7 = 1. / 4 * (beta / 2 * pow(d2, 2) - pi / 4 * pow(d3, 2) + 1. / 2 * (pow(b, 2) - pow(e, 2)) * tan(alpha - gamma / 2) + 1. / 2 * pow(e, 2) * tan(beta));
+                } else if (familySubtype == "3") {
+                    lmax = e / 2 + 1. / 2 * (1 - sin(gamma / 2)) * (d2 - c);
+                    a7 = 1. / 4 * (beta / 2 * pow(d2, 2) - pi / 4 * pow(d3, 2) + 1. / 2 * pow(c, 2) * tan(alpha - beta));
+                } else if (familySubtype == "4") {
+                    lmax = sqrt(1. / 4 * (pow(d2, 2) + pow(d3, 2)) - 1. / 2 * d2 * d3 * cos(alpha - beta));
+                    a7 = 1. / 4 * (beta / 2 * pow(d2, 2) + 1. / 2 * d2 * d3 * sin(alpha - beta) + 1. / 2 * pow(c - d3, 2) * tan(gamma / 2) - pi / 4 * pow(d3, 2));
+                }
+
+                double f = (lmin + lmax) / (2 * lmin);
+                double D = a7 / a8;
+
+                double l1 = 2 * std::get<double>(dimensions["D"]);
+                double a1 = 1. / 2 * pow(a, 2) * (1 + tan(beta - pi / 4)) - beta / 2 * pow(d2, 2) - 1. / 2 * pow(p, 2);
+
+                double l3 = 2 * std::get<double>(dimensions["D"]);
+                double a3 = pi / 4 * (pow(d3, 2) - pow(d4, 2));
+
+                double l4 =  pi / 4 * (h + a / 2 - d2 / 2 );
+                double a4 = 1. / 2 * (a1 + 2 * beta * d2 * h);
+                double l5 = pi / 4 * (d3 + h - sqrt(1. / 2 * (pow(d3, 2) + pow(d4, 2))));
+                double a5 = 1. / 2 * (pi / 4 * (pow(d3, 2) - pow(d4, 2)) + 2 * alpha * d3 * h);
+
+                areas.push_back(a1);
+                areas.push_back(a3);
+                areas.push_back(a4);
+                areas.push_back(a5);
+
+                lengths_areas.push_back(l1 / a1);
+                lengths_areas.push_back(log(d2 / d3) * f / (D * pi * h));
+                lengths_areas.push_back(l3 / a3);
+                lengths_areas.push_back(l4 / a4);
+                lengths_areas.push_back(l5 / a5);
+
+                lengths_areas_2.push_back(l1 / pow(a1, 2));
+                lengths_areas_2.push_back((1 / d3 - 1 / d2) * f / pow(D * pi * h, 2));
+                lengths_areas_2.push_back(l3 / pow(a3, 2));
+                lengths_areas_2.push_back(l4 / pow(a4, 2));
+                lengths_areas_2.push_back(l5 / pow(a5, 2));
+
+                double c1 = 0, c2 = 0;
+                for (size_t i = 0; i < lengths_areas.size(); ++i)
+                {
+                    c1 += lengths_areas[i] / 2;
+                    c2 += lengths_areas_2[i] / 2;
+                }
+                auto minimumArea = *min_element(areas.begin(), areas.end());
+
+                return {c1, c2, minimumArea};
+            }
+    };
+
+    class PQ: public CorePiece
+    { 
+        public:
+            void process_extra_data()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                set_width(std::get<double>(dimensions["A"]));
+                set_height(std::get<double>(dimensions["B"]));
+                set_depth(std::get<double>(dimensions["C"]));
+            }
+
+            
+            void process_winding_window()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindow;
+                jsonWindingWindow["height"] = std::get<double>(dimensions["D"]);
+                jsonWindingWindow["width"] = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2;
+                jsonWindingWindow["area"] = jsonWindingWindow["height"].get<double>() * jsonWindingWindow["width"].get<double>();
+                jsonWindingWindow["coordinates"] = {std::get<double>(dimensions["F"]) / 2, 0};
+                set_winding_window(jsonWindingWindow);
+            }
+
+            double get_lateral_leg_area() {
+                auto dimensions = *get_shape().get_dimensions();
+
+                double A = std::get<double>(dimensions["A"]);
+                double C = std::get<double>(dimensions["C"]);
+                double E = std::get<double>(dimensions["E"]);
+                double G = std::get<double>(dimensions["G"]);
+
+                double beta = acos(G / E);
+                double I = E * sin(beta);
+
+                double a1 = C * (A - G) - beta * pow(E, 2) / 2 + 1. / 2 * G * I;
+                double area = a1 / 2;
+                return area;
+            }
+
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::ROUND;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2));
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
+                jsonLateralColumn["depth"] = std::get<double>(dimensions["C"]);
+                jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                jsonLateralColumn["width"] = roundFloat<6>(jsonLateralColumn["area"].get<double>() / jsonLateralColumn["depth"].get<double>());
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                set_columns(jsonWindingWindows);
+            }
+
+            std::tuple<double, double, double> get_shape_constants()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                std::vector<double> lengths_areas;
+                std::vector<double> lengths_areas_2;
+                std::vector<double> areas;
+
+                double A = std::get<double>(dimensions["A"]);
+                double B = std::get<double>(dimensions["B"]);
+                double C = std::get<double>(dimensions["C"]);
+                double D = std::get<double>(dimensions["D"]);
+                double E = std::get<double>(dimensions["E"]);
+                double F = std::get<double>(dimensions["F"]);
+                double G = std::get<double>(dimensions["G"]);
+                double J;
+                double L;
+                if (dimensions.find("J") == dimensions.end()) {
+                    J = std::get<double>(dimensions["F"]) / 2;  // Totally made up base on drawings
+                    L = F + (C - F) / 3;  // Totally made up base on drawings
+                } else {
+                    J = std::get<double>(dimensions["J"]);
+                    L = std::get<double>(dimensions["L"]);
+                }
+
+                double pi = std::numbers::pi;
+                double beta = acos(G / E);
+                double alpha = atan(L / J);
+                double I = E * sin(beta);
+                double a7 = 1. / 8 * (beta * pow(E, 2) - alpha * pow(F, 2) + G * L - J * I);
+                double a8 = pi / 16 * (pow(E, 2) - pow(F, 2));
+                double a9 = 2 * alpha * F * (B - D);
+                double a10 = 2 * beta * E * (B - D);
+                double lmin = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2;
+                double lmax = sqrt(pow(E, 2) + pow(F, 2) - 2 * E * F * cos(alpha - beta)) / 2;
+                double f = (lmin + lmax) / (2 * lmin);
+                double K = a7 / a8;
+
+                double l1 = 2 * D;
+                double a1 = C * (A - G) - beta * pow(E, 2) / 2 + 1. / 2 * G * I;
+                double a2 = pi * K * E * F * (B - D) / (E - F) * log(E / F);
+                double l2 = f * E * F / (E - F) * pow(log(E / F), 2);
+
+                double l3 = 2 * D;
+                double a3 = pi / 4 * (pow(F, 2));
+
+                double l4 = pi / 4 * ((B - D) + A / 2 - E / 2);
+                double a4 = 1. / 2 * (a1 + a10);
+                double l5 = pi / 4 * ((B - D) + (1 - 1. / sqrt(2)) * F);
+                double a5 = 1. / 2 * (a3 + a9);
+
+                areas.push_back(a1);
+                areas.push_back(a3);
+                areas.push_back(a2);
+                areas.push_back(a4);
+                areas.push_back(a5);
+
+                lengths_areas.push_back(l1 / a1);
+                lengths_areas.push_back(l2 / a2);
+                lengths_areas.push_back(l3 / a3);
+                lengths_areas.push_back(l4 / a4);
+                lengths_areas.push_back(l5 / a5);
+
+                lengths_areas_2.push_back(l1 / pow(a1, 2));
+                lengths_areas_2.push_back(l2 / pow(a2, 2));
+                lengths_areas_2.push_back(l3 / pow(a3, 2));
+                lengths_areas_2.push_back(l4 / pow(a4, 2));
+                lengths_areas_2.push_back(l5 / pow(a5, 2));
+
+                double c1 = 0, c2 = 0;
+                for (size_t i = 0; i < lengths_areas.size(); ++i)
+                {
+                    c1 += lengths_areas[i] / 2;
+                    c2 += lengths_areas_2[i] / 2;
+                }
+                auto minimumArea = *min_element(areas.begin(), areas.end());
+
+                return {c1, c2, minimumArea};
+            }
+    };
+
+    class PM: public CorePiece
+    { 
+        public:
+            
+            void process_winding_window()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindow;
+                jsonWindingWindow["height"] = std::get<double>(dimensions["D"]);
+                jsonWindingWindow["width"] = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2;
+                jsonWindingWindow["area"] = jsonWindingWindow["height"].get<double>() * jsonWindingWindow["width"].get<double>();
+                jsonWindingWindow["coordinates"] = {std::get<double>(dimensions["F"]) / 2, 0};
+                set_winding_window(jsonWindingWindow);
+            }
+
+            void process_extra_data()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                set_width(std::get<double>(dimensions["A"]));
+                set_height(std::get<double>(dimensions["B"]));
+                set_depth(std::get<double>(dimensions["E"]));
+            }
+
+            double get_lateral_leg_area() {
+                auto dimensions = *get_shape().get_dimensions();
+
+                double d1 = std::get<double>(dimensions["A"]);
+                double d2 = std::get<double>(dimensions["E"]);
+                double f = std::get<double>(dimensions["G"]);
+                double b = std::get<double>(dimensions["b"]);
+                double t = std::get<double>(dimensions["t"]);
+                double pi = std::numbers::pi;
+
+                double alpha = pi / 2;
+                double beta = alpha - asin(f / d2);
+
+                double a1 = beta / 2 * (pow(d1, 2) - pow(d2, 2)) - 2 * b * t;
+                double area = a1 / 2;
+                return area;
+            }
+
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::ROUND;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2));
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
+                jsonLateralColumn["width"] = roundFloat<6>((std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 2);
+                jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                jsonLateralColumn["depth"] = roundFloat<6>(jsonLateralColumn["area"].get<double>() / jsonLateralColumn["width"].get<double>());
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                set_columns(jsonWindingWindows);
+            }
+
+            std::tuple<double, double, double> get_shape_constants()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                std::vector<double> lengths_areas;
+                std::vector<double> lengths_areas_2;
+                std::vector<double> areas;
+                double pi = std::numbers::pi;
+
+                double d1 = std::get<double>(dimensions["A"]);
+                double h1 = 2 * std::get<double>(dimensions["B"]);
+                double h2 = 2 * std::get<double>(dimensions["D"]);
+                double d2 = std::get<double>(dimensions["E"]);
+                double d3 = std::get<double>(dimensions["F"]);
+                double f = std::get<double>(dimensions["G"]);
+                double d4 = std::get<double>(dimensions["H"]);
+                double gamma = std::get<double>(dimensions["alpha"]) / 180 * pi;
+                double b = std::get<double>(dimensions["b"]);
+                double t = std::get<double>(dimensions["t"]);
+
+                double alpha = pi / 2;
+                double beta = alpha - asin(f / d2);
+                double lmin = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2;
+                double lmax = sqrt(1. / 4* (pow(d2, 2) + pow(d3, 2)) - 1. / 2 * d2 * d3 * cos(alpha - beta));
+                double g = (lmin + lmax) / (2 * lmin);
+                double a7 = beta / 8 * pow(d2, 2) + 1. / 8 * pow(f, 2) * tan(beta) - 1. / 8 * pow(f, 2) * tan(alpha - gamma / 2) - pi / 16 * pow(d3, 2);
+                double a8 = alpha / 8 * (pow(d2, 2) - pow(d3, 2));
+                double D = a7 / a8;
+
+                double a1 = beta / 2 * (pow(d1, 2) - pow(d2, 2)) - 2 * b * t;
+                double l1 = h2;
+
+                double l3 = h2;
+                double a3 = pi / 4 * (pow(d3, 2) - pow(d4, 2));
+
+                double l4 = pi / 8 * (h1 - h2 + d1 - d2);
+                double a4 = 1. / 2 * (a1 + 2 * beta * d2 * (h1 - h2));
+                double l5 = pi / 4 * (d3 + h1 - h2 - sqrt(1. / 2 * (pow(d3, 2) + pow(d4, 2))));
+                double a5 = pi / 8 * (pow(d3, 2) - pow(d4, 2)) + alpha * d3 * (h1 - h2);
+
+                areas.push_back(a1);
+                areas.push_back(a3);
+                areas.push_back(a4);
+                areas.push_back(a5);
+
+                lengths_areas.push_back(l1 / a1);
+                lengths_areas.push_back(log(d2 / d3) * g / (D * pi * (h1 - h2) / 2));
+                lengths_areas.push_back(l3 / a3);
+                lengths_areas.push_back(l4 / a4);
+                lengths_areas.push_back(l5 / a5);
+
+                lengths_areas_2.push_back(l1 / pow(a1, 2));
+                lengths_areas_2.push_back((1 / d3 - 1 / d2) * g / pow(D * pi * (h1 - h2) / 2, 2));
+                lengths_areas_2.push_back(l3 / pow(a3, 2));
+                lengths_areas_2.push_back(l4 / pow(a4, 2));
+                lengths_areas_2.push_back(l5 / pow(a5, 2));
+
+                double c1 = 0, c2 = 0;
+                for (size_t i = 0; i < lengths_areas.size(); ++i)
+                {
+                    c1 += lengths_areas[i] / 2;
+                    c2 += lengths_areas_2[i] / 2;
+                }
+                auto minimumArea = *min_element(areas.begin(), areas.end());
+
+                return {c1, c2, minimumArea};
+            }
+    };
+
+    class P: public CorePiece
+    { 
+        public:
+            void process_winding_window()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindow;
+                jsonWindingWindow["height"] = std::get<double>(dimensions["D"]);
+                jsonWindingWindow["width"] = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2;
+                jsonWindingWindow["area"] = jsonWindingWindow["height"].get<double>() * jsonWindingWindow["width"].get<double>();
+                jsonWindingWindow["coordinates"] = {std::get<double>(dimensions["F"]) / 2, 0};
+                set_winding_window(jsonWindingWindow);
+            }
+
+            void process_extra_data()
+            { 
+                auto dimensions = *get_shape().get_dimensions();
+                set_width(std::get<double>(dimensions["A"]));
+                set_height(std::get<double>(dimensions["B"]));
+                set_depth(std::get<double>(dimensions["A"]));
+            }
+
+            double get_lateral_leg_area() {
+                auto dimensions = *get_shape().get_dimensions();
+                auto familySubtype = *get_shape().get_family_subtype();
+                double pi = std::numbers::pi;
+                double d1 = std::get<double>(dimensions["A"]);
+                double d2 = std::get<double>(dimensions["E"]);
+                double b = std::get<double>(dimensions["G"]);
+                double tetha = asin(2 * b / (d1 + d2));
+                double n;
+                if (familySubtype == "1" || familySubtype == "2") {
+                    n = 2;
+                } else {
+                    n = 0;
+                }
+
+                double a1 = 1. / 4 * (pi - n * tetha) * (pow(d1, 2) - pow(d2, 2));
+                double area = a1 / 2;
+                return area;
+            }
+
+            void process_columns()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                json jsonWindingWindows = json::array();
+                json jsonMainColumn;
+                json jsonLateralColumn;
+                jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
+                jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::ROUND;
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F"]));
+                jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2));
+                jsonMainColumn["coordinates"] = {0, 0, 0};
+                jsonWindingWindows.push_back(jsonMainColumn);
+                jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
+                jsonLateralColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
+                jsonLateralColumn["width"] = roundFloat<6>((std::get<double>(dimensions["A"]) - std::get<double>(dimensions["E"])) / 2);
+                jsonLateralColumn["area"] = roundFloat<6>(get_lateral_leg_area());
+                jsonLateralColumn["depth"] = roundFloat<6>(jsonLateralColumn["area"].get<double>() / jsonLateralColumn["width"].get<double>());
+                jsonLateralColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(std::get<double>(dimensions["E"]) / 2 + jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                jsonLateralColumn["coordinates"] = {roundFloat<6>(-std::get<double>(dimensions["E"]) / 2 - jsonLateralColumn["width"].get<double>() / 2), 0, 0};
+                jsonWindingWindows.push_back(jsonLateralColumn);
+                set_columns(jsonWindingWindows);
+            }
+
+            std::tuple<double, double, double> get_shape_constants()
+            {
+                auto dimensions = *get_shape().get_dimensions();
+                auto familySubtype = *get_shape().get_family_subtype();
+                std::vector<double> lengths_areas;
+                std::vector<double> lengths_areas_2;
+                std::vector<double> areas;
+                double pi = std::numbers::pi;
+
+                double r4 = std::get<double>(dimensions["A"]) / 2;
+                double r3 = std::get<double>(dimensions["E"]) / 2;
+                double r2 = std::get<double>(dimensions["F"]) / 2;
+                double r1 = std::get<double>(dimensions["H"]) / 2;
+                double h = std::get<double>(dimensions["B"]) - std::get<double>(dimensions["D"]);
+                double h2 = 2 * std::get<double>(dimensions["D"]);
+                double b = std::get<double>(dimensions["G"]);
+
+                double s1 = r2 - sqrt((pow(r1, 2) + pow(r2, 2)) / 2);
+                double s2 = sqrt((pow(r3, 2) + pow(r4, 2)) / 2) - r3;
+                double n;
+                if (familySubtype == "1" || familySubtype == "2") {
+                    n = 2;
+                } else {
+                    n = 0;
+                }
+
+                double k1 = n * b * (r4 - r3);
+                double k2 = 1 / (1 - n * b / (2 * pi * r3));
+                double k3 = 1 - n * b / (pi * (r3 + r4));
+
+                double a1 = pi * (r4 - r3) * (r4 + r3) - k1;
+                double l1 = h2;
+
+                double a3 = pi * (r2 - r1) * (r2 + r1);
+                double l3 = h2;
+
+                double l4 = pi / 4 * (2 * s2 + h);
+                double a4 = pi / 2 * (pow(r4, 2) - pow(r3, 2) + 2 * r3 * h) * k3;
+                double l5 = pi / 4 * (2 * s1 + h);
+                double a5 = pi / 2 * (pow(r2, 2) - pow(r1, 2) + 2 * r2 * h);
+
+                areas.push_back(a1);
+                areas.push_back(a3);
+                areas.push_back(a4);
+                areas.push_back(a5);
+
+                lengths_areas.push_back(l1 / a1);
+                lengths_areas.push_back(1. / (pi * h) * log(r3 / r2) * k2);
+                lengths_areas.push_back(l3 / a3);
+                lengths_areas.push_back(l4 / a4);
+                lengths_areas.push_back(l5 / a5);
+
+                lengths_areas_2.push_back(l1 / pow(a1, 2));
+                lengths_areas_2.push_back(1 / (2 * pow(pi * h, 2)) * (r3 - r2) / (r3 * r2) * k2);
+                lengths_areas_2.push_back(l3 / pow(a3, 2));
+                lengths_areas_2.push_back(l4 / pow(a4, 2));
+                lengths_areas_2.push_back(l5 / pow(a5, 2));
+
+                double c1 = 0, c2 = 0;
+                for (size_t i = 0; i < lengths_areas.size(); ++i)
+                {
+                    c1 += lengths_areas[i] / 2;
+                    c2 += lengths_areas_2[i] / 2;
+                }
+                auto minimumArea = *min_element(areas.begin(), areas.end());
+
+                return {c1, c2, minimumArea};
+            }
+    };
+
+
     std::shared_ptr<CorePiece> CorePiece::factory(CoreShape shape)
     {
         auto family = shape.get_family();
@@ -243,35 +1280,109 @@ namespace OpenMagnetics {
             piece->process();
             return piece;
         }
-        // else if (family == CoreShapeFamily::EC)
-        //     return new EC;
-        // else if (family == CoreShapeFamily::EFD)
-        //     return new EFD;
-        // else if (family == CoreShapeFamily::EL)
-        //     return new EL;
-        // else if (family == CoreShapeFamily::EP)
-        //     return new EP;
-        // else if (family == CoreShapeFamily::ER)
-        //     return new ER;
-        // else if (family == CoreShapeFamily::ETD)
-        //     return new ETD;
-        // else if (family == CoreShapeFamily::P)
-        //     return new P;
-        // else if (family == CoreShapeFamily::PLANAR_E)
-        //     return new PLANAR_E;
-        // else if (family == CoreShapeFamily::PLANAR_EL)
-        //     return new PLANAR_EL;
-        // else if (family == CoreShapeFamily::PLANAR_ER)
-        //     return new PLANAR_ER;
-        // else if (family == CoreShapeFamily::PM)
-        //     return new PM;
-        // else if (family == CoreShapeFamily::PQ)
-        //     return new PQ;
-        // else if (family == CoreShapeFamily::RM)
-        //     return new RM;
-        // else if (family == CoreShapeFamily::U)
-        //     return new U;
-        else throw std::runtime_error("Unknown shape family, available options are: {E, EC, EFD, EL, EP, ER, ETD, P, PLANAR_E, PLANAR_EL, PLANAR_ER, PM, PQ, RM, U}");
+        else if (family == CoreShapeFamily::EC) {
+            std::shared_ptr<CorePiece> piece(new EC);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::EFD) {
+            std::shared_ptr<CorePiece> piece(new EFD);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::EL) {
+            std::shared_ptr<CorePiece> piece(new EL);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::EP) {
+            std::shared_ptr<CorePiece> piece(new EP);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::EPX) {
+            std::shared_ptr<CorePiece> piece(new EPX);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::LP) {
+            std::shared_ptr<CorePiece> piece(new LP);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::EQ) {
+            std::shared_ptr<CorePiece> piece(new EQ);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::ER) {
+            std::shared_ptr<CorePiece> piece(new ER);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::ETD) {
+            std::shared_ptr<CorePiece> piece(new ETD);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::P) {
+            std::shared_ptr<CorePiece> piece(new P);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::PLANAR_E) {
+            std::shared_ptr<CorePiece> piece(new PLANAR_E);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::PLANAR_EL) {
+            std::shared_ptr<CorePiece> piece(new PLANAR_EL);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::PLANAR_ER) {
+            std::shared_ptr<CorePiece> piece(new PLANAR_ER);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::PM) {
+            std::shared_ptr<CorePiece> piece(new PM);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::PQ) {
+            std::shared_ptr<CorePiece> piece(new PQ);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        else if (family == CoreShapeFamily::RM) {
+            std::shared_ptr<CorePiece> piece(new RM);
+            piece->set_shape(shape);
+            piece->process();
+            return piece;
+        }
+        // else if (family == CoreShapeFamily::U) {
+        //     std::shared_ptr<CorePiece> piece(new U);
+            // piece->set_shape(shape);
+            // piece->process();
+        //     return piece;
+        // }
+        else throw std::runtime_error("Unknown shape family, available options are: {E, EC, EFD, EL, EP, EPX, LP, EQ, ER, ETD, P, PLANAR_E, PLANAR_EL, PLANAR_ER, PM, PQ, RM, U}");
     }
 
     class Core:public CoreTemplate {
@@ -420,13 +1531,25 @@ namespace OpenMagnetics {
 
 
             // Check if current information is valid
-            if (numberNonResidualGaps + numberResidualGaps < numberColumns) {
+            if (numberNonResidualGaps + numberResidualGaps < numberColumns && (numberNonResidualGaps + numberResidualGaps) > 0) {
                 if (!(get_functional_description().get_type() == OpenMagnetics::FunctionalDescriptionType::TOROIDAL && numberColumns == 1)) {
                     throw std::runtime_error("A TWO_PIECE_SET core cannot have less gaps than columns");
                 }
             }
 
-            if ((numberResidualGaps == numberColumns || numberNonResidualGaps == numberColumns) && (numberGaps == numberColumns)) {
+            if (numberNonResidualGaps + numberResidualGaps == 0) {
+                for (size_t i = 0; i < get_processed_description()->get_columns().size(); ++i) {
+                    jsonGap["type"] = GappingType::RESIDUAL;
+                    jsonGap["length"] = residualGap;
+                    jsonGap["coordinates"] = get_processed_description()->get_columns()[i].get_coordinates();
+                    jsonGap["shape"] = get_processed_description()->get_columns()[i].get_shape();
+                    jsonGap["distanceClosestNormalSurface"] = get_processed_description()->get_columns()[i].get_height() / 2;
+                    jsonGap["area"] = get_processed_description()->get_columns()[i].get_area();
+                    jsonGap["sectionDimensions"] = {get_processed_description()->get_columns()[i].get_width(), get_processed_description()->get_columns()[i].get_depth()};
+                    jsonGapping.push_back(jsonGap);
+                }
+            }
+            else if ((numberResidualGaps == numberColumns || numberNonResidualGaps == numberColumns) && (numberGaps == numberColumns)) {
                 for (size_t i = 0; i < get_processed_description()->get_columns().size(); ++i) {
                     jsonGap["type"] = gapping[i].get_type();
                     jsonGap["length"] = gapping[i].get_length();
@@ -555,10 +1678,17 @@ namespace OpenMagnetics {
 //     auto coreFilePath = masPath + "samples/core/core_E_55_21_N97_additive.json";
 //     std::ifstream json_file(coreFilePath);
 
-//     auto jf = json::parse(json_file);
-//     std::cout << jf["functionalDescription"] << "\n";
-//     OpenMagnetics::Core core(jf);
-    
+//     json coreJson;
+//     coreJson["functionalDescription"] = json();
+//     coreJson["functionalDescription"]["name"] = "core_PQ_20_16_N97_substractive";
+//     coreJson["functionalDescription"]["type"] = "two-piece set";
+//     coreJson["functionalDescription"]["material"] = "N97";
+//     coreJson["functionalDescription"]["shape"] = "P 59/36";
+//     coreJson["functionalDescription"]["gapping"] = json::array();
+//     coreJson["functionalDescription"]["numberStacks"] = 1;
+//     OpenMagnetics::Core core(coreJson);
+//     std::cout << coreJson["functionalDescription"] << "\n";
+
 //     // core.process_data();
 
 //     // auto processed_description = *core.get_processed_description();
