@@ -910,6 +910,206 @@ SUITE(processedDescription)
         CHECK(core.get_processed_description()->get_columns()[1].get_shape() == OpenMagnetics::ColumnShape::IRREGULAR);
         CHECK(core.get_processed_description()->get_columns()[2].get_shape() == OpenMagnetics::ColumnShape::IRREGULAR);
     }
+
+    TEST(U_79_129_31)
+    {
+        json coreJson;
+        coreJson["functionalDescription"] = json();
+        coreJson["functionalDescription"]["name"] = "core_U_79_129_31_N97_substractive";
+        coreJson["functionalDescription"]["type"] = "two-piece set";
+        coreJson["functionalDescription"]["material"] = "N97";
+        coreJson["functionalDescription"]["shape"] = "U 79/129/31";
+        coreJson["functionalDescription"]["gapping"] = json::array();
+        coreJson["functionalDescription"]["numberStacks"] = 1;
+        OpenMagnetics::Core core(coreJson);
+        double numberStacks = coreJson["functionalDescription"]["numberStacks"];
+
+        CHECK_EQUAL(*(core.get_mutable_functional_description().get_name()), "core_U_79_129_31_N97_substractive");
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_area(), 0.000693 * numberStacks, 0.000693 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_length(), 0.309, 0.309 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_volume(), 0.000214220 * numberStacks, 0.000214220 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_minimum_area(), 0.000693 * numberStacks, 0.000693 * numberStacks * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_height()), 0.085, 0.085 * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_width()), 0.034, 0.034 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_width(), 0.022, 0.022 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_depth(), 0.0315 * numberStacks, 0.0315 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_width(), 0.022 * numberStacks, 0.022 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_depth(), 0.0315 * numberStacks, 0.0315 * numberStacks * 0.2);
+        CHECK(core.get_processed_description()->get_columns()[0].get_shape() == OpenMagnetics::ColumnShape::RECTANGULAR);
+        CHECK(core.get_processed_description()->get_columns()[1].get_shape() == OpenMagnetics::ColumnShape::RECTANGULAR);
+    }
+
+    TEST(U_26_22_16)
+    {
+        json coreJson;
+        coreJson["functionalDescription"] = json();
+        coreJson["functionalDescription"]["name"] = "core_U_26_22_16_N97_substractive";
+        coreJson["functionalDescription"]["type"] = "two-piece set";
+        coreJson["functionalDescription"]["material"] = "N97";
+        coreJson["functionalDescription"]["shape"] = "U 26/22/16";
+        coreJson["functionalDescription"]["gapping"] = json::array();
+        coreJson["functionalDescription"]["numberStacks"] = 1;
+        OpenMagnetics::Core core(coreJson);
+        double numberStacks = coreJson["functionalDescription"]["numberStacks"];
+
+        CHECK_EQUAL(*(core.get_mutable_functional_description().get_name()), "core_U_26_22_16_N97_substractive");
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_area(), 0.000131 * numberStacks, 0.000131 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_length(), 0.098, 0.098 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_volume(), 0.000012800 * numberStacks, 0.000012800 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_minimum_area(), 0.000129 * numberStacks, 0.000129 * numberStacks * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_height()), 0.026, 0.026 * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_width()), 0.009, 0.009 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_width(), 0.0084, 0.0084 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_depth(), 0.016 * numberStacks, 0.016 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_width(), 0.0084 * numberStacks, 0.0084 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_depth(), 0.016 * numberStacks, 0.016 * numberStacks * 0.2);
+        CHECK(core.get_processed_description()->get_columns()[0].get_shape() == OpenMagnetics::ColumnShape::RECTANGULAR);
+        CHECK(core.get_processed_description()->get_columns()[1].get_shape() == OpenMagnetics::ColumnShape::RECTANGULAR);
+    }
+
+    TEST(UR_48_39_17)
+    {
+        json coreJson;
+        coreJson["functionalDescription"] = json();
+        coreJson["functionalDescription"]["name"] = "core_UR_48_39_17_N97_substractive";
+        coreJson["functionalDescription"]["type"] = "two-piece set";
+        coreJson["functionalDescription"]["material"] = "N97";
+        coreJson["functionalDescription"]["shape"] = "UR 48/39/17";
+        coreJson["functionalDescription"]["gapping"] = json::array();
+        coreJson["functionalDescription"]["numberStacks"] = 1;
+        OpenMagnetics::Core core(coreJson);
+        double numberStacks = coreJson["functionalDescription"]["numberStacks"];
+
+        CHECK_EQUAL(*(core.get_mutable_functional_description().get_name()), "core_UR_48_39_17_N97_substractive");
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_area(), 0.000215 * numberStacks, 0.000215 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_length(), 0.186, 0.186 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_volume(), 0.000039990 * numberStacks, 0.000039990 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_minimum_area(), 0.000215 * numberStacks, 0.000215 * numberStacks * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_height()), 0.0538, 0.0538 * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_width()), 0.0174, 0.0174 * 0.2);
+        CHECK_EQUAL(core.get_processed_description()->get_columns().size(), 2u);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_width(), 0.017, 0.017 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_depth(), 0.017 * numberStacks, 0.017 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_width(), 0.013 * numberStacks, 0.013 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_depth(), 0.017 * numberStacks, 0.017 * numberStacks * 0.2);
+        CHECK(core.get_processed_description()->get_columns()[0].get_shape() == OpenMagnetics::ColumnShape::ROUND);
+        CHECK(core.get_processed_description()->get_columns()[1].get_shape() == OpenMagnetics::ColumnShape::RECTANGULAR);
+    }
+
+    TEST(UR_70_33_17)
+    {
+        json coreJson;
+        coreJson["functionalDescription"] = json();
+        coreJson["functionalDescription"]["name"] = "core_UR_70_33_17_N97_substractive";
+        coreJson["functionalDescription"]["type"] = "two-piece set";
+        coreJson["functionalDescription"]["material"] = "N97";
+        coreJson["functionalDescription"]["shape"] = "UR 70/33/17";
+        coreJson["functionalDescription"]["gapping"] = json::array();
+        coreJson["functionalDescription"]["numberStacks"] = 1;
+        OpenMagnetics::Core core(coreJson);
+        double numberStacks = coreJson["functionalDescription"]["numberStacks"];
+
+        CHECK_EQUAL(*(core.get_mutable_functional_description().get_name()), "core_UR_70_33_17_N97_substractive");
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_area(), 0.000214 * numberStacks, 0.000214 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_length(), 0.197, 0.197 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_volume(), 0.000043800 * numberStacks, 0.000043800 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_minimum_area(), 0.000214 * numberStacks, 0.000214 * numberStacks * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_height()), 0.0381, 0.0381 * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_width()), 0.035, 0.035 * 0.2);
+        CHECK_EQUAL(core.get_processed_description()->get_columns().size(), 2u);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_width(), 0.01725, 0.01725 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_depth(), 0.01725 * numberStacks, 0.01725 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_width(), 0.01725 * numberStacks, 0.01725 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_depth(), 0.01725 * numberStacks, 0.01725 * numberStacks * 0.2);
+        CHECK(core.get_processed_description()->get_columns()[0].get_shape() == OpenMagnetics::ColumnShape::ROUND);
+        CHECK(core.get_processed_description()->get_columns()[1].get_shape() == OpenMagnetics::ColumnShape::ROUND);
+    }
+
+    TEST(UR_55_39_36)
+    {
+        json coreJson;
+        coreJson["functionalDescription"] = json();
+        coreJson["functionalDescription"]["name"] = "core_UR_55_39_36_N97_substractive";
+        coreJson["functionalDescription"]["type"] = "two-piece set";
+        coreJson["functionalDescription"]["material"] = "N97";
+        coreJson["functionalDescription"]["shape"] = "UR 55/38/36";
+        coreJson["functionalDescription"]["gapping"] = json::array();
+        coreJson["functionalDescription"]["numberStacks"] = 1;
+        OpenMagnetics::Core core(coreJson);
+        double numberStacks = coreJson["functionalDescription"]["numberStacks"];
+
+        CHECK_EQUAL(*(core.get_mutable_functional_description().get_name()), "core_UR_55_39_36_N97_substractive");
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_area(), 0.000418 * numberStacks, 0.000418 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_length(), 0.188, 0.188 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_volume(), 0.000078570 * numberStacks, 0.000078570 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_minimum_area(), 0.000418 * numberStacks, 0.000418 * numberStacks * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_height()), 0.051, 0.051 * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_width()), 0.0196, 0.0196 * 0.2);
+        CHECK_EQUAL(core.get_processed_description()->get_columns().size(), 2u);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_width(), 0.0235, 0.0235 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_depth(), 0.0235 * numberStacks, 0.0235 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_width(), 0.012 * numberStacks, 0.012 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_depth(), 0.036 * numberStacks, 0.036 * numberStacks * 0.2);
+        CHECK(core.get_processed_description()->get_columns()[0].get_shape() == OpenMagnetics::ColumnShape::ROUND);
+        CHECK(core.get_processed_description()->get_columns()[1].get_shape() == OpenMagnetics::ColumnShape::RECTANGULAR);
+    }
+
+    TEST(UR_64_40_20)
+    {
+        json coreJson;
+        coreJson["functionalDescription"] = json();
+        coreJson["functionalDescription"]["name"] = "core_UR_64_40_20_N97_substractive";
+        coreJson["functionalDescription"]["type"] = "two-piece set";
+        coreJson["functionalDescription"]["material"] = "N97";
+        coreJson["functionalDescription"]["shape"] = "UR 64/40/20";
+        coreJson["functionalDescription"]["gapping"] = json::array();
+        coreJson["functionalDescription"]["numberStacks"] = 1;
+        OpenMagnetics::Core core(coreJson);
+        double numberStacks = coreJson["functionalDescription"]["numberStacks"];
+
+        CHECK_EQUAL(*(core.get_mutable_functional_description().get_name()), "core_UR_64_40_20_N97_substractive");
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_area(), 0.000290 * numberStacks, 0.000290 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_length(), 0.210, 0.210 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_volume(), 0.000061000 * numberStacks, 0.000061000 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_minimum_area(), 0.000290 * numberStacks, 0.000290 * numberStacks * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_height()), 0.053, 0.053 * 0.2);
+        CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_width()), 0.0232, 0.0232 * 0.2);
+        CHECK_EQUAL(core.get_processed_description()->get_columns().size(), 2u);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_width(), 0.020, 0.020 * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_depth(), 0.020 * numberStacks, 0.020 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_width(), 0.020 * numberStacks, 0.020 * numberStacks * 0.2);
+        CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_depth(), 0.020 * numberStacks, 0.020 * numberStacks * 0.2);
+        CHECK(core.get_processed_description()->get_columns()[0].get_shape() == OpenMagnetics::ColumnShape::ROUND);
+        CHECK(core.get_processed_description()->get_columns()[1].get_shape() == OpenMagnetics::ColumnShape::ROUND);
+    }
+
+    // TEST(UI_93_76_20)
+    // {
+    //     json coreJson;
+    //     coreJson["functionalDescription"] = json();
+    //     coreJson["functionalDescription"]["name"] = "core_UI_93_76_20_N97_substractive";
+    //     coreJson["functionalDescription"]["type"] = "piece and place set";
+    //     coreJson["functionalDescription"]["material"] = "N97";
+    //     coreJson["functionalDescription"]["shape"] = "UI 93/76/20";
+    //     coreJson["functionalDescription"]["gapping"] = json::array();
+    //     coreJson["functionalDescription"]["numberStacks"] = 1;
+    //     OpenMagnetics::Core core(coreJson);
+    //     double numberStacks = coreJson["functionalDescription"]["numberStacks"];
+
+    //     CHECK_EQUAL(*(core.get_mutable_functional_description().get_name()), "core_UI_93_76_20_N97_substractive");
+    //     CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_area(), 0.000560 * numberStacks, 0.000560 * numberStacks * 0.2);
+    //     CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_length(), 0.258, 0.258 * 0.2);
+    //     CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_effective_volume(), 0.00014400 * numberStacks, 0.00014400 * numberStacks * 0.2);
+    //     CHECK_CLOSE(core.get_processed_description()->get_effective_parameters().get_minimum_area(), 0.000560 * numberStacks, 0.000560 * numberStacks * 0.2);
+    //     CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_height()), 0.048, 0.048 * 0.2);
+    //     CHECK_CLOSE(*(core.get_processed_description()->get_winding_windows()[0].get_width()), 0.0346, 0.0346 * 0.2);
+    //     CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_width(), 0.028, 0.028 * 0.2);
+    //     CHECK_CLOSE(core.get_processed_description()->get_columns()[0].get_depth(), 0.20 * numberStacks, 0.20 * numberStacks * 0.2);
+    //     CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_width(), 0.028 * numberStacks, 0.028 * numberStacks * 0.2);
+    //     CHECK_CLOSE(core.get_processed_description()->get_columns()[1].get_depth(), 0.20 * numberStacks, 0.20 * numberStacks * 0.2);
+    //     CHECK(core.get_processed_description()->get_columns()[0].get_shape() == OpenMagnetics::ColumnShape::RECTANGULAR);
+    //     CHECK(core.get_processed_description()->get_columns()[1].get_shape() == OpenMagnetics::ColumnShape::RECTANGULAR);
+    // }
 }
 
 SUITE(geometricalDescription)

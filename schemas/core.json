@@ -16,7 +16,7 @@
                 "type": {
                     "description": "The type of core",
                     "type": "string",
-                    "enum": ["two-piece set", "toroidal"]
+                    "enum": ["two-piece set", "piece and plate", "toroidal"]
                 },
                 "material": {
                     "oneOf": [
@@ -179,7 +179,7 @@
                 "type": {
                     "description": "The type of piece",
                     "type": "string",
-                    "enum": ["half set", "toroidal", "sheet"]
+                    "enum": ["half set", "toroidal", "plate", "sheet"]
                 },
                 "material": {
                     "oneOf": [
