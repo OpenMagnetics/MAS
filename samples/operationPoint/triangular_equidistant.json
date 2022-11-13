@@ -1,0 +1,21 @@
+{
+    "frequency": 100000,
+    "current": {
+        "waveform": {
+            "data": [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.4, 0.3, 0.2, 0.1]
+        },
+        "processed": {
+            "label": "triangular",
+            "dutyCycle": 0.5
+        }
+    },
+    "voltage": {
+        "waveform": {
+            "data": [-10, 10, 10, 10, 10, 10, -10, -10, -10, -10]
+        },
+        "processed": {
+            "label": "square",
+            "dutyCycle": 0.5
+        }
+    }
+}

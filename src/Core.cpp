@@ -325,9 +325,9 @@ namespace OpenMagnetics {
                 auto dimensions = *get_shape().get_dimensions();
                 json jsonWindingWindow;
                 jsonWindingWindow["height"] = std::get<double>(dimensions["D"]);
-                jsonWindingWindow["width"] = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F1"])) / 2;
+                jsonWindingWindow["width"] = (std::get<double>(dimensions["E"]) - std::get<double>(dimensions["F"])) / 2;
                 jsonWindingWindow["area"] = jsonWindingWindow["height"].get<double>() * jsonWindingWindow["width"].get<double>();
-                jsonWindingWindow["coordinates"] = {std::get<double>(dimensions["F1"]) / 2, 0};
+                jsonWindingWindow["coordinates"] = {std::get<double>(dimensions["F"]) / 2, 0};
                 set_winding_window(jsonWindingWindow);
             }
 
@@ -339,10 +339,10 @@ namespace OpenMagnetics {
                 json jsonLateralColumn;
                 jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
                 jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::OBLONG;
-                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F1"]));
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
                 jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F2"]));
                 jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
-                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2) + (std::get<double>(dimensions["F2"]) - std::get<double>(dimensions["F1"])) * std::get<double>(dimensions["F1"]));
+                jsonMainColumn["area"] = roundFloat<6>(std::numbers::pi * pow(jsonMainColumn["width"].get<double>() / 2, 2) + (std::get<double>(dimensions["F2"]) - std::get<double>(dimensions["F"])) * std::get<double>(dimensions["F"]));
                 jsonMainColumn["coordinates"] = {0, 0, 0};
                 jsonWindingWindows.push_back(jsonMainColumn);
                 jsonLateralColumn["type"] = OpenMagnetics::ColumnType::LATERAL;
@@ -369,21 +369,21 @@ namespace OpenMagnetics {
                 double c = std::get<double>(dimensions["C"]);
                 double d = std::get<double>(dimensions["D"]);
                 double e = std::get<double>(dimensions["E"]);
-                double f1 = std::get<double>(dimensions["F1"]);
+                double f = std::get<double>(dimensions["F"]);
                 double f2 = std::get<double>(dimensions["F2"]);
                 double r = std::get<double>(dimensions["R"]);
                 double a21 = (b - d) * c;
-                double a23 = (f2 - f1 + std::numbers::pi * f1 / 2) * (b - d);
-                double a3 = 1. / 2 * (1. / 4 * std::numbers::pi * pow(f1, 2) + (f2 - f1) * f1);
+                double a23 = (f2 - f + std::numbers::pi * f / 2) * (b - d);
+                double a3 = 1. / 2 * (1. / 4 * std::numbers::pi * pow(f, 2) + (f2 - f) * f);
 
                 lengths.push_back(d);
-                lengths.push_back(e / 2 - f1 / 2);
+                lengths.push_back(e / 2 - f / 2);
                 lengths.push_back(d);
                 lengths.push_back(std::numbers::pi / 8 * (a / 2 - e / 2 + b - d));
                 lengths.push_back(std::numbers::pi / 8 * (a3 / f2 + b - d));
 
                 areas.push_back(1. / 2 * (a - e) * c - 4 * (pow(r, 2) - 1. / 4 * std::numbers::pi * pow(r, 2)));
-                areas.push_back(1. / 2 * (c + f2 - f1 + std::numbers::pi * f1 / 2) * (b - d));
+                areas.push_back(1. / 2 * (c + f2 - f + std::numbers::pi * f / 2) * (b - d));
                 areas.push_back(a3);
                 areas.push_back((areas[0] + a21) / 2);
                 areas.push_back((a23 + areas[2]) / 2);
@@ -411,7 +411,7 @@ namespace OpenMagnetics {
                 json jsonLateralColumn;
                 jsonMainColumn["type"] = OpenMagnetics::ColumnType::CENTRAL;
                 jsonMainColumn["shape"] = OpenMagnetics::ColumnShape::IRREGULAR;
-                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F1"]));
+                jsonMainColumn["width"] = roundFloat<6>(std::get<double>(dimensions["F"]));
                 jsonMainColumn["depth"] = roundFloat<6>(std::get<double>(dimensions["F2"]));
                 jsonMainColumn["height"] = roundFloat<6>(std::get<double>(dimensions["D"]));
                 jsonMainColumn["area"] = roundFloat<6>(jsonMainColumn["width"].get<double>() * jsonMainColumn["depth"].get<double>());
@@ -453,20 +453,20 @@ namespace OpenMagnetics {
                 double c = std::get<double>(dimensions["C"]);
                 double d = std::get<double>(dimensions["D"]);
                 double e = std::get<double>(dimensions["E"]);
-                double f1 = std::get<double>(dimensions["F1"]);
+                double f = std::get<double>(dimensions["F"]);
                 double f2 = std::get<double>(dimensions["F2"]);
                 double k = std::get<double>(dimensions["K"]);
                 double q = std::get<double>(dimensions["q"]);
 
                 lengths.push_back(d);
-                lengths.push_back((e - f1) / 2);
+                lengths.push_back((e - f) / 2);
                 lengths.push_back(d);
                 lengths.push_back(std::numbers::pi / 8 * ((a - e) / 2 + b - d));
-                lengths.push_back(std::numbers::pi / 4 * (f1 / 4 + sqrt(pow((c - f2 - 2 * k) / 2, 2) + pow((b - d) / 2 , 2))));
+                lengths.push_back(std::numbers::pi / 4 * (f / 4 + sqrt(pow((c - f2 - 2 * k) / 2, 2) + pow((b - d) / 2 , 2))));
 
                 areas.push_back(c * (a - e) / 2);
                 areas.push_back(c * (b - d));
-                areas.push_back((f1 * f2 - 2 * pow(q, 2)) / 2);
+                areas.push_back((f * f2 - 2 * pow(q, 2)) / 2);
                 areas.push_back((areas[0] + areas[1]) / 2);
                 areas.push_back((areas[1] + areas[2]) / 2);
 

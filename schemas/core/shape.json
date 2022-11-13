@@ -13,7 +13,7 @@
         "family": {
             "description": "The family of a magnetic shape",
             "type": "string",
-            "enum": ["u", "ur", "e", "etd", "p", "rm", "ep", "epx", "lp", "pm", "el", "er", "pq", "efd", "planar e", "planar er", "planar el", "ec", "eq"]
+            "enum": ["u", "ur", "e", "etd", "p", "rm", "ep", "epx", "lp", "pm", "el", "er", "pq", "efd", "planar e", "planar er", "planar el", "ec", "eq", "ui"]
         },
         "name": {
             "description": "The name of a magnetic shape",

@@ -79,7 +79,7 @@
                     "type": "number"
                 },
                 "angle": {
-                    "description": "The angle that the turn does, usful for partial turns, in degrees",
+                    "description": "The angle that the turn does, useful for partial turns, in degrees",
                     "type": "number",
                     "default": 360
                 },
