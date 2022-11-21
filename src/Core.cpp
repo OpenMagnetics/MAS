@@ -26,7 +26,7 @@ namespace OpenMagnetics {
     template <OpenMagnetics::DimensionalValues preferredValue> 
     double resolve_dimensional_values(OpenMagnetics::Dimension dimensionValue)
     {
-        double doubleValue;
+        double doubleValue = 0;
         if (std::holds_alternative<OpenMagnetics::Utils>(dimensionValue)) {
             switch (preferredValue){
                 case OpenMagnetics::DimensionalValues::MAXIMUM:
@@ -804,6 +804,9 @@ namespace OpenMagnetics {
                 } else if (familySubtype == "4") {
                     lmax = sqrt(1. / 4 * (pow(d2, 2) + pow(d3, 2)) - 1. / 2 * d2 * d3 * cos(alpha - beta));
                     a7 = 1. / 4 * (beta / 2 * pow(d2, 2) + 1. / 2 * d2 * d3 * sin(alpha - beta) + 1. / 2 * pow(c - d3, 2) * tan(gamma / 2) - pi / 4 * pow(d3, 2));
+                } else {
+                    lmax = 0;
+                    a7 = 0;
                 }
 
                 double f = (lmin + lmax) / (2 * lmin);
@@ -1609,6 +1612,31 @@ namespace OpenMagnetics {
         else throw std::runtime_error("Unknown shape family, available options are: {E, EC, EFD, EL, EP, EPX, LP, EQ, ER, ETD, P, PLANAR_E, PLANAR_EL, PLANAR_ER, PM, PQ, RM, U, UR}");
     }
 
+    void from_json(const json & j, OpenMagnetics::CorePiece & x);
+    void to_json(json & j, const OpenMagnetics::CorePiece & x);
+
+
+    inline void from_json(const json & j, OpenMagnetics::CorePiece& x) {
+        x.set_columns(j.at("columns").get<std::vector<OpenMagnetics::ColumnElement>>());
+        x.set_depth(j.at("depth").get<double>());
+        x.set_height(j.at("height").get<double>());
+        x.set_width(j.at("width").get<double>());
+        x.set_shape(j.at("shape").get<OpenMagnetics::CoreShape>());
+        x.set_winding_window(j.at("winding_window").get<OpenMagnetics::WindingWindowElement>());
+        x.set_partial_effective_parameters(j.at("partial_effective_parameters").get<OpenMagnetics::EffectiveParameters>());
+    }
+
+    inline void to_json(json & j, const OpenMagnetics::CorePiece & x) {
+        j = json::object();
+        j["columns"] = x.get_columns();
+        j["depth"] = x.get_depth();
+        j["height"] = x.get_height();
+        j["width"] = x.get_width();
+        j["shape"] = x.get_winding_window();
+        j["winding_window"] = x.get_shape();
+        j["partial_effective_parameters"] = x.get_partial_effective_parameters();
+    }
+
     class Core:public CoreTemplate {
         public:
         Core(const json & j) {
@@ -1746,7 +1774,7 @@ namespace OpenMagnetics {
             auto gapping = get_functional_description().get_gapping();
             double centralColumnGapsHeightOffset;
             double distanceClosestNormalSurface;
-            double coreChunkSizePlusGap;
+            double coreChunkSizePlusGap = 0;
             auto nonResidualGaps = find_gaps_by_type(GappingType::SUBTRACTIVE);
             auto additiveGaps = find_gaps_by_type(GappingType::ADDITIVE);
             nonResidualGaps.insert(nonResidualGaps.end(), additiveGaps.begin(), additiveGaps.end());

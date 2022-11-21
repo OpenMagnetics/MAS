@@ -24,3 +24,8 @@
     ```
     $ ./MAS_tests
     ```
+6. Create Python package
+
+    ```
+    python3 -m pip install -e ../ -vvv
+    ```
