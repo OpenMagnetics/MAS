@@ -1069,10 +1069,21 @@ namespace OpenMagnetics {
             std::tuple<double, double, double> get_shape_constants()
             {
                 auto dimensions = *get_shape().get_dimensions();
+                auto familySubtype = *get_shape().get_family_subtype();
+
                 std::vector<double> lengths_areas;
                 std::vector<double> lengths_areas_2;
                 std::vector<double> areas;
                 double pi = std::numbers::pi;
+
+                if (dimensions.find("alpha") == dimensions.end()) {
+                    if (familySubtype == "1") {
+                        dimensions["alpha"] = 120.;
+                    }
+                    else {
+                        dimensions["alpha"] = 90.;
+                    }
+                }
 
                 double d1 = std::get<double>(dimensions["A"]);
                 double h1 = 2 * std::get<double>(dimensions["B"]);
@@ -1942,7 +1953,6 @@ namespace OpenMagnetics {
 //     coreJson["functionalDescription"]["gapping"] = json::array();
 //     coreJson["functionalDescription"]["numberStacks"] = 1;
 //     OpenMagnetics::Core core(coreJson);
-//     std::cout << coreJson["functionalDescription"] << "\n";
 
 //     // core.process_data();
 

@@ -1295,4 +1295,16 @@ SUITE(functionalDescription)
         CHECK((*function_description.get_gapping()[3].get_coordinates())[1] == 0);
         CHECK((*function_description.get_gapping()[3].get_coordinates())[0] == -(*function_description.get_gapping()[4].get_coordinates())[0]);
     }
+
+    TEST(Custom_0)
+    {
+        auto coreFilePath = masPath + "samples/core/core_E_55_21_N97_additive.json";
+        std::ifstream json_file(coreFilePath);
+
+        auto coreJson = json::parse("""{\"functionalDescription\": {\"gapping\": [], \"material\": \"3C97\", \"shape\": {\"family\": \"pm\", \"type\": \"custom\", \"aliases\": [], \"dimensions\": {\"A\": 0.1118, \"B\": 0.046299999999999994, \"C\": 0.045, \"D\": 0.0319, \"E\": 0.08979999999999999, \"F\": 0.0286, \"G\": 0.052, \"H\": 0.0056, \"b\": 0.0058, \"t\": 0.004200000000000001}, \"familySubtype\": \"2\", \"name\": \"Custom\"}, \"type\": \"two-piece set\", \"name\": \"default\", \"numberStacks\": 1}}""");
+
+        OpenMagnetics::Core core(coreJson);
+
+        auto function_description = core.get_functional_description();
+    }
 }
