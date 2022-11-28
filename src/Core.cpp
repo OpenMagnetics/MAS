@@ -246,8 +246,14 @@ namespace OpenMagnetics {
                     tetha = asin(std::get<double>(dimensions["C"]) / std::get<double>(dimensions["E"]));
                     aperture = std::get<double>(dimensions["E"]) / 2 * cos(tetha);
                 } else {
-                    aperture = std::get<double>(dimensions["G"]) / 2;
-                    tetha = acos(aperture / (std::get<double>(dimensions["E"]) / 2));
+                    if (std::get<double>(dimensions["G"]) > 0) {
+                        aperture = std::get<double>(dimensions["G"]) / 2;
+                        tetha = acos(aperture / (std::get<double>(dimensions["E"]) / 2));
+                    }
+                    else {
+                        tetha = asin(std::get<double>(dimensions["C"]) / std::get<double>(dimensions["E"]));
+                        aperture = std::get<double>(dimensions["E"]) / 2 * cos(tetha);
+                    }
                 }
                 double segmentArea = pow(std::get<double>(dimensions["E"]) / 2, 2) / 2 * (2 * tetha - sin(2 * tetha));
                 double area = std::get<double>(dimensions["C"]) * (std::get<double>(dimensions["A"]) / 2 - aperture) - segmentArea;
