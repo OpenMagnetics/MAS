@@ -1,0 +1,32 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/core/spacer.json",
+    "title": "core/spacer",
+    "description": "Data describing the spacer used to separate cores in additive gaps",
+    "type": "object",
+    "properties": {
+        "type": {
+            "description": "The type of spacer",
+            "type": "string",
+            "enum": ["spacer"]
+        },
+        "material": {
+            "oneOf": [
+                {"$ref": "/schemas/insulation/material.json"},
+                {
+                    "description": "The name of the material used in the insulation",
+                    "type": "string"
+                }
+            ]
+        },
+        "dimensions": {
+            "description": "Dimensions of the cube defining the spacer",
+            "$ref": "/schemas/utils.json#/$defs/dimensions"
+        },
+        "coordinates": {
+            "description": "The coordinates of the center of the gap, referred to the center of the main column",
+            "$ref": "/schemas/utils.json#/$defs/coordinates"
+        }
+    },
+    "required": ["type", "material", "dimensions", "coordinates"]
+}

@@ -49,7 +49,7 @@ file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/MAS")
 
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/MAS/CoreTemplate.hpp"
-  COMMAND quicktype -l c++ -s schema ${PROJECT_SOURCE_DIR}/schemas/core.json -S ${PROJECT_SOURCE_DIR}/schemas/utils.json -S ${PROJECT_SOURCE_DIR}/schemas/core/gap.json -S ${PROJECT_SOURCE_DIR}/schemas/core/shape.json -S ${PROJECT_SOURCE_DIR}/schemas/core/material.json -S ${PROJECT_SOURCE_DIR}/schemas/insulation/material.json -S ${PROJECT_SOURCE_DIR}/schemas/insulation/wireCoating.json -S ${PROJECT_SOURCE_DIR}/schemas/core/bobbin.json -o MAS/CoreTemplate.hpp --namespace OpenMagnetics --source-style single-source --type-style pascal-case --member-style underscore-case --enumerator-style upper-underscore-case --no-boost
+  COMMAND quicktype -l c++ -s schema ${PROJECT_SOURCE_DIR}/schemas/core.json -S ${PROJECT_SOURCE_DIR}/schemas/utils.json -S ${PROJECT_SOURCE_DIR}/schemas/core/gap.json -S ${PROJECT_SOURCE_DIR}/schemas/core/shape.json -S ${PROJECT_SOURCE_DIR}/schemas/core/material.json -S ${PROJECT_SOURCE_DIR}/schemas/insulation/material.json -S ${PROJECT_SOURCE_DIR}/schemas/insulation/wireCoating.json -S ${PROJECT_SOURCE_DIR}/schemas/core/bobbin.json -S ${PROJECT_SOURCE_DIR}/schemas/core/piece.json -S ${PROJECT_SOURCE_DIR}/schemas/core/spacer.json -o MAS/CoreTemplate.hpp --namespace OpenMagnetics --source-style single-source --type-style pascal-case --member-style underscore-case --enumerator-style upper-underscore-case --no-boost
   USES_TERMINAL)
 
 add_custom_target(CoreTemplate ALL

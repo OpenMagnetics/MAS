@@ -12,6 +12,7 @@
         },
         "composition": {
             "description": "The composition of a magnetic material",
+            "title": "composition",
             "type": "string",
             "enum": ["ferrite", "powder", "nanocrystaline", "amorphous", "electricalSteel"]
         },
