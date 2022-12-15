@@ -32,6 +32,10 @@
             "description": "The coordinates of the top of the piece, referred to the center of the main column",
             "$ref": "/schemas/utils.json#/$defs/coordinates"
         },
+        "rotation": {
+            "description": "The rotation of the top of the piece from its original state, referred to the center of the main column",
+            "$ref": "/schemas/utils.json#/$defs/rotation"
+        },
         "machining": {
             "type": "array",
             "items": {
@@ -40,7 +44,7 @@
             "uniqueItems": true
         }
     },
-    "required": ["type", "material", "shape", "coordinates"],
+    "required": ["type", "material", "shape", "coordinates", "rotation"],
 
     "$defs": {
         "machining":{

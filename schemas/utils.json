@@ -43,6 +43,15 @@
             },
             "required": ["name"]
         },
+        "rotation":{
+            "description": "Data describing the rotation around the corresponding axis in cartesian 2 or 3 dimensional space, in radians",
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 3
+        },
         "coordinates":{
             "description": "Data describing coordinates in cartesian 2 or 3 dimensional space",
             "type": "array",

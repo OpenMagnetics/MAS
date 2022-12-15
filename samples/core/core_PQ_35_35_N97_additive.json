@@ -21,13 +21,15 @@
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, -0.0355, -0.01]
+            "coordinates": [0, -0.0355, -0.01],
+            "rotation": [0, 0, 0]
         },
         {
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, 0.0355, -0.01]
+            "coordinates": [0, 0.0355, -0.01],
+            "rotation": [0, 0, 0]
         },
         {
             "type": "spacer",
@@ -39,13 +41,15 @@
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, -0.0355, 0.01]
+            "coordinates": [0, -0.0355, 0.01],
+            "rotation": [0, 0, 0]
         },
         {
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, 0.0355, 0.01]
+            "coordinates": [0, 0.0355, 0.01],
+            "rotation": [0, 0, 0]
         }
     ]
 }

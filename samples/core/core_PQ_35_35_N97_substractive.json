@@ -20,13 +20,15 @@
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, -0.035, -0.01]
+            "coordinates": [0, -0.035, -0.01],
+            "rotation": [0, 0, 0]
         },
         {
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
             "coordinates": [0, 0.035, -0.01],
+            "rotation": [0, 0, 0],
             "machining": [
                 {
                     "length": 0.001,
@@ -38,13 +40,15 @@
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
-            "coordinates": [0, -0.035, 0.01]
+            "coordinates": [0, -0.035, 0.01],
+            "rotation": [0, 0, 0]
         },
         {
             "type": "half set",
             "material": "N97",
             "shape": "PQ 35/35",
             "coordinates": [0, 0.035, 0.01],
+            "rotation": [0, 0, 0],
             "machining": [
                 {
                     "length": 0.001,
