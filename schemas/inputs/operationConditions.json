@@ -1,0 +1,72 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/operationConditions.json",
+    "title": "operationConditions",
+    "description": "The description of a magnetic operation conditions",
+    "type": "object",
+    "properties": {
+        "name": {
+            "description": "A label that identifies this Operation Conditions",
+            "type": "string"
+        },
+        "ambientTemperature": {
+            "description": "Temperature of the ambient where the magnetic will operate",
+            "type": "number",
+            "minimum": -273.15
+        },
+        "ambientRelativeHumidity": {
+            "description": "Relative Humidity of the ambient where the magnetic will operate",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+        },
+        "cooling": {
+            "description": "Relative Humidity of the ambient where the magnetic will operate",
+            "oneOf": [
+                {"$ref": "#/$defs/naturalConvectionCooling"},
+                {"$ref": "#/$defs/forcedConvectionCooling"}
+            ]
+        }
+    },
+    "required": ["ambientTemperature"],
+
+    "$defs": {
+        "naturalConvectionCooling":{
+            "description": "Data describing a natural convection cooling",
+            "type": "object",
+            "title": "forcedConvectionCooling",
+            "properties": {
+                "temperature": {
+                    "description": "Temperature of the fluid. To be used only if different from ambient temperature",
+                    "type": "number"
+                },
+                "fluid": {
+                    "description": "Name of the fluid used",
+                    "type": "string",
+                    "default": "air"
+                }
+            },
+            "required": ["temperature"]
+        },
+        "forcedConvectionCooling":{
+            "description": "Data describing a forced convection cooling",
+            "type": "object",
+            "title": "forcedConvectionCooling",
+            "properties": {
+                "velocity": {
+                    "$ref": "/schemas/utils.json#/$defs/velocity"
+                },
+                "temperature": {
+                    "description": "Temperature of the fluid. To be used only if different from ambient temperature",
+                    "type": "number"
+                },
+                "fluid": {
+                    "description": "Name of the fluid used",
+                    "type": "string",
+                    "default": "air"
+                }
+            },
+            "required": ["velocity"]
+        }
+    }
+}

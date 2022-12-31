@@ -1,13 +1,14 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/core.json",
-    "title": "core",
+    "$id": "http://openmagnetics.com/schemas/magnetic/core.json",
+    "title": "magneticCore",
     "description": "The description of a magnetic core",
     "type": "object",
     "properties": {
         "functionalDescription":{
             "description": "The data from the core based on its function, in a way that can be used by analytical models.",
             "type": "object",
+            "title": "coreFunctionalDescription",
             "properties": {
                 "name": {
                     "description": "The name of core",
@@ -19,8 +20,9 @@
                     "enum": ["two-piece set", "piece and plate", "toroidal", "closed shape"]
                 },
                 "material": {
+                    "title": "CoreMaterialDataOrNameUnion",
                     "oneOf": [
-                        {"$ref": "/schemas/core/material.json"},
+                        {"$ref": "/schemas/magnetic/core/material.json"},
                         {
                             "description": "The name of the material used in the core",
                             "type": "string"
@@ -29,7 +31,7 @@
                 },
                 "bobbin": {
                     "oneOf": [
-                        {"$ref": "/schemas/core/bobbin.json"},
+                        {"$ref": "/schemas/magnetic/core/bobbin.json"},
                         {
                             "description": "The name of the bobbin used in the core",
                             "type": "string"
@@ -37,8 +39,9 @@
                     ]
                 },
                 "shape": {
+                    "title": "CoreShapeDataOrNameUnion",
                     "oneOf": [
-                        {"$ref": "/schemas/core/shape.json"},
+                        {"$ref": "/schemas/magnetic/core/shape.json"},
                         {
                             "description": "The name of the shape used in the core",
                             "type": "string"
@@ -49,7 +52,7 @@
                     "description": "The lists of gaps in the magnetic core",
                     "type": "array",
                     "items": {
-                        "$ref": "/schemas/core/gap.json"
+                        "$ref": "/schemas/magnetic/core/gap.json"
                     },
                     "uniqueItems": false
                 },
@@ -64,6 +67,7 @@
         "processedDescription":{
             "description": "The data from the core after been processed, and ready to use by the analytical models",
             "type": "object",
+            "title": "coreProcessedDescription",
             "properties": {
                 "effectiveParameters": {
                     "$ref": "#/$defs/effectiveParameters"
@@ -113,14 +117,11 @@
             "required": ["effectiveParameters", "width", "height", "depth", "windingWindows", "columns"]
         },
         "geometricalDescription":{
-            "description": "The data from the core based on its geometrical description, in a way that can be used by CAD models.",
-            "title": "GeometricalDescription",
+            "description": "List with data from the core based on its geometrical description, in a way that can be used by CAD models.",
+            "title": "coreGeometricalDescription",
             "type": "array",
             "items": {
-                "oneOf": [
-                    {"$ref": "/schemas/core/piece.json"},
-                    {"$ref": "/schemas/core/spacer.json"}
-                ]
+                "$ref": "#/$defs/coreGeometricalDescriptionElement"
             },
             "uniqueItems": true
         }
@@ -128,6 +129,14 @@
     "required": ["functionalDescription"],
 
     "$defs": {
+        "coreGeometricalDescriptionElement":{
+            "description": "The data from the core based on its geometrical description, in a way that can be used by CAD models.",
+            "title": "coreGeometricalDescriptionElement",
+            "oneOf": [
+                {"$ref": "/schemas/magnetic/core/piece.json"},
+                {"$ref": "/schemas/magnetic/core/spacer.json"}
+            ]
+        },
         "effectiveParameters":{
             "description": "Effective data of the magnetic core",
             "type": "object",
@@ -217,6 +226,7 @@
                     "enum": ["central", "lateral"]
                 },
                 "shape": {
+                    "title": "ColumnShape",
                     "$ref": "/schemas/utils.json#/$defs/columnShape"
                 },
                 "area": {

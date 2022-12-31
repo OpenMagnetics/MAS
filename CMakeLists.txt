@@ -10,6 +10,7 @@ SET(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-deprecated-declarations -Wno-unused-para
 
 option(BUILD_TESTS      "Build tests"    OFF)
 option(BUILD_EXAMPLES   "Build examples" OFF)
+option(UTPP_INCLUDE_TESTS_IN_BUILD   "Build tests" OFF)
 
 include(FetchContent)
 

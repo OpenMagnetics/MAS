@@ -1,0 +1,20 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/MAS.json",
+    "title": "MAS",
+    "description": "All the data structure used in the Magnetic Agnostic Structure",
+    "type": "object",
+    "properties": {
+        "inputs":{
+            "description": "The description of the inputs that can be used to design a Magnetic",
+            "title": "Inputs",
+            "$ref": "/schemas/inputs.json"
+        },
+        "magnetic":{
+            "description": "The description of a magnetic",
+            "title": "Magnetic",
+            "$ref": "/schemas/magnetic.json"
+        }
+    },
+    "required": ["inputs", "magnetic"]
+}

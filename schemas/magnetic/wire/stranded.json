@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/wire/stranded.json",
+    "$id": "http://openmagnetics.com/schemas/magnetic/wire/stranded.json",
     "title": "wire/stranded",
     "description": "The description of a strand magnet wire",
     "type": "object",
@@ -26,7 +26,7 @@
         "strand": {
             "description": "The wire used as strands",
             "oneOf": [
-                {"$ref": "/schemas/wire/solid.json"},
+                {"$ref": "/schemas/magnetic/wire/solid.json"},
                 {
                     "description": "The name of the wire used as strand",
                     "type": "string"
@@ -44,7 +44,7 @@
         },
         "coating": {
             "oneOf": [
-                {"$ref": "/schemas/insulation/wireCoating.json"},
+                {"$ref": "/schemas/magnetic/insulation/wireCoating.json"},
                 {
                     "description": "The name of the coating used in the wire",
                     "type": "string"

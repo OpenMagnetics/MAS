@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/core/piece.json",
+    "$id": "http://openmagnetics.com/schemas/magnetic/core/piece.json",
     "title": "core/piece",
     "description": "Data describing the a piece of a core",
     "type": "object",
@@ -11,8 +11,9 @@
             "enum": ["half set", "toroidal", "plate", "sheet", "closed"]
         },
         "material": {
+            "title": "CoreMaterialDataOrNameUnion",
             "oneOf": [
-                {"$ref": "/schemas/core/material.json"},
+                {"$ref": "/schemas/magnetic/core/material.json"},
                 {
                     "description": "The name of the material used in the piece",
                     "type": "string"
@@ -20,8 +21,9 @@
             ]
         },
         "shape": {
+            "title": "CoreShapeDataOrNameUnion",
             "oneOf": [
-                {"$ref": "/schemas/core/shape.json"},
+                {"$ref": "/schemas/magnetic/core/shape.json"},
                 {
                     "description": "The name of the shape used in the piece",
                     "type": "string"

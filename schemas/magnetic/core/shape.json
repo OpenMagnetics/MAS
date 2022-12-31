@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/core/shape.json",
+    "$id": "http://openmagnetics.com/schemas/magnetic/core/shape.json",
     "title": "core/shape",
     "description": "A shape for the magnetic cores",
     "type": "object",

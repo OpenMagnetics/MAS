@@ -1,12 +1,13 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "resource:/schemas/winding#",
+    "$id": "http://openmagnetics.com/schemas/magnetic/winding.json",
     "title": "winding",
     "description": "The description of a magnetic winding",
     "type": "object",
     "properties": {
         "functionalDescription":{
             "description": "The data from the winding based on its function, in a way that can be used by analytical models of only Magnetism.",
+            "title": "windingFunctionalDescription",
             "type": "array",
             "items": {
                 "$ref": "#/$defs/winding"
@@ -33,12 +34,13 @@
             "description": "The data from the winding at the turn level, in a way that can be used by the most advanced analytical and finite element models",
             "type": "array",
             "items": {
-                "$ref": "#/$defs/section"
+                "$ref": "#/$defs/turn"
             },
             "minItems": 1
         }
     },
     "anyOf": [
+        {"required": ["functionalDescription"]},
         {"required": ["functionalDescription", "sectionsDescription"]},
         {"required": ["functionalDescription", "layersDescription"]},
         {"required": ["functionalDescription", "turnsDescription"]}
@@ -75,7 +77,7 @@
                     "enum": ["clockwire", "counterClockwise"]
                 },
                 "length": {
-                    "description": "The length of the turn, referred from the center of the section, in m",
+                    "description": "The length of the turn, referred from the center of its cross section, in m",
                     "type": "number"
                 },
                 "angle": {
@@ -111,7 +113,7 @@
                     "description": "List of partial windings in this section",
                     "type": "array",
                     "items":{
-                        "$ref": "#/$defs/piece"
+                        "$ref": "#/$defs/partialWinding"
                     }
                 },
                 "dimensions": {
@@ -142,7 +144,7 @@
                     "description": "List of partial windings in this section",
                     "type": "array",
                     "items":{
-                        "$ref": "#/$defs/piece"
+                        "$ref": "#/$defs/partialWinding"
                     }
                 },
                 "dimensions": {
@@ -207,8 +209,8 @@
                 },
                 "wire": {
                     "oneOf": [
-                        {"$ref": "file://schemas/wire/solid.json"},
-                        {"$ref": "file://schemas/wire/stranded.json"},
+                        {"$ref": "/schemas/magnetic/wire/solid.json"},
+                        {"$ref": "/schemas/magnetic/wire/stranded.json"},
                         {
                             "description": "The name of the wire",
                             "type": "string"

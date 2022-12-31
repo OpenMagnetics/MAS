@@ -1,0 +1,18 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/magnetic.json",
+    "title": "magnetic",
+    "description": "The description of a magnetic",
+    "type": "object",
+    "properties": {
+        "core":{
+            "description": "Data describing the magnetic core.",
+            "$ref": "/schemas/magnetic/core.json"
+        },
+        "winding":{
+            "description": "Data describing the winding",
+            "$ref": "/schemas/magnetic/winding.json"
+        }
+    },
+    "required": ["core", "winding"]
+}

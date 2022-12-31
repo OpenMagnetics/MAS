@@ -33,7 +33,7 @@
         },
         {
             "type": "spacer",
-            "material": "plastic",
+            "insulationMaterial": "plastic",
             "dimensions": [0.02, 0.001, 0.02],
             "coordinates": [0, 0, 0]
         },

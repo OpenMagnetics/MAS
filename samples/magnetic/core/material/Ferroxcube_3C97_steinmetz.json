@@ -1,0 +1,39 @@
+{
+    "type": "commercial",
+    "materialComposition": "ferrite",
+    "name": "3C97",
+    "manufacturerInfo": {
+        "name": "Ferroxcube"
+    },
+    "permeability": {
+        "initial": {
+          "value": 3000
+        }
+    },
+    "saturation": [
+        {
+            "magneticFluxDensity": 0.35221929492417337,
+            "magneticField": 75,
+            "temperature": 100
+        }
+    ],
+    "volumetricLosses": {
+        "default": [
+            {
+                "method": "steinmetz",
+                "ranges": [
+                    {
+                        "minimumFrequency": 20000,
+                        "maximumFrequency": 150000,
+                        "k": 42.36588301,
+                        "alpha": 1.16,
+                        "beta": 2.8,
+                        "ct0": 0.0000635519,
+                        "ct1": 0.01100719,
+                        "ct2": 1.465
+                    }
+                ]
+            }
+        ]
+    }
+}

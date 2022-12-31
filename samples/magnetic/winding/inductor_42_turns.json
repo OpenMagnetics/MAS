@@ -1,0 +1,11 @@
+{
+    "functionalDescription":[
+        {
+            "name": "MyWinding",
+            "numberTurns": 42,
+            "numberParallels": 2,
+            "isolationSide": "primary",
+            "wire": "Litz 450x01"
+        }
+    ]
+}

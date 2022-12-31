@@ -70,6 +70,7 @@ SUITE(Samples)
                         }
 
                         std::ifstream json_file(dir_entry.path());
+                        // std::cout << dir_entry.path() << std::endl;
                         auto jf = json::parse(json_file);
                         try
                         {
@@ -150,10 +151,13 @@ SUITE(Data)
 
             try
             {
+                // std::cout << database << std::endl;
                 std::ifstream ndjson_file(database);
                 std::string myline;
+
                 while (std::getline(ndjson_file, myline))
                 {
+                    // std::cout << myline << std::endl;
                     json jf = json::parse(myline);
 
                     try
@@ -163,7 +167,7 @@ SUITE(Data)
                     catch (const std::exception & e)
                     {
                         std::cerr << "Validation failed, here is why: " << e.what() << "\n";
-                         CHECK(false); // fails
+                        CHECK(false); // fails
                         break;
                     }
                 }
@@ -186,21 +190,22 @@ SUITE(Data)
     TEST(Shapes)
     {
         auto data_file_path = mas_path + "data/shapes.ndjson";
-        auto schema_file_path = mas_path + "schemas/core/shape.json";
+        auto schema_file_path = mas_path + "schemas/magnetic/core/shape.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
 
     TEST(Bobbins)
     {
         auto data_file_path = mas_path + "data/bobbins.ndjson";
-        auto schema_file_path = mas_path + "schemas/core/bobbin.json";
+        auto schema_file_path = mas_path + "schemas/magnetic/core/bobbin.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
 
     TEST(Materials)
     {
-        auto data_file_path = mas_path + "data/materials.ndjson";
-        auto schema_file_path = mas_path + "schemas/core/material.json";
+        // auto data_file_path = mas_path + "data/materials.ndjson";
+        auto data_file_path = mas_path + "data/extractor/materials.ndjson";
+        auto schema_file_path = mas_path + "schemas/magnetic/core/material.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
 }

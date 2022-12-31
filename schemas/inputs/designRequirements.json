@@ -1,0 +1,82 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/designRequirements.json",
+    "title": "designRequirements",
+    "description": "The list of requirement that must comply a given magnetic",
+    "type": "object",
+    "properties": {
+        "name": {
+            "description": "A label that identifies these Design Requirements",
+            "type": "string"
+        },
+        "magnetizingInductance": {
+            "description": "Required values for the magnetizing inductance",
+            "$ref": "#/$defs/numericRequirement"
+        },
+        "leakageInductance": {
+            "description": "Required values for the leakage inductance",
+            "$ref": "#/$defs/numericRequirement"
+        },
+        "operationTemperature": {
+            "description": "Required values for the temperature that the magnetic can reach under operation",
+            "$ref": "#/$defs/numericRequirement"
+        },
+        "altitude": {
+            "description": "Required values for the altitude",
+            "$ref": "#/$defs/numericRequirement"
+        },
+        "cti": {
+            "description": "Required CTI",
+            "type": "string",
+            "enum": ["Group I", "Group II", "Group IIIa", "Group IIIb"]
+        },
+        "pollutionDegree": {
+            "description": "Required pollution for the magnetic to work under",
+            "type": "string",
+            "enum": ["P1", "P2", "P3"]
+        },
+        "overvoltageCategory": {
+            "description": "Required overvoltage category",
+            "type": "string",
+            "enum": ["OVC-I", "OVC-II", "OVC-III", "OVC-IV"]
+        },
+        "insulationType": {
+            "description": "Required type of insulation",
+            "type": "string",
+            "enum": ["Functional", "Basic", "Supplementary", "Double", "Reinforced"]
+        }
+    },
+    "required": ["magnetizingInductance"],
+
+    "$defs": {
+        "numericRequirement":{
+            "description": "Data describing a minimum, maximum or range requirement",
+            "type": "object",
+            "title": "numericRequirement",
+            "properties": {
+                "minimum": {
+                    "description": "Minimum value of the requirement",
+                    "type": "number"
+                },
+                "excludeMinimum": {
+                    "description": "True is the minimum value must be excluded from the range",
+                    "type": "boolean",
+                    "default": false
+                },
+                "maximum": {
+                    "description": "Maximum value of the requirement",
+                    "type": "number"
+                },
+                "excludeMaximum": {
+                    "description": "True is the maximum value must be excluded from the range",
+                    "type": "boolean",
+                    "default": false
+                }
+            },
+            "oneOf": [
+                {"required": ["minimum"]},
+                {"required": ["maximum"]},
+            ]
+        }
+    }
+}
