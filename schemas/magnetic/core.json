@@ -16,6 +16,7 @@
                 },
                 "type": {
                     "description": "The type of core",
+                    "title": "coreType",
                     "type": "string",
                     "enum": ["two-piece set", "piece and plate", "toroidal", "closed shape"]
                 },
