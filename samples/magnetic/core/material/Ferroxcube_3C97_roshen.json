@@ -7,12 +7,10 @@
     },
     "permeability": {
         "initial":{
-            "value":[{
-                "value": 3000,
-                "tolerance": 0.20,
-                "temperature": 25,
-                "magneticFluxDensityPeak": 0.00025
-            }]
+            "value": 3000,
+            "tolerance": 0.20,
+            "temperature": 25,
+            "magneticFluxDensityPeak": 0.00025
         }
     },
     "saturation": [

@@ -14,7 +14,7 @@
             "description": "The composition of a magnetic material",
             "title": "materialComposition",
             "type": "string",
-            "enum": ["ferrite", "powder", "nanocrystaline", "amorphous", "electricalSteel"]
+            "enum": ["ferrite", "ironPowder", "nanocrystaline", "amorphous", "electricalSteel"]
         },
         "name": {
             "description": "The name of a magnetic material",
@@ -38,40 +38,23 @@
         },
         "permeability":{
             "description": "The data regarding the relative permeability of a magnetic material",
+            "title": "permeabilities",
             "type": "object",
             "properties": {
                 "initial": {
-                    "title": "initialPermeability",
-                    "type": "object",
-                    "properties": {
-                        "value": {
-                            "anyOf": [
-                                {
-                                    "description": "Fixed simple initial permeability given by the manufacturer",
-                                    "type": "number",
-                                    "minimum": 1
-                                },
-                                {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/$defs/permeabilityPoint"
-                                    },
-                                    "minItems": 0,
-                                    "uniqueItems": true
-                                }
-                            ]
+                    "oneOf": [
+                        {
+                            "$ref": "#/$defs/permeabilityPoint"
                         },
-                        "modifiers": {
-                            "description": "The initial permeability of a magnetic material according to its manufacturer",
-                            "title": "initialPermeabilitModifier",
-                            "type": "object",
-                            "additionalProperties": {
-                                "description": "Object where keys are shape families for which this permeability is valid. If missing, the variant is valid for all shapes",
-                                "$ref": "#/$defs/magneticsPermeabilityMethodData"
-                            }
+                        {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/permeabilityPoint"
+                            },
+                            "minItems": 1,
+                            "uniqueItems": true
                         }
-                    },
-                    "required": ["value"]
+                    ]
                 },
                 "amplitude": {
                     "description": "The amplitude permeability of a magnetic material according to its manufacturer",
@@ -172,6 +155,15 @@
                     "description": "Frequency of the Magnetic field, in Hz",
                     "type": "number",
                     "exclusiveMinimum": 0
+                },
+                "modifiers": {
+                    "description": "The initial permeability of a magnetic material according to its manufacturer",
+                    "title": "initialPermeabilitModifier",
+                    "type": "object",
+                    "additionalProperties": {
+                        "description": "Object where keys are shape families for which this permeability is valid. If missing, the variant is valid for all shapes",
+                        "$ref": "#/$defs/magneticsPermeabilityMethodData"
+                    }
                 }
             },
             "required": ["value"]
@@ -265,26 +257,23 @@
             "title": "volumetricLossesPoint",
             "properties": {
                 "magneticFluxDensity": {
-                    "description": "magnetic flux density value, in T",
-                    "type": "number",
-                    "exclusiveMinimum": 0
-                },
-                "frequency": {
-                    "description": "frequency value, in Hz",
-                    "type": "number",
-                    "exclusiveMinimum": 0
+                    "$ref": "/schemas/inputs/operationPointExcitation.json"
                 },
                 "temperature": {
                     "description": "temperature value, in Celsius",
                     "type": "number"
                 },
                 "volumetricLosses": {
-                    "description": "voluemtric losses value, in W/m3",
+                    "description": "volumetric losses value, in W/m3",
                     "type": "number",
                     "exclusiveMinimum": 0
+                },
+                "origin": {
+                    "description": "origin of the data",
+                    "type": "string"
                 }
             },
-            "required": ["magneticFluxDensity", "frequency", "temperature", "volumetricLosses"]
+            "required": ["magneticFluxDensity", "origin", "temperature", "volumetricLosses"]
         },
         "roshenCoreLossesMethodData": {
             "description": "Roshen coefficients for estimating volumetric losses",

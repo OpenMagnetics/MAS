@@ -6,6 +6,8 @@
         },
         "processed": {
             "label": "triangular",
+            "peakToPeak": 0.5,
+            "offset": 0,
             "dutyCycle": 0.5
         }
     },
@@ -15,6 +17,8 @@
         },
         "processed": {
             "label": "square",
+            "peakToPeak": 20,
+            "offset": 0,
             "dutyCycle": 0.5
         }
     }

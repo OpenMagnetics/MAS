@@ -81,7 +81,8 @@
                             "description": "The Total Harmonic Distortion of the waveform, according to https://en.wikipedia.org/wiki/Total_harmonic_distortion",
                             "type": "number"
                         }
-                    }
+                    },
+                    "required": ["label", "peakToPeak", "offset"]
                 },
                 "harmonics": {
                     "description": "Data containing the harmonics of the waveform, defined by a list of amplitudes and a list of frequencies",
@@ -107,7 +108,11 @@
                     "required": ["amplitudes", "frequencies"]
                 }
             },
-            "required": ["waveform"]
+            "anyOf": [
+                {"required": ["waveform"]},
+                {"required": ["processed"]},
+                {"required": ["harmonics"]}
+            ]
         },
         "equidistantWaveform":{
             "description": "Data containing the points that define an arbitrary waveform with equidistant points",
