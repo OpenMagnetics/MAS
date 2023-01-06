@@ -203,8 +203,7 @@ SUITE(Data)
 
     TEST(Materials)
     {
-        // auto data_file_path = mas_path + "data/materials.ndjson";
-        auto data_file_path = mas_path + "data/extractor/gecko_materials.ndjson";
+        auto data_file_path = mas_path + "data/materials.ndjson";
         auto schema_file_path = mas_path + "schemas/magnetic/core/material.json";
         validate_ndjson(schema_file_path, data_file_path);
     }

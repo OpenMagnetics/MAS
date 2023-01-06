@@ -42,19 +42,7 @@
             "type": "object",
             "properties": {
                 "initial": {
-                    "oneOf": [
-                        {
-                            "$ref": "#/$defs/permeabilityPoint"
-                        },
-                        {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/$defs/permeabilityPoint"
-                            },
-                            "minItems": 1,
-                            "uniqueItems": true
-                        }
-                    ]
+                    "$ref": "#/$defs/permeability"
                 },
                 "amplitude": {
                     "description": "The amplitude permeability of a magnetic material according to its manufacturer",
@@ -121,6 +109,22 @@
                 }
             },
             "required": ["value"]
+        },
+        "permeability": {
+            "title": "permeability",
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/permeabilityPoint"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/permeabilityPoint"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                }
+            ]
         },
         "permeabilityPoint": {
             "description": "data for describing one point of permebility",
@@ -263,7 +267,7 @@
                     "description": "temperature value, in Celsius",
                     "type": "number"
                 },
-                "volumetricLosses": {
+                "value": {
                     "description": "volumetric losses value, in W/m3",
                     "type": "number",
                     "exclusiveMinimum": 0
@@ -273,7 +277,7 @@
                     "type": "string"
                 }
             },
-            "required": ["magneticFluxDensity", "origin", "temperature", "volumetricLosses"]
+            "required": ["magneticFluxDensity", "origin", "temperature", "value"]
         },
         "roshenCoreLossesMethodData": {
             "description": "Roshen coefficients for estimating volumetric losses",
