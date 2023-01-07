@@ -45,13 +45,7 @@
                     "$ref": "#/$defs/permeability"
                 },
                 "amplitude": {
-                    "description": "The amplitude permeability of a magnetic material according to its manufacturer",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/permeabilityPoint"
-                    },
-                    "minItems": 1,
-                    "uniqueItems": true
+                    "$ref": "#/$defs/permeability"
                 }
             },
             "required": ["initial"]
@@ -148,10 +142,9 @@
                 },
                 "magneticFluxDensityPeak": {
                     "description": "magnetic flux density peak for the field value, in T",
-                    "type": "number",
-                    "exclusiveMinimum": 0
+                    "type": "number"
                 },
-                "magneticFieldBias": {
+                "magneticFieldDcBias": {
                     "description": "DC bias in the magnetic field, in A/m",
                     "type": "number"
                 },
@@ -337,9 +330,9 @@
                 "method": {
                     "description": "Name of this method",
                     "type": "string",
-                    "const": "magnetics"
+                    "const": "Magnetics"
                 },
-                "hDcBiasFactor": {
+                "magneticFieldDcBiasFactor": {
                     "description": "Field with the coefficients used to calculate how much the permeability decreases with the H DC bias, as factor = a + b * pow(H, c)",
                     "type": "object",
                     "properties": {
@@ -352,7 +345,8 @@
                         "c": {
                             "type": "number"
                         }
-                    }
+                    },
+                    "required": ["a", "b", "c"]
                 },
                 "frequencyFactor": {
                     "description": "Field with the coefficients used to calculate how much the permeability decreases with the frequency, as factor = a + b * f + c * pow(f, 2) + d * pow(f, 3) + e * pow(f, 4)",
@@ -373,7 +367,8 @@
                         "e": {
                             "type": "number"
                         }
-                    }
+                    },
+                    "required": ["a", "b", "c", "d", "e"]
                 },
                 "temperatureFactor": {
                     "description": "Field with the coefficients used to calculate how much the permeability decreases with the temperature, as factor = a + b * T + c * pow(T, 2) + d * pow(T, 3) + e * pow(T, 4)",
@@ -394,10 +389,11 @@
                         "e": {
                             "type": "number"
                         }
-                    }
+                    },
+                    "required": ["a", "b", "c", "d", "e"]
                 }
             },
-            "required": ["hDcBiasFactor"]
+            "required": ["magneticFieldDcBiasFactor"]
         }
     }
 }
