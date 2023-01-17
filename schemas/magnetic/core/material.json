@@ -27,6 +27,10 @@
             "description": "The family of a magnetic material according to its manufacturer",
             "type": "string"
         },
+        "curieTemperature": {
+            "description": "The temperature at which this material losses all ferromagnetism",
+            "type": "number"
+        },
         "saturation": {
             "description": "BH Cycle points where a non-negligible increase in magnetic field produces a negligible increase of magnetic flux density",
             "type": "array",

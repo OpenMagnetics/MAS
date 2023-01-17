@@ -25,6 +25,9 @@
         },
         "magneticField":{
             "$ref": "#/$defs/electromagneticParameter"
+        },
+        "magnetizingCurrent":{
+            "$ref": "#/$defs/electromagneticParameter"
         }
     },
     "anyOf": [
@@ -49,8 +52,9 @@
                     "properties": {
                         "label": {
                             "description": "Label of the waveform, if applicable. Used for common waveforms",
+                            "title": "waveformLabel",
                             "type": "string",
-                            "enum": ["triangular", "square", "sinusoidal", "square with dead time", "flyback", "phase-shifted full bridge"]
+                            "enum": ["custom", "triangular", "square", "sinusoidal", "square with dead time", "flyback", "phase-shifted full bridge"]
                         },
                         "dutyCycle": {
                             "description": "The duty cycle of the waveform, if applicable",
@@ -110,8 +114,7 @@
             },
             "anyOf": [
                 {"required": ["waveform"]},
-                {"required": ["processed"]},
-                {"required": ["harmonics"]}
+                {"required": ["processed"]}
             ]
         },
         "equidistantWaveform":{
@@ -152,6 +155,9 @@
                         "type": "number"
                     },
                     "uniqueItems": false
+                },
+                "ancillaryLabel": {
+                    "type": "string"
                 }
             },
             "required": ["data", "time"]

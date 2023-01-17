@@ -13,6 +13,14 @@
             "description": "Required values for the magnetizing inductance",
             "$ref": "#/$defs/numericRequirement"
         },
+        "turnsRatios": {
+            "description": "Required turns ratios between primary and the rest of windings",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/numericRequirement"
+            },
+            "minItems": 0
+        },
         "leakageInductance": {
             "description": "Required values for the leakage inductance",
             "$ref": "#/$defs/numericRequirement"
@@ -46,7 +54,7 @@
             "enum": ["Functional", "Basic", "Supplementary", "Double", "Reinforced"]
         }
     },
-    "required": ["magnetizingInductance"],
+    "required": ["magnetizingInductance", "turnsRatios"],
 
     "$defs": {
         "numericRequirement":{
@@ -54,6 +62,10 @@
             "type": "object",
             "title": "numericRequirement",
             "properties": {
+                "nominal": {
+                    "description": "Nominal value of the requirement",
+                    "type": "number"
+                },
                 "minimum": {
                     "description": "Minimum value of the requirement",
                     "type": "number"
@@ -76,6 +88,7 @@
             "oneOf": [
                 {"required": ["minimum"]},
                 {"required": ["maximum"]},
+                {"required": ["nominal"]},
             ]
         }
     }

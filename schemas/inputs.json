@@ -36,8 +36,8 @@
                     "title": "operationConditions",
                     "$ref": "/schemas/inputs/operationConditions.json"
                 },
-                "windingExcitations": {
-                    "title": "excitations",
+                "excitationsPerWinding": {
+                    "title": "excitationsPerWinding",
                     "type": "array",
                     "items": {
                         "title": "OperationPointExcitationPerWinding",
@@ -57,7 +57,7 @@
                     "minItems": 1
                 }
             },
-            "required": ["conditions", "windingExcitations"]
+            "required": ["conditions", "excitationsPerWinding"]
         }
     }
 }
