@@ -41,18 +41,8 @@
                     "type": "array",
                     "items": {
                         "title": "OperationPointExcitationPerWinding",
-                        "description": "Data describing the excitation of one port of a magnetic for a given operation point",
-                        "type": "object",
-                        "properties": {
-                            "winding":{
-                                "type": "string"
-                            },
-                            "excitation":{
-                                "description": "Data describing the excitation of the winding",
-                                "$ref": "/schemas/inputs/operationPointExcitation.json"
-                            }
-                        },
-                        "required": ["winding", "excitation"]
+                        "description": "Data describing the excitation of the winding",
+                        "$ref": "/schemas/inputs/operationPointExcitation.json"
                     },
                     "minItems": 1
                 }

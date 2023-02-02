@@ -81,6 +81,11 @@
                             "type": "number",
                             "minimum": 0
                         },
+                        "acEffectiveFrequency": {
+                            "description": "The effective frequency value of the AC component of the waveform, according to https://sci-hub.wf/https://ieeexplore.ieee.org/document/750181, Appedix C",
+                            "type": "number",
+                            "minimum": 0
+                        },
                         "thd": {
                             "description": "The Total Harmonic Distortion of the waveform, according to https://en.wikipedia.org/wiki/Total_harmonic_distortion",
                             "type": "number"
