@@ -23,7 +23,7 @@
         "magneticFluxDensity":{
             "$ref": "#/$defs/electromagneticParameter"
         },
-        "magneticField":{
+        "magneticFieldStrength":{
             "$ref": "#/$defs/electromagneticParameter"
         },
         "magnetizingCurrent":{
@@ -67,6 +67,11 @@
                             "type": "number",
                             "minimum": 0
                         },
+                        "peak": {
+                            "description": "The maximum positive value of the waveform",
+                            "type": "number",
+                            "minimum": 0
+                        },
                         "offset": {
                             "description": "The offset value of the waveform, referred to 0",
                             "type": "number"
@@ -77,12 +82,12 @@
                             "minimum": 0
                         },
                         "effectiveFrequency": {
-                            "description": "The effective frequency value of the waveform, according to https://sci-hub.wf/https://ieeexplore.ieee.org/document/750181, Appedix C",
+                            "description": "The effective frequency value of the waveform, according to https://sci-hub.wf/https://ieeexplore.ieee.org/document/750181, Appendix C",
                             "type": "number",
                             "minimum": 0
                         },
                         "acEffectiveFrequency": {
-                            "description": "The effective frequency value of the AC component of the waveform, according to https://sci-hub.wf/https://ieeexplore.ieee.org/document/750181, Appedix C",
+                            "description": "The effective frequency value of the AC component of the waveform, according to https://sci-hub.wf/https://ieeexplore.ieee.org/document/750181, Appendix C",
                             "type": "number",
                             "minimum": 0
                         },
@@ -91,7 +96,10 @@
                             "type": "number"
                         }
                     },
-                    "required": ["label", "peakToPeak", "offset"]
+                    "anyOf": [
+                        {"required": ["label", "peakToPeak", "offset" ]},
+                        {"required": ["label", "peak", "offset" ]}
+                    ]
                 },
                 "harmonics": {
                     "description": "Data containing the harmonics of the waveform, defined by a list of amplitudes and a list of frequencies",

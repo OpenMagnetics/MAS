@@ -5,6 +5,15 @@
     "description": "The description of a magnetic winding",
     "type": "object",
     "properties": {
+        "bobbin": {
+            "oneOf": [
+                {"$ref": "/schemas/magnetic/core/bobbin.json"},
+                {
+                    "description": "The name of the bobbin used in the core",
+                    "type": "string"
+                }
+            ]
+        },
         "functionalDescription":{
             "description": "The data from the winding based on its function, in a way that can be used by analytical models of only Magnetism.",
             "title": "windingFunctionalDescription",
@@ -100,6 +109,11 @@
                     "description": "Name given to the layer",
                     "type": "string"
                 },
+                "type": {
+                    "description": "Type of the layer",
+                    "type": "string",
+                    "enum": ["wiring", "insulation"]
+                },
                 "section": {
                     "description": "The name of the section that this layer belongs to",
                     "type": "string"
@@ -116,6 +130,16 @@
                         "$ref": "#/$defs/partialWinding"
                     }
                 },
+                "insulationMaterial": {
+                    "description": "In case of insulating layer, the material used",
+                    "oneOf": [
+                        {"$ref": "/schemas/magnetic/insulation/material.json"},
+                        {
+                            "description": "The insulating material",
+                            "type": "string"
+                        }
+                    ]
+                },
                 "dimensions": {
                     "description": "Dimensions of the rectangle defining the section",
                     "$ref": "/schemas/utils.json#/$defs/dimensions"
@@ -125,7 +149,7 @@
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
-            "required": ["name", "orientation", "partialWindings", "dimensions", "coordinates"]
+            "required": ["name", "type", "orientation", "partialWindings", "dimensions", "coordinates"]
         },
         "section":{
             "description": "Data describing one section in a magnetic",

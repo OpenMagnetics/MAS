@@ -40,7 +40,7 @@
             "exclusiveMinimum": 0
         },
         "breakdownVoltage": {
-            "description": "The thickness of the insulation aorund the wire, in V",
+            "description": "The minimum voltage that causes a portion of an insulator to experience electrical breakdown and become electrically conductive, in V",
             "type": "number",
             "exclusiveMinimum": 0
         }

@@ -16,13 +16,9 @@
         "maximum": 0.0207
     },
     "outerThickness": {
-        "minimum": 0.00009,
-        "maximum": 0.00011
+        "nominal": 0.0001
     },
     "coating":{
-        "type": "enamelled",
-        "maximumThickness": 0.00016,
-        "grade": 1,
-        "breakdownVoltage": 1600
+        "type": "bare"
     }
 }

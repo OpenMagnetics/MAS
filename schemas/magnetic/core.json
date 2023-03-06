@@ -5,15 +5,18 @@
     "description": "The description of a magnetic core",
     "type": "object",
     "properties": {
+        "name": {
+            "description": "The name of core",
+            "type": "string"
+        },
+        "manufacturerInfo": {
+            "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
+        },
         "functionalDescription":{
             "description": "The data from the core based on its function, in a way that can be used by analytical models.",
             "type": "object",
             "title": "coreFunctionalDescription",
             "properties": {
-                "name": {
-                    "description": "The name of core",
-                    "type": "string"
-                },
                 "type": {
                     "description": "The type of core",
                     "title": "coreType",
@@ -26,15 +29,6 @@
                         {"$ref": "/schemas/magnetic/core/material.json"},
                         {
                             "description": "The name of the material used in the core",
-                            "type": "string"
-                        }
-                    ]
-                },
-                "bobbin": {
-                    "oneOf": [
-                        {"$ref": "/schemas/magnetic/core/bobbin.json"},
-                        {
-                            "description": "The name of the bobbin used in the core",
                             "type": "string"
                         }
                     ]
@@ -148,7 +142,7 @@
                     "exclusiveMinimum": 0
                 },
                 "effectiveArea": {
-                    "description": "This is the equivalent section the that magnetic flux traverses, because the shape of the core is not uniform and its section changes along the path",
+                    "description": "This is the equivalent section that the magnetic flux traverses, because the shape of the core is not uniform and its section changes along the path",
                     "type": "number",
                     "exclusiveMinimum": 0
                 },

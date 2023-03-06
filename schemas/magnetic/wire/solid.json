@@ -19,13 +19,8 @@
             "type": "string",
             "enum": ["IEC 60317", "JIS C3202", "NEMA MW 1000C"]
         },
-        "manufacturer": {
-            "description": "The manufacturer of the wire",
-            "type": "string"
-        },
-        "manufacturerPartNumber": {
-            "description": "The part number of manufacturer for the wire",
-            "type": "string"
+        "manufacturerInfo": {
+            "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
         },
         "material": {
             "oneOf": [

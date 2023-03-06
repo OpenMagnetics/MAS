@@ -23,7 +23,11 @@
         },
         "leakageInductance": {
             "description": "Required values for the leakage inductance",
-            "$ref": "#/$defs/numericRequirement"
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/numericRequirement"
+            },
+            "minItems": 0
         },
         "operationTemperature": {
             "description": "Required values for the temperature that the magnetic can reach under operation",
