@@ -322,6 +322,29 @@
                     },
                     "minItems": 2,
                     "uniqueItems": true
+                },
+                "coefficients": {
+                    "description": "List of coefficients for taking into account the excess losses and the dependencies of the resistivity",
+                    "title": "roshenAdditionalCoefficients",
+                    "type": "object",
+                    "properties": {
+                        "excessLossesCoefficient": {
+                            "type": "number"
+                        },
+                        "resistivityFrequencyCoefficient": {
+                            "type": "number"
+                        },
+                        "resistivityMagneticFluxDensityCoefficient": {
+                            "type": "number"
+                        },
+                        "resistivityOffset": {
+                            "type": "number"
+                        },
+                        "resistivityTemperatureCoefficient": {
+                            "type": "number"
+                        }
+                    },
+                    "required": ["excessLossesCoefficient", "resistivityFrequencyCoefficient", "resistivityMagneticFluxDensityCoefficient", "resistivityOffset", "resistivityTemperatureCoefficient"]
                 }
             },
             "required": ["method", "remanence", "coerciveForce", "resistivity"]
