@@ -12,6 +12,14 @@
         "manufacturerInfo": {
             "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
         },
+        "distributorsInfo": {
+            "description": "The lists of distributors of the magnetic core",
+            "type": "array",
+            "items": {
+                "$ref": "/schemas/utils.json#/$defs/distributorInfo"
+            },
+            "uniqueItems": false
+        },
         "functionalDescription":{
             "description": "The data from the core based on its function, in a way that can be used by analytical models.",
             "type": "object",
@@ -55,7 +63,12 @@
                     "description": "The number of stacked cores",
                     "type": "integer",
                     "minimum": 1
-                }
+                },
+                "coating": {
+                    "description": "The coating of the core",
+                    "type": "string",
+                    "enum": ["epoxy"]
+                },
             },
             "required": ["type", "material", "shape", "gapping"]
         },

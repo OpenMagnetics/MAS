@@ -43,6 +43,53 @@
             },
             "required": ["name"]
         },
+        "distributorInfo":{
+            "description": "Data from the distributor for a given part",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "The name of the distributor of the part",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "The distributor's phone",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "The distributor's email",
+                    "type": "string"
+                },
+                "link": {
+                    "description": "The distributor's link",
+                    "type": "string"
+                },
+                "country": {
+                    "description": "The country of the distributor of the part",
+                    "type": "string"
+                },
+                "distributedArea": {
+                    "description": "The area where the distributor doistributes",
+                    "type": "string"
+                },
+                "reference": {
+                    "description": "The distributor's reference of this part",
+                    "type": "string"
+                },
+                "quantity": {
+                    "description": "The number of individual pieces available in the distributor",
+                    "type": "number"
+                },
+                "updatedAt": {
+                    "description": "The date that this information was updated",
+                    "type": "number"
+                },
+                "cost": {
+                    "description": "The distributor's price for this part",
+                    "type": "number"
+                }
+            },
+            "required": ["name", "reference", "quantity", "email"]
+        },
         "rotation":{
             "description": "Data describing the rotation around the corresponding axis in cartesian 2 or 3 dimensional space, in radians",
             "type": "array",
