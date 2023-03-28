@@ -68,7 +68,7 @@
                     "description": "The coating of the core",
                     "type": "string",
                     "enum": ["epoxy"]
-                },
+                }
             },
             "required": ["type", "material", "shape", "gapping"]
         },
