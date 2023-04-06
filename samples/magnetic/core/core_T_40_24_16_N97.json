@@ -1,0 +1,10 @@
+{
+    "name": "core_T_40_24_16_N97",
+    "functionalDescription": {
+        "type": "toroidal",
+        "material": "N97",
+        "shape": "T 40/24/16",
+        "gapping": [],
+        "numberStacks": 1
+    }
+}
