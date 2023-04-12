@@ -36,6 +36,10 @@
                     "description": "The manufacturer's reference of this part",
                     "type": "string"
                 },
+                "datasheetUrl": {
+                    "description": "The manufacturer's URL to the datasheet of the product",
+                    "type": "string"
+                },
                 "cost": {
                     "description": "The manufacturer's price for this part",
                     "type": "string"

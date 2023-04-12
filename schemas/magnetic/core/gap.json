@@ -18,7 +18,7 @@
             "exclusiveMinimum": 0
         },
         "coordinates": {
-            "description": "The coordinates of the center of the gap, referred to the center of thw main column",
+            "description": "The coordinates of the center of the gap, referred to the center of the main column",
             "type": "array",
             "items": {
                 "type": "number"
