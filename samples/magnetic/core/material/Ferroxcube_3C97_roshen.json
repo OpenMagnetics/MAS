@@ -25,40 +25,40 @@
             "temperature": 100
         }
     ],
+    "remanence": [
+        {
+            "magneticFluxDensity": 0.13258847770214024,
+            "magneticField": 0,
+            "temperature": 25
+        },
+        {
+            "magneticFluxDensity": 0.05772561749292473,
+            "magneticField": 0,
+            "temperature": 100
+        }
+    ],
+    "coerciveForce": [
+        {
+            "magneticFluxDensity": 0,
+            "magneticField": 14.418946774162618,
+            "temperature": 25
+        },
+        {
+            "magneticFluxDensity": 0,
+            "magneticField": 8.669621596391217,
+            "temperature": 100
+        }
+    ],
+    "resistivity": [
+        {
+            "value": 5,
+            "temperature": 25
+        }
+    ],
     "volumetricLosses": {
         "default": [
-             {
-                "method": "roshen",
-                "remanence": [
-                    {
-                        "magneticFluxDensity": 0.13258847770214024,
-                        "magneticField": 0,
-                        "temperature": 25
-                    },
-                    {
-                        "magneticFluxDensity": 0.05772561749292473,
-                        "magneticField": 0,
-                        "temperature": 100
-                    }
-                ],
-                "coerciveForce": [
-                    {
-                        "magneticFluxDensity": 0,
-                        "magneticField": 14.418946774162618,
-                        "temperature": 25
-                    },
-                    {
-                        "magneticFluxDensity": 0,
-                        "magneticField": 8.669621596391217,
-                        "temperature": 100
-                    }
-                ],
-                "resistivity": [
-                    {
-                        "value": 5,
-                        "temperature": 25
-                    }
-                ]
+            {
+                "method": "roshen"
             }
         ]
     }

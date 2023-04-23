@@ -40,6 +40,46 @@
             "minItems": 1,
             "uniqueItems": true
         },
+        "remanence": {
+            "description": "BH Cycle points where the magnetic field is 0",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/bhCyclePoint"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "coerciveForce": {
+            "description": "BH Cycle points where the magnetic flux density is 0",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/bhCyclePoint"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "resistivity": {
+            "description": "Resistivity value according to manufacturer",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/resistivityPoint"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "heatConductivity": {
+            "description": "Heat conductivity value according to manufacturer, in W/m/K",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
+        "heatCapacity": {
+            "description": "Heat capacity value according to manufacturer, in J/Kg/K",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
+        "density": {
+            "description": "Density value according to manufacturer, in kg/m3",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
         "permeability":{
             "description": "The data regarding the relative permeability of a magnetic material",
             "title": "permeabilities",
@@ -74,6 +114,8 @@
                     "anyOf": [
                         { "$ref": "#/$defs/steinmetzCoreLossesMethodData" },
                         { "$ref": "#/$defs/roshenCoreLossesMethodData" },
+                        { "$ref": "#/$defs/micrometalsCoreLossesMethodData" },
+                        { "$ref": "#/$defs/magneticsCoreLossesMethodData" },
                         {
                             "description": "List of volumetric losses points",
                             "type": "array",
@@ -88,7 +130,7 @@
             }
         }
     },
-    "required": ["materialComposition", "type", "name", "permeability", "saturation", "volumetricLosses", "manufacturerInfo"],
+    "required": ["materialComposition", "type", "name", "permeability", "saturation", "resistivity", "volumetricLosses", "manufacturerInfo"],
 
     "$defs": {
         "resistivityPoint": {
@@ -159,11 +201,18 @@
                 },
                 "modifiers": {
                     "description": "The initial permeability of a magnetic material according to its manufacturer",
-                    "title": "initialPermeabilitModifier",
                     "type": "object",
                     "additionalProperties": {
                         "description": "Object where keys are shape families for which this permeability is valid. If missing, the variant is valid for all shapes",
-                        "$ref": "#/$defs/magneticsPermeabilityMethodData"
+                        "title": "initialPermeabilitModifier",
+                        "oneOf": [
+                            {
+                                "$ref": "#/$defs/magneticsPermeabilityMethodData"
+                            },
+                            {
+                                "$ref": "#/$defs/micrometalsPermeabilityMethodData"
+                            }
+                        ]
                     }
                 }
             },
@@ -286,33 +335,6 @@
                     "type": "string",
                     "const": "roshen"
                 },
-                "remanence": {
-                    "description": "BH Cycle points where the magnetic field is 0",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/bhCyclePoint"
-                    },
-                    "minItems": 1,
-                    "uniqueItems": true
-                },
-                "coerciveForce": {
-                    "description": "BH Cycle points where the magnetic flux density is 0",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/bhCyclePoint"
-                    },
-                    "minItems": 1,
-                    "uniqueItems": true
-                },
-                "resistivity": {
-                    "description": "Resistivity value according to manufacturer",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/resistivityPoint"
-                    },
-                    "minItems": 1,
-                    "uniqueItems": true
-                },
                 "referenceVolumetricLosses": {
                     "description": "List of reference volumetric losses used to estimate excess eddy current losses",
                     "type": "array",
@@ -347,7 +369,56 @@
                     "required": ["excessLossesCoefficient", "resistivityFrequencyCoefficient", "resistivityMagneticFluxDensityCoefficient", "resistivityOffset", "resistivityTemperatureCoefficient"]
                 }
             },
-            "required": ["method", "remanence", "coerciveForce", "resistivity"]
+            "required": ["method"]
+        },
+        "micrometalsCoreLossesMethodData": {
+            "description": "Micrometals method for estimating volumetric losses",
+            "type": "object",
+            "title": "micrometalsCoreLossesMethodData",
+            "properties": {
+                "method": {
+                    "description": "Name of this method",
+                    "type": "string",
+                    "const": "micrometals"
+                },
+                "a": {
+                    "type": "number"
+                },
+                "b": {
+                    "type": "number"
+                },
+                "c": {
+                    "type": "number"
+                },
+                "d": {
+                    "type": "number"
+                }
+
+            },
+            "required": ["method", "a", "b", "c", "d"]
+        },
+        "magneticsCoreLossesMethodData": {
+            "description": "Magnetics method for estimating volumetric losses",
+            "type": "object",
+            "title": "magneticsCoreLossesMethodData",
+            "properties": {
+                "method": {
+                    "description": "Name of this method",
+                    "type": "string",
+                    "const": "magnetics"
+                },
+                "a": {
+                    "type": "number"
+                },
+                "b": {
+                    "type": "number"
+                },
+                "c": {
+                    "type": "number"
+                }
+
+            },
+            "required": ["method", "a", "b", "c"]
         },
         "magneticsPermeabilityMethodData": {
             "description": "Coefficients given by Magnetics in order to calculate the permeability of their cores",
@@ -357,7 +428,7 @@
                 "method": {
                     "description": "Name of this method",
                     "type": "string",
-                    "const": "Magnetics"
+                    "const": "magnetics"
                 },
                 "magneticFieldDcBiasFactor": {
                     "description": "Field with the coefficients used to calculate how much the permeability decreases with the H DC bias, as factor = a + b * pow(H, c)",
@@ -421,6 +492,104 @@
                 }
             },
             "required": ["magneticFieldDcBiasFactor"]
+        },
+        "micrometalsPermeabilityMethodData": {
+            "description": "Coefficients given by Micrometals in order to calculate the permeability of their cores",
+            "type": "object",
+            "title": "micrometalsPermeabilityMethodData",
+            "properties": {
+                "method": {
+                    "description": "Name of this method",
+                    "type": "string",
+                    "const": "micrometals"
+                },
+                "magneticFieldDcBiasFactor": {
+                    "description": "Field with the coefficients used to calculate how much the permeability decreases with the H DC bias, as factor = a + b * pow(H, c) + d",
+                    "type": "object",
+                    "properties": {
+                        "a": {
+                            "type": "number"
+                        },
+                        "b": {
+                            "type": "number"
+                        },
+                        "c": {
+                            "type": "number"
+                        },
+                        "d": {
+                            "type": "number"
+                        }
+                    },
+                    "required": ["a", "b", "c", "d"]
+                },
+                "magneticFluxDensityFactor": {
+                    "description": "Field with the coefficients used to calculate how much the permeability decreases with the B field, as factor = = 1 / ( 1 / ( a + b * pow(B,c)) + 1 / (d * pow(B, e) ) + 1 / f )",
+                    "type": "object",
+                    "properties": {
+                        "a": {
+                            "type": "number"
+                        },
+                        "b": {
+                            "type": "number"
+                        },
+                        "c": {
+                            "type": "number"
+                        },
+                        "d": {
+                            "type": "number"
+                        },
+                        "e": {
+                            "type": "number"
+                        },
+                        "f": {
+                            "type": "number"
+                        }
+                    },
+                    "required": ["a", "b", "c", "d", "e", "f"]
+                },
+                "frequencyFactor": {
+                    "description": "Field with the coefficients used to calculate how much the permeability decreases with the frequency, as factor = 1 / (a + b * pow(f, c) ) + d",
+                    "type": "object",
+                    "properties": {
+                        "a": {
+                            "type": "number"
+                        },
+                        "b": {
+                            "type": "number"
+                        },
+                        "c": {
+                            "type": "number"
+                        },
+                        "d": {
+                            "type": "number"
+                        }
+                    },
+                    "required": ["a", "b", "c", "d"]
+                },
+                "temperatureFactor": {
+                    "description": "Field with the coefficients used to calculate how much the permeability decreases with the temperature, as either factor = a * (T -20) * 0.0001 or factor = (a + c * T + e * pow(T, 2)) / (1 + b * T + d * pow(T, 2))",
+                    "type": "object",
+                    "properties": {
+                        "a": {
+                            "type": "number"
+                        },
+                        "b": {
+                            "type": "number"
+                        },
+                        "c": {
+                            "type": "number"
+                        },
+                        "d": {
+                            "type": "number"
+                        },
+                        "e": {
+                            "type": "number"
+                        }
+                    },
+                    "required": ["a"]
+                }
+            },
+            "required": ["method", "magneticFieldDcBiasFactor", "magneticFluxDensityFactor", "frequencyFactor", "temperatureFactor"]
         }
     }
 }

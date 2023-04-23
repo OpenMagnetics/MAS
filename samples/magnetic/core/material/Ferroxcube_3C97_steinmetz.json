@@ -17,6 +17,12 @@
             "temperature": 100
         }
     ],
+    "resistivity": [
+        {
+            "value": 5,
+            "temperature": 25
+        }
+    ],
     "volumetricLosses": {
         "default": [
             {

@@ -85,14 +85,14 @@
                 },
                 "updatedAt": {
                     "description": "The date that this information was updated",
-                    "type": "number"
+                    "type": "string"
                 },
                 "cost": {
                     "description": "The distributor's price for this part",
                     "type": "number"
                 }
             },
-            "required": ["name", "reference", "quantity", "email"]
+            "required": ["name", "reference", "quantity"]
         },
         "rotation":{
             "description": "Data describing the rotation around the corresponding axis in cartesian 2 or 3 dimensional space, in radians",
