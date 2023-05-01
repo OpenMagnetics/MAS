@@ -197,7 +197,7 @@ SUITE(Data)
     TEST(Bobbins)
     {
         auto data_file_path = mas_path + "data/bobbins.ndjson";
-        auto schema_file_path = mas_path + "schemas/magnetic/core/bobbin.json";
+        auto schema_file_path = mas_path + "schemas/magnetic/bobbin.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
 
