@@ -1,8 +1,10 @@
 {
     "type": "litz",
     "numberConductors": 550,
-    "manufacturer": "Rubadue",
-    "manufacturerPartNumber": "TXXL550/44FXXX-3(MWXX)",
+    "manufacturerInfo": {
+        "name": "Rubadue",
+        "reference": "TXXL550/44FXXX-3(MWXX)"
+    },
     "strand": {
         "type": "round",
         "material": "copper",
@@ -15,7 +17,9 @@
         },
         "coating":{
             "type": "enamelled",
-            "maximumThickness": 2.54e-6,
+            "thickness": {
+                "maximum": 2.54e-6
+            },
             "grade": 1,
             "breakdownVoltage": 1600
         }

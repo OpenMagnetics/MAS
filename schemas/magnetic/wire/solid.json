@@ -16,8 +16,13 @@
         },
         "standard": {
             "description": "The standard of wire",
+            "title": "wireStandard",
             "type": "string",
-            "enum": ["IEC 60317", "JIS C3202", "NEMA MW 1000C"]
+            "enum": ["IEC 60317", "JIS C3202", "NEMA MW 1000 C"]
+        },
+        "standardName": {
+            "description": "Name according to the standard of wire",
+            "type": "string"
         },
         "manufacturerInfo": {
             "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
@@ -43,10 +48,6 @@
             "description": "The conducting height of the wire, in m",
             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
-        "conductingThickness": {
-            "description": "The conducting thickness of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
-        },
         "numberConductors": {
             "description": "The number of conductors in the wire",
             "type": "number",
@@ -64,11 +65,8 @@
             "description": "The outer height of the wire, in m",
             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
-        "outerThickness": {
-            "description": "The outer thickness of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
-        },
         "coating": {
+            "title": "CoatingDataOrNameUnion",
             "oneOf": [
                 {"$ref": "/schemas/magnetic/insulation/wireCoating.json"},
                 {
@@ -89,10 +87,8 @@
                     "anyOf": [
                         { "required": [ "outerWidth" ] },
                         { "required": [ "outerHeight" ] },
-                        { "required": [ "outerThickness" ] },
                         { "required": [ "conductingWidth" ] },
-                        { "required": [ "conductingHeight" ] },
-                        { "required": [ "conductingThickness" ] }
+                        { "required": [ "conductingHeight" ] }
                     ]
                 }
             }
@@ -102,12 +98,10 @@
                 "properties": { "type": { "const": "rectangular" } }
             },
             "then": {
-                "required": ["type", "material", "conductingWidth", "outerWidth", "conductingThickness", "outerThickness", "coating"],
+                "required": ["type", "material", "conductingWidth", "outerWidth", "conductingHeight", "outerHeight", "coating"],
                  "not": {
                     "anyOf": [
-                        { "required": [ "conductingHeight" ] },
                         { "required": [ "conductingDiameter" ] },
-                        { "required": [ "outerHeight" ] },
                         { "required": [ "outerDiameter" ] }
                     ]
                 }
@@ -118,11 +112,9 @@
                 "properties": { "type": { "const": "foil" } }
             },
             "then": {
-                "required": ["type", "material", "conductingThickness", "outerThickness", "conductingHeight", "outerHeight", "coating"],
+                "required": ["type", "material", "conductingWidth", "outerWidth", "conductingHeight", "outerHeight", "coating"],
                  "not": {
                     "anyOf": [
-                        { "required": [ "conductingWidth" ] },
-                        { "required": [ "outerWidth" ] },
                         { "required": [ "conductingDiameter" ] },
                         { "required": [ "outerDiameter" ] }
                     ]

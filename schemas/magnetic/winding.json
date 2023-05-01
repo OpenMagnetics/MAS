@@ -6,8 +6,9 @@
     "type": "object",
     "properties": {
         "bobbin": {
+            "title": "BobbinDataOrNameUnion",
             "oneOf": [
-                {"$ref": "/schemas/magnetic/core/bobbin.json"},
+                {"$ref": "/schemas/magnetic/bobbin.json"},
                 {
                     "description": "The name of the bobbin used in the core",
                     "type": "string"
@@ -232,9 +233,9 @@
                     "enum": ["primary", "secondary", "tertiary", "quaternary", "quinary", "senary", "septenary", "octonary", "nonary", "denary", "undenary", "duodenary"]
                 },
                 "wire": {
+                    "title": "WireDataOrNameUnion",
                     "oneOf": [
-                        {"$ref": "/schemas/magnetic/wire/solid.json"},
-                        {"$ref": "/schemas/magnetic/wire/stranded.json"},
+                        {"$ref": "/schemas/magnetic/wire.json"},
                         {
                             "description": "The name of the wire",
                             "type": "string"

@@ -207,4 +207,11 @@ SUITE(Data)
         auto schema_file_path = mas_path + "schemas/magnetic/core/material.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
+
+    TEST(Wires)
+    {
+        auto data_file_path = mas_path + "data/wires.ndjson";
+        auto schema_file_path = mas_path + "schemas/magnetic/wire.json";
+        validate_ndjson(schema_file_path, data_file_path);
+    }
 }

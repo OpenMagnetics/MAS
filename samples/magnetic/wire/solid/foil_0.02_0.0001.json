@@ -7,7 +7,7 @@
         "nominal": 0.02,
         "maximum": 0.0207
     },
-    "conductingThickness": {
+    "conductingWidth": {
         "nominal": 0.0001
     },
     "outerHeight": {
@@ -15,7 +15,7 @@
         "nominal": 0.02,
         "maximum": 0.0207
     },
-    "outerThickness": {
+    "outerWidth": {
         "nominal": 0.0001
     },
     "coating":{

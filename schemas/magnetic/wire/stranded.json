@@ -16,8 +16,13 @@
         },
         "standard": {
             "description": "The standard of wire",
+            "title": "wireStandard",
             "type": "string",
-            "enum": ["IEC 60317", "JIS C3202", "NEMA MW 1000C"]
+            "enum": ["IEC 60317", "JIS C3202", "NEMA MW 1000 C"]
+        },
+        "standardName": {
+            "description": "Name according to the standard of wire",
+            "type": "string"
         },
         "manufacturerInfo": {
             "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
@@ -25,7 +30,7 @@
         "strand": {
             "description": "The wire used as strands",
             "oneOf": [
-                {"$ref": "/schemas/magnetic/wire/solid.json"},
+                {"title": "wireSolid", "$ref": "/schemas/magnetic/wire/solid.json"},
                 {
                     "description": "The name of the wire used as strand",
                     "type": "string"
@@ -42,6 +47,7 @@
             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "coating": {
+            "title": "CoatingDataOrNameUnion",
             "oneOf": [
                 {"$ref": "/schemas/magnetic/insulation/wireCoating.json"},
                 {

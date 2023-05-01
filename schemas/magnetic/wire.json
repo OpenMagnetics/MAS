@@ -1,0 +1,10 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/magnetic/wire.json",
+    "title": "wire",
+    "description": "The description of a magnet wire",
+    "oneOf": [
+        {"$ref": "/schemas/magnetic/wire/solid.json"},
+        {"$ref": "/schemas/magnetic/wire/stranded.json"}
+    ]
+}

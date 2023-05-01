@@ -11,7 +11,9 @@
     },
     "coating":{
         "type": "enamelled",
-        "maximumThickness": 0.00002,
+        "thickness": {
+            "maximum": 0.00002
+        },
         "grade": 1,
         "breakdownVoltage": 1600
     }

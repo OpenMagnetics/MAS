@@ -1,0 +1,102 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/magnetic/bobbin.json",
+    "title": "bobbin",
+    "description": "The description of a bobbin",
+    "type": "object",
+    "properties": {
+        "name": {
+            "description": "The name of bobbin",
+            "type": "string"
+        },
+        "manufacturerInfo": {
+            "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
+        },
+        "distributorsInfo": {
+            "description": "The lists of distributors of the magnetic bobbin",
+            "type": "array",
+            "items": {
+                "$ref": "/schemas/utils.json#/$defs/distributorInfo"
+            },
+            "uniqueItems": false
+        },
+        "functionalDescription":{
+            "description": "The data from the bobbin based on its function, in a way that can be used by analytical models.",
+            "type": "object",
+            "title": "bobbinFunctionalDescription",
+            "properties": {
+                "type": {
+                    "description": "The type of a bobbin",
+                    "type": "string",
+                    "enum": ["standard", "custom"]
+                },
+                "family": {
+                    "description": "The family of a bobbin",
+                    "title": "bobbinFamily",
+                    "type": "string",
+                    "enum": ["u", "e", "etd", "er", "p", "rm", "ep", "pm", "el", "er", "pq", "efd", "ec"]
+                },
+                "shape": {
+                    "description": "The name of a bobbin that this bobbin belongs to",
+                    "type": "string"
+                },
+                "familySubtype": {
+                    "description": "The subtype of the shape, in case there are more than one",
+                    "type": "string"
+                },
+                "dimensions": {
+                    "description": "The dimensions of a bobbin, keys must be as defined in EN 62317",
+                    "type": "object",
+                    "additionalProperties": {
+                        "oneOf": [
+                            {"$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"},
+                            {
+                                "type": "number"
+                            }
+                        ]
+                    }
+                }
+            },
+            "required": ["type", "family", "shape", "dimensions"]
+        },
+        "processedDescription":{
+            "description": "TBD, add separators",
+            "type": "object",
+            "title": "coreBobbinProcessedDescription",
+            "properties": {
+                "wallThickness": {
+                    "description": "The thicknes of the walls that hold the wire on both sides of the column",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "columnThickness": {
+                    "description": "The thicknes of the central column wall, where the wire is wound",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "windingWindows": {
+                    "description": "List of winding windows, all elements in the list must be of the same type",
+                    "title": "windingWindows",
+                    "oneOf": [
+                        {
+                            "description": "List of rectangular winding windows",
+                            "type": "array",
+                            "items": {"$ref": "/schemas/magnetic/core.json#/$defs/rectangularWindingWindow"},
+                            "minItems": 1,
+                            "uniqueItems": false
+                        },
+                        {
+                            "description": "List of radial winding windows",
+                            "type": "array",
+                            "items": {"$ref": "/schemas/magnetic/core.json#/$defs/radialWindingWindow"},
+                            "minItems": 1,
+                            "uniqueItems": false
+                        }
+                    ]
+                }
+            },
+            "required": ["wallThickness", "columnThickness", "windingWindows"]
+        }
+    },
+    "required": ["functionalDescription"]
+}

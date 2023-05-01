@@ -1,7 +1,7 @@
 {
     "type": "litz",
     "numberConductors": 20,
-    "manufacturer": "Elektrisola",
+    "manufacturerInfo": {"name": "Elektrisola"},
     "strand": {
         "type": "round",
         "material": "copper",
@@ -15,7 +15,9 @@
         },
         "coating":{
             "type": "enamelled",
-            "maximumThickness": 0.0000105,
+            "thickness": {
+               "maximum": 0.0000105
+            },
             "grade": 2,
             "breakdownVoltage": 850
         }

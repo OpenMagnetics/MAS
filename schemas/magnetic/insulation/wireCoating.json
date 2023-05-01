@@ -10,10 +10,9 @@
             "type": "string",
             "enum": ["bare", "enamelled", "insulated", "served", "taped", "extruded"]
         },
-        "maximumThickness": {
+        "thickness": {
             "description": "The maximum thickness of the insulation around the wire, in m",
-            "type": "number",
-            "exclusiveMinimum": 0
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "material": {
             "oneOf": [
