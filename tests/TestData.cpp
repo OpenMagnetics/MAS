@@ -187,6 +187,28 @@ SUITE(Data)
         }
     }
 
+    static void check_valid_ndjson(const std::string database)
+    {
+        try
+        {
+            // std::cout << database << std::endl;
+            std::ifstream ndjson_file(database);
+            std::string myline;
+
+            while (std::getline(ndjson_file, myline))
+            {
+                // std::cout << myline << std::endl;
+                json jf = json::parse(myline);
+            }
+        }
+        catch (std::exception & e)
+        {
+            std::cerr << "Could not open and parse " << database << ": " << e.what() << "\n";
+            CHECK(false); // fails
+            return;
+        }
+    }
+
     TEST(Shapes)
     {
         auto data_file_path = mas_path + "data/shapes.ndjson";
@@ -206,6 +228,12 @@ SUITE(Data)
         auto data_file_path = mas_path + "data/materials.ndjson";
         auto schema_file_path = mas_path + "schemas/magnetic/core/material.json";
         validate_ndjson(schema_file_path, data_file_path);
+    }
+
+    TEST(Advanced_Materials)
+    {
+        auto data_file_path = mas_path + "data/advanced_materials.ndjson";
+        check_valid_ndjson(data_file_path);
     }
 
     TEST(Wires)
