@@ -60,7 +60,6 @@
             "required": ["type", "family", "shape", "dimensions"]
         },
         "processedDescription":{
-            "description": "TBD, add separators",
             "type": "object",
             "title": "coreBobbinProcessedDescription",
             "properties": {
@@ -98,5 +97,8 @@
             "required": ["wallThickness", "columnThickness", "windingWindows"]
         }
     },
-    "required": ["functionalDescription"]
+    "anyOf": [
+        {"required": ["functionalDescription"]},
+        {"required": ["processedDescription"]}
+    ]
 }

@@ -14,7 +14,12 @@
             "description": "The description of a magnetic",
             "title": "Magnetic",
             "$ref": "/schemas/magnetic.json"
+        },
+        "outputs":{
+            "description": "The description of the outputs that are produced after designing a Magnetic",
+            "title": "Outputs",
+            "$ref": "/schemas/outputs.json"
         }
     },
-    "required": ["inputs", "magnetic"]
+    "required": ["inputs", "magnetic", "outputs"]
 }

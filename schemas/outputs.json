@@ -1,0 +1,199 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/outputs.json",
+    "title": "outputs",
+    "description": "The description of the outputs that result of simulating a Magnetic",
+    "type": "object",
+    "properties": {
+        "coreLosses":{
+            "description": "Data describing the output core losses",
+            "$ref": "#/$defs/coreLosses"
+        },
+        "windingLosses":{
+            "description": "Data describing the output winding losses",
+            "$ref": "#/$defs/windingLosses"
+        },
+        "windingWindowMagneticStrengthField":{
+            "description": "Data describing the output magnetic strength field",
+            "$ref": "#/$defs/windingWindowMagneticStrengthField"
+        },
+        "leakageInductance":{
+            "description": "Data describing the output magnetic strength field",
+            "$ref": "#/$defs/leakageInductance"
+        },
+        "magnetizingInductance":{
+            "description": "Data describing the output magnetic strength field",
+            "$ref": "#/$defs/magnetizingInductance"
+        }
+    },
+    "required": [],
+
+    "$defs": {
+        "coreLosses":{
+            "description": "Data describing the core losses and the intermediate inputs used to calculate them",
+            "title": "coreLossesOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "description": "Origin of the value of the result",
+                    "type": "string",
+                    "enum": ["manufacturer", "measurement", "simulation"]
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the core losses in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "magneticFluxDensity":{
+                    "description": "Excitation of the B field that produced the core losses",
+                    "title": "excitation",
+                    "$ref": "/schemas/inputs/operationPointExcitation.json"
+                },
+                "temperature":{
+                    "description": "temperature in the core that produced the core losses",
+                    "type": "number"
+                },
+                "volumetricLosses": {
+                    "description": "Volumetric value of the core losses",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "eddyCurrentCoreLosses": {
+                    "description": "Part of the core losses due to eddy currents",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "hysteresisCoreLosses": {
+                    "description": "Part of the core losses due to hysteresis",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "coreLosses": {
+                    "description": "Value of the core losses",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["origin", "methodUsed", "coreLosses"]
+        },
+        "windingLosses":{
+            "description": "Data describing the winding losses and the intermediate inputs used to calculate them",
+            "title": "windingLossesOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "description": "Origin of the value of the result",
+                    "type": "string",
+                    "enum": ["manufacturer", "measurement", "simulation"]
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the winding losses in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "currentPerWinding":{
+                    "description": "Excitation of the current per winding that produced the winding losses",
+                    "title": "excitation",
+                    "$ref": "/schemas/inputs/operationPointExcitation.json"
+                },
+                "temperature":{
+                    "description": "temperature in the winding that produced the winding losses",
+                    "type": "number"
+                },
+                "windingLosses": {
+                    "description": "Value of the winding losses",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["origin", "methodUsed", "windingLosses"]
+        },
+        "leakageInductance":{
+            "description": "Data describing the leakage inductance and the intermediate inputs used to calculate them",
+            "title": "leakageInductanceOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "description": "Origin of the value of the result",
+                    "type": "string",
+                    "enum": ["manufacturer", "measurement", "simulation"]
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the leakage inductance in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "leakageInductance": {
+                    "description": "Value of the leakage inductance",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["origin", "methodUsed", "leakageInductance"]
+        },
+        "magnetizingInductance":{
+            "description": "Data describing the magnetizing inductance and the intermediate inputs used to calculate them",
+            "title": "magnetizingInductanceOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "description": "Origin of the value of the result",
+                    "type": "string",
+                    "enum": ["manufacturer", "measurement", "simulation"]
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "magnetizingInductance": {
+                    "description": "Value of the magnetizing inductance",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["origin", "methodUsed", "magnetizingInductance"]
+        },
+        "fieldPoint":{
+            "description": "Data describing the magnetizing inductance and the intermediate inputs used to calculate them",
+            "title": "fieldPoint",
+            "type": "object",
+            "properties": {
+                "point":{
+                    "description": "The coordinates of the point of the field",
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                },
+                "value": {
+                    "description": "Value of the field at this point",
+                    "type": "number"
+                }
+            },
+            "required": ["point", "value"]
+        },
+        "windingWindowMagneticStrengthField":{
+            "description": "Data describing the magnetic strengtg field inside the winding window",
+            "title": "windingWindowMagneticStrengthFieldOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "description": "Origin of the value of the result",
+                    "type": "string",
+                    "enum": ["manufacturer", "measurement", "simulation"]
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "frequency": {
+                    "description": "Value of the field at this point",
+                    "type": "number"
+                },
+                "data": {
+                    "description": "Value of the magnetizing inductance",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/fieldPoint"
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": ["origin", "methodUsed", "frequency", "data"]
+        }
+    }
+}

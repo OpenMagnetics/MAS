@@ -50,15 +50,16 @@
         }
     },
     "anyOf": [
-        {"required": ["functionalDescription"]},
-        {"required": ["functionalDescription", "sectionsDescription"]},
-        {"required": ["functionalDescription", "layersDescription"]},
-        {"required": ["functionalDescription", "turnsDescription"]}
+        {"required": ["bobbin", "functionalDescription"]},
+        {"required": ["bobbin", "functionalDescription", "sectionsDescription"]},
+        {"required": ["bobbin", "functionalDescription", "layersDescription"]},
+        {"required": ["bobbin", "functionalDescription", "turnsDescription"]}
     ],
 
     "$defs": {
         "turn":{
             "description": "Data describing one turn in a magnetic",
+            "title": "turn",
             "type": "object",
             "properties": {
                 "name": {
@@ -83,6 +84,7 @@
                 },
                 "orientation": {
                     "description": "Way in which the turn is wound",
+                    "title": "turnOrientation",
                     "type": "string",
                     "enum": ["clockwire", "counterClockwise"]
                 },
@@ -104,6 +106,7 @@
         },
         "layer":{
             "description": "Data describing one layer in a magnetic",
+            "title": "layer",
             "type": "object",
             "properties": {
                 "name": {
@@ -121,6 +124,7 @@
                 },
                 "orientation": {
                     "description": "Way in which the layer is oriented inside the section",
+                    "title": "windingOrientation",
                     "type": "string",
                     "enum": ["horizontal", "vertical", "radial"]
                 },
@@ -148,12 +152,18 @@
                 "coordinates": {
                     "description": "The coordinates of the center of the section, referred to the center of the main column",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
+                },
+                "fillingFactor": {
+                    "description": "How much space in this layer is used by wires compared to the total",
+                    "type": "number",
+                    "minimum": 0
                 }
             },
             "required": ["name", "type", "orientation", "partialWindings", "dimensions", "coordinates"]
         },
         "section":{
             "description": "Data describing one section in a magnetic",
+            "title": "section",
             "type": "object",
             "properties": {
                 "name": {
@@ -179,18 +189,20 @@
                 "coordinates": {
                     "description": "The coordinates of the center of the section, referred to the center of the main column",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
+                },
+                "fillingFactor": {
+                    "description": "How much space in this section is used by wires compared to the total",
+                    "type": "number",
+                    "minimum": 0
                 }
             },
             "required": ["name", "layersOrientation", "partialWindings", "dimensions", "coordinates"]
         },
         "partialWinding":{
             "description": "Data describing one part of winding, described by a list with the proportion of each parallel in the winding that is contained here",
+            "title": "partialWinding",
             "type": "object",
             "properties": {
-                "name": {
-                    "description": "Name given to the partial winding",
-                    "type": "string"
-                },
                 "winding": {
                     "description": "The name of the winding that this part belongs to",
                     "type": "string"
@@ -207,7 +219,7 @@
                     "uniqueItems": false
                 }
             },
-            "required": ["name", "winding", "parallelsProportion"]
+            "required": ["winding", "parallelsProportion"]
         },
         "winding":{
             "description": "Data describing one winding associated with a magnetic",

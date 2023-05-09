@@ -1,4 +1,15 @@
 {
+    "bobbin": {
+        "processedDescription": {
+            "wallThickness": 0.001,
+            "columnThickness": 0.001,
+            "windingWindows": [{
+                "height": 0.01,
+                "width": 0.01,
+                "coordinates": [0.01, 0, 0]
+            }]
+        }
+    },
     "functionalDescription":[
         {
             "name": "MyWinding",
