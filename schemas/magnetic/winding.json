@@ -128,6 +128,13 @@
                     "type": "string",
                     "enum": ["horizontal", "vertical", "radial"]
                 },
+                "turnsAlignment": {
+                    "description": "Way in which the turns are aligned inside the layer",
+                    "title": "windingOrientation",
+                    "type": "string",
+                    "enum": ["inner or top", "outer or bottom", "spread", "centered"],
+                    "default": "centered"
+                },
                 "partialWindings": {
                     "description": "List of partial windings in this section",
                     "type": "array",
