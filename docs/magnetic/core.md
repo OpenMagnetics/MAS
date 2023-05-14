@@ -25,9 +25,9 @@ class MagneticCore {
 	+get_manufacturer_info()
 	+get_name()
 }
-Core ..> FunctionalDescription : Dependency
-Core ..> GeometricalDescription : Dependency
-Core ..> ProcessedDescription : Dependency
+MagneticCore ..> FunctionalDescription : Dependency
+MagneticCore ..> GeometricalDescription : Dependency
+MagneticCore ..> ProcessedDescription : Dependency
 
 
 ```
