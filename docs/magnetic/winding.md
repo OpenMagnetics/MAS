@@ -4,10 +4,10 @@ The nomenclature of the different elements of the winding used in this document 
 
 * Winding: This can refer to the whole winding, when used at a magnetic level (e.g.: “The winding losses are overheating the magnetic”) or to an individual winding when specifically indicated (e.g.: “primary winding”, “winding 1”)
 * Partial Winding: A subset of an individual winding, either a proportion of its turns or a proportion of its parallels; a proportion of both is not supported, and in those rare cases the Turns Description must be used. It contains the following fields:
-	* Name: Reference name given to the partial winding.
-	* Winding: Reference to the winding where it belongs to.
-	* Turns proportion: Number from 0 to 1 indicating the proportion of turns contained in this partial winding.
-	* Parallel proportion: Number from 0 to 1 indicating the proportion of parallels contained in this partial winding.
+    * Name: Reference name given to the partial winding.
+    * Winding: Reference to the winding where it belongs to.
+    * Turns proportion: Number from 0 to 1 indicating the proportion of turns contained in this partial winding.
+    * Parallel proportion: Number from 0 to 1 indicating the proportion of parallels contained in this partial winding.
 * Winding window: This is the space available for placing the turns of any or all windings in a magnetic component. There is usually one per core, but certain kinds of bobbins offer many windows in order to help control the coupling, in which case more than one winding window will be available.
 * Physical turn: Any physical turns wound around the bobbin, independent of its series or parallel connection. Current can circulate through it, generating losses and magnetic field.
 * Turn: A turn from the magnetic point of view, in the sense that it is connected in series with others and generates inductance.
@@ -26,14 +26,11 @@ class Winding {
     -List~Section~ sections_description
     -List~Turn~ turns_description
 
-	+wind_by_sections()
-	+wind_by_layers()
-	+wind_by_turns()
-	+get_bobbin()
-	+get_functional_description()
-	+get_layers_description()
-	+get_sections_description()
-	+get_turns_description()
+    +wind_by_sections()
+    +wind_by_layers()
+    +wind_by_turns()
+    +get_*()
+    +set_*()
 }
 Winding ..> Bobbin : Dependency
 Winding ..> WindingFunctionalDescription : Dependency
@@ -42,31 +39,25 @@ Winding ..> Section : Dependency
 Winding ..> Turn : Dependency
 
 class Bobbin {
-	-List~Utils~ distributors_info
-	-BobbinFunctionalDescription functional_description
-	-ManufacturerInfo manufacturer_info
-	-String name
-	-CoreBobbinProcessedDescription processed_description
+    -List~Utils~ distributors_info
+    -BobbinFunctionalDescription functional_description
+    -ManufacturerInfo manufacturer_info
+    -String name
+    -CoreBobbinProcessedDescription processed_description
 
-	+get_distributors_info()
-	+get_functional_description()
-	+get_manufacturer_info()
-	+get_name()
-	+get_processed_description()
+    +get_*()
+    +set_*()
 }
 
 class WindingFunctionalDescription {
-	-IsolationSide isolation_side
-	-String name
-	-Int number_parallels
-	-Int number_turns
-	-Wire wire
+    -IsolationSide isolation_side
+    -String name
+    -Int number_parallels
+    -Int number_turns
+    -Wire wire
 
-	+get_isolation_side()
-	+get_name()
-	+get_number_parallels()
-	+get_number_turns()
-	+get_wire()
+    +get_*()
+    +set_*()
 }
 WindingFunctionalDescription ..> IsolationSide : Dependency
 
@@ -78,12 +69,8 @@ class Section {
     -String name
     -List~PartialWinding~ partial_windings
 
- 	+get_coordinates()
- 	+get_dimensions()
- 	+get_filling_factor()
- 	+get_layers_orientation()
- 	+get_name()
- 	+get_partial_windings()
+    +get_*()
+    +set_*()
 }
 Section ..> OrientationEnum : Dependency
 Section ..> PartialWinding : Dependency
@@ -100,16 +87,8 @@ class Layer {
     -TurnsAlignmentEnum turns_alignment
     -LayersDescriptionType type
 
-	+get_coordinates()
-	+get_dimensions()
-	+get_filling_factor()
-	+get_insulation_material()
-	+get_name()
-	+get_orientation()
-	+get_partial_windings()
-	+get_section()
-	+get_turns_alignment()
-	+get_type()
+    +get_*()
+    +set_*()
 }
 Layer ..> TurnsAlignmentEnum : Dependency
 Layer ..> OrientationEnum : Dependency
@@ -127,15 +106,8 @@ class Turn {
     -String section
     -String winding
 
-	+get_angle()
-	+get_coordinates()
-	+get_layer()
-	+get_length()
-	+get_name()
-	+get_orientation()
-	+get_parallel()
-	+get_section()
-	+get_winding()
+    +get_*()
+    +set_*()
 }
 
 Turn ..> TurnOrientation : Dependency
@@ -144,46 +116,46 @@ class PartialWinding {
     -List~Double~ parallels_proportion
     -String winding;
 
-	+get_parallels_proportion()
-	+get_winding()
+    +get_*()
+    +set_*()
 
 }
 
 class IsolationSide {
     <<enumeration>>
     DENARY
-	DUODENARY
-	NONARY
-	OCTONARY
-	PRIMARY
-	QUATERNARY
-	QUINARY
-	SECONDARY
-	SENARY
-	SEPTENARY
-	TERTIARY
-	UNDENARY
+    DUODENARY
+    NONARY
+    OCTONARY
+    PRIMARY
+    QUATERNARY
+    QUINARY
+    SECONDARY
+    SENARY
+    SEPTENARY
+    TERTIARY
+    UNDENARY
 }
 
 class TurnsAlignmentEnum {
     <<enumeration>>
     CENTERED
-	INNER_OR_TOP
-	OUTER_OR_BOTTOM
-	SPREAD
+    INNER_OR_TOP
+    OUTER_OR_BOTTOM
+    SPREAD
 }
 
 class OrientationEnum {
     <<enumeration>>
     HORIZONTAL
-	RADIAL
-	VERTICAL
+    RADIAL
+    VERTICAL
 }
 
 class TurnOrientation {
     <<enumeration>>
     CLOCKWIRE
-	COUNTER_CLOCKWISE
+    COUNTER_CLOCKWISE
 }
 
 ```
@@ -198,8 +170,8 @@ This field can be of two types, either a string containing the reference of the 
 
 * Name: Reference name for this bobbin.
 * Type: The type of a bobbin. It can be either:
-	* Standard
-	* Custom
+    * Standard
+    * Custom
 * Family: Family of core shape that this bobbin is compatible with
 * Manufacturer Info: Dictionary/Map with the information about the manufacturer, including name, status of the material, internal reference, or cost.
 * Shape: The name of a magnetic shape that this bobbin belongs to
@@ -268,9 +240,9 @@ It consists on a list of sections, each element containing the following fields:
 
 * Name: Reference name of the section
 * Layers Orientation: Way in which the layers are oriented inside the section. It can be one of the following:
-	* Horizontal
-	* Vertical
-	* Radial
+    * Horizontal
+    * Vertical
+    * Radial
 * Partial Windings: List of partial windings in this section
 * Dimensions: Dimensions of the rectangle defining the section
 * Coordinates: The coordinates of the center of the section, referred to the center of the main column of the core.
@@ -285,13 +257,13 @@ It consists on a list of layer, each element containing the following fields:
 
 * Name: Reference name of the layer.
 * Type: Type of the layer. It can be either:
-	* Wiring
-	* Insulation
+    * Wiring
+    * Insulation
 * Section (optional): Reference of the section this layer belongs to, if the Section Description exists.
 * Orientation:  Way in which the layer is oriented. It can be one of the following:
-	* Horizontal
-	* Vertical
-	* Radial
+    * Horizontal
+    * Vertical
+    * Radial
 * Partial Windings: List of partial windings in this layer.
 * Insulation Material: Insulation material used in the layer
 * Dimensions: Dimensions of the rectangle defining the layer
@@ -310,13 +282,13 @@ It can be used together with all the previous Descriptions or just with the Func
 * Layer (optional): The reference of the layer that this physical turn belongs to.
 * Section: (optional): The reference of the section that this physical turn belongs to.
 * Turns Alignment: Way in which the turns are aligned inside the layer. It can be one of the following:
-	* Inner or top
-	* Outer or bottom
-	* Spread
-	* Centered
+    * Inner or top
+    * Outer or bottom
+    * Spread
+    * Centered
 * Orientation: Way in which the physical turn is wound, it can be either:
-	* Clockwire 
-	* Counter Clockwise
+    * Clockwire 
+    * Counter Clockwise
 * Length (optional): The length of the physical turn, referred from the center of its cross section.
 * Angle: The angle that the physical turn does, useful for partial turns.
 * Coordinates: The coordinates of the center of the physical turn, referred to the center of the main column.
