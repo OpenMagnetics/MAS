@@ -360,8 +360,8 @@ class BhCycleElement {
 }
 
 class ResistivityPoint {
-    +Double temperature
-    +Double value
+    -Double temperature
+    -Double value
 
     +get_*()
     +set_*()
@@ -656,12 +656,12 @@ The field contains the effective parameters as defined in DIN IEC 60205. They ar
 ```mermaid
 classDiagram
 class CoreProcessedDescription {
-    +List~ColumnElement~ columns
-    +Double depth
-    +EffectiveParameters effectiveParameters
-    +Double height
-    +Double width
-    +List~WindingWindowElement~ windingWindows
+    -List~ColumnElement~ columns
+    -Double depth
+    -EffectiveParameters effectiveParameters
+    -Double height
+    -Double width
+    -List~WindingWindowElement~ windingWindows
     
     +get_*()
     +set_*()
@@ -672,38 +672,38 @@ CoreProcessedDescription ..> WindingWindowElement : Dependency
 
 
 class WindingWindowElement {
-    +Double area
-    +List~Double~ coordinates
-    +Double height
-    +Double width
-    +Double angle
-    +Double radialHeight
+    -Double area
+    -List~Double~ coordinates
+    -Double height
+    -Double width
+    -Double angle
+    -Double radialHeight
     
     +get_*()
     +set_*()
 }
 
 class EffectiveParameters {
-    +Double effectiveArea
-    +Double effectiveLength
-    +Double effectiveVolume
-    +Double minimumArea
+    -Double effectiveArea
+    -Double effectiveLength
+    -Double effectiveVolume
+    -Double minimumArea
     
     +get_*()
     +set_*()
 }
 
 class ColumnElement {
-    +Double area
-    List~Double~ coordinates
-    +Double depth
-    +Double height
-    +Double minimum_depth
-    +Double minimum_width
-    +ShapeEnum shape
-    +ColumnType type
-    +Double width
-    
+    -Double area
+    -List~Double~ coordinates
+    -Double depth
+    -Double height
+    -Double minimum_depth
+    -Double minimum_width
+    -ShapeEnum shape
+    -ColumnType type
+    -Double width
+
     +get_*()
     +set_*()
 }
