@@ -37,10 +37,8 @@ class MAS {
     -Magnetic magnetic
     -Outputs outputs
 
-    +get_inputs()
-	+get_magnetic()
-	+get_outputs()
-    
+    +get_*()
+    +set_*()   
 }
 MAS ..> Inputs : Dependency
 MAS ..> Magnetic : Dependency
@@ -51,9 +49,8 @@ class Inputs {
     -DesignRequirements design_requirements;
     -List~OperationPoint~ operation_points;
 
-    +get_design_requirements()
-    +get_operation_points()
-    
+    +get_*()
+    +set_*()    
 }
 
 class Magnetic {
@@ -62,10 +59,8 @@ class Magnetic {
     -MagneticCore core
     -Winding winding
 
-    +get_name()
-    +get_core()
-    +get_winding()
-    
+    +get_*()
+    +set_*()
 }
 
 class Outputs {
@@ -75,11 +70,8 @@ class Outputs {
     -Dict winding_losses
     -Dict winding_window_magnetic_strength_field
 
-    +get_core_losses()
-    +get_leakage_inductance()
-    +get_magnetizing_inductance()
-    +get_winding_losses()
-    +get_winding_window_magnetic_strength_field()
+    +get_*()
+    +set_*()
 }
 
 ```
