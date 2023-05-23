@@ -23,9 +23,8 @@ class Magnetic {
     -MagneticCore core
     -Winding winding
 
-	+get_name()
-	+get_core()
-	+get_winding()
+    +get_*()
+    +set_*()
     
 }
 Magnetic ..> MagneticCore : Dependency
@@ -40,13 +39,10 @@ class MagneticCore {
     -ProcessedDescription processed_description
     -ManufacturingInfo manufacturing_info
 
-	+process_data()
-	+process_gap()
-	+get_geometrical_description()
-	+get_processed_description()
-	+get_distributors_info()
-	+get_manufacturer_info()
-	+get_name()
+    +process_data()
+    +process_gap()
+    +get_*()
+    +set_*()
 }
 
 class Winding {
@@ -56,14 +52,11 @@ class Winding {
     -List~Section~ sections_description;
     -List~Turn~ turns_description;
 
-	+wind_by_sections()
-	+wind_by_layers()
-	+wind_by_turns()
-	+get_bobbin()
-	+get_functional_description()
-	+get_layers_description()
-	+get_sections_description()
-	+get_turns_description()
+    +wind_by_sections()
+    +wind_by_layers()
+    +wind_by_turns()
+    +get_*()
+    +set_*()
 }
 
 ```
