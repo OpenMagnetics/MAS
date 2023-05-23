@@ -5,28 +5,28 @@ The wire structure is designed to be able to describe any kind of wire, from Lit
 
 * Name: Reference name of the wire.
 * Type: Type of the wire. It can be one of the following:
-	* Round: Solid round wire, defined by its conducting diameter.
-	* Rectangular: Rectangular solid wire, defined by its conducting height and width. This wire can represent from strip wire to PCB tracks.
-	* Foil: Solid foil wire, defined by its conducting height and width (or thickness). 
-	* Litz: Stranded wire made of other kinds of wires.
+    * Round: Solid round wire, defined by its conducting diameter.
+    * Rectangular: Rectangular solid wire, defined by its conducting height and width. This wire can represent from strip wire to PCB tracks.
+    * Foil: Solid foil wire, defined by its conducting height and width (or thickness). 
+    * Litz: Stranded wire made of other kinds of wires.
 * Standard (optional): Standard where the wire is defined (e.g.: IEC 60317 or NEMA MW 1000C)
 * Manufacturer Info: Dictionary/Map with the information about the manufacturer, including name, status of the material, internal reference, or cost.
 * Material: Conductive material of the wire, usually Copper.
 * Number Conductors: The number of conductors in the wire. The conductors are isolated from one another in the case of Litz type, and non-isolated for the rest.
 * Coating: The coating field covers anything that insulation material that goes around the wire and has the following fields:
-	* Type: Type of the coating. Can be
-		* Bare
-		* Enamelled
-		* Insulated
-		* Served
-		* Taped
-		* Extruded
-	* Maximum Thickness: The maximum thickness of the insulation around the wire.
-	* Material: Name of the material used or a dictionary/map with its properties, like rating, thermal conductivity, or dielectric strength.
-	* Grade: The grade of the insulation around the wire.
-	* Number Layers: The number of layers of the insulation around the wire.
-	* Thickness Layers: The thickness of the layers of the insulation around the wire.
-	* Breakdown Voltage: Minimum voltage that causes a portion of an insulator to experience electrical breakdown and become electrically conductive.
+    * Type: Type of the coating. Can be
+        * Bare
+        * Enamelled
+        * Insulated
+        * Served
+        * Taped
+        * Extruded
+    * Maximum Thickness: The maximum thickness of the insulation around the wire.
+    * Material: Name of the material used or a dictionary/map with its properties, like rating, thermal conductivity, or dielectric strength.
+    * Grade: The grade of the insulation around the wire.
+    * Number Layers: The number of layers of the insulation around the wire.
+    * Thickness Layers: The thickness of the layers of the insulation around the wire.
+    * Breakdown Voltage: Minimum voltage that causes a portion of an insulator to experience electrical breakdown and become electrically conductive.
 
 Additionally, depending on the type, more fields are needed, and are described in the following subsections.
 
@@ -34,37 +34,24 @@ Additionally, depending on the type, more fields are needed, and are described i
 classDiagram
 
 class Wire {
-	-InsulationWireCoating coating
-	-DimensionWithTolerance conducting_diameter
-	-DimensionWithTolerance conducting_height
-	-DimensionWithTolerance conducting_width
-	-ManufacturerInfo manufacturer_info
-	-WireMaterial material
-	-String name
-	-Double number_conductors
-	-DimensionWithTolerance outer_diameter
-	-DimensionWithTolerance outer_height
-	-DimensionWithTolerance outer_width
-	-WireStandard standard
-	-String standard_name
-	-String type
-	-Wire strand
+    -InsulationWireCoating coating
+    -DimensionWithTolerance conducting_diameter
+    -DimensionWithTolerance conducting_height
+    -DimensionWithTolerance conducting_width
+    -ManufacturerInfo manufacturer_info
+    -WireMaterial material
+    -String name
+    -Double number_conductors
+    -DimensionWithTolerance outer_diameter
+    -DimensionWithTolerance outer_height
+    -DimensionWithTolerance outer_width
+    -WireStandard standard
+    -String standard_name
+    -String type
+    -Wire strand
 
-	+get_coating()
-	+get_conducting_diameter()
-	+get_conducting_height()
-	+get_conducting_width()
-	+get_manufacturer_info()
-	+get_material()
-	+get_name()
-	+get_number_conductors()
-	+get_outer_diameter()
-	+get_outer_height()
-	+get_outer_width()
-	+get_standard()
-	+get_standard_name()
-	+get_type()
-	+get_strand()
+    +get_*()
+    +set_*()
 }
 Wire ..> InsulationWireCoating : Dependency
 Wire ..> WireMaterial : Dependency
@@ -73,21 +60,16 @@ Wire ..> Wire : Dependency
 
 class InsulationWireCoating {
 
-	-Double breakdown_voltage
-	-Int grade
-	-InsulationMaterial material
-	-Int number_layers
-	-DimensionWithTolerance thickness
-	-Double thickness_layers
-	-InsulationWireCoatingType type
+    -Double breakdown_voltage
+    -Int grade
+    -InsulationMaterial material
+    -Int number_layers
+    -DimensionWithTolerance thickness
+    -Double thickness_layers
+    -InsulationWireCoatingType type
 
-	+get_breakdown_voltage()
-	+get_grade()
-	+get_material()
-	+get_number_layers()
-	+get_thickness()
-	+get_thickness_layers()
-	+get_type()
+    +get_*()
+    +set_*()
 }
 
 InsulationWireCoating ..> InsulationMaterial : Dependency
@@ -95,73 +77,66 @@ InsulationWireCoating ..> InsulationWireCoatingType : Dependency
 
 class InsulationMaterial {
 
-	-InsulationMaterialComposition composition
-	-DielectricStrengthElement dielectric_strength
-	-String manufacturer
-	-String name
-	-Rating rating
-	-Double thermal_conductivity
+    -InsulationMaterialComposition composition
+    -DielectricStrengthElement dielectric_strength
+    -String manufacturer
+    -String name
+    -Rating rating
+    -Double thermal_conductivity
 
-	+get_composition()
-	+get_dielectric_strength()
-	+get_manufacturer()
-	+get_name()
-	+get_rating()
-	+get_thermal_conductivity()
+    +get_*()
+    +set_*()
 }
 InsulationMaterial ..> InsulationMaterialComposition : Dependency
 
 class InsulationWireCoatingType {
     <<enumeration>>
     BARE
-	ENAMELLED
-	EXTRUDED
-	INSULATED
-	SERVED
-	TAPED
+    ENAMELLED
+    EXTRUDED
+    INSULATED
+    SERVED
+    TAPED
 }
 
 class WireMaterial {
 
-	-String name
-	-Double permeability
-	-Resistivity resistivity
-	-List~ThermalConductivityElement~ thermal_conductivity
+    -String name
+    -Double permeability
+    -Resistivity resistivity
+    -List~ThermalConductivityElement~ thermal_conductivity
 
-	+get_name()
-	+get_permeability()
-	+get_resistivity()
-	+get_thermal_conductivity()
+    +get_*()
+    +set_*()
 }
 WireMaterial ..> Resistivity : Dependency
 
 class Resistivity {
 
-	-Double reference_temperature
-	-Double reference_value
-	-Double temperature_coefficient
+    -Double reference_temperature
+    -Double reference_value
+    -Double temperature_coefficient
 
-	+get_reference_temperature()
-	+get_reference_value()
-	+get_temperature_coefficient()
+    +get_*()
+    +set_*()
 }
 
 class WireStandard {
     <<enumeration>>
     IEC_60317
-	JIS_C3202
-	NEMA_MW_1000_C
+    JIS_C3202
+    NEMA_MW_1000_C
 }
 
 class InsulationMaterialComposition {
     <<enumeration>>
     AIR
-	BAKELITE
-	NYLON
-	PAPER
-	POLYIMIDE
-	POLYSTYRENE
-	TEFLON
+    BAKELITE
+    NYLON
+    PAPER
+    POLYIMIDE
+    POLYSTYRENE
+    TEFLON
 }
 
 ```
