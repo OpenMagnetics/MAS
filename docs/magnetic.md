@@ -28,7 +28,7 @@ class Magnetic {
 	+get_winding()
     
 }
-Magnetic ..> Core : Dependency
+Magnetic ..> MagneticCore : Dependency
 Magnetic ..> Winding : Dependency
 
 
