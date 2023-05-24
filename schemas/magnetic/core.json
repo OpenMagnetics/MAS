@@ -253,6 +253,16 @@
                     "type": "number",
                     "exclusiveMinimum": 0
                 },
+                "minimumWidth": {
+                    "description": "Minimum width of the column, if irregular",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "minimumDepth": {
+                    "description": "Minimum depth of the column, if irregular",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
                 "height": {
                     "description": "Height of the column",
                     "type": "number",

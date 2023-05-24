@@ -71,8 +71,8 @@
                     "type": "string"
                 },
                 "parallel": {
-                    "description": "The name of the parallel that this turn belongs to",
-                    "type": "string"
+                    "description": "The index of the parallel that this turn belongs to",
+                    "type": "integer"
                 },
                 "layer": {
                     "description": "The name of the layer that this turn belongs to",
@@ -86,7 +86,7 @@
                     "description": "Way in which the turn is wound",
                     "title": "turnOrientation",
                     "type": "string",
-                    "enum": ["clockwire", "counterClockwise"]
+                    "enum": ["clockwise", "counterClockwise"]
                 },
                 "length": {
                     "description": "The length of the turn, referred from the center of its cross section, in m",
@@ -97,8 +97,12 @@
                     "type": "number",
                     "default": 360
                 },
+                "dimensions": {
+                    "description": "Dimensions of the rectangle defining the turn",
+                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                },
                 "coordinates": {
-                    "description": "The coordinates of the center of the section, referred to the center of the main column",
+                    "description": "The coordinates of the center of the turn, referred to the center of the main column",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
@@ -136,7 +140,7 @@
                     "default": "centered"
                 },
                 "partialWindings": {
-                    "description": "List of partial windings in this section",
+                    "description": "List of partial windings in this layer",
                     "type": "array",
                     "items":{
                         "$ref": "#/$defs/partialWinding"
@@ -153,11 +157,11 @@
                     ]
                 },
                 "dimensions": {
-                    "description": "Dimensions of the rectangle defining the section",
+                    "description": "Dimensions of the rectangle defining the layer",
                     "$ref": "/schemas/utils.json#/$defs/dimensions"
                 },
                 "coordinates": {
-                    "description": "The coordinates of the center of the section, referred to the center of the main column",
+                    "description": "The coordinates of the center of the layer, referred to the center of the main column",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
                 },
                 "fillingFactor": {

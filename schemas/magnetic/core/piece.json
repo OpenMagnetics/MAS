@@ -51,6 +51,7 @@
     "$defs": {
         "machining":{
             "description": "Data describing the machining applied to a piece",
+            "title": "machining",
             "type": "object",
             "properties": {
                 "length": {

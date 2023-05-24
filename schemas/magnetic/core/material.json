@@ -14,7 +14,7 @@
             "description": "The composition of a magnetic material",
             "title": "materialComposition",
             "type": "string",
-            "enum": ["ferrite", "ironPowder", "nanocrystalline", "amorphous", "electricalSteel"]
+            "enum": ["ferrite", "powder", "nanocrystalline", "amorphous", "electricalSteel"]
         },
         "name": {
             "description": "The name of a magnetic material",
