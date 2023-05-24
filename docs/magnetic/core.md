@@ -88,7 +88,7 @@ Optional field for COTS cores, compiling the information about the manufacturer 
     * Cost: Absolute cost of the core in dollars by the distributor
 ## Functional Description
 This level describes the core in a way mainly thought for humans, defining the core with the values used by most Power Engineers. 
-I decided to break down the specification in part following the common use in the industry. A core manufacturer has a list of materials they use to create their cores (ferrites, iron powder, nanocrystalline, etc.) and then uses those materials to create a core with a given shape (RM8, PQ40/40, T25), and then it might machine some gapping into some column. Additionally, some of these shapes can be stacked to create larger cores.
+I decided to break down the specification in part following the common use in the industry. A core manufacturer has a list of materials they use to create their cores (ferrites, powder, nanocrystalline, etc.) and then uses those materials to create a core with a given shape (RM8, PQ40/40, T25), and then it might machine some gapping into some column. Additionally, some of these shapes can be stacked to create larger cores.
 
 
 ```mermaid
@@ -297,12 +297,12 @@ For the case of the definition, the following field are defined, although, in co
 * Curie Temperature: The temperature at which the material loses its ferromagnetism.
 * Material Composition: Type of the material, can be one of the following: 
     * Ferrite
-    * Iron Powder
+    * Powder
     * Nanocrystalline
     * Amorphous
     * Electrical Steel
 * Saturation: List of points defining the saturation at different temperatures. Each point must have its magnetic flux density, magnetic field strength, and temperature values.
-* Permeability: Dictionary/Map containing all the different possible permeabilities, of which the only mandatory is the Initial Permeability. Each permeability can be defined in two ways, either with a list of points or with an individual point. Each point is defined by a value as a minimum, but can carry more data, including temperature, magnetic field DC bias, frequency (which is commonly used for ferrites), or even modifier equations (as it is common for Iron Powder materials). With this definition we can cover all from individual values, to temperature graphs, or equations. 
+* Permeability: Dictionary/Map containing all the different possible permeabilities, of which the only mandatory is the Initial Permeability. Each permeability can be defined in two ways, either with a list of points or with an individual point. Each point is defined by a value as a minimum, but can carry more data, including temperature, magnetic field DC bias, frequency (which is commonly used for ferrites), or even modifier equations (as it is common for Powder materials). With this definition we can cover all from individual values, to temperature graphs, or equations. 
 * VolumetricLosses: This is a list of possible methods for calculating the volumetric losses of the material. The options are:
     * Steinmetz coefficients: List of ranges defined by a minimum and maximum frequency, including the coefficients k, alpha and beta (and optionally ct0, ct1, and ct2, for temperature dependance) for calculating the volumetric losses for any method derived from Steinmetz.
     * Roshen coefficients: Values for calculating the volumetric losses according to Roshen’s method. The needed values are normally provided by the manufacturer: remanence, coercive force, resistivity, at optionally some reference volumetric losses.
@@ -405,7 +405,7 @@ class MaterialComposition {
     AMORPHOUS
     ELECTRICAL_STEEL
     FERRITE
-    IRON_POWDER
+    POWDER
     NANOCRYSTALLINE
 }
 
@@ -795,7 +795,4 @@ class InsulationMaterial {
     +get_*()
     +set_*()
 }
-
-
 ```
-
