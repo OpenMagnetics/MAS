@@ -25,7 +25,7 @@ As explained in the [Inputs Section] (https://github.com/OpenMagnetics/MAS/blob/
 As explained in the [Magnetic Section] (https://github.com/OpenMagnetics/MAS/blob/main/docs/magnetic.md)
 
 ## Outputs
-As explained in the [Outputs Section] (https://github.com/OpenMagnetics/MAS/blob/main/docs/outputs.md)
+As explained in the [Outputs Section] (TBD)
 
 
 ```mermaid
