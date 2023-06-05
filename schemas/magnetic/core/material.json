@@ -62,7 +62,7 @@
             "description": "Resistivity value according to manufacturer",
             "type": "array",
             "items": {
-                "$ref": "#/$defs/resistivityPoint"
+                "$ref": "/schemas/utils.json#/$defs/resistivityPoint"
             },
             "minItems": 1,
             "uniqueItems": true
@@ -133,23 +133,6 @@
     "required": ["materialComposition", "type", "name", "permeability", "saturation", "resistivity", "volumetricLosses", "manufacturerInfo"],
 
     "$defs": {
-        "resistivityPoint": {
-            "description": "data for describing one point of resistivity",
-            "title": "resistivityPoint",
-            "type": "object",
-            "properties": {
-                "value": {
-                    "description": "Resistivity value, in Ohm * m",
-                    "type": "number",
-                    "exclusiveMinimum": 0
-                },
-                "temperature": {
-                    "description": "temperature for the field value, in Celsius",
-                    "type": "number"
-                }
-            },
-            "required": ["value"]
-        },
         "permeability": {
             "title": "permeability",
             "oneOf": [

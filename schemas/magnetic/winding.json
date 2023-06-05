@@ -119,8 +119,9 @@
                 },
                 "type": {
                     "description": "Type of the layer",
+                    "title": "electricalType",
                     "type": "string",
-                    "enum": ["wiring", "insulation"]
+                    "enum": ["conduction", "insulation"]
                 },
                 "section": {
                     "description": "The name of the section that this layer belongs to",
@@ -134,7 +135,7 @@
                 },
                 "turnsAlignment": {
                     "description": "Way in which the turns are aligned inside the layer",
-                    "title": "windingOrientation",
+                    "title": "coilAlignment",
                     "type": "string",
                     "enum": ["inner or top", "outer or bottom", "spread", "centered"],
                     "default": "centered"
@@ -181,6 +182,12 @@
                     "description": "Name given to the winding",
                     "type": "string"
                 },
+                "type": {
+                    "description": "Type of the layer",
+                    "title": "electricalType",
+                    "type": "string",
+                    "enum": ["conduction", "insulation"]
+                },
                 "layersOrientation": {
                     "description": "Way in which the layers are oriented inside the section",
                     "type": "string",
@@ -192,6 +199,13 @@
                     "items":{
                         "$ref": "#/$defs/partialWinding"
                     }
+                },
+                "layersAlignment": {
+                    "description": "Way in which the layers are aligned inside the section",
+                    "title": "coilAlignment",
+                    "type": "string",
+                    "enum": ["inner or top", "outer or bottom", "spread", "centered"],
+                    "default": "centered"
                 },
                 "dimensions": {
                     "description": "Dimensions of the rectangle defining the section",
@@ -207,7 +221,7 @@
                     "minimum": 0
                 }
             },
-            "required": ["name", "layersOrientation", "partialWindings", "dimensions", "coordinates"]
+            "required": ["name", "type", "layersOrientation", "partialWindings", "dimensions", "coordinates"]
         },
         "partialWinding":{
             "description": "Data describing one part of winding, described by a list with the proportion of each parallel in the winding that is contained here",

@@ -105,6 +105,10 @@
                             "uniqueItems": false
                         }
                     ]
+                },
+                "coordinates": {
+                    "description": "The coordinates of the center of the bobbin central wall, whre the wires are wound, referred to the center of the main column.",
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
             "required": ["columnShape", "wallThickness", "columnThickness", "columnDepth", "windingWindows"]

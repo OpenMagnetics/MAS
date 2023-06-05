@@ -19,6 +19,23 @@
         }
     },
     "$defs": {
+        "resistivityPoint": {
+            "description": "data for describing one point of resistivity",
+            "title": "resistivityPoint",
+            "type": "object",
+            "properties": {
+                "value": {
+                    "description": "Resistivity value, in Ohm * m",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "temperature": {
+                    "description": "temperature for the field value, in Celsius",
+                    "type": "number"
+                }
+            },
+            "required": ["value"]
+        },
         "manufacturerInfo":{
             "description": "Data from the manufacturer for a given part",
             "type": "object",

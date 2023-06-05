@@ -242,4 +242,11 @@ SUITE(Data)
         auto schema_file_path = mas_path + "schemas/magnetic/wire.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
+
+    TEST(Insulation)
+    {
+        auto data_file_path = mas_path + "data/insulation_materials.ndjson";
+        auto schema_file_path = mas_path + "schemas/magnetic/insulation/material.json";
+        validate_ndjson(schema_file_path, data_file_path);
+    }
 }

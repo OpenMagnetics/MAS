@@ -7,12 +7,18 @@
     "properties": {
         "composition": {
             "description": "The composition of a insulation material",
-            "type": "string",
-            "enum": ["polyimide", "bakelite", "nylon", "paper", "polystyrene", "teflon", "air"]
+            "type": "string"
         },
         "name": {
             "description": "The name of a insulation material",
             "type": "string"
+        },
+        "aliases": {
+            "description": "Alternative names of the material",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         },
         "manufacturer": {
             "description": "The manufacturer of the insulation material",
@@ -25,25 +31,39 @@
             },
             "minItems": 1
         },
-        "thermalConductivity": {
-            "description": "The thermal conductivity of the insulation material, in W / m * K",
+        "dielectricConstant": {
+            "description": "The dielectric constant of the insulation material",
             "type": "number",
             "exclusiveMinimum": 0
         },
-        "rating": {
-            "description": "The rating of the material",
-            "type": "object",
-            "properties": {
-                "temperature": {
-                    "description": "The temperature rating of the material",
-                    "type": "number"
-                },
-                "voltage": {
-                    "description": "The voltage rating of the material",
-                    "type": "number",
-                    "exclusiveMinimum": 0
-                }
-            }
+        "thermalConductivity": {
+            "description": "The thermal conductivity of the insulation material, in W / (m * K)",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "specificHeat": {
+            "description": "The specific heat of the insulation material, in J / (Kg * K)",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "temperatureClass": {
+            "description": "The temperature class of the insulation material, in Celsius",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "meltingPoint": {
+            "description": "The melting temperature of the insulation material, in Celsius",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "resistivity": {
+            "description": "Resistivity value according to manufacturer",
+            "type": "array",
+            "items": {
+                "$ref": "/schemas/utils.json#/$defs/resistivityPoint"
+            },
+            "minItems": 1,
+            "uniqueItems": true
         }
     },
     "required": ["name", "dielectricStrength"],
@@ -62,6 +82,10 @@
                     "description": "Thickness of the material",
                     "type": "number",
                     "exclusiveMinimum": 0
+                },
+                "temperature": {
+                    "description": "Temperature for the field value, in Celsius ",
+                    "type": "number"
                 },
                 "humidity": {
                     "description": "Humidity for the field value, in proportion over 1",
