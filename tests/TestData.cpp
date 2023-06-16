@@ -209,7 +209,7 @@ SUITE(Data)
         }
     }
 
-    TEST(Shapes)
+    TEST(CoreShapes)
     {
         auto data_file_path = mas_path + "data/shapes.ndjson";
         auto schema_file_path = mas_path + "schemas/magnetic/core/shape.json";
@@ -223,7 +223,7 @@ SUITE(Data)
         validate_ndjson(schema_file_path, data_file_path);
     }
 
-    TEST(Materials)
+    TEST(CoreMaterials)
     {
         auto data_file_path = mas_path + "data/materials.ndjson";
         auto schema_file_path = mas_path + "schemas/magnetic/core/material.json";
@@ -247,6 +247,13 @@ SUITE(Data)
     {
         auto data_file_path = mas_path + "data/insulation_materials.ndjson";
         auto schema_file_path = mas_path + "schemas/magnetic/insulation/material.json";
+        validate_ndjson(schema_file_path, data_file_path);
+    }
+
+    TEST(WireMaterials)
+    {
+        auto data_file_path = mas_path + "data/wire_materials.ndjson";
+        auto schema_file_path = mas_path + "schemas/magnetic/wire/material.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
 }

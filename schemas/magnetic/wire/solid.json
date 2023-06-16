@@ -28,6 +28,7 @@
             "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
         },
         "material": {
+            "title": "WireMaterialDataOrNameUnion",
             "oneOf": [
                 {"$ref": "/schemas/magnetic/wire/material.json"},
                 {
