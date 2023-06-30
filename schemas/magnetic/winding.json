@@ -169,6 +169,11 @@
                     "description": "How much space in this layer is used by wires compared to the total",
                     "type": "number",
                     "minimum": 0
+                },
+                "windingStyle": {
+                    "description": "Defines if the layer is wound by consecutive turns or parallels",
+                    "type": "string",
+                    "enum": ["windByConsecutiveTurns", "windByConsecutiveParallels"]
                 }
             },
             "required": ["name", "type", "orientation", "partialWindings", "dimensions", "coordinates"]
@@ -219,6 +224,11 @@
                     "description": "How much space in this section is used by wires compared to the total",
                     "type": "number",
                     "minimum": 0
+                },
+                "windingStyle": {
+                    "description": "Defines if the section is wound by consecutive turns or parallels",
+                    "type": "string",
+                    "enum": ["windByConsecutiveTurns", "windByConsecutiveParallels"]
                 }
             },
             "required": ["name", "type", "layersOrientation", "partialWindings", "dimensions", "coordinates"]
