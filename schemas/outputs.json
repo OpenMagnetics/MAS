@@ -24,6 +24,14 @@
         "magnetizingInductance":{
             "description": "Data describing the output magnetic strength field",
             "$ref": "#/$defs/magnetizingInductance"
+        },
+        "temperature":{
+            "description": "Data describing the output temperature",
+            "$ref": "#/$defs/temperature"
+        },
+        "strayCapacitance":{
+            "description": "Data describing the output stray capacitance",
+            "$ref": "#/$defs/strayCapacitance"
         }
     },
     "required": [],
@@ -102,9 +110,60 @@
                     "description": "Value of the winding losses",
                     "type": "number",
                     "exclusiveMinimum": 0
+                },
+                "ohmicLossesPerTurn": {
+                    "description": "Value of the winding ohmic losses",
+                    "$ref": "#/$defs/windingLossesPerElement"
+                },
+                "skinEffectPerTurn": {
+                    "description": "Value of the winding skin effect losses",
+                    "$ref": "#/$defs/windingLossesPerElement"
+                },
+                "proximityEffectPerTurn": {
+                    "description": "Value of the winding proximity losses",
+                    "$ref": "#/$defs/windingLossesPerElement"
                 }
             },
             "required": ["origin", "methodUsed", "windingLosses"]
+        },
+        "temperature":{
+            "description": "Data describing the temperature and the intermediate inputs used to calculate them",
+            "title": "temperatureOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "description": "Origin of the value of the result",
+                    "type": "string",
+                    "enum": ["manufacturer", "measurement", "simulation"]
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the temperature in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "maximumTemperature":{
+                    "description": "temperature in the winding that produced the winding losses",
+                    "type": "number"
+                },
+                "temperaturePoint": {
+                    "type": "object",
+                    "properties": {
+                        "value":{
+                            "description": "temperature at the point, in Celsius",
+                            "type": "number"
+                        },
+                        "coordinates": {
+                            "description": "The coordinates of the temperature point, referred to the center of the main column",
+                            "$ref": "/schemas/utils.json#/$defs/coordinates"
+                        }
+                    },
+                    "required": ["value", "coordinates"]
+                },
+                "bulkThermalResistance": {
+                    "description": "bulk thermal resistance of the whole magnetic",
+                    "type": "number"
+                }
+            },
+            "required": ["origin", "methodUsed", "maximumTemperature"]
         },
         "leakageInductance":{
             "description": "Data describing the leakage inductance and the intermediate inputs used to calculate them",
@@ -120,13 +179,77 @@
                     "description": "Model used to calculate the leakage inductance in the case of simulation, or method used to measure it",
                     "type": "string"
                 },
-                "leakageInductance": {
-                    "description": "Value of the leakage inductance",
-                    "type": "number",
-                    "exclusiveMinimum": 0
+                "leakageInductancePerWinding": {
+                    "type": "array",
+                    "items": {
+                        "description": "Value of the leakage inductance between the primary and a secodnary winding given by the position in the array",
+                        "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
+                        "exclusiveMinimum": 0
+                    }
                 }
             },
-            "required": ["origin", "methodUsed", "leakageInductance"]
+            "required": ["origin", "methodUsed", "leakageInductancePerWinding"]
+        },
+        "strayCapacitance":{
+            "description": "Data describing the stray capacitance and the intermediate inputs used to calculate them",
+            "title": "strayCapacitanceOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "description": "Origin of the value of the result",
+                    "type": "string",
+                    "enum": ["manufacturer", "measurement", "simulation"]
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the stray capacitance in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "sixCapacitorNetworkPerWinding": {
+                    "description": "Network of six equivalent capacitors that describe the capacitance between two given windings",
+                    "type": "object",
+                    "properties": {
+                        "C1":{
+                            "type": "number"
+                        },
+                        "C2":{
+                            "type": "number"
+                        },
+                        "C3":{
+                            "type": "number"
+                        },
+                        "C4":{
+                            "type": "number"
+                        },
+                        "C5":{
+                            "type": "number"
+                        },
+                        "C6":{
+                            "type": "number"
+                        }
+                    },
+                    "required": ["C1", "C2", "C3", "C4", "C5", "C6"]
+                },
+                "tripoleCapacitancePerWinding": {
+                    "description": "The three values of a three input electrostatic multipole that describe the capacitance between two given windings",
+                    "type": "object",
+                    "properties": {
+                        "C1":{
+                            "type": "number"
+                        },
+                        "C2":{
+                            "type": "number"
+                        },
+                        "C3":{
+                            "type": "number"
+                        }
+                    },
+                    "required": ["C1", "C2", "C3"]
+                }
+            },                    
+            "anyOf": [
+                {"required": ["origin", "methodUsed", "sixCapacitorNetworkPerWinding"]},
+                {"required": ["origin", "methodUsed", "tripoleCapacitancePerWinding"]}
+            ]
         },
         "magnetizingInductance":{
             "description": "Data describing the magnetizing inductance and the intermediate inputs used to calculate them",
@@ -144,8 +267,32 @@
                 },
                 "magnetizingInductance": {
                     "description": "Value of the magnetizing inductance",
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
+                    "exclusiveMinimum": 0
+                },
+                "reluctanceCore": {
+                    "description": "Value of the reluctance of the core",
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
+                    "exclusiveMinimum": 0
+                },
+                "reluctanceGapping": {
+                    "description": "Value of the reluctance of the gaps",
+                    "type": "array",
+                    "items": {
+                        "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
+                    }
+                },
+                "maximumMagneticEnergyCore": {
+                    "description": "Value of the maximum magnetic energy storable in the core",
                     "type": "number",
                     "exclusiveMinimum": 0
+                },
+                "maximumMagneticEnergyGapping": {
+                    "description": "Value of the maximum magnetic energy storable in the gaps",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
                 }
             },
             "required": ["origin", "methodUsed", "magnetizingInductance"]
@@ -194,6 +341,31 @@
                 }
             },
             "required": ["origin", "methodUsed", "frequency", "data"]
+        },
+        "windingLossesPerElement":{
+            "description": "Data describing the losses due to either DC, skin effect, or proximity effect; in a given element, which can be winding, section, layer or physical turn",
+            "title": "windingLossesPerElement",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "description": "Origin of the value of the result",
+                    "type": "string",
+                    "enum": ["manufacturer", "measurement", "simulation"]
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "data": {
+                    "description": "Value of the losses",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": ["origin", "methodUsed", "data"]
         }
     }
 }

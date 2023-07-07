@@ -148,21 +148,31 @@
             "maxItems": 3
         },
         "dimensionWithTolerance": {
-            "description": "A dimension of the wire, in m",
+            "description": "A dimension of with minimum, nominal, and maximum values", 
             "title": "dimensionWithTolerance",
             "type": "object",
             "properties": {
                 "minimum": {
-                    "description": "The minimum value of the dimension, in m",
+                    "description": "The minimum value of the dimension",
                     "type": "number"
                 },
                 "nominal": {
-                    "description": "The nominal value of the dimension, in m",
+                    "description": "The nominal value of the dimension",
                     "type": "number"
                 },
                 "maximum": {
-                    "description": "The maximum value of the dimension, in m",
+                    "description": "The maximum value of the dimension",
                     "type": "number"
+                },
+                "excludeMinimum": {
+                    "description": "True is the minimum value must be excluded from the range",
+                    "type": "boolean",
+                    "default": false
+                },
+                "excludeMaximum": {
+                    "description": "True is the maximum value must be excluded from the range",
+                    "type": "boolean",
+                    "default": false
                 }
             },
             "anyOf": [

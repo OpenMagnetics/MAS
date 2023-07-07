@@ -11,13 +11,13 @@
         },
         "magnetizingInductance": {
             "description": "Required values for the magnetizing inductance",
-            "$ref": "#/$defs/numericRequirement"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "turnsRatios": {
             "description": "Required turns ratios between primary and the rest of windings",
             "type": "array",
             "items": {
-                "$ref": "#/$defs/numericRequirement"
+                "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
             },
             "minItems": 0
         },
@@ -25,17 +25,17 @@
             "description": "Required values for the leakage inductance",
             "type": "array",
             "items": {
-                "$ref": "#/$defs/numericRequirement"
+                "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
             },
             "minItems": 0
         },
         "operationTemperature": {
             "description": "Required values for the temperature that the magnetic can reach under operation",
-            "$ref": "#/$defs/numericRequirement"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "altitude": {
             "description": "Required values for the altitude",
-            "$ref": "#/$defs/numericRequirement"
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "cti": {
             "description": "Required CTI",
@@ -61,39 +61,5 @@
     "required": ["magnetizingInductance", "turnsRatios"],
 
     "$defs": {
-        "numericRequirement":{
-            "description": "Data describing a minimum, maximum or range requirement",
-            "type": "object",
-            "title": "numericRequirement",
-            "properties": {
-                "nominal": {
-                    "description": "Nominal value of the requirement",
-                    "type": "number"
-                },
-                "minimum": {
-                    "description": "Minimum value of the requirement",
-                    "type": "number"
-                },
-                "excludeMinimum": {
-                    "description": "True is the minimum value must be excluded from the range",
-                    "type": "boolean",
-                    "default": false
-                },
-                "maximum": {
-                    "description": "Maximum value of the requirement",
-                    "type": "number"
-                },
-                "excludeMaximum": {
-                    "description": "True is the maximum value must be excluded from the range",
-                    "type": "boolean",
-                    "default": false
-                }
-            },
-            "oneOf": [
-                {"required": ["minimum"]},
-                {"required": ["maximum"]},
-                {"required": ["nominal"]},
-            ]
-        }
     }
 }
