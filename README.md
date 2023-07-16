@@ -57,7 +57,9 @@ class Magnetic {
     
     -String name
     -MagneticCore core
-    -Winding winding
+    -Coil coil
+    -List<DistributorInfo> distributors_info;
+    -MagneticManufacturerInfo manufacturer_info;
 
     +get_*()
     +set_*()
