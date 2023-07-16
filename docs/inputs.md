@@ -223,6 +223,7 @@ And because a magnetic working on a converter must function and be efficient ove
 To take this into account, the operation points are designed as a list, where each element contains two main fields: the operation conditions and excitations of each winding.
 
 ```mermaid
+
 classDiagram
 
 class OperationPoint {
@@ -242,20 +243,26 @@ class OperationConditions {
 
     -Double ambient_relative_humidity;
     -Double ambient_temperature;
-    -ForcedConvectionCooling cooling;
+    -Cooling cooling;
     -String name;
 
     +get_*()
     +set_*()
 }
 
-OperationConditions ..> ForcedConvectionCooling : Dependency
+OperationConditions ..> Cooling : Dependency
 
-class ForcedConvectionCooling {
+class Cooling {
 
     -String fluid;
     -Double temperature;
-    -List~double~ velocity;
+    -Double flow_diameter;
+    -List<Double> velocity;
+    -List<Double> dimensions;
+    -Double interface_thermal_resistance;
+    -Double interface_thickness;
+    -Double thermal_resistance;
+    -Double maximum_temperature;
 
     +get_*()
     +set_*()
@@ -295,10 +302,27 @@ Before defining the excitations it is necessary to define the ambient conditions
 
 * Ambient temperature: Ambient temperature for this operation point.
 * Relative humidity (optional): Relative humidity for this operation point.
-* Cooling: Dictionary/Map that represents the cooling condition applied to the magnetic. It can have the following fields:
-    * Temperature: Temperature of the fluid. To be used only if different from ambient temperature
-    * Fluid: Name of the fluid used, by default air.
-    * Velocity: Array describing the velocity of the fluid in cartesian 2 or 3 dimensional space.
+* Cooling: Dictionary/Map that represents the cooling condition applied to the magnetic. It can be one of the following options:
+    * Natural Convection Cooling: Data describing a natural convection cooling.
+        * Temperature: Temperature of the fluid. To be used only if different from ambient temperature.
+        * Fluid: Name of the fluid used, default: air.
+    * Forced Convection Cooling: Data describing a forced convection cooling.
+        * Velocity: Three-dimensional vector describing the velocity of the fluid.
+        * Flow Diameter: Diameter of the fluid flow, normally defined as a fan diameter.
+        * Temperature: Temperature of the fluid. To be used only if different from ambient temperature.
+        * Fluid: Name of the fluid used.
+    * Heatsink Cooling: Data describing a heatsink cooling.
+        * Thermal Resistance: Bulk thermal resistance of the heat sink, in W/K.
+        * Interface Thermal Resistance: Bulk thermal resistance of the thermal interface used to connect the device to the heatsink, in W/mK.
+        * Interface Thickness: Thickness of the thermal interface used to connect the device to the heatsink, in m.
+        * Dimensions: Dimensions of the cube defining the heatsink.
+    * Cold Plate Cooling: Data describing a cold plate cooling.
+        * Thermal Resistance: Bulk thermal resistance of the cold plate, in W/K.
+        * Maximum Temperature: Maximum temperature of the cold plate.
+        * Interface Thermal Resistance: Bulk thermal resistance of the thermal interface used to connect the device to the cold plate, in W/mK.
+        * Interface Thickness: Thickness of the thermal interface used to connect the device to the cold plate, in m.
+        * Dimensions: Dimensions of the cube defining the cold plate.
+
 ### Excitation per winding
 This section describes the most important part of all the inputs, the waveforms that the magnetic will see, and be excited by, at each of its inputs and outputs. 
 In order to have a structure that supports any number and combinations of individual windings, the excitations are defined in a list, with a number of elements equal to the number of elements in the Design Requirement field of Turns Ratios plus one, or what is equivalent, the number of windings.
