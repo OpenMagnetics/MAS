@@ -1,8 +1,8 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/magnetic/winding.json",
-    "title": "winding",
-    "description": "The description of a magnetic winding",
+    "$id": "http://openmagnetics.com/schemas/magnetic/coil.json",
+    "title": "coil",
+    "description": "The description of a magnetic coil",
     "type": "object",
     "properties": {
         "bobbin": {
@@ -16,8 +16,8 @@
             ]
         },
         "functionalDescription":{
-            "description": "The data from the winding based on its function, in a way that can be used by analytical models of only Magnetism.",
-            "title": "windingFunctionalDescription",
+            "description": "The data from the coil based on its function, in a way that can be used by analytical models of only Magnetism.",
+            "title": "coilFunctionalDescription",
             "type": "array",
             "items": {
                 "$ref": "#/$defs/winding"
@@ -25,7 +25,7 @@
             "minItems": 1
         },
         "sectionsDescription":{
-            "description": "The data from the winding at the section level, in a way that can be used by more advanced analytical and finite element models",
+            "description": "The data from the coil at the section level, in a way that can be used by more advanced analytical and finite element models",
             "type": "array",
             "items": {
                 "$ref": "#/$defs/section"
@@ -33,7 +33,7 @@
             "minItems": 1
         },
         "layersDescription":{
-            "description": "The data from the winding at the layer level, in a way that can be used by more advanced analytical and finite element models",
+            "description": "The data from the coil at the layer level, in a way that can be used by more advanced analytical and finite element models",
             "type": "array",
             "items": {
                 "$ref": "#/$defs/layer"
@@ -41,7 +41,7 @@
             "minItems": 1
         },
         "turnsDescription":{
-            "description": "The data from the winding at the turn level, in a way that can be used by the most advanced analytical and finite element models",
+            "description": "The data from the coil at the turn level, in a way that can be used by the most advanced analytical and finite element models",
             "type": "array",
             "items": {
                 "$ref": "#/$defs/turn"

@@ -111,17 +111,46 @@
                     "type": "number",
                     "exclusiveMinimum": 0
                 },
-                "ohmicLossesPerTurn": {
-                    "description": "Value of the winding ohmic losses",
-                    "$ref": "#/$defs/windingLossesPerElement"
+                "windingLossesPerTurn": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/windingLossesPerElement"
+                    }
                 },
-                "skinEffectPerTurn": {
-                    "description": "Value of the winding skin effect losses",
-                    "$ref": "#/$defs/windingLossesPerElement"
+                "windingLossesPerLayer": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/windingLossesPerElement"
+                    }
                 },
-                "proximityEffectPerTurn": {
-                    "description": "Value of the winding proximity losses",
-                    "$ref": "#/$defs/windingLossesPerElement"
+                "windingLossesPerSection": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/windingLossesPerElement"
+                    }
+                },
+                "windingLossesPerWinding": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/windingLossesPerElement"
+                    }
+                },
+                "resistanceMatrix": {
+                    "description": "List of resistance matrix per frequency",
+                    "type": "array",
+                    "items": {
+                        "title": "resistanceMatrixAtFrequency",
+                        "type": "object",
+                        "properties": {
+                            "matrix": {
+                                "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
+                            },
+                            "frequency":{
+                                "description": "Frequency of the resitance matrix",
+                                "type": "number"
+                            }
+                        }
+                    }
                 }
             },
             "required": ["origin", "methodUsed", "windingLosses"]
@@ -140,8 +169,12 @@
                     "description": "Model used to calculate the temperature in the case of simulation, or method used to measure it",
                     "type": "string"
                 },
+                "initialTemperature":{
+                    "description": "Temperature of the magnetic before it started working. If missing ambient temperature must be assumed",
+                    "type": "number"
+                },
                 "maximumTemperature":{
-                    "description": "temperature in the winding that produced the winding losses",
+                    "description": "maximum temperature reached",
                     "type": "number"
                 },
                 "temperaturePoint": {
@@ -182,7 +215,7 @@
                 "leakageInductancePerWinding": {
                     "type": "array",
                     "items": {
-                        "description": "Value of the leakage inductance between the primary and a secodnary winding given by the position in the array",
+                        "description": "Value of the leakage inductance between the primary and a secondary winding given by the position in the array",
                         "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
                         "exclusiveMinimum": 0
                     }
@@ -193,63 +226,66 @@
         "strayCapacitance":{
             "description": "Data describing the stray capacitance and the intermediate inputs used to calculate them",
             "title": "strayCapacitanceOutput",
-            "type": "object",
-            "properties": {
-                "origin":{
-                    "description": "Origin of the value of the result",
-                    "type": "string",
-                    "enum": ["manufacturer", "measurement", "simulation"]
-                },
-                "methodUsed": {
-                    "description": "Model used to calculate the stray capacitance in the case of simulation, or method used to measure it",
-                    "type": "string"
-                },
-                "sixCapacitorNetworkPerWinding": {
-                    "description": "Network of six equivalent capacitors that describe the capacitance between two given windings",
-                    "type": "object",
-                    "properties": {
-                        "C1":{
-                            "type": "number"
-                        },
-                        "C2":{
-                            "type": "number"
-                        },
-                        "C3":{
-                            "type": "number"
-                        },
-                        "C4":{
-                            "type": "number"
-                        },
-                        "C5":{
-                            "type": "number"
-                        },
-                        "C6":{
-                            "type": "number"
-                        }
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "origin":{
+                        "description": "Origin of the value of the result",
+                        "type": "string",
+                        "enum": ["manufacturer", "measurement", "simulation"]
                     },
-                    "required": ["C1", "C2", "C3", "C4", "C5", "C6"]
-                },
-                "tripoleCapacitancePerWinding": {
-                    "description": "The three values of a three input electrostatic multipole that describe the capacitance between two given windings",
-                    "type": "object",
-                    "properties": {
-                        "C1":{
-                            "type": "number"
-                        },
-                        "C2":{
-                            "type": "number"
-                        },
-                        "C3":{
-                            "type": "number"
-                        }
+                    "methodUsed": {
+                        "description": "Model used to calculate the stray capacitance in the case of simulation, or method used to measure it",
+                        "type": "string"
                     },
-                    "required": ["C1", "C2", "C3"]
-                }
-            },                    
-            "anyOf": [
-                {"required": ["origin", "methodUsed", "sixCapacitorNetworkPerWinding"]},
-                {"required": ["origin", "methodUsed", "tripoleCapacitancePerWinding"]}
-            ]
+                    "sixCapacitorNetworkPerWinding": {
+                        "description": "Network of six equivalent capacitors that describe the capacitance between two given windings",
+                        "type": "object",
+                        "properties": {
+                            "C1":{
+                                "type": "number"
+                            },
+                            "C2":{
+                                "type": "number"
+                            },
+                            "C3":{
+                                "type": "number"
+                            },
+                            "C4":{
+                                "type": "number"
+                            },
+                            "C5":{
+                                "type": "number"
+                            },
+                            "C6":{
+                                "type": "number"
+                            }
+                        },
+                        "required": ["C1", "C2", "C3", "C4", "C5", "C6"]
+                    },
+                    "tripoleCapacitancePerWinding": {
+                        "description": "The three values of a three input electrostatic multipole that describe the capacitance between two given windings",
+                        "type": "object",
+                        "properties": {
+                            "C1":{
+                                "type": "number"
+                            },
+                            "C2":{
+                                "type": "number"
+                            },
+                            "C3":{
+                                "type": "number"
+                            }
+                        },
+                        "required": ["C1", "C2", "C3"]
+                    }
+                },                    
+                "anyOf": [
+                    {"required": ["origin", "methodUsed", "sixCapacitorNetworkPerWinding"]},
+                    {"required": ["origin", "methodUsed", "tripoleCapacitancePerWinding"]}
+                ]
+            }
         },
         "magnetizingInductance":{
             "description": "Data describing the magnetizing inductance and the intermediate inputs used to calculate them",
@@ -267,6 +303,11 @@
                 },
                 "magnetizingInductance": {
                     "description": "Value of the magnetizing inductance",
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
+                    "exclusiveMinimum": 0
+                },
+                "reluctanceTotal": {
+                    "description": "Value of the reluctance of the core",
                     "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
                     "exclusiveMinimum": 0
                 },
@@ -342,9 +383,9 @@
             },
             "required": ["origin", "methodUsed", "frequency", "data"]
         },
-        "windingLossesPerElement":{
+        "windingLossElementPerHarmonic":{
             "description": "Data describing the losses due to either DC, skin effect, or proximity effect; in a given element, which can be winding, section, layer or physical turn",
-            "title": "windingLossesPerElement",
+            "title": "windingLossElement",
             "type": "object",
             "properties": {
                 "origin":{
@@ -356,16 +397,58 @@
                     "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
                     "type": "string"
                 },
-                "data": {
-                    "description": "Value of the losses",
+                "lossesPerHarmonic": {
+                    "description": "Losses produced by each harmonic",
                     "type": "array",
                     "items": {
                         "type": "number"
                     },
-                    "minItems": 1
+                    "uniqueItems": false
+                },
+                "harmonicFrequencies": {
+                    "description": "List of frequencies of the harmonics that are producing losses",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "uniqueItems": true
                 }
             },
-            "required": ["origin", "methodUsed", "data"]
+            "required": ["origin", "methodUsed", "lossesPerHarmonic", "harmonicFrequencies"]
+        },
+        "windingLossesPerElement": {
+            "type": "object",
+            "title": "windingLossesPerElement",
+            "properties": {
+                "ohmicLosses":{
+                    "description": "List of value of the winding ohmic losses",
+                    "type": "object",
+                    "properties": {
+                        "origin":{
+                            "description": "Origin of the value of the result",
+                            "type": "string",
+                            "enum": ["manufacturer", "measurement", "simulation"]
+                        },
+                        "methodUsed": {
+                            "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
+                            "type": "string"
+                        },
+                        "losses": {
+                            "description": "Value of the losses",
+                            "type": "number"
+                        }
+                    },
+                    "required": ["origin", "losses"]
+                },
+                "skinEffectLosses":{
+                    "description": "List of value of the winding skin losses per harmonic",
+                    "$ref": "#/$defs/windingLossElementPerHarmonic"
+                },
+                "proximityEffectLosses":{
+                    "description": "List of value of the winding proximity losses per harmonic",
+                    "$ref": "#/$defs/windingLossElementPerHarmonic"
+                }
+            }
         }
     }
 }

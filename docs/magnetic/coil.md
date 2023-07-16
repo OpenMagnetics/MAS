@@ -33,6 +33,7 @@ class Coil {
     +get_*()
     +set_*()
 }
+
 Coil ..> Bobbin : Dependency
 Coil ..> CoilFunctionalDescription : Dependency
 Coil ..> Layer : Dependency

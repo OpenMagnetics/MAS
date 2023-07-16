@@ -33,29 +33,63 @@
             "description": "Required values for the temperature that the magnetic can reach under operation",
             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
-        "altitude": {
-            "description": "Required values for the altitude",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        "insulation": {
+            "title": "insulationRequirements",
+            "type": "object",
+            "properties": {
+                "altitude": {
+                    "description": "Required values for the altitude",
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                },
+                "cti": {
+                    "description": "Required CTI",
+                    "type": "string",
+                    "enum": ["Group I", "Group II", "Group IIIa", "Group IIIb"]
+                },
+                "pollutionDegree": {
+                    "description": "Required pollution for the magnetic to work under",
+                    "type": "string",
+                    "enum": ["P1", "P2", "P3"]
+                },
+                "overvoltageCategory": {
+                    "description": "Required overvoltage category",
+                    "type": "string",
+                    "enum": ["OVC-I", "OVC-II", "OVC-III", "OVC-IV"]
+                },
+                "insulationType": {
+                    "description": "Required type of insulation",
+                    "type": "string",
+                    "enum": ["Functional", "Basic", "Supplementary", "Double", "Reinforced"]
+                }
+            }
         },
-        "cti": {
-            "description": "Required CTI",
+        "market": {
+            "description": "Market where the magnetic will end up being used",
             "type": "string",
-            "enum": ["Group I", "Group II", "Group IIIa", "Group IIIb"]
+            "enum": ["Medical", "Commercial", "Industrial", "Military", "Space"]
         },
-        "pollutionDegree": {
-            "description": "Required pollution for the magnetic to work under",
-            "type": "string",
-            "enum": ["P1", "P2", "P3"]
+        "topology": {
+            "description": "Topology that will use the magnetic",
+            "type": "string"
         },
-        "overvoltageCategory": {
-            "description": "Required overvoltage category",
-            "type": "string",
-            "enum": ["OVC-I", "OVC-II", "OVC-III", "OVC-IV"]
+        "maximumWeight": {
+            "description": "Maximum weight for the designed magnetic, in Kg",
+            "type": "number"
         },
-        "insulationType": {
-            "description": "Required type of insulation",
-            "type": "string",
-            "enum": ["Functional", "Basic", "Supplementary", "Double", "Reinforced"]
+        "maximumDimensions": {
+            "description": "Maximum dimensions, width, height, and depth, for the designed magnetic, in m",
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+        "terminalType": {
+            "description": "Type of the terminal that must be used, per winding",
+            "type": "array",
+            "items": {
+                "type": "string",
+                "enum": ["Pin", "Screw", "SMT", "Flyind Lead"]
+            }
         }
     },
     "required": ["magnetizingInductance", "turnsRatios"],

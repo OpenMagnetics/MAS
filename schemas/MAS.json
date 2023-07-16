@@ -18,7 +18,10 @@
         "outputs":{
             "description": "The description of the outputs that are produced after designing a Magnetic",
             "title": "Outputs",
-            "$ref": "/schemas/outputs.json"
+            "type": "array",
+            "items": {                
+                "$ref": "/schemas/outputs.json"
+            },
         }
     },
     "required": ["inputs", "magnetic", "outputs"]

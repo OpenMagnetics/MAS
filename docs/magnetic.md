@@ -22,14 +22,18 @@ class Magnetic {
     -String name
     -MagneticCore core
     -Coil coil
+    -List<DistributorInfo> distributors_info;
+    -MagneticManufacturerInfo manufacturer_info;
 
     +get_*()
     +set_*()
     
 }
+
 Magnetic ..> MagneticCore : Dependency
 Magnetic ..> Coil : Dependency
-
+Magnetic ..> DistributorInfo : Dependency
+Magnetic ..> MagneticManufacturerInfo : Dependency
 
 class MagneticCore {
 
@@ -47,7 +51,7 @@ class MagneticCore {
 
 class Coil {
     -Bobbin bobbin;
-    -List~WindingFunctionalDescription~ functional_description;
+    -List~CoilFunctionalDescription~ functional_description;
     -List~Layer~ layers_description;
     -List~Section~ sections_description;
     -List~Turn~ turns_description;
@@ -55,6 +59,43 @@ class Coil {
     +wind_by_sections()
     +wind_by_layers()
     +wind_by_turns()
+    +get_*()
+    +set_*()
+}
+
+class MagneticManufacturerInfo {
+    -String cost
+    -String datasheet_url
+    -String name
+    -String reference
+    -String status
+    -MagneticManufacturerRecommendations recommendations;
+
+    +get_*()
+    +set_*()
+}
+class DistributorInfo {
+    -Double cost;
+    -String country;
+    -String distributed_area;
+    -String email;
+    -String link;
+    -String name;
+    -String phone;
+    -Double quantity;
+    -String reference;
+    -String updated_at;
+
+    +get_*()
+    +set_*()
+}
+MagneticManufacturerInfo ..> MagneticManufacturerRecommendations : Dependency
+
+class MagneticManufacturerRecommendations {
+    -Double rated_current;
+    -Double rated_current_temperature_rise;
+    -Double rated_magnetic_flux;
+
     +get_*()
     +set_*()
 }

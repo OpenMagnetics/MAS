@@ -53,6 +53,10 @@
                     "description": "The manufacturer's reference of this part",
                     "type": "string"
                 },
+                "family": {
+                    "description": "The family of a magnetic, as defined by the manufacturer",
+                    "type": "string"
+                },
                 "datasheetUrl": {
                     "description": "The manufacturer's URL to the datasheet of the product",
                     "type": "string"
@@ -66,6 +70,7 @@
         },
         "distributorInfo":{
             "description": "Data from the distributor for a given part",
+            "title": "distributorInfo",
             "type": "object",
             "properties": {
                 "name": {
@@ -146,6 +151,18 @@
             },
             "minItems": 2,
             "maxItems": 3
+        },
+        "twoDimensionalMatrix":{
+            "description": "Data a two dimensional matrix, created as an array of array, where the first coordinate in the X and the second the Y",
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/$defs/dimensionWithTolerance"
+                },
+                "minItems": 1
+            },
+            "minItems": 1
         },
         "dimensionWithTolerance": {
             "description": "A dimension of with minimum, nominal, and maximum values", 

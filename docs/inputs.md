@@ -287,7 +287,7 @@ OperationPointExcitation ..> ElectromagneticParameter : Dependency
 class ElectromagneticParameter {
 
     -Harmonics harmonics;
-    -Processed processed;
+    -ProcessedData processed;
     -Waveform waveform;
 
     +get_*()
@@ -366,7 +366,7 @@ classDiagram
 class ElectromagneticParameter {
 
     -Harmonics harmonics;
-    -Processed processed;
+    -ProcessedData processed;
     -Waveform waveform;
 
     +get_*()
@@ -374,7 +374,7 @@ class ElectromagneticParameter {
 }
 
 ElectromagneticParameter ..> Harmonics : Dependency
-ElectromagneticParameter ..> Processed : Dependency
+ElectromagneticParameter ..> ProcessedData : Dependency
 ElectromagneticParameter ..> Waveform : Dependency
 
 
@@ -387,7 +387,7 @@ class Harmonics {
     +set_*()
 }
 
-class Processed {
+class ProcessedData {
 
     -Double ac_effective_frequency;
     -Double duty_cycle;
@@ -402,7 +402,7 @@ class Processed {
     +get_*()
     +set_*()
 }
-Processed ..> WaveformLabel : Dependency
+ProcessedData ..> WaveformLabel : Dependency
 
 class WaveformLabel {
     <<enumeration>>

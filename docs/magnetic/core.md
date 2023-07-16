@@ -3,7 +3,7 @@ This section must completely define the magnetic core used in our magnetic compo
 
 In order to achieve this, the information is grouped in three levels or descriptions, each one independent from the others. Ideally any level / description must be able to describe the core, and all the information of the core can be extracted from any of them. This descriptions are:
 * **Functional description**: The most commonly used in core datasheets, here is the information that describes the core from the functional point of view: shape, material, number of stacks, etc. Practical for humans.
-* **Processed description**: Here the processed information is kept. Things like the dimensions of the columns, the winding windows, or the effective parameters of the shape are stored here. Practical for analytical models.
+* **ProcessedData description**: Here the processed information is kept. Things like the dimensions of the columns, the winding windows, or the effective parameters of the shape are stored here. Practical for analytical models.
 * **Geometrical description**: This is the information of the core related to its geometry and relative position. Data about which pieces make the core, including ferrite pieces, spacers, or column chunks for distributed gaps, along to all their relative positions , rotations, and machining. Practical for CAD models.
 
 ```mermaid
@@ -617,7 +617,7 @@ Example of simple gapping, one grinded gap in the center, residual in the latera
 
 The whole JSON Schema with the complete definition can be found in: https://github.com/OpenMagnetics/MAS/blob/main/schemas/magnetic/core/gap.json
 
-## Processed Description
+## ProcessedData Description
 This level or description holds the processed data from the core. This is detailed data that is useful for working with the core, but it does not define its shape, instead it is a consequence of the shape.
 The opposite step, from processed to functional, is done when selecting a magnetic core depending on the input excitations (for example, the Area Product or Energy methods). We implicitly define the winding window and the central column, and from that date we choose the shape that is closer to them.
 

@@ -47,7 +47,7 @@
                         {"$ref": "#/$defs/compressedWaveform"}
                     ]
                 },
-                "processed": {
+                "processedData": {
                     "type": "object",
                     "properties": {
                         "label": {
@@ -127,7 +127,7 @@
             },
             "anyOf": [
                 {"required": ["waveform"]},
-                {"required": ["processed"]}
+                {"required": ["processedData"]}
             ]
         },
         "equidistantWaveform":{

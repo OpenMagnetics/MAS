@@ -22,9 +22,12 @@
         },
         "cooling": {
             "description": "Relative Humidity of the ambient where the magnetic will operate",
+            "title": "cooling",
             "oneOf": [
                 {"$ref": "#/$defs/naturalConvectionCooling"},
-                {"$ref": "#/$defs/forcedConvectionCooling"}
+                {"$ref": "#/$defs/forcedConvectionCooling"},
+                {"$ref": "#/$defs/heatsinkCooling"},
+                {"$ref": "#/$defs/coldPlateCooling"}
             ]
         }
     },
@@ -56,6 +59,10 @@
                 "velocity": {
                     "$ref": "/schemas/utils.json#/$defs/velocity"
                 },
+                "flowDiameter": {
+                    "description": "Diameter of the fluid flow, normally defined as a fan diameter",
+                    "type": "number"
+                },
                 "temperature": {
                     "description": "Temperature of the fluid. To be used only if different from ambient temperature",
                     "type": "number"
@@ -67,6 +74,58 @@
                 }
             },
             "required": ["velocity"]
+        },
+        "heatsinkCooling":{
+            "description": "Data describing a heatsink cooling",
+            "type": "object",
+            "title": "heatsinkCooling",
+            "properties": {
+                "thermalResistance": {
+                    "description": "Bulk thermal resistance of the heat sink, in W/K",
+                    "type": "number"
+                },
+                "interfaceThermalResistance": {
+                    "description": "Bulk thermal resistance of the thermal interface used to connect the device to the heatsink, in W/mK",
+                    "type": "number"
+                },
+                "interfaceThickness": {
+                    "description": "Thickness of the thermal interface used to connect the device to the heatsink, in m",
+                    "type": "number"
+                },
+                "dimensions": {
+                    "description": "Dimensions of the cube defining the heatsink",
+                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                }
+            },
+            "required": ["thermalResistance"]
+        },
+        "coldPlateCooling":{
+            "description": "Data describing a cold plate cooling",
+            "type": "object",
+            "title": "heatsinkCooling",
+            "properties": {
+                "thermalResistance": {
+                    "description": "Bulk thermal resistance of the cold plate, in W/K",
+                    "type": "number"
+                },
+                "maximumTemperature": {
+                    "description": "Maximum temperature of the cold plate",
+                    "type": "number"
+                },
+                "interfaceThermalResistance": {
+                    "description": "Bulk thermal resistance of the thermal interface used to connect the device to the cold plate, in W/mK",
+                    "type": "number"
+                },
+                "interfaceThickness": {
+                    "description": "Thickness of the thermal interface used to connect the device to the cold plate, in m",
+                    "type": "number"
+                },
+                "dimensions": {
+                    "description": "Dimensions of the cube defining the cold plate",
+                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                }
+            },
+            "required": ["maximumTemperature"]
         }
     }
 }

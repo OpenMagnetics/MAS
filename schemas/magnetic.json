@@ -9,10 +9,68 @@
             "description": "Data describing the magnetic core.",
             "$ref": "/schemas/magnetic/core.json"
         },
-        "winding":{
-            "description": "Data describing the winding",
-            "$ref": "/schemas/magnetic/winding.json"
-        }
+        "coil":{
+            "description": "Data describing the coil",
+            "$ref": "/schemas/magnetic/coil.json"
+        },
+        "manufacturerInfo": {
+            "type": "object",
+            "title": "magneticManufacturerInfo",
+            "properties": {
+                "name": {
+                    "description": "The name of the manufacturer of the part",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "The production status of a part according to its manufacturer",
+                    "type": "string",
+                    "enum": ["production", "prototype", "obsolete"]
+                },
+                "reference": {
+                    "description": "The manufacturer's reference of this part",
+                    "type": "string"
+                },
+                "family": {
+                    "description": "The family of a magnetic, as defined by the manufacturer",
+                    "type": "string"
+                },
+                "datasheetUrl": {
+                    "description": "The manufacturer's URL to the datasheet of the product",
+                    "type": "string"
+                },
+                "cost": {
+                    "description": "The manufacturer's price for this part",
+                    "type": "string"
+                },
+                "recommendations": {
+                    "type": "object",
+                    "title": "magneticManufacturerRecommendations",
+                    "properties": {
+                        "ratedCurrent": {
+                            "description": "The manufacturer's rated current for this part",
+                            "type": "number"
+                        },
+                        "ratedCurrentTemperatureRise": {
+                            "description": "The temperature rise for which the rated current is calculated",
+                            "type": "number"
+                        },
+                        "ratedMagneticFlux": {
+                            "description": "The manufacturer's rated magnetic flux or volt-seconds for this part",
+                            "type": "number"
+                        },
+                    }
+                }
+            },
+            "required": ["name"]
+        },
+        "distributorsInfo": {
+            "description": "The lists of distributors of the magnetic",
+            "type": "array",
+            "items": {
+                "$ref": "/schemas/utils.json#/$defs/distributorInfo"
+            },
+            "uniqueItems": false
+        },
     },
-    "required": ["core", "winding"]
+    "required": ["core", "coil"]
 }
