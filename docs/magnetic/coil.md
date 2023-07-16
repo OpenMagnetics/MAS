@@ -1,8 +1,9 @@
-# Winding
-Following the same principle as with the core, the winding is defined in an equivalent way as how they are manufactured: The wires are selected, prepared, and wound over a coil former following a series of steps. For this reason the bobbin or coil former is included in this section as part of the winding, which gives the possibility of defining a winding without a specific core, just its bobbin.
-The nomenclature of the different elements of the winding used in this document tries to follow the most common practices in the industry, but in order to avoid misinterpretation they will be defined here:
+# Coil
+Following the same principle as with the core, the coil is defined in an equivalent way as how they are manufactured: The wires are selected, prepared, and wound over a coil former following a series of steps. For this reason the bobbin or coil former is included in this section as part of the coil, which gives the possibility of defining a coil without a specific core, just its bobbin.
+The nomenclature of the different elements of the coil used in this document tries to follow the most common practices in the industry, but in order to avoid misinterpretation they will be defined here:
 
-* Winding: This can refer to the whole winding, when used at a magnetic level (e.g.: “The winding losses are overheating the magnetic”) or to an individual winding when specifically indicated (e.g.: “primary winding”, “winding 1”)
+* Coil: This refers to the whole set of windings, 
+* Winding: This refers to an individual winding when specifically indicated (e.g.: “primary winding”, “winding 1”)
 * Partial Winding: A subset of an individual winding, either a proportion of its turns or a proportion of its parallels; a proportion of both is not supported, and in those rare cases the Turns Description must be used. It contains the following fields:
     * Name: Reference name given to the partial winding.
     * Winding: Reference to the winding where it belongs to.
@@ -19,9 +20,9 @@ The nomenclature of the different elements of the winding used in this document 
 ```mermaid
 classDiagram
 
-class Winding {
+class Coil {
     -Bobbin bobbin
-    -List~WindingFunctionalDescription~ functional_description
+    -List~CoilFunctionalDescription~ functional_description
     -List~Layer~ layers_description
     -List~Section~ sections_description
     -List~Turn~ turns_description
@@ -32,11 +33,11 @@ class Winding {
     +get_*()
     +set_*()
 }
-Winding ..> Bobbin : Dependency
-Winding ..> WindingFunctionalDescription : Dependency
-Winding ..> Layer : Dependency
-Winding ..> Section : Dependency
-Winding ..> Turn : Dependency
+Coil ..> Bobbin : Dependency
+Coil ..> CoilFunctionalDescription : Dependency
+Coil ..> Layer : Dependency
+Coil ..> Section : Dependency
+Coil ..> Turn : Dependency
 
 class Bobbin {
     -List~Utils~ distributors_info
@@ -49,7 +50,7 @@ class Bobbin {
     +set_*()
 }
 
-class WindingFunctionalDescription {
+class CoilFunctionalDescription {
     -IsolationSide isolation_side
     -String name
     -Int number_parallels
@@ -59,7 +60,7 @@ class WindingFunctionalDescription {
     +get_*()
     +set_*()
 }
-WindingFunctionalDescription ..> IsolationSide : Dependency
+CoilFunctionalDescription ..> IsolationSide : Dependency
 
 class Section {
     -List~Double~ coordinates
@@ -189,7 +190,7 @@ Each of these windings will contain the following fields:
 * Wire: Wire used in this winding. As defined in the [Wire Section] (https://github.com/OpenMagnetics/MAS/blob/main/docs/magnetic/wire.md)
 
 
-Example of Winding Functional Description of an inductor:
+Example of Coil Functional Description of an inductor:
 ```
 {
     "name": "MyInductor",
@@ -230,7 +231,7 @@ Example of Winding Functional Description of a transformer:
 ```
 
 ## Sections Description
-This level or description is an increment to the previous one, adding more detail to the Functional level. It describes the winding with a granularity of sections (as described above).
+This level or description is an increment to the previous one, adding more detail to the Functional level. It describes the coil with a granularity of sections (as described above).
 
 If we represented the winding window of the core as a 2D rectangle, we would see the cross section of the wires as circles or rectangles (depending on the type of the wire). If we grouped the physical turns that belong to the same winding and only that one with encircling rectangles, these rectangles would represent the sections of our designs. A simple inductor will have only one section, and non-interleaved simple transformer will have two sections, and a transformer with primary and secondary interleaved once will have four sections.
 
@@ -249,7 +250,7 @@ It consists on a list of sections, each element containing the following fields:
 
 
 ## Layers Description
-As the previous case, this description is an incremental step to either the Functional or Section Description. Although it is still not enough to fully describe the whole winding, it has enough information for certain analytical models, like capacitance or temperature rise.
+As the previous case, this description is an incremental step to either the Functional or Section Description. Although it is still not enough to fully describe the whole coil, it has enough information for certain analytical models, like capacitance or temperature rise.
 
 It breaks down each of the sections into layers, allowing defining them as insulation or wiring layers. For wiring layers it contains how many turns and parallels go into each one, for insulation layers, the material used. In both cases its dimension and coordinates must be specified.
 
@@ -270,7 +271,7 @@ It consists on a list of layer, each element containing the following fields:
 * Coordinates: The coordinates of the center of the layer, referred to the center of the main column of the core.
 
 ## Turns Description
-This is the deepest and most detailed level of description for the winding of a magnetic component. It consists of describing each of the physical turns existing in all the individual windings, including their exact position inside the winding window.
+This is the deepest and most detailed level of description for the coil of a magnetic component. It consists of describing each of the physical turns existing in all the individual windings, including their exact position inside the winding window.
 
 It is useful for advanced Finite Element Simulation or advanced analytical models, like 2D winding losses, where the proximity effect from each physical turn into all the others is taken into account.
 
