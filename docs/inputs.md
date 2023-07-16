@@ -69,67 +69,89 @@ This object must have the following fields:
 * Magnetizing Inductance: Numeric requirement representing the inductance that the magnetic must have in order to work.
 * Turns ratios: List of numeric requirements, where each element represents the turns ratio that a secondary winding must have referred to the primary. An empty list represents a component with only the primary (a basic inductor)
 * Leakage inductance (optional): List of numeric requirements, where each element represents the leakage inductance that a secondary winding must have referred to the primary.
-* Altitude (optional): Numeric requirement representing the altitude at which the magnetic will work, in order to calculate insulation requirements.
-* CTI (optional): Required CTI the magnetic must comply with. It can be one of the following:
-    * Group I
-    * Group II
-    * Group IIIa
-    * Group IIIb
-* Insulation Type (optional): Required type of insulation. It can be one of the following:
-    * Functional
-    * Basic
-    * Supplementary
-    * Double
-    * Reinforced
 * Operation Temperature (optional): Numeric requirement representing the temperature that the magnetic can reach under operation.
-* Overvoltage Category (optional): Required overvoltage category. It can be one of the following:
-    * OVC-I
-    * OVC-II
-    * OVC-III
-    * OVC-IV
-* Pollution Degree (optional): Required pollution for the magnetic to work under.  It can be one of the following:
-    * P1
-    * P2
-    * P3
+* Insulation requirements (optional): Field needed to calculate the insulation requirements.
+    * Altitude (optional): Numeric requirement representing the altitude at which the magnetic will work, in order to calculate insulation requirements.
+    * CTI (optional): Required CTI the magnetic must comply with. It can be one of the following:
+        * Group I
+        * Group II
+        * Group IIIa
+        * Group IIIb
+    * Insulation Type (optional): Required type of insulation. It can be one of the following:
+        * Functional
+        * Basic
+        * Supplementary
+        * Double
+        * Reinforced
+    * Overvoltage Category (optional): Required overvoltage category. It can be one of the following:
+        * OVC-I
+        * OVC-II
+        * OVC-III
+        * OVC-IV
+    * Pollution Degree (optional): Required pollution for the magnetic to work under. It can be one of the following:
+        * P1
+        * P2
+        * P3
+* Market (optional): Market where the magnetic will end up being used. It can be one of the following:
+    *Medical
+    *Commercial
+    *Industrial
+    *Military
+    *Space
+* Maximum Dimension (optional)s: Maximum dimensions, width, height, and depth, for the designed magnetic, in m.
+* Maximum Weight (optional): Maximum weight for the designed magnetic, in Kg.
+* Terminal Type (optional): Type of the terminal that must be used, per winding. It can be one of the following:
+    *Pin
+    *Screw
+    *SMT
+    *Flyind Lead
+* Topology: Topology that will use the magnetic.
 
 
 ```mermaid
+
 classDiagram
 
 class DesignRequirements {
 
-    -NumericRequirement altitude;
-    -Cti cti;
-    -InsulationType insulation_type;
-    -List~NumericRequirement~ leakage_inductance;
-    -NumericRequirement magnetizing_inductance;
-    -String name;
-    -NumericRequirement operation_temperature;
-    -OvervoltageCategory overvoltage_category;
-    -PollutionDegree pollution_degree;
-    -List~NumericRequirement~ turns_ratios;
+    InsulationRequirements insulation;
+    List<DimensionWithTolerance> leakage_inductance;
+    DimensionWithTolerance magnetizing_inductance;
+    Market market;
+    List<Double> maximum_dimensions;
+    Double maximum_weight;
+    String name;
+    DimensionWithTolerance operation_temperature;
+    List<TerminalType> terminal_type;
+    String topology;
+    List<DimensionWithTolerance> turns_ratios;
 
     +get_*()
     +set_*()
 }
-DesignRequirements ..> NumericRequirement : Dependency
-DesignRequirements ..> Cti : Dependency
-DesignRequirements ..> InsulationType : Dependency
-DesignRequirements ..> OvervoltageCategory : Dependency
-DesignRequirements ..> PollutionDegree : Dependency
+DesignRequirements ..> InsulationRequirements : Dependency
+DesignRequirements ..> Market : Dependency
+DesignRequirements ..> TerminalType : Dependency
+DesignRequirements ..> DimensionWithTolerance : Dependency
 
-class NumericRequirement {
-    -Bool exclude_maximum;
-    -Bool exclude_minimum;
-    -Double maximum;
-    -Double minimum;
-    -Double nominal;
+class InsulationRequirements {
+
+    DimensionWithTolerance altitude;
+    Cti cti;
+    InsulationType insulation_type;
+    OvervoltageCategory overvoltage_category;
+    PollutionDegree pollution_degree;
 
     +get_*()
     +set_*()
 }
+InsulationRequirements ..> Cti : Dependency
+InsulationRequirements ..> InsulationType : Dependency
+InsulationRequirements ..> OvervoltageCategory : Dependency
+InsulationRequirements ..> PollutionDegree : Dependency
+InsulationRequirements ..> DimensionWithTolerance : Dependency
 
-class Cti {
+class DimensionWithTolerance {
     -Bool exclude_maximum;
     -Bool exclude_minimum;
     -Double maximum;
@@ -172,6 +194,22 @@ class PollutionDegree {
     P3
 }
 
+class Market {
+    <<enumeration>>
+    COMMERCIAL
+    INDUSTRIAL
+    MEDICAL
+    MILITARY
+    SPACE
+}
+
+class TerminalType {
+    <<enumeration>>
+    FLYIND_LEAD
+    PIN
+    SCREW
+    SMT
+}
 ```
 
 ## Operation Points
