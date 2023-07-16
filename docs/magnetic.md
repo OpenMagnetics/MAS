@@ -11,8 +11,8 @@ This name references the magnetic component and can be used to refer to it. This
 ## Core
 As defined in the [Core Section] (https://github.com/OpenMagnetics/MAS/blob/main/docs/magnetic/core.md)
 
-## Winding
-As defined in the [Winding Section] (https://github.com/OpenMagnetics/MAS/blob/main/docs/magnetic/winding.md)
+## Coil
+As defined in the [Coil Section] (https://github.com/OpenMagnetics/MAS/blob/main/docs/magnetic/coil.md)
 
 ```mermaid
 classDiagram
@@ -21,14 +21,14 @@ class Magnetic {
     
     -String name
     -MagneticCore core
-    -Winding winding
+    -Coil coil
 
     +get_*()
     +set_*()
     
 }
 Magnetic ..> MagneticCore : Dependency
-Magnetic ..> Winding : Dependency
+Magnetic ..> Coil : Dependency
 
 
 class MagneticCore {
@@ -45,7 +45,7 @@ class MagneticCore {
     +set_*()
 }
 
-class Winding {
+class Coil {
     -Bobbin bobbin;
     -List~WindingFunctionalDescription~ functional_description;
     -List~Layer~ layers_description;
