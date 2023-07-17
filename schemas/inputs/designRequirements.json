@@ -29,6 +29,14 @@
             },
             "minItems": 0
         },
+        "strayCapacitance": {
+            "description": "Required values for the stray capacitance",
+            "type": "array",
+            "items": {
+                "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            },
+            "minItems": 0
+        },
         "operationTemperature": {
             "description": "Required values for the temperature that the magnetic can reach under operation",
             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
