@@ -21,16 +21,17 @@ Inputs ..> OperationPoint : Dependency
 
 class DesignRequirements {
 
-    -NumericRequirement altitude;
-    -Cti cti;
-    -InsulationType insulation_type;
-    -List~NumericRequirement~ leakage_inductance;
-    -NumericRequirement magnetizing_inductance;
-    -String name;
-    -NumericRequirement operation_temperature;
-    -OvervoltageCategory overvoltage_category;
-    -PollutionDegree pollution_degree;
-    -List~NumericRequirement~ turns_ratios;
+    InsulationRequirements insulation;
+    List<DimensionWithTolerance> leakage_inductance;
+    DimensionWithTolerance magnetizing_inductance;
+    Market market;
+    List<Double> maximum_dimensions;
+    Double maximum_weight;
+    String name;
+    DimensionWithTolerance operation_temperature;
+    List<TerminalType> terminal_type;
+    String topology;
+    List<DimensionWithTolerance> turns_ratios;
 
     +get_*()
     +set_*()
