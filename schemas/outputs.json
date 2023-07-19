@@ -37,15 +37,19 @@
     "required": [],
 
     "$defs": {
+        "resultOrigin":{
+            "description": "Origin of the value of the result",
+            "type": "string",
+            "title": "resultOrigin",
+            "enum": ["manufacturer", "measurement", "simulation"]
+        },
         "coreLosses":{
             "description": "Data describing the core losses and the intermediate inputs used to calculate them",
             "title": "coreLossesOutput",
             "type": "object",
             "properties": {
                 "origin":{
-                    "description": "Origin of the value of the result",
-                    "type": "string",
-                    "enum": ["manufacturer", "measurement", "simulation"]
+                    "$ref": "#/$defs/resultOrigin"
                 },
                 "methodUsed": {
                     "description": "Model used to calculate the core losses in the case of simulation, or method used to measure it",
@@ -89,9 +93,7 @@
             "type": "object",
             "properties": {
                 "origin":{
-                    "description": "Origin of the value of the result",
-                    "type": "string",
-                    "enum": ["manufacturer", "measurement", "simulation"]
+                    "$ref": "#/$defs/resultOrigin"
                 },
                 "methodUsed": {
                     "description": "Model used to calculate the winding losses in the case of simulation, or method used to measure it",
@@ -161,9 +163,7 @@
             "type": "object",
             "properties": {
                 "origin":{
-                    "description": "Origin of the value of the result",
-                    "type": "string",
-                    "enum": ["manufacturer", "measurement", "simulation"]
+                    "$ref": "#/$defs/resultOrigin"
                 },
                 "methodUsed": {
                     "description": "Model used to calculate the temperature in the case of simulation, or method used to measure it",
@@ -204,9 +204,7 @@
             "type": "object",
             "properties": {
                 "origin":{
-                    "description": "Origin of the value of the result",
-                    "type": "string",
-                    "enum": ["manufacturer", "measurement", "simulation"]
+                    "$ref": "#/$defs/resultOrigin"
                 },
                 "methodUsed": {
                     "description": "Model used to calculate the leakage inductance in the case of simulation, or method used to measure it",
@@ -293,9 +291,7 @@
             "type": "object",
             "properties": {
                 "origin":{
-                    "description": "Origin of the value of the result",
-                    "type": "string",
-                    "enum": ["manufacturer", "measurement", "simulation"]
+                    "$ref": "#/$defs/resultOrigin"
                 },
                 "methodUsed": {
                     "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
@@ -360,9 +356,7 @@
             "type": "object",
             "properties": {
                 "origin":{
-                    "description": "Origin of the value of the result",
-                    "type": "string",
-                    "enum": ["manufacturer", "measurement", "simulation"]
+                    "$ref": "#/$defs/resultOrigin"
                 },
                 "methodUsed": {
                     "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
@@ -389,9 +383,7 @@
             "type": "object",
             "properties": {
                 "origin":{
-                    "description": "Origin of the value of the result",
-                    "type": "string",
-                    "enum": ["manufacturer", "measurement", "simulation"]
+                    "$ref": "#/$defs/resultOrigin"
                 },
                 "methodUsed": {
                     "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
