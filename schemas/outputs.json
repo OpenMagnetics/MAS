@@ -58,7 +58,7 @@
                 "magneticFluxDensity":{
                     "description": "Excitation of the B field that produced the core losses",
                     "title": "excitation",
-                    "$ref": "/schemas/inputs/operationPointExcitation.json"
+                    "$ref": "/schemas/inputs/operatingPointExcitation.json"
                 },
                 "temperature":{
                     "description": "temperature in the core that produced the core losses",
@@ -102,7 +102,7 @@
                 "currentPerWinding":{
                     "description": "Excitation of the current per winding that produced the winding losses",
                     "title": "excitation",
-                    "$ref": "/schemas/inputs.json#/$defs/operationPoint.json"
+                    "$ref": "/schemas/inputs.json#/$defs/operatingPoint"
                 },
                 "temperature":{
                     "description": "temperature in the winding that produced the winding losses",

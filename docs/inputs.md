@@ -1,7 +1,7 @@
 # Inputs
 We have finished describing the magnetic core, but as we commented at the beginning, a magnetic core without its inputs cannot really be defined, as we cannot even establish if it will work. Only by describing the requirements of the application, and the excitations to the Electronics system, can a magnetic component be correct.
 
-The specification of the inputs is therefore divided into two parts, a list of design requirements for the magnetic to comply with, and a list of operation points, which the magnetic has to be optimized for.
+The specification of the inputs is therefore divided into two parts, a list of design requirements for the magnetic to comply with, and a list of operating points, which the magnetic has to be optimized for.
 
 
 ```mermaid
@@ -10,14 +10,14 @@ classDiagram
 class Inputs {
     
     -DesignRequirements design_requirements;
-    -List~OperationPoint~ operation_points;
+    -List~OperatingPoint~ operating_points;
 
     +get_*()
     +set_*()
     
 }
 Inputs ..> DesignRequirements : Dependency
-Inputs ..> OperationPoint : Dependency
+Inputs ..> OperatingPoint : Dependency
 
 class DesignRequirements {
 
@@ -28,7 +28,7 @@ class DesignRequirements {
     List<Double> maximum_dimensions;
     Double maximum_weight;
     String name;
-    DimensionWithTolerance operation_temperature;
+    DimensionWithTolerance operating_temperature;
     List<TerminalType> terminal_type;
     String topology;
     List<DimensionWithTolerance> turns_ratios;
@@ -37,10 +37,10 @@ class DesignRequirements {
     +set_*()
 }
 
-class OperationPoint {
+class OperatingPoint {
 
-    -OperationConditions conditions;
-    -List~OperationPointExcitation~ excitations_per_winding;
+    -OperatingConditions conditions;
+    -List~OperatingPointExcitation~ excitations_per_winding;
     -String name;
 
     +get_*()
@@ -70,7 +70,7 @@ This object must have the following fields:
 * Magnetizing Inductance: Numeric requirement representing the inductance that the magnetic must have in order to work.
 * Turns ratios: List of numeric requirements, where each element represents the turns ratio that a secondary winding must have referred to the primary. An empty list represents a component with only the primary (a basic inductor)
 * Leakage inductance (optional): List of numeric requirements, where each element represents the leakage inductance that a secondary winding must have referred to the primary.
-* Operation Temperature (optional): Numeric requirement representing the temperature that the magnetic can reach under operation.
+* Operating Temperature (optional): Numeric requirement representing the temperature that the magnetic can reach under operating.
 * Insulation requirements (optional): Field needed to calculate the insulation requirements.
     * Altitude (optional): Numeric requirement representing the altitude at which the magnetic will work, in order to calculate insulation requirements.
     * CTI (optional): Required CTI the magnetic must comply with. It can be one of the following:
@@ -122,7 +122,7 @@ class DesignRequirements {
     List<Double> maximum_dimensions;
     Double maximum_weight;
     String name;
-    DimensionWithTolerance operation_temperature;
+    DimensionWithTolerance operating_temperature;
     List<TerminalType> terminal_type;
     String topology;
     List<DimensionWithTolerance> turns_ratios;
@@ -213,34 +213,34 @@ class TerminalType {
 }
 ```
 
-## Operation Points
-The other part of a magnetic specification is the operation points that it must work under or be optimized for.
+## Operating Points
+The other part of a magnetic specification is the operating points that it must work under or be optimized for.
 Although a magnetic is normally designed for a given topology, what really matters from the electromagnetic point of view (apart from the Design Requirement defined previously) is the excitation that it has in each of its ports, the energy that excites the magnetic component. And also is not really practical to define all variables for each topology and each of its possible configurations and controls.
 
-Due to all these the operation points were defined from the point of view of the magnetic, as topology-agnostic waveforms, collection of points that define a signal.
+Due to all these the operating points were defined from the point of view of the magnetic, as topology-agnostic waveforms, collection of points that define a signal.
 
-And because a magnetic working on a converter must function and be efficient over a range of operation conditions, it must be designed taking into account different excitations and conditions, so it can be optimal for common cases and still work in extreme cases.
+And because a magnetic working on a converter must function and be efficient over a range of operating conditions, it must be designed taking into account different excitations and conditions, so it can be optimal for common cases and still work in extreme cases.
 
-To take this into account, the operation points are designed as a list, where each element contains two main fields: the operation conditions and excitations of each winding.
+To take this into account, the operating points are designed as a list, where each element contains two main fields: the operating conditions and excitations of each winding.
 
 ```mermaid
 
 classDiagram
 
-class OperationPoint {
+class OperatingPoint {
 
-    -OperationConditions conditions;
-    -List~OperationPointExcitation~ excitations_per_winding;
+    -OperatingConditions conditions;
+    -List~OperatingPointExcitation~ excitations_per_winding;
     -String name;
 
     +get_*()
     +set_*()
 }
 
-OperationPoint ..> OperationConditions : Dependency
-OperationPoint ..> OperationPointExcitation : Dependency
+OperatingPoint ..> OperatingConditions : Dependency
+OperatingPoint ..> OperatingPointExcitation : Dependency
 
-class OperationConditions {
+class OperatingConditions {
 
     -Double ambient_relative_humidity;
     -Double ambient_temperature;
@@ -251,7 +251,7 @@ class OperationConditions {
     +set_*()
 }
 
-OperationConditions ..> Cooling : Dependency
+OperatingConditions ..> Cooling : Dependency
 
 class Cooling {
 
@@ -269,23 +269,23 @@ class Cooling {
     +set_*()
 }
 
-class OperationPointExcitation {
+class OperatingPointExcitation {
 
-    -ElectromagneticParameter current;
+    -SignalDescriptor current;
     -Double frequency;
-    -ElectromagneticParameter magnetic_field_strength;
-    -ElectromagneticParameter magnetic_flux_density;
-    -ElectromagneticParameter magnetizing_current;
+    -SignalDescriptor magnetic_field_strength;
+    -SignalDescriptor magnetic_flux_density;
+    -SignalDescriptor magnetizing_current;
     -String name;
-    -ElectromagneticParameter voltage;
+    -SignalDescriptor voltage;
 
     +get_*()
     +set_*()
 }
 
-OperationPointExcitation ..> ElectromagneticParameter : Dependency
+OperatingPointExcitation ..> SignalDescriptor : Dependency
 
-class ElectromagneticParameter {
+class SignalDescriptor {
 
     -Harmonics harmonics;
     -Processed processed;
@@ -297,12 +297,12 @@ class ElectromagneticParameter {
 ```
 
 ### Name
-This name references the Operation Point and can be used to refer to it from any number of magnetic components or simulations. This field can contain any valid string of characters.
-### Operation Conditions
+This name references the Operating Point and can be used to refer to it from any number of magnetic components or simulations. This field can contain any valid string of characters.
+### Operating Conditions
 Before defining the excitations it is necessary to define the ambient conditions that will exist at that point. The reason these variables are defined here and not in the previous section of Design Requirements is to give the opportunity to design the magnetic for different excitations and different temperature and humidities and see how it behaves, instead of a global maximum value.
 
-* Ambient temperature: Ambient temperature for this operation point.
-* Relative humidity (optional): Relative humidity for this operation point.
+* Ambient temperature: Ambient temperature for this operating point.
+* Relative humidity (optional): Relative humidity for this operating point.
 * Cooling: Dictionary/Map that represents the cooling condition applied to the magnetic. It can be one of the following options:
     * Natural Convection Cooling: Data describing a natural convection cooling.
         * Temperature: Temperature of the fluid. To be used only if different from ambient temperature.
@@ -364,7 +364,7 @@ The third and last level of definition is the harmonics data, which is a list of
 ```mermaid
 classDiagram
 
-class ElectromagneticParameter {
+class SignalDescriptor {
 
     -Harmonics harmonics;
     -Processed processed;
@@ -374,9 +374,9 @@ class ElectromagneticParameter {
     +set_*()
 }
 
-ElectromagneticParameter ..> Harmonics : Dependency
-ElectromagneticParameter ..> Processed : Dependency
-ElectromagneticParameter ..> Waveform : Dependency
+SignalDescriptor ..> Harmonics : Dependency
+SignalDescriptor ..> Processed : Dependency
+SignalDescriptor ..> Waveform : Dependency
 
 
 class Harmonics {
@@ -449,7 +449,7 @@ Example inputs for an inductor:
         "magnetizingInductance": {"nominal": 0.000465},
         "turnsRatios": []
     },
-    "operationPoints": [
+    "operatingPoints": [
         {
             "conditions": {
                 "ambientTemperature": 25.0,

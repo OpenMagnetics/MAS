@@ -432,7 +432,7 @@ VolumetricLossesMethod ..> VolumetricLossesPoint : Dependency
 VolumetricLossesMethod ..> CoreLossesMethodData : Dependency
 
 class VolumetricLossesPoint {
-    -OperationPointExcitation magnetic_flux_density;
+    -OperatingPointExcitation magnetic_flux_density;
     -String origin;
     -Double temperature;
     -Double value;

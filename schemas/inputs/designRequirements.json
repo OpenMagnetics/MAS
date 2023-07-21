@@ -37,8 +37,8 @@
             },
             "minItems": 0
         },
-        "operationTemperature": {
-            "description": "Required values for the temperature that the magnetic can reach under operation",
+        "operatingTemperature": {
+            "description": "Required values for the temperature that the magnetic can reach under operating",
             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
         "insulation": {

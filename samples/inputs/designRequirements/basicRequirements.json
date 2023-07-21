@@ -1,0 +1,9 @@
+{
+    "name": "basicRequirements",
+    "magnetizingInductance": {
+        "minimum": 42e-6
+    },
+    "turnsRatios": [
+        {"nominal": 4}
+    ]
+}

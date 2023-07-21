@@ -1,5 +1,5 @@
 # Magnetic
-I am going to separate into different specifications (and therefore files or entries in the database) anything that has to do with input to the system (operation points and requirements) from the physical system itself (the magnetic component). This first chapter describes how a magnetic can be described.
+I am going to separate into different specifications (and therefore files or entries in the database) anything that has to do with input to the system (operating points and requirements) from the physical system itself (the magnetic component). This first chapter describes how a magnetic can be described.
 
 It is a common practice of magnetics manufacturers to decouple cores (including gaps) and windings, having collections of compatible cores and wound bobbins, which allows having a multitude of different magnetics by combining them.
 

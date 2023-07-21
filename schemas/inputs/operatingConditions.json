@@ -1,12 +1,12 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/inputs/operationConditions.json",
-    "title": "operationConditions",
-    "description": "The description of a magnetic operation conditions",
+    "$id": "http://openmagnetics.com/schemas/inputs/operatingConditions.json",
+    "title": "operatingConditions",
+    "description": "The description of a magnetic operating conditions",
     "type": "object",
     "properties": {
         "name": {
-            "description": "A label that identifies this Operation Conditions",
+            "description": "A label that identifies this Operating Conditions",
             "type": "string"
         },
         "ambientTemperature": {

@@ -5,12 +5,12 @@
     "description": "The description of the inputs that can be used to design a Magnetic",
     "type": "object",
     "properties": {
-        "operationPoints":{
-            "description": "Data describing the operation points",
-            "title": "operationPoints",
+        "operatingPoints":{
+            "description": "Data describing the operating points",
+            "title": "operatingPoints",
             "type": "array",
             "items": {                
-                "$ref": "#/$defs/operationPoint"
+                "$ref": "#/$defs/operatingPoint"
             },
             "minItems": 1
         },
@@ -20,29 +20,29 @@
             "$ref": "/schemas/inputs/designRequirements.json"
         }
     },
-    "required": ["operationPoints", "designRequirements"],
+    "required": ["operatingPoints", "designRequirements"],
 
     "$defs": {
-        "operationPoint":{
-            "description": "Data describing one operation point, including the operation conditions and the excitations for all ports",
-            "title": "operationPoint",
+        "operatingPoint":{
+            "description": "Data describing one operating point, including the operating conditions and the excitations for all ports",
+            "title": "operatingPoint",
             "type": "object",
             "properties": {
                 "name":{
-                    "description": "Name describing this operation point",
+                    "description": "Name describing this operating point",
                     "type": "string"
                 },
                 "conditions":{
-                    "title": "operationConditions",
-                    "$ref": "/schemas/inputs/operationConditions.json"
+                    "title": "operatingConditions",
+                    "$ref": "/schemas/inputs/operatingConditions.json"
                 },
                 "excitationsPerWinding": {
                     "title": "excitationsPerWinding",
                     "type": "array",
                     "items": {
-                        "title": "OperationPointExcitationPerWinding",
+                        "title": "OperatingPointExcitationPerWinding",
                         "description": "Data describing the excitation of the winding",
-                        "$ref": "/schemas/inputs/operationPointExcitation.json"
+                        "$ref": "/schemas/inputs/operatingPointExcitation.json"
                     },
                     "minItems": 1
                 }

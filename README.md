@@ -6,7 +6,7 @@ This first prototype I called Magnetic Agnostic Structure, because it defines a 
 
 I would like to start with some clarifications, or "design decisions" , I took along the way, and explain why I took them. I also think they are a nice way of introducing the reasoning behind the MAS format.
 
-A magnetic component is just a piece of iron with copper wires around it without an application. The excitation defines the magnetic as much as the construction: the same component can be used as a transformer in a LLC or as an inductor in a Flyback. Some coupled inductors can be used as a common mode choke. Of course, the performance is not going to be the same, as normally one component is optimized for an application, but that is beside my point. What I want to highlight is that the operation point (excitation and conditions) is as important as the construction, and they must be equally defined.
+A magnetic component is just a piece of iron with copper wires around it without an application. The excitation defines the magnetic as much as the construction: the same component can be used as a transformer in a LLC or as an inductor in a Flyback. Some coupled inductors can be used as a common mode choke. Of course, the performance is not going to be the same, as normally one component is optimized for an application, but that is beside my point. What I want to highlight is that the operating point (excitation and conditions) is as important as the construction, and they must be equally defined.
 
 For that reason, I decided for my specification to cover both, but separate, and I called them inputs and magnetic. One input can excite many magnetics, and one magnetic can work with many different inputs.
 
@@ -47,7 +47,7 @@ MAS ..> Outputs : Dependency
 class Inputs {
     
     -DesignRequirements design_requirements;
-    -List~OperationPoint~ operation_points;
+    -List~OperatingPoint~ operating_points;
 
     +get_*()
     +set_*()    

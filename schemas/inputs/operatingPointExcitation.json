@@ -1,12 +1,12 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/inputs/operationPointExcitation.json",
-    "title": "operationPointExcitation",
-    "description": "The description of a magnetic operation point",
+    "$id": "http://openmagnetics.com/schemas/inputs/operatingPointExcitation.json",
+    "title": "operatingPointExcitation",
+    "description": "The description of a magnetic operating point",
     "type": "object",
     "properties": {
         "name": {
-            "description": "A label that identifies this Operation Point",
+            "description": "A label that identifies this Operating Point",
             "type": "string"
         },
         "frequency": {
@@ -15,19 +15,19 @@
             "minimum": 0
         },
         "current":{
-            "$ref": "#/$defs/electromagneticParameter"
+            "$ref": "#/$defs/signalDescriptor"
         },
         "voltage":{
-            "$ref": "#/$defs/electromagneticParameter"
+            "$ref": "#/$defs/signalDescriptor"
         },
         "magneticFluxDensity":{
-            "$ref": "#/$defs/electromagneticParameter"
+            "$ref": "#/$defs/signalDescriptor"
         },
         "magneticFieldStrength":{
-            "$ref": "#/$defs/electromagneticParameter"
+            "$ref": "#/$defs/signalDescriptor"
         },
         "magnetizingCurrent":{
-            "$ref": "#/$defs/electromagneticParameter"
+            "$ref": "#/$defs/signalDescriptor"
         }
     },
     "anyOf": [
@@ -36,10 +36,10 @@
     ],
 
     "$defs": {
-        "electromagneticParameter":{
+        "signalDescriptor":{
             "description": "Structure definining one electromagnetic parameters: current, voltage, magnetic flux density",
             "type": "object",
-            "title": "electromagneticParameter",
+            "title": "signalDescriptor",
             "properties": {
                 "waveform": {
                     "oneOf": [

@@ -290,7 +290,7 @@
             "title": "volumetricLossesPoint",
             "properties": {
                 "magneticFluxDensity": {
-                    "$ref": "/schemas/inputs/operationPointExcitation.json"
+                    "$ref": "/schemas/inputs/operatingPointExcitation.json"
                 },
                 "temperature": {
                     "description": "temperature value, in Celsius",
