@@ -447,43 +447,39 @@
             }
         },
         "insulation": {
-            "type": "object",
             "title": "insulationOutput",
-            "properties": {
-                "dielectricVoltages": {
-                    "type": "array",
-                    "items": {
-                        "description": "List of voltages that the magnetic can withstand",
-                        "type": "object",
-                        "properties": {
-                            "origin":{
-                                "description": "Origin of the value of the result",
-                                "type": "string",
-                                "enum": ["manufacturer", "measurement", "simulation"]
-                            },
-                            "methodUsed": {
-                                "description": "Model used to calculate the voltage in the case of simulation, or method used to measure it",
-                                "type": "string"
-                            },
-                            "voltage": {
-                                "description": "Voltage that the magnetic withstands",
-                                "type": "number"
-                            },
-                            "voltageType": {
-                                "description": "Type of the voltage",
-                                "type": "string",
-                                "enum": ["AC", "DC"]
-                            },
-                            "duration": {
-                                "description": "Duration of the voltate, or undefined if the field is not present",
-                                "type": "number"
-                            }
-                        },
-                        "required": ["origin", "voltage", "voltageType"]
+            "type": "array",
+            "items": {
+                "description": "List of voltages that the magnetic can withstand",
+                "type": "object",
+                "title": "dielectricVoltage",
+                "properties": {
+                    "origin":{
+                        "description": "Origin of the value of the result",
+                        "type": "string",
+                        "enum": ["manufacturer", "measurement", "simulation"]
                     },
-                    "minItems": 1
-                }
-            }
+                    "methodUsed": {
+                        "description": "Model used to calculate the voltage in the case of simulation, or method used to measure it",
+                        "type": "string"
+                    },
+                    "voltage": {
+                        "description": "Voltage that the magnetic withstands",
+                        "type": "number"
+                    },
+                    "voltageType": {
+                        "description": "Type of the voltage",
+                        "type": "string",
+                        "enum": ["AC", "DC"]
+                    },
+                    "duration": {
+                        "description": "Duration of the voltate, or undefined if the field is not present",
+                        "type": "number"
+                    }
+                },
+                "required": ["origin", "voltage", "voltageType"]
+            },
+            "minItems": 1
         }
     }
 }
