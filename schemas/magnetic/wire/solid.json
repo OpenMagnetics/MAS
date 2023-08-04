@@ -51,7 +51,7 @@
         },
         "numberConductors": {
             "description": "The number of conductors in the wire",
-            "type": "number",
+            "type": "integer",
             "const": 1
         },
         "outerDiameter": {

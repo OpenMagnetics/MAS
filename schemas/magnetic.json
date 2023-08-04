@@ -58,6 +58,14 @@
                             "description": "The manufacturer's rated magnetic flux or volt-seconds for this part",
                             "type": "number"
                         },
+                        "saturationCurrent": {
+                            "description": "The manufacturer's saturation current for this part",
+                            "type": "number"
+                        },
+                        "saturationCurrentInductanceDrop": {
+                            "description": "Percentage of inductance drop at saturation current",
+                            "type": "number"
+                        },
                     }
                 }
             },

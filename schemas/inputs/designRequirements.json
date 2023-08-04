@@ -68,6 +68,19 @@
                     "description": "Required type of insulation",
                     "type": "string",
                     "enum": ["Functional", "Basic", "Supplementary", "Double", "Reinforced"]
+                },
+                "mainSupplyVoltage": {
+                    "description": "Voltage RMS of the main supply to which this transformer is connected to.",
+                    "type": "number"
+                },
+                "standards": {
+                    "description": "VList of standards that will be taken into account for insulation.",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": ["IEC 60664-1", "IEC 60664-5", "IEC 61558-1", "IEC 60335-1", "IEC 62368-1"]
+                    },
+                    "minItems": 1
                 }
             }
         },
@@ -78,7 +91,9 @@
         },
         "topology": {
             "description": "Topology that will use the magnetic",
-            "type": "string"
+            "type": "string",
+            "enum": ["Buck Converter", "Boost Converter", "Inverting Buck-Boost Converter", "SEPIC", "Cuk Converter", "Zeta Converter", "Flyback Converter", "Two Switch Flyback Converter", "Active Clamp Forward Converter", "Single Switch Forward Converter", "Two Switch Forward Converter", "Push-Pull Converter", "Weinberg Converter", "Half-Bridge Converter", "Full-Bridge Converter", "Phase-Shifted Full-Bridge Converter"]
+
         },
         "maximumWeight": {
             "description": "Maximum weight for the designed magnetic, in Kg",

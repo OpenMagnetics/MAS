@@ -14,7 +14,7 @@
             "description": "The family of a magnetic shape",
             "title": "CoreShapeFamily",
             "type": "string",
-            "enum": ["u", "ur", "e", "etd", "p", "rm", "ep", "epx", "lp", "pm", "el", "er", "pq", "efd", "elp", "planar e", "planar er", "planar el", "ec", "eq", "ui", "pqi", "ut", "t"]
+            "enum": ["u", "ur", "e", "etd", "p", "rm", "ep", "epx", "lp", "pm", "el", "er", "pq", "efd", "elp", "planar e", "planar er", "planar el", "ec", "eq", "ui", "pqi", "ut", "t", "drum", "rod", "ei", "h", "c"]
         },
         "magneticCircuit": {
             "description": "Describes if the magnetic circuit of the shape is open, and can be combined with others; or closed, and has to be used by itself",

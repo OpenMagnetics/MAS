@@ -39,7 +39,7 @@
         },
         "numberConductors": {
             "description": "The number of conductors in the wire",
-            "type": "number",
+            "type": "integer",
             "exclusiveMinimum": 1
         },
         "outerDiameter": {
