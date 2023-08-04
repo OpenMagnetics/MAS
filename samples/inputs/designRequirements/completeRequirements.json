@@ -26,7 +26,7 @@
         "insulationType": "Double"
     },
     "market": "Military",
-    "topology": "Flyback",
+    "topology": "Flyback Converter",
     "maximumWeight": 3,
     "maximumDimensions": [0.1, 0.05, 0.04],
     "terminalType": ["SMT", "Flyind Lead"]
