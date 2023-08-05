@@ -111,7 +111,7 @@
             "type": "array",
             "items": {
                 "type": "string",
-                "enum": ["Pin", "Screw", "SMT", "Flyind Lead"]
+                "enum": ["Pin", "Screw", "SMT", "Flying Lead"]
             }
         }
     },
