@@ -23,11 +23,12 @@
         "cti": "Group II",
         "pollutionDegree": "P3",
         "overvoltageCategory": "OVC-III",
-        "insulationType": "Double"
+        "insulationType": "Double",
+        "standards": ["IEC 60664-1"]
     },
     "market": "Military",
     "topology": "Flyback Converter",
     "maximumWeight": 3,
     "maximumDimensions": [0.1, 0.05, 0.04],
-    "terminalType": ["SMT", "Flyind Lead"]
+    "terminalType": ["SMT", "Flying Lead"]
 }

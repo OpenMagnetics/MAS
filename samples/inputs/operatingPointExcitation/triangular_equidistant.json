@@ -5,7 +5,7 @@
             "data": [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.4, 0.3, 0.2, 0.1]
         },
         "processed": {
-            "label": "triangular",
+            "label": "Triangular",
             "peakToPeak": 0.5,
             "offset": 0,
             "dutyCycle": 0.5
@@ -16,7 +16,7 @@
             "data": [-10, 10, 10, 10, 10, 10, -10, -10, -10, -10]
         },
         "processed": {
-            "label": "square",
+            "label": "Rectangular",
             "peakToPeak": 20,
             "offset": 0,
             "dutyCycle": 0.5
