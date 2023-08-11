@@ -105,8 +105,16 @@
                 },
                 "currentPerWinding":{
                     "description": "Excitation of the current per winding that produced the winding losses",
-                    "title": "excitation",
+                    "title": "currentPerWinding",
                     "$ref": "/schemas/inputs.json#/$defs/operatingPoint"
+                },
+                "currentDividerPerTurn":{
+                    "description": "Excitation of the current per physical turn that produced the winding losses",
+                    "title": "currentDividerPerTurn",
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                    }
                 },
                 "temperature":{
                     "description": "temperature in the winding that produced the winding losses",
@@ -143,6 +151,7 @@
                 },
                 "resistanceMatrix": {
                     "description": "List of resistance matrix per frequency",
+                    "title": "resistanceMatrix",
                     "type": "array",
                     "items": {
                         "title": "resistanceMatrixAtFrequency",
@@ -156,6 +165,14 @@
                                 "type": "number"
                             }
                         }
+                    }
+                },
+                "dcResistancePerTurn": {
+                    "description": "List of DC resistance per turn",
+                    "title": "dcResistancePerTurn",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
                     }
                 }
             },
