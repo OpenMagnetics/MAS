@@ -27,13 +27,12 @@ FetchContent_Declare(json-schema-validator
         GIT_REPOSITORY https://github.com/pboettch/json-schema-validator.git
         GIT_TAG  tags/2.1.0)
 
-FetchContent_MakeAvailable(UnitTest++ json json-schema-validator magic-enum)
+FetchContent_MakeAvailable(UnitTest++ json json-schema-validator)
 
 SET(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
 include_directories("${CMAKE_BINARY_DIR}/_deps/unittest++-src/UnitTest++/")
 include_directories("${CMAKE_BINARY_DIR}/_deps/json-src/include/nlohmann/")
-include_directories("${CMAKE_BINARY_DIR}/_deps/magic-enum-src/include")
 
 file(GLOB MAS_sources
     "tests/*.cpp")
