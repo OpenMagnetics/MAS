@@ -71,7 +71,7 @@
                 },
                 "mainSupplyVoltage": {
                     "description": "Voltage RMS of the main supply to which this transformer is connected to.",
-                    "type": "number"
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
                 },
                 "standards": {
                     "description": "VList of standards that will be taken into account for insulation.",
@@ -101,9 +101,17 @@
         },
         "maximumDimensions": {
             "description": "Maximum dimensions, width, height, and depth, for the designed magnetic, in m",
-            "type": "array",
-            "items": {
-                "type": "number"
+            "type": "object",
+            "properties": {
+                "width": {
+                    "type": "number"
+                },
+                "height": {
+                    "type": "number"
+                },
+                "depth": {
+                    "type": "number"
+                }
             }
         },
         "terminalType": {
