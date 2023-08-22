@@ -76,6 +76,10 @@
                             "description": "The offset value of the waveform, referred to 0",
                             "type": "number"
                         },
+                        "average": {
+                            "description": "The average value of the waveform, referred to 0",
+                            "type": "number"
+                        },
                         "rms": {
                             "description": "The RMS value of the waveform",
                             "type": "number",
