@@ -211,7 +211,7 @@ SUITE(Data)
 
     TEST(CoreShapes)
     {
-        auto data_file_path = mas_path + "data/shapes.ndjson";
+        auto data_file_path = mas_path + "data/core_shapes.ndjson";
         auto schema_file_path = mas_path + "schemas/magnetic/core/shape.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
@@ -225,14 +225,14 @@ SUITE(Data)
 
     TEST(CoreMaterials)
     {
-        auto data_file_path = mas_path + "data/materials.ndjson";
+        auto data_file_path = mas_path + "data/core_materials.ndjson";
         auto schema_file_path = mas_path + "schemas/magnetic/core/material.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
 
     TEST(Advanced_Materials)
     {
-        auto data_file_path = mas_path + "data/advanced_materials.ndjson";
+        auto data_file_path = mas_path + "data/advanced_core_materials.ndjson";
         check_valid_ndjson(data_file_path);
     }
 
