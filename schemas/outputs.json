@@ -62,7 +62,7 @@
                 "magneticFluxDensity":{
                     "description": "Excitation of the B field that produced the core losses",
                     "title": "excitation",
-                    "$ref": "/schemas/inputs/operatingPointExcitation.json"
+                    "$ref": "/schemas/inputs/operatingPointExcitation.json#/$defs/signalDescriptor"
                 },
                 "temperature":{
                     "description": "temperature in the core that produced the core losses",
@@ -323,22 +323,20 @@
                     "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
                     "exclusiveMinimum": 0
                 },
-                "reluctanceTotal": {
+                "reluctanceCore": {
                     "description": "Value of the reluctance of the core",
                     "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
                     "exclusiveMinimum": 0
                 },
-                "reluctanceCore": {
+                "reluctanceUngappedCore": {
                     "description": "Value of the reluctance of the core",
                     "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
                     "exclusiveMinimum": 0
                 },
                 "reluctanceGapping": {
                     "description": "Value of the reluctance of the gaps",
-                    "type": "array",
-                    "items": {
-                        "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
-                    }
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
+                    "exclusiveMinimum": 0
                 },
                 "maximumMagneticEnergyCore": {
                     "description": "Value of the maximum magnetic energy storable in the core",
