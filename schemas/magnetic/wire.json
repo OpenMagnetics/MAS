@@ -6,5 +6,14 @@
     "oneOf": [
         {"$ref": "/schemas/magnetic/wire/solid.json"},
         {"$ref": "/schemas/magnetic/wire/stranded.json"}
-    ]
+    ],
+
+    "$defs": {
+        "wireType": {
+            "description": "The type of wire",
+            "title": "wireType",
+            "type": "string",
+            "enum": ["round", "litz", "rectangular", "foil"]
+        },
+    }
 }

@@ -10,9 +10,7 @@
             "type": "string"
         },
         "type": {
-            "description": "The type of wire",
-            "type": "string",
-            "const": "litz"
+            "$ref": "/schemas/magnetic/wire.json#/$defs/wireType"
         },
         "standard": {
             "description": "The standard of wire",
