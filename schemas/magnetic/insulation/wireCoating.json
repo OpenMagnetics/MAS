@@ -28,6 +28,11 @@
             "type": "integer",
             "exclusiveMinimum": 0
         },
+        "temperatureRating": {
+            "description": "The maximum temperature that the wire coating can withstand",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
         "numberLayers": {
             "description": "The number of layers of the insulation around the wire",
             "type": "integer",
