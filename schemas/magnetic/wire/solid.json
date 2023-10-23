@@ -119,7 +119,7 @@
                 "properties": { "type": { "const": "foil" } }
             },
             "then": {
-                "required": ["type", "material", "conductingWidth", "outerWidth", "conductingHeight", "outerHeight", "coating"],
+                "required": ["type", "material", "conductingWidth"],
                  "not": {
                     "anyOf": [
                         { "required": [ "conductingDiameter" ] },
