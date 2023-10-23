@@ -47,6 +47,14 @@
             "description": "The conducting height of the wire, in m",
             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
+        "conductingArea": {
+            "description": "The conducting area of the wire, in m². Used for some rectangular shapes where the area is smaller than expected due to rounded corners",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
+        "edgeRadius": {
+            "description": "The radius of the edge, in case of rectangular wire, in m",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
         "numberConductors": {
             "description": "The number of conductors in the wire",
             "type": "integer",
