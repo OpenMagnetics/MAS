@@ -52,7 +52,7 @@
                 "cti": {
                     "description": "Required CTI",
                     "type": "string",
-                    "enum": ["Group I", "Group II", "Group IIIa", "Group IIIb"]
+                    "enum": ["Group I", "Group II", "Group IIIA", "Group IIIB"]
                 },
                 "pollutionDegree": {
                     "description": "Required pollution for the magnetic to work under",
@@ -78,6 +78,7 @@
                     "type": "array",
                     "items": {
                         "type": "string",
+                        "title": "insulationStandards",
                         "enum": ["IEC 60664-1", "IEC 60664-5", "IEC 61558-1", "IEC 60335-1", "IEC 62368-1"]
                     },
                     "minItems": 1
@@ -94,6 +95,11 @@
             "type": "string",
             "enum": ["Buck Converter", "Boost Converter", "Inverting Buck-Boost Converter", "SEPIC", "Cuk Converter", "Zeta Converter", "Flyback Converter", "Two Switch Flyback Converter", "Active Clamp Forward Converter", "Single Switch Forward Converter", "Two Switch Forward Converter", "Push-Pull Converter", "Weinberg Converter", "Half-Bridge Converter", "Full-Bridge Converter", "Phase-Shifted Full-Bridge Converter"]
 
+        },
+        "wiringTechnology": {
+            "description": "Technology that must be used to create the wiring",
+            "type": "string",
+            "enum": ["Wound", "Printed", "Deposition"]
         },
         "maximumWeight": {
             "description": "Maximum weight for the designed magnetic, in Kg",
