@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/magnetic/wire/litz.json",
+    "$ref": "/schemas/magnetic/wire/basicWire.json",
+    "title": "wire/litz",
+    "description": "The description of a stranded litz magnet wire",
+    "type": "object",
+    "properties": {
+        "strand": {
+            "description": "The wire used as strands",
+            "oneOf": [
+                {"title": "wireRound", "$ref": "/schemas/magnetic/wire/round.json"},
+                {
+                    "description": "The name of the wire used as strand",
+                    "type": "string"
+                }
+            ]
+        },
+        "outerDiameter": {
+            "description": "The outer diameter of the wire, in m",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        }
+    },
+    "required": ["strand", "outerDiameter"]
+}

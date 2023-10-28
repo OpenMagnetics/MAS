@@ -202,6 +202,11 @@
             "description": "Shape of the column, also used for gaps",
             "type": "string",
             "enum": ["oblong", "round", "rectangular", "irregular"]
+        },
+        "connectionType": {
+            "description": "Type of the terminal",
+            "type": "string",
+            "enum": ["Pin", "Screw", "SMT", "Flying Lead"]
         }
     }
 }

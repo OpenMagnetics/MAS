@@ -79,6 +79,10 @@
             },
             "uniqueItems": false
         },
+        "rotation": {
+            "description": "The rotation of the magnetic, by default the winding column goes vertical",
+            "$ref": "/schemas/utils.json#/$defs/rotation"
+        }
     },
     "required": ["core", "coil"]
 }

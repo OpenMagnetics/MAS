@@ -124,8 +124,7 @@
             "description": "Type of the terminal that must be used, per winding",
             "type": "array",
             "items": {
-                "type": "string",
-                "enum": ["Pin", "Screw", "SMT", "Flying Lead"]
+                "$ref": "/schemas/utils.json#/$defs/connectionType"
             }
         }
     },

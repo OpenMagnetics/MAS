@@ -252,6 +252,16 @@
                         "maximum": 1
                     },
                     "uniqueItems": false
+                },
+                "connections": {
+                    "description": "Array on two elements, representing the input and output connection for this partial winding",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/connection"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "uniqueItems": false
                 }
             },
             "required": ["winding", "parallelsProportion"]
@@ -296,24 +306,16 @@
             "description": "Data describing the connection of the a wire",
             "type": "object",
             "properties": {
-                "flyingLead": {
-                    "description": "True if the wire flying, false if connected to pin",
-                    "type": "boolean"
+                "type": {
+                    "$ref": "/schemas/utils.json#/$defs/connectionType"
                 },
-                "terminal": {
-                    "description": "Data describing the terminal of a connection",
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "description": "Type of connector",
-                            "type": "string",
-                            "enum": ["tinned", "pin", "screw", "ring"]
-                        },
-                        "metric": {
-                            "description": "Metric of the terminal, if applicable",
-                            "type": "integer"
-                        }
-                    }
+                "metric": {
+                    "description": "Metric of the terminal, if applicable",
+                    "type": "integer"
+                },
+                "pinName": {
+                    "description": "Name of the pin where it is connected, if applicable",
+                    "type": "string"
                 },
                 "length": {
                     "description": "Length of the connection, counted from the exit of the last turn until the terminal, in m",

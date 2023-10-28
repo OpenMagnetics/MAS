@@ -55,6 +55,29 @@
                             }
                         ]
                     }
+                },
+                "pinout": {
+                    "$ref": "#/$defs/pinout"
+                },
+                "connections": {
+                    "description": "List of connections between windings and pins",
+                    "type": "array",
+                    "items": {
+                        "title": "pinWIndingConnection",
+                        "type": "object",
+                        "properties": {
+                            "pin": {
+                                "description": "The name of the connected pin",
+                                "type": "string"
+                            },
+                            "winding": {
+                                "description": "The name of the connected winding",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "minItems": 0,
+                    "uniqueItems": true
                 }
             },
             "required": ["type", "family", "shape", "dimensions"]
@@ -106,6 +129,15 @@
                         }
                     ]
                 },
+                "pins": {
+                    "description": "List of pins, geometrically defining how and where it is",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/pin"
+                    },
+                    "minItems": 0,
+                    "uniqueItems": true
+                },
                 "coordinates": {
                     "description": "The coordinates of the center of the bobbin central wall, whre the wires are wound, referred to the center of the main column.",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
@@ -117,5 +149,69 @@
     "anyOf": [
         {"required": ["functionalDescription"]},
         {"required": ["processedDescription"]}
-    ]
+    ],
+    "$defs": {
+        "pin":{
+            "description": "Data describing one pin in a bobbin",
+            "title": "pin",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name given to the pin",
+                    "type": "string"
+                },
+                "shape": {
+                    "description": "The shape of the pin",
+                    "type": "string",
+                    "enum": ["round", "rectangular"]
+                },
+                "type": {
+                    "description": "Type of pin",
+                    "type": "string",
+                    "enum": ["smd", "tht"]
+                },
+                "rotation": {
+                    "description": "The rotation of the pin, default is vertical",
+                    "$ref": "/schemas/utils.json#/$defs/rotation"
+                },
+                "dimensions": {
+                    "description": "Dimensions of the rectangle defining the pin",
+                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                },
+                "coordinates": {
+                    "description": "The coordinates of the center of the pin, referred to the center of the main column",
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                }
+            },
+            "required": ["name", "shape", "type", "dimensions"]
+        },
+        "pinout":{
+            "description": "Data describing the pinout of a bobbin",
+            "title": "pinout",
+            "type": "object",
+            "properties": {
+                "pitch": {
+                    "description": "The distance between pits",
+                    "type": "number"
+                },
+                "rowDistance": {
+                    "description": "The distance between a row of pins and the center of the bobbin",
+                    "type": "number"
+                },
+                "numberRows": {
+                    "description": "The number of rows of a bobbin, typically 2",
+                    "type": "integer",
+                    "default": 2
+                },
+                "numberPins": {
+                    "description": "The distance between pins",
+                    "type": "integer"
+                },
+                "pinDescription": {
+                    "$ref": "#/$defs/pin"
+                }
+            },
+            "required": ["pitch", "rowDistance", "numberPins", "pinDescription"]
+        }
+    }
 }
