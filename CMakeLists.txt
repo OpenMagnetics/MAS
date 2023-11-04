@@ -25,7 +25,7 @@ FetchContent_Declare(json
 
 FetchContent_Declare(json-schema-validator
         GIT_REPOSITORY https://github.com/pboettch/json-schema-validator.git
-        GIT_TAG  tags/2.1.0)
+        GIT_TAG  origin/main)
 
 FetchContent_MakeAvailable(UnitTest++ json json-schema-validator)
 

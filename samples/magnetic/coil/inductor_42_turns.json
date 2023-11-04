@@ -17,6 +17,7 @@
             "name": "MyWinding",
             "numberTurns": 42,
             "numberParallels": 2,
+            "connections": [{"pinName": "1"}, {"pinName": "2"}],
             "isolationSide": "primary",
             "wire": "Dummy"
         }

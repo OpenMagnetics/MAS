@@ -121,7 +121,7 @@
                     "description": "Type of the layer",
                     "title": "electricalType",
                     "type": "string",
-                    "enum": ["conduction", "insulation"]
+                    "enum": ["conduction", "insulation", "shielding"]
                 },
                 "section": {
                     "description": "The name of the section that this layer belongs to",
@@ -191,7 +191,7 @@
                     "description": "Type of the layer",
                     "title": "electricalType",
                     "type": "string",
-                    "enum": ["conduction", "insulation"]
+                    "enum": ["conduction", "insulation", "shielding"]
                 },
                 "layersOrientation": {
                     "description": "Way in which the layers are oriented inside the section",
@@ -261,7 +261,7 @@
                     },
                     "minItems": 2,
                     "maxItems": 2,
-                    "uniqueItems": false
+                    "uniqueItems": true
                 }
             },
             "required": ["winding", "parallelsProportion"]
@@ -298,6 +298,15 @@
                             "type": "string"
                         }
                     ]
+                },
+                "connections": {
+                    "description": "Array on elements, representing the all the pins this winding is connected to",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/connection"
+                    },
+                    "minItems": 2,
+                    "uniqueItems": true
                 }
             },
             "required": ["name", "numberTurns", "numberParallels", "isolationSide", "wire"]
