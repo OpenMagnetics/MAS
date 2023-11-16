@@ -208,6 +208,98 @@
             "title": "connectionType",
             "type": "string",
             "enum": ["Pin", "Screw", "SMT", "Flying Lead"]
-        }
+        },
+        "complexFieldPoint":{
+            "description": "Data describing the complex value of a field in a 2D or 3D space",
+            "title": "complexFieldPoint",
+            "type": "object",
+            "properties": {
+                "turnIndex":{
+                    "description": "If this field point is inside of a wire, this is the index of the turn",
+                    "type": "integer"
+                },
+                "turnLength":{
+                    "description": "If this field point is inside of a wire, this is the length of the turn",
+                    "type": "number"
+                },
+                "point":{
+                    "description": "The coordinates of the point of the field",
+                    "$ref": "#/$defs/coordinates"
+                },
+                "real": {
+                    "description": "Real value of the field at this point",
+                    "type": "number"
+                },
+                "imaginary": {
+                    "description": "Imaginary value of the field at this point",
+                    "type": "number"
+                }
+            },
+            "required": ["point", "real", "imaginary"]
+        },
+        "complexField":{
+            "description": "Data describing a field in a 2D or 3D space",
+            "title": "complexField",
+            "type": "object",
+            "properties": {
+                "frequency": {
+                    "description": "Value of the field at this point",
+                    "type": "number"
+                },
+                "data": {
+                    "description": "Value of the magnetizing inductance",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/complexFieldPoint"
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": ["frequency", "data"]
+        },
+        "fieldPoint":{
+            "description": "Data describing the value of a field in a 2D or 3D space",
+            "title": "fieldPoint",
+            "type": "object",
+            "properties": {
+                "turnIndex":{
+                    "description": "If this field point is inside of a wire, this is the index of the turn",
+                    "type": "integer"
+                },
+                "turnLength":{
+                    "description": "If this field point is inside of a wire, this is the length of the turn",
+                    "type": "number"
+                },
+                "point":{
+                    "description": "The coordinates of the point of the field",
+                    "$ref": "#/$defs/coordinates"
+                },
+                "value": {
+                    "description": "Value of the field at this point",
+                    "type": "number"
+                }
+            },
+            "required": ["point", "value"]
+        },
+        "field":{
+            "description": "Data describing a field in a 2D or 3D space",
+            "title": "field",
+            "type": "object",
+            "properties": {
+                "frequency": {
+                    "description": "Value of the field at this point",
+                    "type": "number"
+                },
+                "data": {
+                    "description": "Value of the magnetizing inductance",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/fieldPoint"
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": ["frequency", "data"]
+        },
     }
 }

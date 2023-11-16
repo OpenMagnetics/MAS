@@ -13,6 +13,14 @@
             "description": "Data describing the output winding losses",
             "$ref": "#/$defs/windingLosses"
         },
+        "windingWindowCurrentField":{
+            "description": "Data describing the output current field",
+            "$ref": "#/$defs/windingWindowCurrentField"
+        },
+        "windingWindowCurrentDensityField":{
+            "description": "Data describing the output current field",
+            "$ref": "#/$defs/windingWindowCurrentField"
+        },
         "windingWindowMagneticStrengthField":{
             "description": "Data describing the output magnetic strength field",
             "$ref": "#/$defs/windingWindowMagneticStrengthField"
@@ -361,48 +369,85 @@
             },
             "required": ["origin", "methodUsed", "magnetizingInductance"]
         },
-        "fieldPoint":{
-            "description": "Data describing the magnetizing inductance and the intermediate inputs used to calculate them",
-            "title": "fieldPoint",
-            "type": "object",
-            "properties": {
-                "point":{
-                    "description": "The coordinates of the point of the field",
-                    "$ref": "/schemas/utils.json#/$defs/coordinates"
-                },
-                "value": {
-                    "description": "Value of the field at this point",
-                    "type": "number"
-                }
-            },
-            "required": ["point", "value"]
-        },
-        "windingWindowMagneticStrengthField":{
-            "description": "Data describing the magnetic strengtg field inside the winding window",
-            "title": "windingWindowMagneticStrengthFieldOutput",
+        "windingWindowCurrentField": {
+            "description": "Data describing the curren in the different chunks used in field calculation",
+            "title": "windingWindowCurrentFieldOutput",
             "type": "object",
             "properties": {
                 "origin":{
                     "$ref": "#/$defs/resultOrigin"
                 },
                 "methodUsed": {
-                    "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
+                    "description": "Model used to calculate the current field",
                     "type": "string"
                 },
-                "frequency": {
-                    "description": "Value of the field at this point",
-                    "type": "number"
-                },
-                "data": {
-                    "description": "Value of the magnetizing inductance",
+                "fieldPerFrequency":{
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/fieldPoint"
+                        "$ref": "/schemas/utils.json#/$defs/field"
                     },
                     "minItems": 1
                 }
             },
-            "required": ["origin", "methodUsed", "frequency", "data"]
+            "required": ["origin", "methodUsed", "fieldPerFrequency"]
+        },
+        "windingWindowCurrentDensityField": {
+            "description": "Data describing the curren in the different chunks used in field calculation",
+            "title": "windingWindowCurrentDensityFieldOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "$ref": "#/$defs/resultOrigin"
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the current field",
+                    "type": "string"
+                }, 
+                "wires": {
+                    "type": "array",
+                    "items": {
+
+                        "title": "WireDataOrNameUnion",
+                        "oneOf": [
+                            {"$ref": "/schemas/magnetic/wire.json"},
+                            {
+                                "description": "The name of the wire",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "minItems": 1
+                },
+                "fieldPerFrequency":{
+                    "type": "array",
+                    "items": {
+                        "$ref": "/schemas/utils.json#/$defs/field"
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": ["origin", "methodUsed", "wires", "fieldPerFrequency"]
+        },
+        "windingWindowMagneticStrengthField":{
+            "type": "object",
+            "title": "windingWindowMagneticStrengthFieldOutput",
+            "properties": {
+                "origin":{
+                    "$ref": "#/$defs/resultOrigin"
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the magnetic strength field",
+                    "type": "string"
+                },
+                "fieldPerFrequency":{
+                    "type": "array",
+                    "items": {
+                        "$ref": "/schemas/utils.json#/$defs/complexField"
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": ["origin", "methodUsed", "fieldPerFrequency"]
         },
         "windingLossElementPerHarmonic":{
             "description": "Data describing the losses due to either DC, skin effect, or proximity effect; in a given element, which can be winding, section, layer or physical turn",
