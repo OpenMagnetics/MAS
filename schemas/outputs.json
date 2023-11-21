@@ -339,19 +339,24 @@
                     "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
                     "exclusiveMinimum": 0
                 },
-                "reluctanceCore": {
+                "coreReluctance": {
                     "description": "Value of the reluctance of the core",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
+                    "type": "number",
                     "exclusiveMinimum": 0
                 },
-                "reluctanceUngappedCore": {
+                "ungappedCoreReluctance": {
                     "description": "Value of the reluctance of the core",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
+                    "type": "number",
                     "exclusiveMinimum": 0
                 },
-                "reluctanceGapping": {
+                "gappingReluctance": {
                     "description": "Value of the reluctance of the gaps",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "maximumFringingFactor": {
+                    "description": "Maximum value of the fringing of the gaps",
+                    "type": "number",
                     "exclusiveMinimum": 0
                 },
                 "maximumMagneticEnergyCore": {
@@ -359,15 +364,50 @@
                     "type": "number",
                     "exclusiveMinimum": 0
                 },
-                "maximumMagneticEnergyGapping": {
+                "maximumStorableMagneticEnergyGapping": {
+                    "description": "Value of the maximum magnetic energy storable in the gaps",
+                    "type": "number"
+                },
+                "reluctancePerGap": {
                     "description": "Value of the maximum magnetic energy storable in the gaps",
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "$ref": "#/$defs/airGapReluctance"
                     }
                 }
+
             },
-            "required": ["origin", "methodUsed", "magnetizingInductance"]
+            "required": ["origin", "methodUsed", "magnetizingInductance", "coreReluctance"]
+        },
+        "airGapReluctance":{
+            "description": "Data describing the reluctance of an air gap",
+            "title": "airGapReluctanceOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "$ref": "#/$defs/resultOrigin"
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the magnetizing inductance in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "reluctance": {
+                    "description": "Value of the reluctance of the gap",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "fringingFactor": {
+                    "description": "Value of the Fringing Factor",
+                    "type": "number",
+                    "exclusiveMinimum": 1
+                },
+                "maximumStorableMagneticEnergy": {
+                    "description": "Value of the maximum magnetic energy storable in the gap",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["origin", "methodUsed", "reluctance", "fringingFactor", "maximumStorableMagneticEnergy"]
         },
         "windingWindowCurrentField": {
             "description": "Data describing the curren in the different chunks used in field calculation",

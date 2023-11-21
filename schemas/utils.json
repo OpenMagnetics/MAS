@@ -222,6 +222,10 @@
                     "description": "If this field point is inside of a wire, this is the length of the turn",
                     "type": "number"
                 },
+                "label":{
+                    "description": "If this point has some special significance, can be identified with this label",
+                    "type": "string"
+                },
                 "point":{
                     "description": "The coordinates of the point of the field",
                     "$ref": "#/$defs/coordinates"
@@ -269,6 +273,10 @@
                 "turnLength":{
                     "description": "If this field point is inside of a wire, this is the length of the turn",
                     "type": "number"
+                },
+                "label":{
+                    "description": "If this point has some special significance, can be identified with this label",
+                    "type": "string"
                 },
                 "point":{
                     "description": "The coordinates of the point of the field",
