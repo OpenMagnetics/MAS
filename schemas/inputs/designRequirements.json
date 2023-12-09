@@ -79,7 +79,7 @@
                     "items": {
                         "type": "string",
                         "title": "insulationStandards",
-                        "enum": ["IEC 60664-1", "IEC 60664-5", "IEC 61558-1", "IEC 60335-1", "IEC 62368-1"]
+                        "enum": ["IEC 60664-1", "IEC 61558-1", "IEC 60335-1", "IEC 62368-1"]
                     },
                     "minItems": 1
                 }
