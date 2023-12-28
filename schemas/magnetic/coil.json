@@ -285,9 +285,7 @@
                     "exclusiveMinimum": 0
                 },
                 "isolationSide": {
-                    "description": "Tag to identify windings that are sharing the same ground",
-                    "type": "string",
-                    "enum": ["primary", "secondary", "tertiary", "quaternary", "quinary", "senary", "septenary", "octonary", "nonary", "denary", "undenary", "duodenary"]
+                    "$ref": "/schemas/utils.json#/$defs/isolationSide"
                 },
                 "wire": {
                     "title": "WireDataOrNameUnion",

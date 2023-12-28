@@ -37,6 +37,14 @@
             },
             "minItems": 0
         },
+        "isolationSides": {
+            "description": "Isolation side where each winding is connected to.",
+            "type": "array",
+            "items": {
+                "$ref": "/schemas/utils.json#/$defs/isolationSide"
+            },
+            "minItems": 1
+        },
         "operatingTemperature": {
             "description": "Required values for the temperature that the magnetic can reach under operating",
             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"

@@ -44,6 +44,10 @@
         "insulation":{
             "description": "Data describing the output insulation that the magnetic has",
             "$ref": "#/$defs/insulation"
+        },
+        "insulationCoordination":{
+            "description": "Data describing the output insulation coordination that the magnetic has",
+            "$ref": "#/$defs/insulationCoordination"
         }
     },
     "required": [],
@@ -553,6 +557,42 @@
                     "$ref": "#/$defs/windingLossElementPerHarmonic"
                 }
             }
+        },
+        "insulationCoordination": {
+            "title": "insulationCoordinationOutput",
+            "description": "List of voltages that the magnetic can withstand",
+            "type": "object",
+            "properties": {
+                "creepageDistance":{
+                    "description": "Creepage distance required for this magnetic",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "clearance":{
+                    "description": "Clearance required for this magnetic",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "distanceThroughInsulation":{
+                    "description": "Distance through insulation required for this magnetic",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "withstandVoltage": {
+                    "description": "Voltage that the magnetic withstands",
+                    "type": "number"
+                },
+                "withstandVoltageType": {
+                    "description": "Type of the voltage",
+                    "type": "string",
+                    "enum": ["AC", "DC"]
+                },
+                "withstandVoltageDuration": {
+                    "description": "Duration of the voltate, or undefined if the field is not present",
+                    "type": "number"
+                }
+            },
+            "required": ["creepageDistance", "clearance", "distanceThroughInsulation", "withstandVoltage"]
         },
         "insulation": {
             "title": "insulationOutput",
