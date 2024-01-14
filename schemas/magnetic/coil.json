@@ -229,6 +229,15 @@
                     "description": "Defines if the section is wound by consecutive turns or parallels",
                     "type": "string",
                     "enum": ["windByConsecutiveTurns", "windByConsecutiveParallels"]
+                },
+                "margin": {
+                    "description": "Defines the distance in extremes of the section that is reserved to be filled with margin tape. It is an array os two elements from inner or top, to outer or bottom",
+                    "type": "array",
+                    "items":{
+                        "type": "number",
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
                 }
             },
             "required": ["name", "type", "layersOrientation", "partialWindings", "dimensions", "coordinates"]

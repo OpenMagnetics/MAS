@@ -195,6 +195,11 @@
                 "coordinates": {
                     "description": "The coordinates of the center of the winding window, referred to the center of the main column. In the case of half-sets, the center will be in the top point, where it would join another half-set",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
+                },
+                "sectionsOrientation": {
+                    "description": "Way in which the sections are oriented inside the winding window",
+                    "type": "string",
+                    "enum": ["horizontal", "vertical", "radial"]
                 }
             },
             "required": ["width", "height"]
@@ -221,6 +226,11 @@
                 "coordinates": {
                     "description": "The coordinates of the point of the winding window where the middle height touches the main column, referred to the center of the main column. In the case of half-sets, the center will be in the top point, where it would join another half-set",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
+                },
+                "sectionsOrientation": {
+                    "description": "Way in which the sections are oriented inside the winding window",
+                    "type": "string",
+                    "enum": ["horizontal", "vertical", "radial"]
                 }
             },
             "required": ["angle", "radialHeight"]
