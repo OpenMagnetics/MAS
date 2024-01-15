@@ -227,6 +227,7 @@
             "properties": {
                 "method": {
                     "description": "Name of this method",
+                    "title": "CoreLossesMethodType",
                     "type": "string",
                     "const": "steinmetz"
                 },
@@ -362,6 +363,7 @@
                 "method": {
                     "description": "Name of this method",
                     "type": "string",
+                    "title": "CoreLossesMethodType",
                     "const": "micrometals"
                 },
                 "a": {
@@ -388,6 +390,7 @@
                 "method": {
                     "description": "Name of this method",
                     "type": "string",
+                    "title": "CoreLossesMethodType",
                     "const": "magnetics"
                 },
                 "a": {
@@ -410,6 +413,7 @@
             "properties": {
                 "method": {
                     "description": "Name of this method",
+                    "title": "InitialPermeabilitModifierMethod",
                     "type": "string",
                     "const": "magnetics"
                 },
@@ -483,6 +487,7 @@
             "properties": {
                 "method": {
                     "description": "Name of this method",
+                    "title": "InitialPermeabilitModifierMethod",
                     "type": "string",
                     "const": "micrometals"
                 },
