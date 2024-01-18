@@ -234,7 +234,7 @@
                     "description": "Defines the distance in extremes of the section that is reserved to be filled with margin tape. It is an array os two elements from inner or top, to outer or bottom",
                     "type": "array",
                     "items":{
-                        "type": "number",
+                        "type": "number"
                     },
                     "minItems": 2,
                     "maxItems": 2
