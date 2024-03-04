@@ -131,7 +131,7 @@
                     "description": "Way in which the layer is oriented inside the section",
                     "title": "windingOrientation",
                     "type": "string",
-                    "enum": ["horizontal", "vertical", "radial"]
+                    "enum": ["contiguous", "overlapping"]
                 },
                 "turnsAlignment": {
                     "description": "Way in which the turns are aligned inside the layer",
@@ -195,8 +195,9 @@
                 },
                 "layersOrientation": {
                     "description": "Way in which the layers are oriented inside the section",
+                    "title": "windingOrientation",
                     "type": "string",
-                    "enum": ["horizontal", "vertical", "radial"]
+                    "enum": ["contiguous", "overlapping"]
                 },
                 "partialWindings": {
                     "description": "List of partial windings in this section",

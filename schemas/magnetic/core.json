@@ -177,6 +177,12 @@
             "description": "It is the area between the winding column and the closest lateral column, and it represents the area where all the wires of the magnetic will have to fit, and equivalently, where all the current must circulate once, in the case of inductors, or twice, in the case of transformers",
             "type": "object",
             "properties": {
+                "shape": {
+                    "description": "Shape of the winding window",
+                    "title": "windingWindowShape",
+                    "type": "string",
+                    "const": "rectangular"
+                },
                 "width": {
                     "description": "Horizontal width of the winding window",
                     "type": "number",
@@ -198,8 +204,9 @@
                 },
                 "sectionsOrientation": {
                     "description": "Way in which the sections are oriented inside the winding window",
+                    "title": "windingOrientation",
                     "type": "string",
-                    "enum": ["horizontal", "vertical", "radial"]
+                    "enum": ["contiguous", "overlapping"]
                 }
             },
             "required": ["width", "height"]
@@ -208,6 +215,12 @@
             "description": "It is the area between the delimited between a height from the surface of the toroidal core at a given angle, and it represents the area where all the wires of the magnetic will have to fit, and equivalently, where all the current must circulate once, in the case of inductors, or twice, in the case of transformers",
             "type": "object",
             "properties": {
+                "shape": {
+                    "description": "Shape of the winding window",
+                    "title": "windingWindowShape",
+                    "type": "string",
+                    "const": "round"
+                },
                 "angle": {
                     "description": "Total angle of the window",
                     "type": "number",
@@ -229,8 +242,9 @@
                 },
                 "sectionsOrientation": {
                     "description": "Way in which the sections are oriented inside the winding window",
+                    "title": "windingOrientation",
                     "type": "string",
-                    "enum": ["horizontal", "vertical", "radial"]
+                    "enum": ["contiguous", "overlapping"]
                 }
             },
             "required": ["angle", "radialHeight"]

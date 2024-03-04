@@ -162,8 +162,9 @@
                 },
                 "shape": {
                     "description": "The shape of the pin",
+                    "title": "pinShape",
                     "type": "string",
-                    "enum": ["round", "rectangular"]
+                    "enum": ["round", "rectangular", "irregular"]
                 },
                 "type": {
                     "description": "Type of pin",

@@ -126,7 +126,7 @@
             "maxItems": 3
         },
         "coordinates":{
-            "description": "Data describing coordinates in cartesian 2 or 3 dimensional space",
+            "description": "Data describing coordinates in 2 or 3 dimensional space. In case of cartesian coordinates, they represent x, y and z; in case of spherical, they represent r, tetha and gamma, in mathematics convention",
             "type": "array",
             "items": {
                 "type": "number"
@@ -135,7 +135,7 @@
             "maxItems": 3
         },
         "dimensions":{
-            "description": "Data describing a dimensions in cartesian 2 or 3 dimensional space",
+            "description": "Data describing a dimensions in 2 or 3 dimensional space. In case of cartesian coordinates, they represent x, y and z; in case of spherical, they represent r, tetha and gamma, in mathematics convention",
             "type": "array",
             "items": {
                 "type": "number"
