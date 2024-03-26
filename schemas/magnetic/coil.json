@@ -104,6 +104,19 @@
                 "coordinates": {
                     "description": "The coordinates of the center of the turn, referred to the center of the main column",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
+                },
+                "additionalCoordinates": {
+                    "description": "List of additional coordinates of the center of the turn, referred to the center of the main column, in case the turn is not symmetrical, as in toroids",
+                    "type": "array",
+                    "items":{
+                        "$ref": "/schemas/utils.json#/$defs/coordinates"
+                    }
+                },
+                "coordinateSystem": {
+                    "description": "System in which dimension and coordinates are in",
+                    "title": "coordinateSystem",
+                    "type": "string",
+                    "enum": ["cartesian", "polar"]
                 }
             },
             "required": ["name", "winding", "parallel", "length", "coordinates"]
@@ -165,6 +178,19 @@
                     "description": "The coordinates of the center of the layer, referred to the center of the main column",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
                 },
+                "additionalCoordinates": {
+                    "description": "List of additional coordinates of the center of the layer, referred to the center of the main column, in case the layer is not symmetrical, as in toroids",
+                    "type": "array",
+                    "items":{
+                        "$ref": "/schemas/utils.json#/$defs/coordinates"
+                    }
+                },
+                "coordinateSystem": {
+                    "description": "System in which dimension and coordinates are in",
+                    "title": "coordinateSystem",
+                    "type": "string",
+                    "enum": ["cartesian", "polar"]
+                },
                 "fillingFactor": {
                     "description": "How much space in this layer is used by wires compared to the total",
                     "type": "number",
@@ -220,6 +246,12 @@
                 "coordinates": {
                     "description": "The coordinates of the center of the section, referred to the center of the main column",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
+                },
+                "coordinateSystem": {
+                    "description": "System in which dimension and coordinates are in",
+                    "title": "coordinateSystem",
+                    "type": "string",
+                    "enum": ["cartesian", "polar"]
                 },
                 "fillingFactor": {
                     "description": "How much space in this section is used by wires compared to the total",

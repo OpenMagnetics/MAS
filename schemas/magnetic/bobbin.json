@@ -184,7 +184,7 @@
                     "$ref": "/schemas/utils.json#/$defs/coordinates"
                 }
             },
-            "required": ["name", "shape", "type", "dimensions"]
+            "required": ["shape", "type", "dimensions"]
         },
         "pinout":{
             "description": "Data describing the pinout of a bobbin",
@@ -192,7 +192,14 @@
             "type": "object",
             "properties": {
                 "pitch": {
-                    "description": "The distance between pits",
+                    "description": "The distance between pins, per row, by pin order",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "centralPitch": {
+                    "description": "The distance between central pins",
                     "type": "number"
                 },
                 "rowDistance": {
@@ -205,8 +212,15 @@
                     "default": 2
                 },
                 "numberPins": {
-                    "description": "The distance between pins",
+                    "description": "The number of pins",
                     "type": "integer"
+                },
+                "numberPinsPerRow": {
+                    "description": "List of pins per row",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "pinDescription": {
                     "$ref": "#/$defs/pin"

@@ -53,6 +53,10 @@
                     "description": "The manufacturer's reference of this part",
                     "type": "string"
                 },
+                "orderCode": {
+                    "description": "The manufacturer's order code of this part",
+                    "type": "string"
+                },
                 "family": {
                     "description": "The family of a magnetic, as defined by the manufacturer",
                     "type": "string"
