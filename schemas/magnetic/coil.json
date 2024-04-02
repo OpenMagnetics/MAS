@@ -101,6 +101,11 @@
                     "description": "Dimensions of the rectangle defining the turn",
                     "$ref": "/schemas/utils.json#/$defs/dimensions"
                 },
+                "rotation": {
+                    "description": "Rotation of the rectangle defining the turn, in degrees",
+                    "type": "number",
+                    "default": 0
+                },
                 "coordinates": {
                     "description": "The coordinates of the center of the turn, referred to the center of the main column",
                     "$ref": "/schemas/utils.json#/$defs/coordinates"

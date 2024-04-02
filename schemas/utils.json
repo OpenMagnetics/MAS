@@ -286,6 +286,11 @@
                     "description": "The coordinates of the point of the field",
                     "$ref": "#/$defs/coordinates"
                 },
+                "rotation": {
+                    "description": "Rotation of the rectangle defining the turn, in degrees",
+                    "type": "number",
+                    "default": 0
+                },
                 "value": {
                     "description": "Value of the field at this point",
                     "type": "number"
