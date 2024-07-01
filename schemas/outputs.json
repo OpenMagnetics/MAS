@@ -26,12 +26,16 @@
             "$ref": "#/$defs/windingWindowMagneticStrengthField"
         },
         "leakageInductance":{
-            "description": "Data describing the output magnetic strength field",
+            "description": "Data describing the output leakage inductance",
             "$ref": "#/$defs/leakageInductance"
         },
         "magnetizingInductance":{
-            "description": "Data describing the output magnetic strength field",
+            "description": "Data describing the output magnetizing inductance",
             "$ref": "#/$defs/magnetizingInductance"
+        },
+        "impedance":{
+            "description": "Data describing the output impedance",
+            "$ref": "#/$defs/impedance"
         },
         "temperature":{
             "description": "Data describing the output temperature",
@@ -382,6 +386,59 @@
 
             },
             "required": ["origin", "methodUsed", "magnetizingInductance", "coreReluctance"]
+        },
+        "impedance":{
+            "description": "Data describing the impendance and the intermediate inputs used to calculate them",
+            "title": "impedanceOutput",
+            "type": "object",
+            "properties": {
+                "origin":{
+                    "$ref": "#/$defs/resultOrigin"
+                },
+                "methodUsed": {
+                    "description": "Model used to calculate the impedance in the case of simulation, or method used to measure it",
+                    "type": "string"
+                },
+                "resistanceMatrix": {
+                    "description": "List of resistance matrix per frequency",
+                    "title": "resistanceMatrix",
+                    "type": "array",
+                    "items": {
+                        "title": "resistanceMatrixAtFrequency",
+                        "type": "object",
+                        "properties": {
+                            "matrix": {
+                                "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
+                            },
+                            "frequency":{
+                                "description": "Frequency of the resitance matrix",
+                                "type": "number"
+                            }
+                        },
+                        "required": ["matrix", "frequency"]
+                    }
+                },
+                "inductanceMatrix": {
+                    "description": "List of inductance matrix per frequency",
+                    "title": "inductanceMatrix",
+                    "type": "array",
+                    "items": {
+                        "title": "inductanceMatrixAtFrequency",
+                        "type": "object",
+                        "properties": {
+                            "matrix": {
+                                "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
+                            },
+                            "frequency":{
+                                "description": "Frequency of the inductance matrix",
+                                "type": "number"
+                            }
+                        },
+                        "required": ["matrix", "frequency"]
+                    }
+                },
+            },
+            "required": ["origin", "methodUsed", "resistanceMatrix", "inductanceMatrix"]
         },
         "airGapReluctance":{
             "description": "Data describing the reluctance of an air gap",
