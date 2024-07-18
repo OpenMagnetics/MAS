@@ -170,17 +170,7 @@
                     "title": "resistanceMatrix",
                     "type": "array",
                     "items": {
-                        "title": "resistanceMatrixAtFrequency",
-                        "type": "object",
-                        "properties": {
-                            "matrix": {
-                                "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
-                            },
-                            "frequency":{
-                                "description": "Frequency of the resitance matrix",
-                                "type": "number"
-                            }
-                        }
+                        "$ref": "#/$defs/resistanceMatrixAtFrequency"
                     }
                 },
                 "dcResistancePerTurn": {
@@ -404,18 +394,7 @@
                     "title": "resistanceMatrix",
                     "type": "array",
                     "items": {
-                        "title": "resistanceMatrixAtFrequency",
-                        "type": "object",
-                        "properties": {
-                            "matrix": {
-                                "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
-                            },
-                            "frequency":{
-                                "description": "Frequency of the resitance matrix",
-                                "type": "number"
-                            }
-                        },
-                        "required": ["matrix", "frequency"]
+                        "$ref": "#/$defs/resistanceMatrixAtFrequency"
                     }
                 },
                 "inductanceMatrix": {
@@ -423,18 +402,7 @@
                     "title": "inductanceMatrix",
                     "type": "array",
                     "items": {
-                        "title": "inductanceMatrixAtFrequency",
-                        "type": "object",
-                        "properties": {
-                            "matrix": {
-                                "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
-                            },
-                            "frequency":{
-                                "description": "Frequency of the inductance matrix",
-                                "type": "number"
-                            }
-                        },
-                        "required": ["matrix", "frequency"]
+                        "$ref": "#/$defs/inductanceMatrixAtFrequency"
                     }
                 },
             },
@@ -685,6 +653,34 @@
                 "required": ["origin", "voltage", "voltageType"]
             },
             "minItems": 1
+        },
+        "resistanceMatrixAtFrequency": {
+            "title": "resistanceMatrixAtFrequency",
+            "type": "object",
+            "properties": {
+                "matrix": {
+                    "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
+                },
+                "frequency":{
+                    "description": "Frequency of the resitance matrix",
+                    "type": "number"
+                }
+            },
+            "required": ["matrix", "frequency"]
+        },
+        "inductanceMatrixAtFrequency": {
+            "title": "inductanceMatrixAtFrequency",
+            "type": "object",
+            "properties": {
+                "matrix": {
+                    "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
+                },
+                "frequency":{
+                    "description": "Frequency of the inductance matrix",
+                    "type": "number"
+                }
+            },
+            "required": ["matrix", "frequency"]
         }
     }
 }
