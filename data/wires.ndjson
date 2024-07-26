@@ -3620,41 +3620,41 @@
 {"name": "16x5 - Grade 2", "type": "rectangular", "material": "copper", "numberConductors": 1, "standard": "IEC 60317", "coating": {"type": "enamelled", "grade": 2, "breakdownVoltage": 1000}, "conductingWidth": {"nominal": 0.016}, "outerWidth": {"minimum": 0.016120000000000002, "maximum": 0.01617}, "conductingHeight": {"nominal": 0.005}, "outerHeight": {"minimum": 0.00512, "maximum": 0.00517}, "edgeRadius": {"nominal": 0.001}, "conductingArea": {"nominal": 0.00007914}}
 {"name": "16x5.30 - Grade 2", "type": "rectangular", "material": "copper", "numberConductors": 1, "standard": "IEC 60317", "coating": {"type": "enamelled", "grade": 2, "breakdownVoltage": 1000}, "conductingWidth": {"nominal": 0.016}, "outerWidth": {"minimum": 0.016120000000000002, "maximum": 0.01617}, "conductingHeight": {"nominal": 0.0053}, "outerHeight": {"minimum": 0.00542, "maximum": 0.00547}, "edgeRadius": {"nominal": 0.001}, "conductingArea": {"nominal": 0.00008394}}
 {"name": "16x5.60 - Grade 2", "type": "rectangular", "material": "copper", "numberConductors": 1, "standard": "IEC 60317", "coating": {"type": "enamelled", "grade": 2, "breakdownVoltage": 1000}, "conductingWidth": {"nominal": 0.016}, "outerWidth": {"minimum": 0.016120000000000002, "maximum": 0.01617}, "conductingHeight": {"nominal": 0.005600000000000001}, "outerHeight": {"minimum": 0.00572, "maximum": 0.005770000000000001}, "edgeRadius": {"nominal": 0.001}, "conductingArea": {"nominal": 0.00008874000000000001}}
-{"name": "Foil 0.005", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 5e-06}}
-{"name": "Foil 0.01", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 1e-05}}
-{"name": "Foil 0.015", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 1.2499999999999999e-05}}
-{"name": "Foil 0.02", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 2e-05}}
-{"name": "Foil 0.025", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 2.4999999999999998e-05}}
-{"name": "Foil 0.0356", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 3.556e-05}}
-{"name": "Foil 0.038", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 3.7999999999999995e-05}}
-{"name": "Foil 0.04", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 4e-05}}
-{"name": "Foil 0.045", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 4.4999999999999996e-05}}
-{"name": "Foil 0.05", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 5e-05}}
-{"name": "Foil 0.05", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 5.0799999999999995e-05}}
-{"name": "Foil 0.068", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 6.8e-05}}
-{"name": "Foil 0.075", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 7.5e-05}}
-{"name": "Foil 0.076", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 7.6e-05}}
-{"name": "Foil 0.1", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0001}}
-{"name": "Foil 0.11", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00011}}
-{"name": "Foil 0.125", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.000125}}
-{"name": "Foil 0.125", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.000127}}
-{"name": "Foil 0.15", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00015000000000000001}}
-{"name": "Foil 0.2", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0002}}
-{"name": "Foil 0.25", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00025}}
-{"name": "Foil 0.25", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.000254}}
-{"name": "Foil 0.3", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00030000000000000003}}
-{"name": "Foil 0.38", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00038}}
-{"name": "Foil 0.5", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0004}}
-{"name": "Foil 0.5", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0005}}
-{"name": "Foil 0.6", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0006000000000000001}}
-{"name": "Foil 0.7", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0007}}
-{"name": "Foil 0.8", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0008}}
-{"name": "Foil 1", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.001}}
-{"name": "Foil 1.6", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0016}}
-{"name": "Foil 2", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.002}}
-{"name": "Foil 2", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.003}}
-{"name": "Foil 3.25", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0032500000000000003}}
-{"name": "Foil 3.25", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.004}}
+{"name": "0.005", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 5e-06}}
+{"name": "0.01", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 1e-05}}
+{"name": "0.015", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 1.2499999999999999e-05}}
+{"name": "0.02", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 2e-05}}
+{"name": "0.025", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 2.4999999999999998e-05}}
+{"name": "0.0356", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 3.556e-05}}
+{"name": "0.038", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 3.7999999999999995e-05}}
+{"name": "0.04", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 4e-05}}
+{"name": "0.045", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 4.4999999999999996e-05}}
+{"name": "0.05", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 5e-05}}
+{"name": "0.05", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 5.0799999999999995e-05}}
+{"name": "0.068", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 6.8e-05}}
+{"name": "0.075", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 7.5e-05}}
+{"name": "0.076", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 7.6e-05}}
+{"name": "0.1", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0001}}
+{"name": "0.11", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00011}}
+{"name": "0.125", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.000125}}
+{"name": "0.125", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.000127}}
+{"name": "0.15", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00015000000000000001}}
+{"name": "0.2", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0002}}
+{"name": "0.25", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00025}}
+{"name": "0.25", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.000254}}
+{"name": "0.3", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00030000000000000003}}
+{"name": "0.38", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.00038}}
+{"name": "0.5", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0004}}
+{"name": "0.5", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0005}}
+{"name": "0.6", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0006000000000000001}}
+{"name": "0.7", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0007}}
+{"name": "0.8", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0008}}
+{"name": "1", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.001}}
+{"name": "1.6", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0016}}
+{"name": "2", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.002}}
+{"name": "2", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.003}}
+{"name": "3.25", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.0032500000000000003}}
+{"name": "3.25", "type": "foil", "material": "copper", "numberConductors": 1, "conductingWidth": {"nominal": 0.004}}
 {"name": "TXXL350/38FXXX-2(MWXX)", "type": "litz", "manufacturerInfo": {"name": "Rubadue"}, "numberConductors": 350, "standard": "NEMA MW 1000 C", "outerDiameter": {"nominal": 0.0029489399999999997}, "coating": {"type": "insulated", "material": "FEP", "numberLayers": 3, "thicknessLayers": 5.08e-05, "temperatureRating": 155, "breakdownVoltage": 9000}, "strand": "38.0 - Single Build"}
 {"name": "TXXL350/38FXXX-3(MWXX)", "type": "litz", "manufacturerInfo": {"name": "Rubadue"}, "numberConductors": 350, "standard": "NEMA MW 1000 C", "outerDiameter": {"nominal": 0.0031013399999999997}, "coating": {"type": "insulated", "material": "FEP", "numberLayers": 3, "thicknessLayers": 7.62e-05, "temperatureRating": 155, "breakdownVoltage": 13500}, "strand": "38.0 - Single Build"}
 {"name": "TXXL825/44FXXX-2(MWXX)", "type": "litz", "manufacturerInfo": {"name": "Rubadue"}, "numberConductors": 825, "standard": "NEMA MW 1000 C", "outerDiameter": {"nominal": 0.00237998}, "coating": {"type": "insulated", "material": "FEP", "numberLayers": 3, "thicknessLayers": 5.08e-05, "temperatureRating": 155, "breakdownVoltage": 9000}, "strand": "44.0 - Single Build"}
