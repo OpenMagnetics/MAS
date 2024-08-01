@@ -6,7 +6,8 @@
         {"$ref": "/schemas/magnetic/wire/round.json"},
         {"$ref": "/schemas/magnetic/wire/foil.json"},
         {"$ref": "/schemas/magnetic/wire/rectangular.json"},
-        {"$ref": "/schemas/magnetic/wire/litz.json"}
+        {"$ref": "/schemas/magnetic/wire/litz.json"},
+        {"$ref": "/schemas/magnetic/wire/planar.json"}
     ],
 
     "$defs": {
@@ -14,7 +15,7 @@
             "description": "The type of wire",
             "title": "wireType",
             "type": "string",
-            "enum": ["round", "litz", "rectangular", "foil"]
+            "enum": ["round", "litz", "rectangular", "foil", "planar"]
         }
     }
 }

@@ -16,7 +16,7 @@
             "description": "The standard of wire",
             "title": "wireStandard",
             "type": "string",
-            "enum": ["IEC 60317", "JIS C3202", "NEMA MW 1000 C"]
+            "enum": ["IEC 60317", "NEMA MW 1000 C", "IPC-6012"]
         },
         "standardName": {
             "description": "Name according to the standard of wire",
