@@ -1,6 +1,6 @@
 {
     "type": "commercial",
-    "materialComposition": "ferrite",
+    "material": "ferrite",
     "name": "3C97",
     "manufacturerInfo": {
         "name": "Ferroxcube"

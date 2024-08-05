@@ -10,11 +10,17 @@
             "type": "string",
             "enum": ["commercial", "custom"]
         },
-        "materialComposition": {
+        "material": {
             "description": "The composition of a magnetic material",
             "title": "materialComposition",
             "type": "string",
             "enum": ["ferrite", "powder", "nanocrystalline", "amorphous", "electricalSteel"]
+        },
+        "materialComposition": {
+            "description": "The composition of a magnetic material",
+            "title": "materialComposition",
+            "type": "string",
+            "enum": ["MnZn", "NiZn"]
         },
         "name": {
             "description": "The name of a magnetic material",
@@ -90,6 +96,19 @@
                 },
                 "amplitude": {
                     "$ref": "#/$defs/permeability"
+                },
+                "complex": {
+                    "description": "The data regarding the complex permeability of a magnetic material",
+                    "title": "complexPermeability",
+                    "type": "object",
+                    "properties": {
+                        "real": {
+                            "$ref": "#/$defs/permeability"
+                        },
+                        "imaginary": {
+                            "$ref": "#/$defs/permeability"
+                        }
+                    }
                 }
             },
             "required": ["initial"]
@@ -124,13 +143,16 @@
                             },
                             "minItems": 4,
                             "uniqueItems": true
+                        },
+                        {
+                            "$ref": "#/$defs/lossFactorCoreLossesMethodData"
                         }
                     ]
                 }
             }
         }
     },
-    "required": ["materialComposition", "type", "name", "permeability", "saturation", "resistivity", "volumetricLosses", "manufacturerInfo"],
+    "required": ["material", "type", "name", "permeability", "saturation", "resistivity", "volumetricLosses", "manufacturerInfo"],
 
     "$defs": {
         "permeability": {
@@ -148,6 +170,47 @@
                     "uniqueItems": true
                 }
             ]
+        },
+        "lossFactorCoreLossesMethodData": {
+            "description": "Loss factor method for estimating volumetric losses",
+            "type": "object",
+            "title": "lossFactorCoreLossesMethodData",
+            "properties": {
+                "method": {
+                    "description": "Name of this method",
+                    "type": "string",
+                    "title": "CoreLossesMethodType",
+                    "const": "lossFactor"
+                },
+                "factors": {
+                    "type": "array",
+                    "items": {
+                        "description": "Data for describing the loss factor at a given frequency and temperature",
+                        "title": "lossFactorPoint",
+                        "type": "object",
+                        "properties": {
+                            "value": {
+                                "description": "Loss Factor value",
+                                "type": "number",
+                                "exclusiveMinimum": 0
+                            },
+                            "temperature": {
+                                "description": "temperature for the value, in Celsius",
+                                "type": "number"
+                            },
+                            "frequency": {
+                                "description": "Frequency of the field, in Hz",
+                                "type": "number",
+                                "exclusiveMinimum": 0
+                            }
+                        },
+                        "required": ["value"]
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                }
+            },
+            "required": ["method", "factors"]
         },
         "permeabilityPoint": {
             "description": "data for describing one point of permebility",
