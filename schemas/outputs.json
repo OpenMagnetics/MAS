@@ -7,7 +7,7 @@
     "properties": {
         "coreLosses":{
             "description": "Data describing the output core losses",
-            "$ref": "#/$defs/coreLosses"
+            "$ref": "/schemas/outputs/coreLossesOutput.json"
         },
         "windingLosses":{
             "description": "Data describing the output winding losses",
@@ -63,50 +63,6 @@
             "title": "resultOrigin",
             "enum": ["manufacturer", "measurement", "simulation"]
         },
-        "coreLosses":{
-            "description": "Data describing the core losses and the intermediate inputs used to calculate them",
-            "title": "coreLossesOutput",
-            "type": "object",
-            "properties": {
-                "origin":{
-                    "$ref": "#/$defs/resultOrigin"
-                },
-                "methodUsed": {
-                    "description": "Model used to calculate the core losses in the case of simulation, or method used to measure it",
-                    "type": "string"
-                },
-                "magneticFluxDensity":{
-                    "description": "Excitation of the B field that produced the core losses",
-                    "title": "excitation",
-                    "$ref": "/schemas/inputs/operatingPointExcitation.json#/$defs/signalDescriptor"
-                },
-                "temperature":{
-                    "description": "temperature in the core that produced the core losses",
-                    "type": "number"
-                },
-                "volumetricLosses": {
-                    "description": "Volumetric value of the core losses",
-                    "type": "number",
-                    "exclusiveMinimum": 0
-                },
-                "eddyCurrentCoreLosses": {
-                    "description": "Part of the core losses due to eddy currents",
-                    "type": "number",
-                    "exclusiveMinimum": 0
-                },
-                "hysteresisCoreLosses": {
-                    "description": "Part of the core losses due to hysteresis",
-                    "type": "number",
-                    "exclusiveMinimum": 0
-                },
-                "coreLosses": {
-                    "description": "Value of the core losses",
-                    "type": "number",
-                    "exclusiveMinimum": 0
-                }
-            },
-            "required": ["origin", "methodUsed", "coreLosses"]
-        },
         "windingLosses":{
             "description": "Data describing the winding losses and the intermediate inputs used to calculate them",
             "title": "windingLossesOutput",
@@ -122,7 +78,7 @@
                 "currentPerWinding":{
                     "description": "Excitation of the current per winding that produced the winding losses",
                     "title": "currentPerWinding",
-                    "$ref": "/schemas/inputs.json#/$defs/operatingPoint"
+                    "$ref": "/schemas/inputs/operatingPoint.json"
                 },
                 "currentDividerPerTurn":{
                     "description": "Excitation of the current per physical turn that produced the winding losses",

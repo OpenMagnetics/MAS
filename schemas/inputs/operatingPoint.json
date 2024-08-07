@@ -1,0 +1,31 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/operatingPoint.json",
+    "title": "operatingPoint",
+    "description": "Data describing one operating point, including the operating conditions and the excitations for all ports",
+    "type": "object",
+    "properties": {
+        "name":{
+            "description": "Name describing this operating point",
+            "type": "string"
+        },
+        "conditions":{
+            "title": "operatingConditions",
+            "$ref": "/schemas/inputs/operatingConditions.json"
+        },
+        "excitationsPerWinding": {
+            "title": "excitationsPerWinding",
+            "type": "array",
+            "items": {
+                "title": "OperatingPointExcitationPerWinding",
+                "description": "Data describing the excitation of the winding",
+                "$ref": "/schemas/inputs/operatingPointExcitation.json"
+            },
+            "minItems": 1
+        }
+    },
+    "required": ["conditions", "excitationsPerWinding"],
+
+    "$defs": {
+    }
+}

@@ -10,7 +10,7 @@
             "title": "operatingPoints",
             "type": "array",
             "items": {                
-                "$ref": "#/$defs/operatingPoint"
+                "$ref": "/schemas/inputs/operatingPoint.json"
             },
             "minItems": 1
         },
@@ -23,31 +23,5 @@
     "required": ["operatingPoints", "designRequirements"],
 
     "$defs": {
-        "operatingPoint":{
-            "description": "Data describing one operating point, including the operating conditions and the excitations for all ports",
-            "title": "operatingPoint",
-            "type": "object",
-            "properties": {
-                "name":{
-                    "description": "Name describing this operating point",
-                    "type": "string"
-                },
-                "conditions":{
-                    "title": "operatingConditions",
-                    "$ref": "/schemas/inputs/operatingConditions.json"
-                },
-                "excitationsPerWinding": {
-                    "title": "excitationsPerWinding",
-                    "type": "array",
-                    "items": {
-                        "title": "OperatingPointExcitationPerWinding",
-                        "description": "Data describing the excitation of the winding",
-                        "$ref": "/schemas/inputs/operatingPointExcitation.json"
-                    },
-                    "minItems": 1
-                }
-            },
-            "required": ["conditions", "excitationsPerWinding"]
-        }
     }
 }

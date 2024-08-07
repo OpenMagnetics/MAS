@@ -72,6 +72,11 @@
                             "type": "number",
                             "minimum": 0
                         },
+                        "phase": {
+                            "description": "The phase of the waveform, in degrees",
+                            "type": "number",
+                            "default": 0
+                        },
                         "offset": {
                             "description": "The offset value of the waveform, referred to 0",
                             "type": "number"
