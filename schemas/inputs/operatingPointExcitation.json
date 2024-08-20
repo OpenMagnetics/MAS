@@ -36,6 +36,12 @@
     ],
 
     "$defs": {
+        "waveformLabel": {
+            "description": "Label of the waveform, if applicable. Used for common waveforms",
+            "title": "waveformLabel",
+            "type": "string",
+            "enum": ["Custom", "Triangular", "Sinusoidal", "Rectangular", "Unipolar Rectangular", "Unipolar Triangular", "Bipolar Rectangular", "Bipolar Triangular", "Flyback Primary", "Flyback Secondary", "Rectangular With Deadtime", "Flyback Secondary With Deadtime", "RectangularDCM", "FlybackSecondaryDCM"]
+        },
         "signalDescriptor":{
             "description": "Structure definining one electromagnetic parameters: current, voltage, magnetic flux density",
             "type": "object",
@@ -51,10 +57,7 @@
                     "type": "object",
                     "properties": {
                         "label": {
-                            "description": "Label of the waveform, if applicable. Used for common waveforms",
-                            "title": "waveformLabel",
-                            "type": "string",
-                            "enum": ["Custom", "Triangular", "Sinusoidal", "Rectangular", "Unipolar Rectangular", "Unipolar Triangular", "Bipolar Rectangular", "Bipolar Triangular", "Flyback Primary", "Flyback Secondary", "Rectangular With Deadtime", "Flyback Secondary With Deadtime", "RectangularDCM", "FlybackSecondaryDCM"]
+                            "$ref": "#/$defs/waveformLabel"
                         },
                         "dutyCycle": {
                             "description": "The duty cycle of the waveform, if applicable",
@@ -179,7 +182,7 @@
                     "uniqueItems": false
                 },
                 "ancillaryLabel": {
-                    "type": "string"
+                    "$ref": "#/$defs/waveformLabel"
                 }
             },
             "required": ["data", "time"]
