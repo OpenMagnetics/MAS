@@ -208,7 +208,7 @@
                     "type": "string",
                     "enum": ["contiguous", "overlapping"]
                 },
-                "sectionAlignment": {
+                "sectionsAlignment": {
                     "description": "Way in which the sections are aligned inside the winding window",
                     "title": "coilAlignment",
                     "type": "string",
