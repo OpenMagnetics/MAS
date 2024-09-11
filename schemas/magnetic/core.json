@@ -207,6 +207,12 @@
                     "title": "windingOrientation",
                     "type": "string",
                     "enum": ["contiguous", "overlapping"]
+                },
+                "sectionAlignment": {
+                    "description": "Way in which the sections are aligned inside the winding window",
+                    "title": "coilAlignment",
+                    "type": "string",
+                    "enum": ["inner or top", "outer or bottom", "spread", "centered"]
                 }
             },
             "required": ["width", "height"]
