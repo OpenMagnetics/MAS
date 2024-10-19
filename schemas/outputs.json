@@ -228,6 +228,30 @@
                         "description": "Model used to calculate the stray capacitance in the case of simulation, or method used to measure it",
                         "type": "string"
                     },
+                    "voltagePerTurn":{
+                        "description": "Voltage at the beginning of the physical turn",
+                        "title": "voltagePerTurn",
+                        "type": "array",
+                        "items": {
+                            "type": "number",
+                        }
+                    },
+                    "voltageDividerStartPerTurn":{
+                        "description": "Voltage divider at the start of the physical turn",
+                        "title": "voltageDividerStartPerTurn",
+                        "type": "array",
+                        "items": {
+                            "type": "number",
+                        }
+                    },
+                    "voltageDividerEndPerTurn":{
+                        "description": "Voltage divider at the end of the physical turn",
+                        "title": "voltageDividerEndPerTurn",
+                        "type": "array",
+                        "items": {
+                            "type": "number",
+                        }
+                    },
                     "sixCapacitorNetworkPerWinding": {
                         "description": "Network of six equivalent capacitors that describe the capacitance between two given windings",
                         "type": "object",

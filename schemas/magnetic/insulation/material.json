@@ -31,7 +31,7 @@
             },
             "minItems": 1
         },
-        "dielectricConstant": {
+        "relativePermittivity": {
             "description": "The dielectric constant of the insulation material",
             "type": "number",
             "exclusiveMinimum": 0
