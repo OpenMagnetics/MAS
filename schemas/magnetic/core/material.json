@@ -20,7 +20,7 @@
             "description": "The composition of a magnetic material",
             "title": "materialComposition",
             "type": "string",
-            "enum": ["MnZn", "NiZn"]
+            "enum": ["MnZn", "NiZn", "MgZn"]
         },
         "name": {
             "description": "The name of a magnetic material",
@@ -252,12 +252,9 @@
                         "description": "Object where keys are shape families for which this permeability is valid. If missing, the variant is valid for all shapes",
                         "title": "initialPermeabilitModifier",
                         "oneOf": [
-                            {
-                                "$ref": "#/$defs/magneticsPermeabilityMethodData"
-                            },
-                            {
-                                "$ref": "#/$defs/micrometalsPermeabilityMethodData"
-                            }
+                            {"$ref": "#/$defs/magneticsPermeabilityMethodData" },
+                            {"$ref": "#/$defs/micrometalsPermeabilityMethodData" },
+                            {"$ref": "#/$defs/fairRitePermeabilityMethodData" }
                         ]
                     }
                 }
@@ -641,6 +638,30 @@
                 }
             },
             "required": ["method", "magneticFieldDcBiasFactor", "magneticFluxDensityFactor", "frequencyFactor", "temperatureFactor"]
+        },
+        "fairRitePermeabilityMethodData": {
+            "description": "Coefficients given by Fair-Rite in order to calculate the permeability of their materials",
+            "type": "object",
+            "title": "fairRitePermeabilityMethodData",
+            "properties": {
+                "method": {
+                    "description": "Name of this method",
+                    "title": "InitialPermeabilitModifierMethod",
+                    "type": "string",
+                    "const": "fair-rite"
+                },
+                "temperatureFactor": {
+                    "description": "Field with the coefficients used to calculate how much the permeability decreases with the temperature, as either factor = a",
+                    "type": "object",
+                    "properties": {
+                        "a": {
+                            "type": "number"
+                        }
+                    },
+                    "required": ["a"]
+                }
+            },
+            "required": ["method", "temperatureFactor"]
         }
     }
 }
