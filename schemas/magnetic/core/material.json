@@ -99,7 +99,7 @@
                 },
                 "complex": {
                     "description": "The data regarding the complex permeability of a magnetic material",
-                    "title": "complexPermeability",
+                    "title": "complexPermeabilityData",
                     "type": "object",
                     "properties": {
                         "real": {
@@ -108,7 +108,8 @@
                         "imaginary": {
                             "$ref": "#/$defs/permeability"
                         }
-                    }
+                    },
+                    "required": ["real", "imaginary"]
                 }
             },
             "required": ["initial"]
@@ -219,8 +220,7 @@
             "properties": {
                 "value": {
                     "description": "Permeability value",
-                    "type": "number",
-                    "exclusiveMinimum": 0
+                    "type": "number"
                 },
                 "tolerance": {
                     "description": "tolerance for the field value",
