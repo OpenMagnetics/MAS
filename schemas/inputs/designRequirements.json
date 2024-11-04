@@ -21,6 +21,25 @@
             },
             "minItems": 0
         },
+        "minimumImpedance": {
+            "description": "List of minimum impedance at given frequency in the primary",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "title": "impedanceAtFrequency",
+                "properties": {
+                    "impedance": {
+                        "$ref": "#/$defs/impedance"
+                    },
+                    "frequency": {
+                        "type": "number",
+                        "minimum": 0
+                    }
+                },
+                "required": ["impedance", "frequency"]
+            },
+            "minItems": 1
+        },
         "leakageInductance": {
             "description": "Required values for the leakage inductance",
             "type": "array",
@@ -139,5 +158,26 @@
     "required": ["magnetizingInductance", "turnsRatios"],
 
     "$defs": {
+        "impedance":{
+            "description": "Data describing one impendance value",
+            "title": "impedance",
+            "type": "object",
+            "properties": {
+                "magnitude":{
+                    "type": "number",
+                    "minimum": 0
+                },
+                "phase":{
+                    "type": "number"
+                },
+                "realPart":{
+                    "type": "number"
+                },
+                "imaginaryPart":{
+                    "type": "number"
+                }
+            },
+            "required": ["magnitude"]
+        },
     }
 }
