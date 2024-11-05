@@ -29,7 +29,7 @@
                 "title": "impedanceAtFrequency",
                 "properties": {
                     "impedance": {
-                        "$ref": "#/$defs/impedance"
+                        "$ref": "#/$defs/impedancePoint"
                     },
                     "frequency": {
                         "type": "number",
@@ -158,12 +158,13 @@
     "required": ["magnetizingInductance", "turnsRatios"],
 
     "$defs": {
-        "impedance":{
+        "impedancePoint":{
             "description": "Data describing one impendance value",
-            "title": "impedance",
+            "title": "impedancePoint",
             "type": "object",
             "properties": {
                 "magnitude":{
+                    "description": "Magnitude of the impedance, in Ohm",
                     "type": "number",
                     "minimum": 0
                 },
@@ -178,6 +179,6 @@
                 }
             },
             "required": ["magnitude"]
-        },
+        }
     }
 }
