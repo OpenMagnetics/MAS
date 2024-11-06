@@ -20,7 +20,7 @@
             "description": "The composition of a magnetic material",
             "title": "materialComposition",
             "type": "string",
-            "enum": ["MnZn", "NiZn", "MgZn"]
+            "enum": ["MnZn", "NiZn", "MgZn", "FeSiAl", "FeSi", "FeNi", "FeNiMo", "FeMo", "Carbonyl Iron", "Iron", "Proprietary"]
         },
         "name": {
             "description": "The name of a magnetic material",
