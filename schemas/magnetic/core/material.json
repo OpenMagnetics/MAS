@@ -26,6 +26,10 @@
             "description": "The name of a magnetic material",
             "type": "string"
         },
+        "commercialName": {
+            "description": "The name of a magnetic material together its manufacturer",
+            "type": "string"
+        },
         "manufacturerInfo": {
             "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
         },
