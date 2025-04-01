@@ -120,6 +120,7 @@
         "topology": {
             "description": "Topology that will use the magnetic",
             "type": "string",
+            "title": "topologies",
             "enum": ["Buck Converter", "Boost Converter", "Inverting Buck-Boost Converter", "SEPIC", "Cuk Converter", "Zeta Converter", "Flyback Converter", "Two Switch Flyback Converter", "Active Clamp Forward Converter", "Single Switch Forward Converter", "Two Switch Forward Converter", "Push-Pull Converter", "Weinberg Converter", "Half-Bridge Converter", "Full-Bridge Converter", "Phase-Shifted Full-Bridge Converter"]
 
         },

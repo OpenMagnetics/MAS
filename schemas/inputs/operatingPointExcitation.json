@@ -65,6 +65,10 @@
                             "minimum": 0,
                             "maximum": 1
                         },
+                        "deadTime": {
+                            "description": "The dead time after TOn and Toff, in seconds, if applicable",
+                            "type": "number"
+                        },
                         "peakToPeak": {
                             "description": "The peak to peak value of the waveform",
                             "type": "number",
