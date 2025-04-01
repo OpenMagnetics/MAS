@@ -385,6 +385,14 @@
                         "$ref": "#/$defs/inductanceMatrixAtFrequency"
                     }
                 },
+                "impedanceMatrix": {
+                    "description": "List of impedance matrix per frequency",
+                    "title": "inductanceMatrix",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/impedanceMatrixAtFrequency"
+                    }
+                },
             },
             "required": ["origin", "methodUsed", "resistanceMatrix", "inductanceMatrix"]
         },
@@ -638,7 +646,7 @@
             "title": "resistanceMatrixAtFrequency",
             "type": "object",
             "properties": {
-                "matrix": {
+                "magnitude": {
                     "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
                 },
                 "frequency":{
@@ -646,13 +654,13 @@
                     "type": "number"
                 }
             },
-            "required": ["matrix", "frequency"]
+            "required": ["magnitude", "frequency"]
         },
         "inductanceMatrixAtFrequency": {
             "title": "inductanceMatrixAtFrequency",
             "type": "object",
             "properties": {
-                "matrix": {
+                "magnitude": {
                     "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
                 },
                 "frequency":{
@@ -660,7 +668,24 @@
                     "type": "number"
                 }
             },
-            "required": ["matrix", "frequency"]
+            "required": ["magnitude", "frequency"]
+        },
+        "impedanceMatrixAtFrequency": {
+            "title": "impedanceMatrixAtFrequency",
+            "type": "object",
+            "properties": {
+                "magnitude": {
+                    "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
+                },
+                "phase": {
+                    "$ref": "/schemas/utils.json#/$defs/twoDimensionalMatrix"
+                },
+                "frequency":{
+                    "description": "Frequency of the inductance matrix",
+                    "type": "number"
+                }
+            },
+            "required": ["magnitude", "phase", "frequency"]
         }
     }
 }
