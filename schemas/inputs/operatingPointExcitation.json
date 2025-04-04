@@ -40,7 +40,7 @@
             "description": "Label of the waveform, if applicable. Used for common waveforms",
             "title": "waveformLabel",
             "type": "string",
-            "enum": ["Custom", "Triangular", "Sinusoidal", "Rectangular", "Unipolar Rectangular", "Unipolar Triangular", "Bipolar Rectangular", "Bipolar Triangular", "Flyback Primary", "Flyback Secondary", "Rectangular With Deadtime", "Flyback Secondary With Deadtime", "RectangularDCM", "FlybackSecondaryDCM"]
+            "enum": ["Custom", "Triangular", "Sinusoidal", "Rectangular", "Unipolar Rectangular", "Unipolar Triangular", "Bipolar Rectangular", "Bipolar Triangular", "Flyback Primary", "Flyback Secondary", "Rectangular With Deadtime", "Flyback Secondary With Deadtime", "RectangularDCM", "Secondary Rectangular" , "Secondary Rectangular With Deadtime"]
         },
         "signalDescriptor":{
             "description": "Structure definining one electromagnetic parameters: current, voltage, magnetic flux density",
