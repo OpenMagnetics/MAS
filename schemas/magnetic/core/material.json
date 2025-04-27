@@ -155,6 +155,31 @@
                     ]
                 }
             }
+        },
+        "massLosses":{
+            "description": "The data regarding the mass losses of a magnetic material",
+            "title": "massLosses",
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "title": "massLossesMethodsData",
+                "description": "Object where keys are shape families for which this mass losses are valid. If missing, the variant is valid for all shapes",
+                "items": {
+                    "title": "massLossesMethod",
+                    "anyOf": [
+                        { "$ref": "#/$defs/magnetecCoreLossesMethodData" },
+                        {
+                            "description": "List of mass losses points",
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/massLossesPoint"
+                            },
+                            "minItems": 4,
+                            "uniqueItems": true
+                        }
+                    ]
+                }
+            }
         }
     },
     "required": ["material", "type", "name", "permeability", "saturation", "resistivity", "volumetricLosses", "manufacturerInfo"],
@@ -373,6 +398,30 @@
             },
             "required": ["magneticFluxDensity", "origin", "temperature", "value"]
         },
+        "massLossesPoint": {
+            "description": "data for describing the mass losses at a given point of magnetic flux density, frequency and temperature",
+            "type": "object",
+            "title": "massLossesPoint",
+            "properties": {
+                "magneticFluxDensity": {
+                    "$ref": "/schemas/inputs/operatingPointExcitation.json"
+                },
+                "temperature": {
+                    "description": "temperature value, in Celsius",
+                    "type": "number"
+                },
+                "value": {
+                    "description": "mass losses value, in W/Kg",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "origin": {
+                    "description": "origin of the data",
+                    "type": "string"
+                }
+            },
+            "required": ["magneticFluxDensity", "origin", "temperature", "value"]
+        },
         "roshenCoreLossesMethodData": {
             "description": "Roshen coefficients for estimating volumetric losses",
             "type": "object",
@@ -469,6 +518,21 @@
 
             },
             "required": ["method", "a", "b", "c"]
+        },
+        "magnetecCoreLossesMethodData": {
+            "description": "Magnetic method for estimating mass losses",
+            "type": "object",
+            "title": "magneticsCoreLossesMethodData",
+            "properties": {
+                "method": {
+                    "description": "Name of this method",
+                    "type": "string",
+                    "title": "CoreLossesMethodType",
+                    "const": "magnetec"
+                }
+
+            },
+            "required": ["method"]
         },
         "magneticsPermeabilityMethodData": {
             "description": "Coefficients given by Magnetics in order to calculate the permeability of their cores",
