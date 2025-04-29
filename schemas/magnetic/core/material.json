@@ -209,7 +209,7 @@
                 "method": {
                     "description": "Name of this method",
                     "type": "string",
-                    "title": "CoreLossesMethodType",
+                    "title": "VolumetricCoreLossesMethodType",
                     "const": "lossFactor"
                 },
                 "factors": {
@@ -316,7 +316,7 @@
             "properties": {
                 "method": {
                     "description": "Name of this method",
-                    "title": "CoreLossesMethodType",
+                    "title": "VolumetricCoreLossesMethodType",
                     "type": "string",
                     "const": "steinmetz"
                 },
@@ -476,7 +476,7 @@
                 "method": {
                     "description": "Name of this method",
                     "type": "string",
-                    "title": "CoreLossesMethodType",
+                    "title": "VolumetricCoreLossesMethodType",
                     "const": "micrometals"
                 },
                 "a": {
@@ -503,7 +503,7 @@
                 "method": {
                     "description": "Name of this method",
                     "type": "string",
-                    "title": "CoreLossesMethodType",
+                    "title": "VolumetricCoreLossesMethodType",
                     "const": "magnetics"
                 },
                 "a": {
@@ -527,7 +527,7 @@
                 "method": {
                     "description": "Name of this method",
                     "type": "string",
-                    "title": "CoreLossesMethodType",
+                    "title": "MassCoreLossesMethodType",
                     "const": "magnetec"
                 }
 
