@@ -16,8 +16,22 @@
         },
         "designRequirements":{
             "description": "Data describing the design requirements",
-            "title": "designRequirements",             
+            "title": "designRequirements",
             "$ref": "/schemas/inputs/designRequirements.json"
+        },
+        "converterInformation":{
+            "title": "converterInformation",
+            "type": "object",
+            "properties": {
+                "supportedTopologies":{
+                    "type": "object",
+                    "properties": {
+                        "flyback": {
+                            "$ref": "/schemas/inputs/topologies/flyback.json",
+                        }
+                    }
+                }
+            },
         }
     },
     "required": ["operatingPoints", "designRequirements"],

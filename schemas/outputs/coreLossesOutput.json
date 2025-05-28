@@ -26,6 +26,11 @@
             "type": "number",
             "exclusiveMinimum": 0
         },
+        "massLosses": {
+            "description": "Mass value of the core losses",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
         "eddyCurrentCoreLosses": {
             "description": "Part of the core losses due to eddy currents",
             "type": "number",
