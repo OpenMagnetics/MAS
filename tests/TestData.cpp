@@ -259,7 +259,14 @@ SUITE(Data)
 
     TEST(CoreStock)
     {
-        auto data_file_path = mas_path + "data/core_stock.ndjson";
+        auto data_file_path = mas_path + "data/cores_stock.ndjson";
+        auto schema_file_path = mas_path + "schemas/magnetic/core.json";
+        validate_ndjson(schema_file_path, data_file_path);
+    }
+
+    TEST(Cores)
+    {
+        auto data_file_path = mas_path + "data/cores.ndjson";
         auto schema_file_path = mas_path + "schemas/magnetic/core.json";
         validate_ndjson(schema_file_path, data_file_path);
     }
