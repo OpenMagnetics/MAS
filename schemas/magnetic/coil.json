@@ -24,6 +24,14 @@
             },
             "minItems": 1
         },
+        "groupsDescription":{
+            "description": "The data from the coil at the gtoup level. A group may define a PCB, or different winding windows.",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/group"
+            },
+            "minItems": 1
+        },
         "sectionsDescription":{
             "description": "The data from the coil at the section level, in a way that can be used by more advanced analytical and finite element models",
             "type": "array",
@@ -209,6 +217,51 @@
             },
             "required": ["name", "type", "orientation", "partialWindings", "dimensions", "coordinates"]
         },
+        "group":{
+            "description": "Data describing one group in a magnetic, which can include several sections. Ideally this is used for PCB or different winding windows",
+            "title": "group",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name given to the group",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Type of the layer",
+                    "title": "coilGroupType",
+                    "type": "string",
+                    "enum": ["wound", "planar"]
+                },
+                "sectionsOrientation": {
+                    "description": "Way in which the sections are oriented inside the winding window",
+                    "title": "windingOrientation",
+                    "type": "string",
+                    "enum": ["contiguous", "overlapping"]
+                },
+                "partialWindings": {
+                    "description": "List of partial windings in this group",
+                    "type": "array",
+                    "items":{
+                        "$ref": "#/$defs/partialWinding"
+                    }
+                },
+                "dimensions": {
+                    "description": "Dimensions of the rectangle defining the group",
+                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                },
+                "coordinates": {
+                    "description": "The coordinates of the center of the section, referred to the center of the main column",
+                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                },
+                "coordinateSystem": {
+                    "description": "System in which dimension and coordinates are in",
+                    "title": "coordinateSystem",
+                    "type": "string",
+                    "enum": ["cartesian", "polar"]
+                }
+            },
+            "required": ["name", "type", "sectionsOrientation", "partialWindings", "dimensions", "coordinates"]
+        },
         "section":{
             "description": "Data describing one section in a magnetic",
             "title": "section",
@@ -276,6 +329,10 @@
                     },
                     "minItems": 2,
                     "maxItems": 2
+                },
+                "group": {
+                    "description": "The name of the group that this section belongs to",
+                    "type": "string"
                 }
             },
             "required": ["name", "type", "layersOrientation", "partialWindings", "dimensions", "coordinates"]
