@@ -140,6 +140,7 @@
                         { "$ref": "#/$defs/roshenCoreLossesMethodData" },
                         { "$ref": "#/$defs/micrometalsCoreLossesMethodData" },
                         { "$ref": "#/$defs/magneticsCoreLossesMethodData" },
+                        { "$ref": "#/$defs/pocoCoreLossesMethodData" },
                         {
                             "description": "List of volumetric losses points",
                             "type": "array",
@@ -283,7 +284,8 @@
                         "oneOf": [
                             {"$ref": "#/$defs/magneticsPermeabilityMethodData" },
                             {"$ref": "#/$defs/micrometalsPermeabilityMethodData" },
-                            {"$ref": "#/$defs/fairRitePermeabilityMethodData" }
+                            {"$ref": "#/$defs/fairRitePermeabilityMethodData" },
+                            {"$ref": "#/$defs/pocoPermeabilityMethodData" }
                         ]
                     }
                 }
@@ -534,6 +536,29 @@
             },
             "required": ["method"]
         },
+        "pocoCoreLossesMethodData": {
+            "description": "Poco method for estimating volumetric losses",
+            "type": "object",
+            "title": "pocoCoreLossesMethodData",
+            "properties": {
+                "method": {
+                    "description": "Name of this method",
+                    "type": "string",
+                    "title": "VolumetricCoreLossesMethodType",
+                    "const": "poco"
+                },
+                "a": {
+                    "type": "number"
+                },
+                "b": {
+                    "type": "number"
+                },
+                "c": {
+                    "type": "number"
+                }
+            },
+            "required": ["method", "a", "b", "c"]
+        },
         "magneticsPermeabilityMethodData": {
             "description": "Coefficients given by Magnetics in order to calculate the permeability of their cores",
             "type": "object",
@@ -730,6 +755,39 @@
                 }
             },
             "required": ["method", "temperatureFactor"]
+        },
+        "pocoPermeabilityMethodData": {
+            "description": "Coefficients given by Poco in order to calculate the permeability of their materials",
+            "type": "object",
+            "title": "pocoPermeabilityMethodData",
+            "properties": {
+                "method": {
+                    "description": "Name of this method",
+                    "title": "InitialPermeabilitModifierMethod",
+                    "type": "string",
+                    "const": "poco"
+                },
+                "magneticFieldDcBiasFactor": {
+                    "description": "Field with the coefficients used to calculate how much the permeability decreases with the H DC bias, as factor = a + b * pow(H, c) + d",
+                    "type": "object",
+                    "properties": {
+                        "a": {
+                            "type": "number"
+                        },
+                        "b": {
+                            "type": "number"
+                        },
+                        "c": {
+                            "type": "number"
+                        },
+                        "d": {
+                            "type": "number"
+                        }
+                    },
+                    "required": ["a", "b", "c", "d"]
+                }
+            },
+            "required": ["method", "magneticFieldDcBiasFactor"]
         }
     }
 }
