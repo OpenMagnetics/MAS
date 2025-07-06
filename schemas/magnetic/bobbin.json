@@ -192,11 +192,19 @@
             "type": "object",
             "properties": {
                 "pitch": {
-                    "description": "The distance between pins, per row, by pin order",
-                    "type": "array",
-                    "items": {
-                        "type": "number"
-                    }
+                    "oneOf": [
+                        {
+                            "description": "The distance between pins, per row, by pin order",
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        },
+                        {
+                            "description": "The distance between pins, common for all pins",
+                            "type": "number"
+                        }
+                    ]
                 },
                 "centralPitch": {
                     "description": "The distance between central pins",
