@@ -22,6 +22,12 @@
             "type": "string",
             "enum": ["MnZn", "NiZn", "MgZn", "FeSiAl", "FeSi", "FeNi", "FeNiMo", "FeMo", "Carbonyl Iron", "Iron", "Proprietary"]
         },
+        "application": {
+            "description": "Application of the material, can be Power, Signal Processing, or Interference Suppression",
+            "title": "coreMaterialApplication",
+            "type": "string",
+            "enum": ["Power", "Signal Processing", "Interference Suppression"]
+        },
         "name": {
             "description": "The name of a magnetic material",
             "type": "string"
