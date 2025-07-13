@@ -19,6 +19,23 @@
         }
     },
     "$defs": {
+        "wiringTechnology": {
+            "description": "Technology that must be used to create the wiring",
+            "type": "string",
+            "enum": ["Wound", "Printed", "Stamped", "Deposition"]
+        },
+        "application": {
+            "description": "Application of the magnetic, can be Power, Signal Processing, or Interference Suppression",
+            "title": "application",
+            "type": "string",
+            "enum": ["Power", "Signal Processing", "Interference Suppression"]
+        },
+        "subApplication": {
+            "description": "Sub application of the magnetic, can be Power Filtering, Transforming, Isolation, Common Mode Noise Filtering, Differential Mode Noise Filtering",
+            "title": "subApplication",
+            "type": "string",
+            "enum": ["Power Filtering", "Transforming", "Isolation", "Common Mode Noise Filtering", "Differential Mode Noise Filtering"]
+        },
         "resistivityPoint": {
             "description": "data for describing one point of resistivity",
             "title": "resistivityPoint",

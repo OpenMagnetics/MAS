@@ -23,10 +23,16 @@
             "enum": ["MnZn", "NiZn", "MgZn", "FeSiAl", "FeSi", "FeNi", "FeNiMo", "FeMo", "Carbonyl Iron", "Iron", "Proprietary"]
         },
         "application": {
-            "description": "Application of the material, can be Power, Signal Processing, or Interference Suppression",
-            "title": "coreMaterialApplication",
-            "type": "string",
-            "enum": ["Power", "Signal Processing", "Interference Suppression"]
+            "$ref": "/schemas/utils.json#/$defs/application"
+        },
+        "alternatives": {
+            "description": "A list of alternative materials that could replace this one",
+            "title": "coreMaterialAlternatives",
+            "type": "array",
+            "items": {
+                "type": "string",
+            },
+            "minItems": 0,
         },
         "name": {
             "description": "The name of a magnetic material",

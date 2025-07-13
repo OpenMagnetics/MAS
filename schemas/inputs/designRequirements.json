@@ -124,10 +124,14 @@
             "enum": ["Buck Converter", "Boost Converter", "Inverting Buck-Boost Converter", "SEPIC", "Cuk Converter", "Zeta Converter", "Flyback Converter", "Two Switch Flyback Converter", "Active Clamp Forward Converter", "Single Switch Forward Converter", "Two Switch Forward Converter", "Push-Pull Converter", "Weinberg Converter", "Half-Bridge Converter", "Full-Bridge Converter", "Phase-Shifted Full-Bridge Converter"]
 
         },
+        "application": {
+            "$ref": "/schemas/utils.json#/$defs/application"
+        },
+        "subApplication": {
+            "$ref": "/schemas/utils.json#/$defs/subApplication"
+        },
         "wiringTechnology": {
-            "description": "Technology that must be used to create the wiring",
-            "type": "string",
-            "enum": ["Wound", "Printed", "Deposition"]
+            "$ref": "/schemas/utils.json#/$defs/wiringTechnology"
         },
         "maximumWeight": {
             "description": "Maximum weight for the designed magnetic, in Kg",

@@ -228,9 +228,7 @@
                 },
                 "type": {
                     "description": "Type of the layer",
-                    "title": "coilGroupType",
-                    "type": "string",
-                    "enum": ["wound", "planar"]
+                    "$ref": "/schemas/utils.json#/$defs/wiringTechnology"
                 },
                 "sectionsOrientation": {
                     "description": "Way in which the sections are oriented inside the winding window",
