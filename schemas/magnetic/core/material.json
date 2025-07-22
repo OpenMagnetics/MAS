@@ -12,7 +12,7 @@
         },
         "material": {
             "description": "The composition of a magnetic material",
-            "title": "material",
+            "title": "materialType",
             "type": "string",
             "enum": ["ferrite", "powder", "nanocrystalline", "amorphous", "electricalSteel"]
         },
@@ -21,6 +21,18 @@
             "title": "materialComposition",
             "type": "string",
             "enum": ["MnZn", "NiZn", "MgZn", "FeSiAl", "FeSi", "FeNi", "FeNiMo", "FeMo", "Carbonyl Iron", "Iron", "Proprietary"]
+        },
+        "application": {
+            "$ref": "/schemas/utils.json#/$defs/application"
+        },
+        "alternatives": {
+            "description": "A list of alternative materials that could replace this one",
+            "title": "coreMaterialAlternatives",
+            "type": "array",
+            "items": {
+                "type": "string",
+            },
+            "minItems": 0,
         },
         "name": {
             "description": "The name of a magnetic material",
