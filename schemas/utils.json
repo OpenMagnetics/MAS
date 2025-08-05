@@ -19,6 +19,11 @@
         }
     },
     "$defs": {
+        "insulationType": {
+            "description": "Required type of insulation",
+            "type": "string",
+            "enum": ["Functional", "Basic", "Supplementary", "Double", "Reinforced"]
+        },
         "wiringTechnology": {
             "description": "Technology that must be used to create the wiring",
             "type": "string",

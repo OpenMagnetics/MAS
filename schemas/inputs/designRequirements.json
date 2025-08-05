@@ -92,9 +92,7 @@
                     "enum": ["OVC-I", "OVC-II", "OVC-III", "OVC-IV"]
                 },
                 "insulationType": {
-                    "description": "Required type of insulation",
-                    "type": "string",
-                    "enum": ["Functional", "Basic", "Supplementary", "Double", "Reinforced"]
+                    "$ref": "/schemas/utils.json#/$defs/insulationType"
                 },
                 "mainSupplyVoltage": {
                     "description": "Voltage RMS of the main supply to which this transformer is connected to.",

@@ -30,9 +30,9 @@
             "title": "coreMaterialAlternatives",
             "type": "array",
             "items": {
-                "type": "string",
+                "type": "string"
             },
-            "minItems": 0,
+            "minItems": 0
         },
         "name": {
             "description": "The name of a magnetic material",

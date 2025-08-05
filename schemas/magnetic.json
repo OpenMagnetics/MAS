@@ -66,6 +66,18 @@
                             "description": "Percentage of inductance drop at saturation current",
                             "type": "number"
                         },
+                        "maximumStorableMagneticEnergy": {
+                            "description": "Maximum magnetic energy that can be stored according to manufacturer",
+                            "type": "number"
+                        },
+                        "insulationType": {
+                            "description": "Insulation grade according to manufacturer",
+                            "$ref": "/schemas/utils.json#/$defs/insulationType"
+                        },
+                        "hipotTest": {
+                            "description": "Hipot test according to manufacturer",
+                            "type": "number"
+                        }
                     }
                 }
             },
