@@ -426,6 +426,11 @@
                     "description": "Name of the pin where it is connected, if applicable",
                     "type": "string"
                 },
+                "direction": {
+                    "description": "Direction of the current in the connection",
+                    "type": "string",
+                    "enum": ["input", "ouptut"]
+                },
                 "length": {
                     "description": "Length of the connection, counted from the exit of the last turn until the terminal, in m",
                     "type": "number"
