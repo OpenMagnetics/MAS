@@ -429,7 +429,7 @@
                 "direction": {
                     "description": "Direction of the current in the connection",
                     "type": "string",
-                    "enum": ["input", "ouptut"]
+                    "enum": ["input", "output"]
                 },
                 "length": {
                     "description": "Length of the connection, counted from the exit of the last turn until the terminal, in m",
