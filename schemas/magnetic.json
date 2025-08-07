@@ -81,6 +81,10 @@
                         "hipotTest": {
                             "description": "Hipot test according to manufacturer",
                             "type": "number"
+                        },
+                        "dimensions": {
+                            "description": "Dimensions of the magnetic according to manufacturer",
+                            "$ref": "/schemas/utils.json#/$defs/dimensions"
                         }
                     }
                 }
