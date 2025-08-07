@@ -237,7 +237,7 @@
             "description": "Type of the terminal",
             "title": "connectionType",
             "type": "string",
-            "enum": ["Pin", "Screw", "SMT", "Flying Lead"]
+            "enum": ["Pin", "Screw", "SMT", "Flying Lead", "THT"]
         },
         "complexFieldPoint":{
             "description": "Data describing the complex value of a field in a 2D or 3D space",

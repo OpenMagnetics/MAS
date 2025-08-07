@@ -74,6 +74,10 @@
                             "description": "Insulation grade according to manufacturer",
                             "$ref": "/schemas/utils.json#/$defs/insulationType"
                         },
+                        "mounting": {
+                            "description": "Recommended way of mounting according to manufacturer",
+                            "$ref": "/schemas/utils.json#/$defs/connectionType"
+                        },
                         "hipotTest": {
                             "description": "Hipot test according to manufacturer",
                             "type": "number"
