@@ -85,6 +85,10 @@
                         "dimensions": {
                             "description": "Dimensions of the magnetic according to manufacturer",
                             "$ref": "/schemas/utils.json#/$defs/dimensions"
+                        },
+                        "leakageInductance": {
+                            "description": "Leakage Inductance of the magnetic according to manufacturer",
+                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
                         }
                     }
                 }
