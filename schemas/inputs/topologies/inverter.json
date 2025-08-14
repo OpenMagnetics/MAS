@@ -1,0 +1,188 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/topologies/inverter.json",
+    "title": "inverter",
+    "description": "The description of a two level inverter leg excitation",
+    "type": "object",
+    "properties": {
+        "dcBusVoltage": {
+            "description": "The DC bus voltage",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
+        "vdcRipple": {
+            "description": "The ripple of the DC bus voltage",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
+        "inverterLegPowerRating": {
+            "description": "The power rating of the inverter leg",
+            "type": "number"
+        },
+        "lineRmsCurrent": {
+            "description": "The RMS current of the line",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
+        "downstreamFilter": {
+            "description": "Downstream filter elements if present",
+            "$ref": "#/$defs/inverterDownstreamFilter"
+        },
+        "switchingFrequency": {
+            "description": "Switching frequency",
+            "type": "number"
+        },
+        "riseTime": {
+            "description": "Rise time of the transistors",
+            "type": "number"
+        },
+        "deadtime": {
+            "description": "Deadtime duration",
+            "type": "number"
+        },
+        "pwmType": {
+            "description": "Waveform used to generate PWM",
+            "$ref": "#/$defs/pwmType"
+        },
+        "modulationStrategy": {
+            "description": "Modulation strategy",
+            "$ref": "#/$defs/modulationStrategy"
+        },
+        "thirdHarmonicInjectionCoefficient": {
+            "description": "Coefficient for third harmonic injection",
+            "type": "number"
+        },
+        "modulationDepth": {
+            "description": "Modulation depth",
+            "type": "number"
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/inverterOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "dcBusVoltage",
+        "vdcRipple",
+        "inverterLegPowerRating",
+        "lineRmsCurrent",
+        "switchingFrequency",
+        "riseTime",
+        "deadtime",
+        "pwmType",
+        "modulationStrategy",
+        "modulationDepth",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "pwmType": {
+            "description": "Type of PWM carrier waveform",
+            "title": "pwmType",
+            "type": "string",
+            "enum": ["sawtooth", "triangular"]
+        },
+        "modulationStrategy": {
+            "description": "Strategy used for modulation",
+            "title": "modulationStrategy",
+            "type": "string",
+            "enum": ["SPWM", "SVPWM"]
+        },
+        "loadType": {
+            "description": "Type of load",
+            "title": "loadType",
+            "type": "string",
+            "enum": ["grid", "R-L"]
+        },
+        "inverterLoad": {
+            "description": "The load connected to the inverter",
+            "title": "inverterLoad",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$ref": "#/$defs/loadType"
+                },
+                "resistance": {
+                    "description": "Load resistance",
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                },
+                "inductance": {
+                    "description": "Load inductance",
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                }
+            },
+            "required": ["type"],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {"type": {"const": "R-L"}}
+                    },
+                    "then": {
+                        "required": ["resistance", "inductance"]
+                    }
+                }
+            ]
+        },
+        "inverterOperatingPoint": {
+            "description": "The description of one inverter operating point",
+            "title": "inverterOperatingPoint",
+            "type": "object",
+            "properties": {
+                "fundamentalFrequency": {
+                    "description": "Fundamental frequency",
+                    "type": "number"
+                },
+                "powerFactor": {
+                    "description": "Power factor at the operating point",
+                    "type": "number"
+                },
+                "currentPhaseAngle": {
+                    "description": "Current phase angle in degrees",
+                    "type": "number"
+                },
+                "load": {
+                    "description": "Load connected to the inverter",
+                    "$ref": "#/$defs/inverterLoad"
+                }
+            },
+            "required": ["fundamentalFrequency", "load"],
+            "anyOf": [
+                {"required": ["powerFactor"]},
+                {"required": ["currentPhaseAngle"]}
+            ]
+        },
+        "inverterDownstreamFilter": {
+            "description": "Downstream filter elements",
+            "title": "inverterDownstreamFilter",
+            "type": "object",
+            "properties": {
+                "capacitor": {
+                    "description": "Capacitor used for LC or LCL filters",
+                    "type": "object",
+                    "properties": {
+                        "capacitance": {
+                            "description": "Capacitance value",
+                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                        },
+                        "resistance": {
+                            "description": "Equivalent series resistance",
+                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                        }
+                    },
+                    "required": ["capacitance"]
+                },
+                "inductor2": {
+                    "description": "Second inductor used for LCL filters",
+                    "type": "object",
+                    "properties": {
+                        "inductance": {
+                            "description": "Inductance value",
+                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                        }
+                    },
+                    "required": ["inductance"]
+                }
+            }
+        }
+    }
+}

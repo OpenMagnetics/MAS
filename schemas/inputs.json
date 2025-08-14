@@ -23,15 +23,18 @@
             "title": "converterInformation",
             "type": "object",
             "properties": {
-                "supportedTopologies":{
+                "supportedTopologies": {
                     "type": "object",
                     "properties": {
                         "flyback": {
-                            "$ref": "/schemas/inputs/topologies/flyback.json",
+                            "$ref": "/schemas/inputs/topologies/flyback.json"
+                        },
+                        "inverter": {
+                            "$ref": "/schemas/inputs/topologies/inverter.json"
                         }
                     }
                 }
-            },
+            }
         }
     },
     "required": ["operatingPoints", "designRequirements"],
