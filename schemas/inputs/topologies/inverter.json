@@ -109,6 +109,22 @@
                 "inductance": {
                     "description": "Load inductance",
                     "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                },
+                "phaseVoltage": {
+                    "description": "Grid phase voltage",
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                },
+                "gridFrequency": {
+                    "description": "Grid frequency",
+                    "type": "number"
+                },
+                "gridResistance": {
+                    "description": "Equivalent grid resistance",
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                },
+                "gridInductance": {
+                    "description": "Equivalent grid inductance",
+                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
                 }
             },
             "required": ["type"],
@@ -119,6 +135,14 @@
                     },
                     "then": {
                         "required": ["resistance", "inductance"]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {"type": {"const": "grid"}}
+                    },
+                    "then": {
+                        "required": ["phaseVoltage", "gridFrequency", "gridResistance", "gridInductance"]
                     }
                 }
             ]
@@ -140,6 +164,10 @@
                     "description": "Current phase angle in degrees",
                     "type": "number"
                 },
+                "outputPower": {
+                    "description": "Output power at the operating point",
+                    "type": "number"
+                },
                 "load": {
                     "description": "Load connected to the inverter",
                     "$ref": "#/$defs/inverterLoad"
@@ -149,6 +177,20 @@
             "anyOf": [
                 {"required": ["powerFactor"]},
                 {"required": ["currentPhaseAngle"]}
+            ],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "load": {
+                                "properties": {"type": {"const": "grid"}}
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": ["outputPower"]
+                    }
+                }
             ]
         },
         "inverterDownstreamFilter": {
