@@ -30,7 +30,7 @@
                             "$ref": "/schemas/inputs/topologies/flyback.json"
                         },
                         "inverter": {
-                            "$ref": "/schemas/inputs/topologies/inverter.json"
+                            "$ref": "/schemas/inputs/topologies/twoLevelInverter.json"
                         }
                     }
                 }
