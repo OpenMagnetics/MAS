@@ -25,33 +25,9 @@
             "description": "Downstream filter elements if present",
             "$ref": "#/$defs/inverterDownstreamFilter"
         },
-        "switchingFrequency": {
-            "description": "Switching frequency",
-            "type": "number"
-        },
-        "riseTime": {
-            "description": "Rise time of the transistors",
-            "type": "number"
-        },
-        "deadtime": {
-            "description": "Deadtime duration",
-            "type": "number"
-        },
-        "pwmType": {
-            "description": "Waveform used to generate PWM",
-            "$ref": "#/$defs/pwmType"
-        },
-        "modulationStrategy": {
-            "description": "Modulation strategy",
-            "$ref": "#/$defs/modulationStrategy"
-        },
-        "thirdHarmonicInjectionCoefficient": {
-            "description": "Coefficient for third harmonic injection",
-            "type": "number"
-        },
-        "modulationDepth": {
-            "description": "Modulation depth",
-            "type": "number"
+        "modulation": {
+            "description": "All parameters related to switching",
+            "$ref": "#/$defs/modulation"
         },
         "operatingPoints": {
             "description": "A list of operating points",
@@ -64,87 +40,121 @@
     },
     "required": [
         "dcBusVoltage",
-        "vdcRipple",
         "inverterLegPowerRating",
         "lineRmsCurrent",
-        "switchingFrequency",
-        "riseTime",
-        "deadtime",
-        "pwmType",
-        "modulationStrategy",
-        "modulationDepth",
         "operatingPoints"
     ],
     "$defs": {
-        "pwmType": {
-            "description": "Type of PWM carrier waveform",
-            "title": "pwmType",
-            "type": "string",
-            "enum": ["sawtooth", "triangular"]
-        },
-        "modulationStrategy": {
-            "description": "Strategy used for modulation",
-            "title": "modulationStrategy",
-            "type": "string",
-            "enum": ["SPWM", "SVPWM"]
-        },
-        "loadType": {
-            "description": "Type of load",
-            "title": "loadType",
-            "type": "string",
-            "enum": ["grid", "R-L"]
-        },
-        "inverterLoad": {
-            "description": "The load connected to the inverter",
-            "title": "inverterLoad",
+        "inverterDownstreamFilter": {
+            "description": "Downstream filter elements",
+            "title": "inverterDownstreamFilter",
             "type": "object",
             "properties": {
-                "type": {
-                    "$ref": "#/$defs/loadType"
+                "filterTopology": {
+                    "description": "Filter type",
+                    "title": "filterTopologies",
+                    "type": "string",
+                    "enum": ["L", "LC", "LCL"]
                 },
-                "resistance": {
-                    "description": "Load resistance",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                "inductor": {
+                    "description": "L1 inductor used for L, LC or LCL filters",
+                    "type": "object",
+                    "properties": {
+                        "desiredInductance": {
+                            "description": "Desired inductance for L1",
+                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                        },
+                        "resistance": {
+                            "description": "Equivalent series resistance",
+                            "type": "number"
+                        }
+                    },
+                    "required": ["desiredInductance"]
                 },
-                "inductance": {
-                    "description": "Load inductance",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                "capacitor": {
+                    "description": "Capacitor used for LC or LCL filters",
+                    "type": "object",
+                    "properties": {
+                        "desiredCapacitance": {
+                            "description": "Capacitance value",
+                            "type": "number"
+                        },
+                        "resistance": {
+                            "description": "Equivalent series resistance",
+                            "type": "number"
+                        }
+                    },
+                    "required": ["desiredCapacitance"]
                 },
-                "phaseVoltage": {
-                    "description": "Grid phase voltage",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
-                },
-                "gridFrequency": {
-                    "description": "Grid frequency",
-                    "type": "number"
-                },
-                "gridResistance": {
-                    "description": "Equivalent grid resistance",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
-                },
-                "gridInductance": {
-                    "description": "Equivalent grid inductance",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                "inductor2": {
+                    "description": "Second inductor used for LCL filters",
+                    "type": "object",
+                    "properties": {
+                        "desiredInductance2": {
+                            "description": "Desired inductance for L2",
+                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                        },
+                        "resistance": {
+                            "description": "Equivalent series resistance",
+                            "type": "number"
+                        }
+                    },
+                    "required": ["desiredInductance2"]
                 }
             },
-            "required": ["type"],
+            "required": ["filterTopology", "inductor"],
             "allOf": [
                 {
-                    "if": {
-                        "properties": {"type": {"const": "R-L"}}
-                    },
-                    "then": {
-                        "required": ["resistance", "inductance"]
-                    }
+                    "if": { "properties": { "filterTopology": { "enum": ["LC", "LCL"] } } },
+                    "then": { "required": ["capacitor"] }
                 },
                 {
-                    "if": {
-                        "properties": {"type": {"const": "grid"}}
-                    },
-                    "then": {
-                        "required": ["phaseVoltage", "gridFrequency", "gridResistance", "gridInductance"]
-                    }
+                    "if": { "properties": { "filterTopology": { "const": "LCL" } } },
+                    "then": { "required": ["inductor2"] }
                 }
+            ]
+        },
+        "modulation": {
+            "type" : "object",
+            "properties" : {
+                "switchingFrequency": {
+                    "description": "Switching frequency",
+                    "type": "number"
+                },
+                "pwmType": {
+                    "description": "Type of PWM carrier waveform",
+                    "title": "pwmType",
+                    "type": "string",
+                    "enum": ["sawtooth", "triangular"]
+                },
+                "modulationStrategy": {
+                    "description": "Strategy used for modulation",
+                    "title": "modulationStrategy",
+                    "type": "string",
+                    "enum": ["SPWM", "SVPWM", "THIPWM"]
+                },
+                "riseTime": {
+                    "description": "Rise time of the transistors",
+                    "type": "number"
+                },
+                "deadtime": {
+                    "description": "Deadtime duration",
+                    "type": "number"
+                },
+                "thirdHarmonicInjectionCoefficient": {
+                    "description": "Coefficient for third harmonic injection",
+                    "type": "number"
+                },
+                "modulationDepth": {
+                    "description": "Modulation depth",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "switchingFrequency",
+                "pwmType",
+                "modulationStrategy",
+                "modulationDepth"
             ]
         },
         "inverterOperatingPoint": {
@@ -171,6 +181,10 @@
                 "load": {
                     "description": "Load connected to the inverter",
                     "$ref": "#/$defs/inverterLoad"
+                }, 
+                "operatingTemperature": {
+                    "description": "Operating temperature of the Inverter Filter",
+                    "type": "number"
                 }
             },
             "required": ["fundamentalFrequency", "load"],
@@ -183,7 +197,7 @@
                     "if": {
                         "properties": {
                             "load": {
-                                "properties": {"type": {"const": "grid"}}
+                                "properties": {"loadType": {"const": "grid"}}
                             }
                         }
                     },
@@ -193,38 +207,61 @@
                 }
             ]
         },
-        "inverterDownstreamFilter": {
-            "description": "Downstream filter elements",
-            "title": "inverterDownstreamFilter",
+        "inverterLoad": {
+            "description": "The load connected to the inverter",
+            "title": "inverterLoad",
             "type": "object",
             "properties": {
-                "capacitor": {
-                    "description": "Capacitor used for LC or LCL filters",
-                    "type": "object",
-                    "properties": {
-                        "capacitance": {
-                            "description": "Capacitance value",
-                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
-                        },
-                        "resistance": {
-                            "description": "Equivalent series resistance",
-                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
-                        }
-                    },
-                    "required": ["capacitance"]
+                "loadType": {
+                    "description": "Type of load",
+                    "title": "loadType",
+                    "type": "string",
+                    "enum": ["grid", "R-L"]
                 },
-                "inductor2": {
-                    "description": "Second inductor used for LCL filters",
-                    "type": "object",
-                    "properties": {
-                        "inductance": {
-                            "description": "Inductance value",
-                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
-                        }
-                    },
-                    "required": ["inductance"]
+                "resistance": {
+                    "description": "Load resistance",
+                    "type": "number"
+                },
+                "inductance": {
+                    "description": "Load inductance",
+                    "type": "number"
+                },
+                "phaseVoltage": {
+                    "description": "Grid phase voltage",
+                    "type": "number"
+                },
+                "gridFrequency": {
+                    "description": "Grid frequency",
+                    "type": "number"
+                },
+                "gridResistance": {
+                    "description": "Equivalent grid resistance",
+                    "type": "number"
+                },
+                "gridInductance": {
+                    "description": "Equivalent grid inductance",
+                    "type": "number"
                 }
-            }
+            },
+            "required": ["loadType"],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {"loadType": {"const": "R-L"}}
+                    },
+                    "then": {
+                        "required": ["resistance", "inductance"]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {"loadType": {"const": "grid"}}
+                    },
+                    "then": {
+                        "required": ["phaseVoltage", "gridFrequency", "gridResistance", "gridInductance"]
+                    }
+                }
+            ]
         }
     }
 }
