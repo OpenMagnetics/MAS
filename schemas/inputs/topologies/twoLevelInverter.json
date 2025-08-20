@@ -1,17 +1,22 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/inputs/topologies/inverter.json",
+    "$id": "http://openmagnetics.com/schemas/inputs/topologies/twoLevelInverter.json",
     "title": "twoLevelInverter",
     "description": "The description of a two level inverter leg excitation",
     "type": "object",
     "properties": {
         "dcBusVoltage": {
-            "description": "The DC bus voltage",
+            "description": "The DC bus voltage in V",
             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
         },
-        "dcVoltageRipple": {
-            "description": "The ripple of the DC bus voltage",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        "dcBusCapacitor": {
+            "description": "DC bus capacitor model",
+            "$ref": "#/$defs/dcBusCapacitor"
+        },
+        "numberOfLegs": {
+            "description": "Number of inverter legs (one leg = two switches). Examples: 2 = single-phase full bridge, 3 = three-phase.",
+            "type": "integer",
+            "enum": [2, 3]
         },
         "inverterLegPowerRating": {
             "description": "The power rating of the inverter leg",
@@ -40,11 +45,29 @@
     },
     "required": [
         "dcBusVoltage",
+        "dcBusCapacitor",
+        "numberOfLegs",
         "inverterLegPowerRating",
         "lineRmsCurrent",
         "operatingPoints"
     ],
     "$defs": {
+        "dcBusCapacitor": {
+            "description": "DC bus capacitor parameters",
+            "title": "dcBusCapacitor",
+            "type": "object",
+            "properties": {
+                "capacitance": {
+                    "description": "Capacitance value in Farads",
+                    "type": "number"
+                },
+                "resistance": {
+                    "description": "Equivalent series resistance in Ohms",
+                    "type": "number"
+                }
+            },
+            "required": ["capacitance"]
+        },
         "inverterDownstreamFilter": {
             "description": "Downstream filter elements",
             "title": "inverterDownstreamFilter",
@@ -61,11 +84,11 @@
                     "type": "object",
                     "properties": {
                         "desiredInductance": {
-                            "description": "Desired inductance for L1",
+                            "description": "Desired inductance for L1 in Henrys",
                             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
                         },
                         "resistance": {
-                            "description": "Equivalent series resistance",
+                            "description": "Equivalent series resistance in Ohms",
                             "type": "number"
                         }
                     },
@@ -76,11 +99,11 @@
                     "type": "object",
                     "properties": {
                         "desiredCapacitance": {
-                            "description": "Capacitance value",
+                            "description": "Capacitance value in Farads",
                             "type": "number"
                         },
                         "resistance": {
-                            "description": "Equivalent series resistance",
+                            "description": "Equivalent series resistance in Ohms",
                             "type": "number"
                         }
                     },
@@ -91,11 +114,11 @@
                     "type": "object",
                     "properties": {
                         "desiredInductance2": {
-                            "description": "Desired inductance for L2",
+                            "description": "Desired inductance for L2 in Henrys",
                             "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
                         },
                         "resistance": {
-                            "description": "Equivalent series resistance",
+                            "description": "Equivalent series resistance in Ohms",
                             "type": "number"
                         }
                     },
@@ -135,11 +158,11 @@
                     "enum": ["SPWM", "SVPWM", "THIPWM"]
                 },
                 "riseTime": {
-                    "description": "Rise time of the transistors",
+                    "description": "Rise time of the transistors in s",
                     "type": "number"
                 },
                 "deadtime": {
-                    "description": "Deadtime duration",
+                    "description": "Deadtime duration in s",
                     "type": "number"
                 },
                 "thirdHarmonicInjectionCoefficient": {
@@ -164,7 +187,7 @@
             "type": "object",
             "properties": {
                 "fundamentalFrequency": {
-                    "description": "Fundamental frequency",
+                    "description": "Fundamental frequency in Hz",
                     "type": "number"
                 },
                 "powerFactor": {
@@ -176,7 +199,7 @@
                     "type": "number"
                 },
                 "outputPower": {
-                    "description": "Output power at the operating point",
+                    "description": "Output power at the operating point in W",
                     "type": "number"
                 },
                 "load": {
@@ -184,7 +207,7 @@
                     "$ref": "#/$defs/inverterLoad"
                 }, 
                 "operatingTemperature": {
-                    "description": "Operating temperature of the Inverter Filter",
+                    "description": "Operating temperature of the Inverter Filter in °C",
                     "type": "number"
                 }
             },
@@ -220,27 +243,27 @@
                     "enum": ["grid", "R-L"]
                 },
                 "resistance": {
-                    "description": "Load resistance",
+                    "description": "Load resistance in Ohms",
                     "type": "number"
                 },
                 "inductance": {
-                    "description": "Load inductance",
+                    "description": "Load inductance in Henrys",
                     "type": "number"
                 },
                 "phaseVoltage": {
-                    "description": "Grid phase voltage",
+                    "description": "Grid phase voltage in V_RMS",
                     "type": "number"
                 },
                 "gridFrequency": {
-                    "description": "Grid frequency",
+                    "description": "Grid frequency in Hz",
                     "type": "number"
                 },
                 "gridResistance": {
-                    "description": "Equivalent grid resistance",
+                    "description": "Equivalent grid resistance in Ohms",
                     "type": "number"
                 },
                 "gridInductance": {
-                    "description": "Equivalent grid inductance",
+                    "description": "Equivalent grid inductance in Henrys",
                     "type": "number"
                 }
             },
