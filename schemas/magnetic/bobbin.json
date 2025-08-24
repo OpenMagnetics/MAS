@@ -63,7 +63,7 @@
                     "description": "List of connections between windings and pins",
                     "type": "array",
                     "items": {
-                        "title": "pinWIndingConnection",
+                        "title": "pinWindingConnection",
                         "type": "object",
                         "properties": {
                             "pin": {
