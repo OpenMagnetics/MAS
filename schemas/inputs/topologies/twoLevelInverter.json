@@ -1,0 +1,291 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/topologies/twoLevelInverter.json",
+    "title": "twoLevelInverter",
+    "description": "The description of a two level inverter leg excitation",
+    "type": "object",
+    "properties": {
+        "dcBusVoltage": {
+            "description": "The DC bus voltage in V",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
+        "dcBusCapacitor": {
+            "description": "DC bus capacitor model",
+            "$ref": "#/$defs/dcBusCapacitor"
+        },
+        "numberOfLegs": {
+            "description": "Number of inverter legs (one leg = two switches). Examples: 2 = single-phase full bridge, 3 = three-phase.",
+            "type": "integer",
+            "enum": [2, 3]
+        },
+        "inverterLegPowerRating": {
+            "description": "The power rating of the inverter leg",
+            "type": "number"
+        },
+        "lineRmsCurrent": {
+            "description": "The RMS current of the line",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
+        "downstreamFilter": {
+            "description": "Downstream filter elements if present",
+            "$ref": "#/$defs/inverterDownstreamFilter"
+        },
+        "modulation": {
+            "description": "All parameters related to switching",
+            "$ref": "#/$defs/modulation"
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/inverterOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "dcBusVoltage",
+        "dcBusCapacitor",
+        "numberOfLegs",
+        "inverterLegPowerRating",
+        "lineRmsCurrent",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "dcBusCapacitor": {
+            "description": "DC bus capacitor parameters",
+            "title": "dcBusCapacitor",
+            "type": "object",
+            "properties": {
+                "capacitance": {
+                    "description": "Capacitance value in Farads",
+                    "type": "number"
+                },
+                "resistance": {
+                    "description": "Equivalent series resistance in Ohms",
+                    "type": "number"
+                }
+            },
+            "required": ["capacitance"]
+        },
+        "inverterDownstreamFilter": {
+            "description": "Downstream filter elements",
+            "title": "inverterDownstreamFilter",
+            "type": "object",
+            "properties": {
+                "filterTopology": {
+                    "description": "Filter type",
+                    "title": "filterTopologies",
+                    "type": "string",
+                    "enum": ["L", "LC", "LCL"]
+                },
+                "inductor": {
+                    "description": "L1 inductor used for L, LC or LCL filters",
+                    "type": "object",
+                    "properties": {
+                        "desiredInductance": {
+                            "description": "Desired inductance for L1 in Henrys",
+                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                        },
+                        "resistance": {
+                            "description": "Equivalent series resistance in Ohms",
+                            "type": "number"
+                        }
+                    },
+                    "required": ["desiredInductance"]
+                },
+                "capacitor": {
+                    "description": "Capacitor used for LC or LCL filters",
+                    "type": "object",
+                    "properties": {
+                        "desiredCapacitance": {
+                            "description": "Capacitance value in Farads",
+                            "type": "number"
+                        },
+                        "resistance": {
+                            "description": "Equivalent series resistance in Ohms",
+                            "type": "number"
+                        }
+                    },
+                    "required": ["desiredCapacitance"]
+                },
+                "inductor2": {
+                    "description": "Second inductor used for LCL filters",
+                    "type": "object",
+                    "properties": {
+                        "desiredInductance2": {
+                            "description": "Desired inductance for L2 in Henrys",
+                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                        },
+                        "resistance": {
+                            "description": "Equivalent series resistance in Ohms",
+                            "type": "number"
+                        }
+                    },
+                    "required": ["desiredInductance2"]
+                }
+            },
+            "required": ["filterTopology", "inductor"],
+            "allOf": [
+                {
+                    "if": { "properties": { "filterTopology": { "enum": ["LC", "LCL"] } } },
+                    "then": { "required": ["capacitor"] }
+                },
+                {
+                    "if": { "properties": { "filterTopology": { "const": "LCL" } } },
+                    "then": { "required": ["inductor2"] }
+                }
+            ]
+        },
+        "modulation": {
+            "description": "The description of one inverter switching modulation scheme",
+            "type" : "object",
+            "properties" : {
+                "switchingFrequency": {
+                    "description": "Switching frequency in Hz",
+                    "type": "number"
+                },
+                "pwmType": {
+                    "description": "Type of PWM carrier waveform",
+                    "title": "pwmType",
+                    "type": "string",
+                    "enum": ["sawtooth", "triangular"]
+                },
+                "modulationStrategy": {
+                    "description": "Strategy used for modulation",
+                    "title": "modulationStrategy",
+                    "type": "string",
+                    "enum": ["SPWM", "SVPWM", "THIPWM"]
+                },
+                "riseTime": {
+                    "description": "Rise time of the transistors in s",
+                    "type": "number"
+                },
+                "deadtime": {
+                    "description": "Deadtime duration in s",
+                    "type": "number"
+                },
+                "thirdHarmonicInjectionCoefficient": {
+                    "description": "Coefficient for third harmonic injection",
+                    "type": "number"
+                },
+                "modulationDepth": {
+                    "description": "Modulation depth",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "switchingFrequency",
+                "pwmType",
+                "modulationStrategy",
+                "modulationDepth"
+            ]
+        },
+        "inverterOperatingPoint": {
+            "description": "The description of one inverter operating point",
+            "title": "inverterOperatingPoint",
+            "type": "object",
+            "properties": {
+                "fundamentalFrequency": {
+                    "description": "Fundamental frequency in Hz",
+                    "type": "number"
+                },
+                "powerFactor": {
+                    "description": "Power factor at the operating point",
+                    "type": "number"
+                },
+                "currentPhaseAngle": {
+                    "description": "Current phase angle in degrees",
+                    "type": "number"
+                },
+                "outputPower": {
+                    "description": "Output power at the operating point in W",
+                    "type": "number"
+                },
+                "load": {
+                    "description": "Load connected to the inverter",
+                    "$ref": "#/$defs/inverterLoad"
+                }, 
+                "operatingTemperature": {
+                    "description": "Operating temperature of the Inverter Filter in °C",
+                    "type": "number"
+                }
+            },
+            "required": ["fundamentalFrequency", "load"],
+            "anyOf": [
+                {"required": ["powerFactor"]},
+                {"required": ["currentPhaseAngle"]}
+            ],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "load": {
+                                "properties": {"loadType": {"const": "grid"}}
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": ["outputPower"]
+                    }
+                }
+            ]
+        },
+        "inverterLoad": {
+            "description": "The load connected to the inverter",
+            "title": "inverterLoad",
+            "type": "object",
+            "properties": {
+                "loadType": {
+                    "description": "Type of load",
+                    "title": "loadType",
+                    "type": "string",
+                    "enum": ["grid", "R-L"]
+                },
+                "resistance": {
+                    "description": "Load resistance in Ohms",
+                    "type": "number"
+                },
+                "inductance": {
+                    "description": "Load inductance in Henrys",
+                    "type": "number"
+                },
+                "phaseVoltage": {
+                    "description": "Grid phase voltage in V_RMS",
+                    "type": "number"
+                },
+                "gridFrequency": {
+                    "description": "Grid frequency in Hz",
+                    "type": "number"
+                },
+                "gridResistance": {
+                    "description": "Equivalent grid resistance in Ohms",
+                    "type": "number"
+                },
+                "gridInductance": {
+                    "description": "Equivalent grid inductance in Henrys",
+                    "type": "number"
+                }
+            },
+            "required": ["loadType"],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {"loadType": {"const": "R-L"}}
+                    },
+                    "then": {
+                        "required": ["resistance", "inductance"]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {"loadType": {"const": "grid"}}
+                    },
+                    "then": {
+                        "required": ["phaseVoltage", "gridFrequency", "gridResistance", "gridInductance"]
+                    }
+                }
+            ]
+        }
+    }
+}
