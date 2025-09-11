@@ -28,6 +28,9 @@
                     "properties": {
                         "flyback": {
                             "$ref": "/schemas/inputs/topologies/flyback.json",
+                        },
+                        "currentTransformer": {
+                            "$ref": "/schemas/inputs/topologies/currentTransformer.json",
                         }
                     }
                 }

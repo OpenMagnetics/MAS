@@ -1,0 +1,38 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/topologies/currentTransformer.json",
+    "title": "currentTransformer",
+    "description": "The description of a Current Transformer excitation",
+    "type": "object",
+    "properties": {
+        "waveformLabel": {
+            "description": "Waveform of the signal to measure",
+            "$ref": "/schemas/inputs/operatingPointExcitation.json#/$defs/waveformLabel"
+        },
+        "maximumPrimaryCurrentPeak": {
+            "description": "The maximum current peak in the input",
+            "type": "number"
+        },
+        "maximumSecondaryVoltagePeak": {
+            "description": "The maximum voltage peak in the measuring circuit",
+            "type": "number"
+        },
+        "frequency": {
+            "description": "Frequency of the input",
+            "type": "number"
+        },
+        "maximumDutyCycle": {
+            "description": "The maximum duty cycle in the input",
+            "type": "number"
+        },
+        "maximumBurdenResistorLoss": {
+            "description": "The maximum loss we can have in the burden resistor",
+            "type": "number"
+        },
+        "diodeVoltageDrop": {
+            "description": "The voltage drop on the diode",
+            "type": "number"
+        }
+    },
+    "required": ["waveformLabel", "maximumPrimaryCurrentPeak", "maximumSecondaryVoltagePeak", "frequency", "maximumDutyCycle", "maximumBurdenResistorLoss", "diodeVoltageDrop"]
+}
