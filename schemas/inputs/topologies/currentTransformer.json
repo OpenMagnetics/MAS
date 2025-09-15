@@ -13,10 +13,6 @@
             "description": "The maximum current peak in the input",
             "type": "number"
         },
-        "maximumSecondaryVoltagePeak": {
-            "description": "The maximum voltage peak in the measuring circuit",
-            "type": "number"
-        },
         "frequency": {
             "description": "Frequency of the input",
             "type": "number"
@@ -25,14 +21,18 @@
             "description": "The maximum duty cycle in the input",
             "type": "number"
         },
-        "maximumBurdenResistorLoss": {
-            "description": "The maximum loss we can have in the burden resistor",
+        "burdenResistor": {
+            "description": "The value of the burden resistor in the measuring circuit",
             "type": "number"
         },
         "diodeVoltageDrop": {
             "description": "The voltage drop on the diode",
             "type": "number"
+        },
+        "ambientTemperature": {
+            "description": "The ambient temperature of the operating point",
+            "type": "number"
         }
     },
-    "required": ["waveformLabel", "maximumPrimaryCurrentPeak", "maximumSecondaryVoltagePeak", "frequency", "maximumDutyCycle", "maximumBurdenResistorLoss", "diodeVoltageDrop"]
+    "required": ["waveformLabel", "maximumPrimaryCurrentPeak", "frequency", "maximumDutyCycle", "burdenResistor", "diodeVoltageDrop", "ambientTemperature"]
 }
