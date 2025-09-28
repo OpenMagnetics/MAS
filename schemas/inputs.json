@@ -31,6 +31,24 @@
                         },
                         "currentTransformer": {
                             "$ref": "/schemas/inputs/topologies/currentTransformer.json",
+                        },
+                        "isolatedBuck": {
+                            "$ref": "/schemas/inputs/topologies/isolatedBuck.json",
+                        },
+                        "isolatedBuckBoost": {
+                            "$ref": "/schemas/inputs/topologies/isolatedBuckBoost.json",
+                        },
+                        "buck": {
+                            "$ref": "/schemas/inputs/topologies/buck.json",
+                        },
+                        "boost": {
+                            "$ref": "/schemas/inputs/topologies/boost.json",
+                        },
+                        "pushPull": {
+                            "$ref": "/schemas/inputs/topologies/pushPull.json",
+                        },
+                        "forward": {
+                            "$ref": "/schemas/inputs/topologies/forward.json",
                         }
                     }
                 }

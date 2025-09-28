@@ -40,7 +40,7 @@
             "description": "Label of the waveform, if applicable. Used for common waveforms",
             "title": "waveformLabel",
             "type": "string",
-            "enum": ["Custom", "Triangular", "Sinusoidal", "Rectangular", "Unipolar Rectangular", "Unipolar Triangular", "Bipolar Rectangular", "Bipolar Triangular", "Flyback Primary", "Flyback Secondary", "Rectangular With Deadtime", "Flyback Secondary With Deadtime", "RectangularDCM", "Secondary Rectangular" , "Secondary Rectangular With Deadtime"]
+            "enum": ["Custom", "Triangular", "Sinusoidal", "Rectangular", "Unipolar Rectangular", "Unipolar Triangular", "Bipolar Rectangular", "Bipolar Triangular", "Flyback Primary", "Flyback Secondary", "Rectangular With Deadtime", "Flyback Secondary With Deadtime", "RectangularDCM", "Secondary Rectangular", "Secondary Rectangular With Deadtime", "Triangular With Deadtime"]
         },
         "signalDescriptor":{
             "description": "Structure definining one electromagnetic parameters: current, voltage, magnetic flux density",
@@ -75,6 +75,16 @@
                             "minimum": 0
                         },
                         "peak": {
+                            "description": "The maximum absolute value of the waveform",
+                            "type": "number",
+                            "minimum": 0
+                        },
+                        "positivePeak": {
+                            "description": "The maximum positive value of the waveform",
+                            "type": "number",
+                            "minimum": 0
+                        },
+                        "negativePeak": {
                             "description": "The maximum positive value of the waveform",
                             "type": "number",
                             "minimum": 0

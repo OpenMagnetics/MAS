@@ -1,0 +1,74 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/topologies/isolatedBuck.json",
+    "title": "isolatedBuck",
+    "description": "The description of a Isolated Buck / Flybuck converter excitation",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the isolatedBuck",
+            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+        },
+        "diodeVoltageDrop": {
+            "description": "The voltage drop on the diode",
+            "type": "number"
+        },
+        "maximumSwitchCurrent": {
+            "description": "The maximum current that can go through the selected switch",
+            "type": "number"
+        },
+        "currentRippleRatio": {
+            "description": "The maximum current ripple allowed in the output",
+            "type": "number"
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 1
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/isolatedBuckOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": ["inputVoltage", "diodeVoltageDrop", "operatingPoints"],
+
+    "$defs": {
+        "isolatedBuckOperatingPoint": {
+            "description": "The description of one isolatedBuck operating point",
+            "title": "isolatedBuckOperatingPoint",
+            "type": "object",
+            "properties": {
+                "outputVoltages": {
+                    "description": "A list of output voltages, one per output",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1
+                },
+                "outputCurrents": {
+                    "description": "A list of output currents, one per output",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1
+                },
+                "switchingFrequency": {
+                    "description": "The switching frequency of the operating point",
+                    "type": "number"
+                },
+                "ambientTemperature": {
+                    "description": "The ambient temperature of the operating point",
+                    "type": "number"
+                }
+            },
+            "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "ambientTemperature"]
+        }
+    }
+}
