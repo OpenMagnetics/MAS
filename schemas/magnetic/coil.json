@@ -353,6 +353,16 @@
                     "description": "Width of the margin in the bottom or right side of the section, along where the clearance would happen. Also the width of the tape to implement it.",
                     "type": "number"
                 },
+                "insulationMaterial": {
+                    "description": "In case of insulating layer, the material used",
+                    "oneOf": [
+                        {"$ref": "/schemas/magnetic/insulation/material.json"},
+                        {
+                            "description": "The insulating material",
+                            "type": "string"
+                        }
+                    ]
+                },
                 "numberLayers": {
                     "description": "Number of layers to implement the margin",
                     "type": "integer",

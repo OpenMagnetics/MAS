@@ -20,9 +20,8 @@
                 "type": "string"
             }
         },
-        "manufacturer": {
-            "description": "The manufacturer of the insulation material",
-            "type": "string"
+        "manufacturerInfo": {
+            "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
         },
         "dielectricStrength":{
             "type": "array",
