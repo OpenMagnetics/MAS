@@ -321,10 +321,15 @@
                 },
                 "margin": {
                     "description": "Defines the distance in extremes of the section that is reserved to be filled with margin tape. It is an array os two elements from inner or top, to outer or bottom",
-                    "type": "array",
-                    "items":{
-                        "type": "number"
-                    },
+                    "oneOf": [
+                        {"$ref": "#/$defs/marginInfo"},
+                        {
+                            "type": "array",
+                            "items":{
+                                "type": "number"
+                            }
+                        }
+                    ],
                     "minItems": 2,
                     "maxItems": 2
                 },
@@ -334,6 +339,32 @@
                 }
             },
             "required": ["name", "type", "layersOrientation", "partialWindings", "dimensions", "coordinates"]
+        },
+        "marginInfo":{
+            "description": "Data describing the information about the margin of a section",
+            "title": "marginInfo",
+            "type": "object",
+            "properties": {
+                "topOrLeftWidth": {
+                    "description": "Width of the margin in the top or left side of the section, along where the clearance would happen. Also the width of the tape to implement it.",
+                    "type": "number"
+                },
+                "bottomOrRightWidth": {
+                    "description": "Width of the margin in the bottom or right side of the section, along where the clearance would happen. Also the width of the tape to implement it.",
+                    "type": "number"
+                },
+                "numberLayers": {
+                    "description": "Number of layers to implement the margin",
+                    "type": "integer",
+                    "exclusiveMinimum": 0
+                },
+                "layerThickness": {
+                    "description": "Thickness of the layers to implement the margin",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": ["topOrLeftWidth", "bottomOrRightWidth", "numberLayers", "layerThickness"]
         },
         "partialWinding":{
             "description": "Data describing one part of winding, described by a list with the proportion of each parallel in the winding that is contained here",
