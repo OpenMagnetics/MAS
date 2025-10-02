@@ -448,6 +448,13 @@
                     },
                     "minItems": 2,
                     "uniqueItems": true
+                },
+                "woundWith": {
+                    "description": "Lis of winding names that are wound together with this winding",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             },
             "required": ["name", "numberTurns", "numberParallels", "isolationSide", "wire"]
