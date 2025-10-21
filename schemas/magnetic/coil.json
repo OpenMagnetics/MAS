@@ -295,6 +295,11 @@
                     "enum": ["inner or top", "outer or bottom", "spread", "centered"],
                     "default": "centered"
                 },
+                "numberLayers": {
+                    "description": "Optional field to force how many layers must fit in a section",
+                    "type": "number",
+                    "minimum": 1
+                },
                 "dimensions": {
                     "description": "Dimensions of the rectangle defining the section",
                     "$ref": "/schemas/utils.json#/$defs/dimensions"
