@@ -109,6 +109,11 @@
                     "description": "Dimensions of the rectangle defining the turn",
                     "$ref": "/schemas/utils.json#/$defs/dimensions"
                 },
+                "crossSectionalShape": {
+                    "title": "turnCrossSectionalShape",
+                    "type": "string",
+                    "enum": ["round", "rectangular", "oval"]
+                },
                 "rotation": {
                     "description": "Rotation of the rectangle defining the turn, in degrees",
                     "type": "number",
