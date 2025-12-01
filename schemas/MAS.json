@@ -8,19 +8,19 @@
         "inputs":{
             "description": "The description of the inputs that can be used to design a Magnetic",
             "title": "Inputs",
-            "$ref": "./inputs.json"
+            "$ref": "/schemas/inputs.json"
         },
         "magnetic":{
             "description": "The description of a magnetic",
             "title": "Magnetic",
-            "$ref": "./magnetic.json"
+            "$ref": "/schemas/magnetic.json"
         },
         "outputs":{
             "description": "The description of the outputs that are produced after designing a Magnetic",
             "title": "Outputs",
             "type": "array",
             "items": {                
-                "$ref": "./outputs.json"
+                "$ref": "/schemas/outputs.json"
             }
         }
     },
