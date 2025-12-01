@@ -21,7 +21,7 @@
             "type": "array",
             "items": {                
                 "$ref": "/schemas/outputs.json"
-            },
+            }
         }
     },
     "required": ["inputs", "magnetic", "outputs"]

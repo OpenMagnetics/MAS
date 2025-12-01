@@ -85,7 +85,7 @@
                     "title": "currentDividerPerTurn",
                     "type": "array",
                     "items": {
-                        "type": "number",
+                        "type": "number"
                     }
                 },
                 "temperature":{
@@ -233,7 +233,7 @@
                         "title": "voltagePerTurn",
                         "type": "array",
                         "items": {
-                            "type": "number",
+                            "type": "number"
                         }
                     },
                     "voltageDividerStartPerTurn":{
@@ -241,7 +241,7 @@
                         "title": "voltageDividerStartPerTurn",
                         "type": "array",
                         "items": {
-                            "type": "number",
+                            "type": "number"
                         }
                     },
                     "voltageDividerEndPerTurn":{
@@ -249,7 +249,7 @@
                         "title": "voltageDividerEndPerTurn",
                         "type": "array",
                         "items": {
-                            "type": "number",
+                            "type": "number"
                         }
                     },
                     "sixCapacitorNetworkPerWinding": {
@@ -392,7 +392,7 @@
                     "items": {
                         "$ref": "#/$defs/impedanceMatrixAtFrequency"
                     }
-                },
+                }
             },
             "required": ["origin", "methodUsed", "resistanceMatrix", "inductanceMatrix"]
         },
