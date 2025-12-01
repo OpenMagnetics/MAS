@@ -8,7 +8,7 @@
         "bobbin": {
             "title": "BobbinDataOrNameUnion",
             "oneOf": [
-                {"$ref": "/schemas/magnetic/bobbin.json"},
+                {"$ref": "./bobbin.json"},
                 {
                     "description": "The name of the bobbin used in the core",
                     "type": "string"
@@ -107,7 +107,7 @@
                 },
                 "dimensions": {
                     "description": "Dimensions of the rectangle defining the turn",
-                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                    "$ref": "../utils.json#/$defs/dimensions"
                 },
                 "crossSectionalShape": {
                     "title": "turnCrossSectionalShape",
@@ -121,13 +121,13 @@
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the turn, referred to the center of the main column",
-                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                    "$ref": "../utils.json#/$defs/coordinates"
                 },
                 "additionalCoordinates": {
                     "description": "List of additional coordinates of the center of the turn, referred to the center of the main column, in case the turn is not symmetrical, as in toroids",
                     "type": "array",
                     "items":{
-                        "$ref": "/schemas/utils.json#/$defs/coordinates"
+                        "$ref": "../utils.json#/$defs/coordinates"
                     }
                 },
                 "coordinateSystem": {
@@ -181,7 +181,7 @@
                 "insulationMaterial": {
                     "description": "In case of insulating layer, the material used",
                     "oneOf": [
-                        {"$ref": "/schemas/magnetic/insulation/material.json"},
+                        {"$ref": "./insulation/material.json"},
                         {
                             "description": "The insulating material",
                             "type": "string"
@@ -190,17 +190,17 @@
                 },
                 "dimensions": {
                     "description": "Dimensions of the rectangle defining the layer",
-                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                    "$ref": "../utils.json#/$defs/dimensions"
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the layer, referred to the center of the main column",
-                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                    "$ref": "../utils.json#/$defs/coordinates"
                 },
                 "additionalCoordinates": {
                     "description": "List of additional coordinates of the center of the layer, referred to the center of the main column, in case the layer is not symmetrical, as in toroids",
                     "type": "array",
                     "items":{
-                        "$ref": "/schemas/utils.json#/$defs/coordinates"
+                        "$ref": "../utils.json#/$defs/coordinates"
                     }
                 },
                 "coordinateSystem": {
@@ -233,7 +233,7 @@
                 },
                 "type": {
                     "description": "Type of the layer",
-                    "$ref": "/schemas/utils.json#/$defs/wiringTechnology"
+                    "$ref": "../utils.json#/$defs/wiringTechnology"
                 },
                 "sectionsOrientation": {
                     "description": "Way in which the sections are oriented inside the winding window",
@@ -250,11 +250,11 @@
                 },
                 "dimensions": {
                     "description": "Dimensions of the rectangle defining the group",
-                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                    "$ref": "../utils.json#/$defs/dimensions"
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the section, referred to the center of the main column",
-                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                    "$ref": "../utils.json#/$defs/coordinates"
                 },
                 "coordinateSystem": {
                     "description": "System in which dimension and coordinates are in",
@@ -307,11 +307,11 @@
                 },
                 "dimensions": {
                     "description": "Dimensions of the rectangle defining the section",
-                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                    "$ref": "../utils.json#/$defs/dimensions"
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the section, referred to the center of the main column",
-                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                    "$ref": "../utils.json#/$defs/coordinates"
                 },
                 "coordinateSystem": {
                     "description": "System in which dimension and coordinates are in",
@@ -366,7 +366,7 @@
                 "insulationMaterial": {
                     "description": "In case of insulating layer, the material used",
                     "oneOf": [
-                        {"$ref": "/schemas/magnetic/insulation/material.json"},
+                        {"$ref": "./insulation/material.json"},
                         {
                             "description": "The insulating material",
                             "type": "string"
@@ -438,12 +438,12 @@
                     "exclusiveMinimum": 0
                 },
                 "isolationSide": {
-                    "$ref": "/schemas/utils.json#/$defs/isolationSide"
+                    "$ref": "../utils.json#/$defs/isolationSide"
                 },
                 "wire": {
                     "title": "WireDataOrNameUnion",
                     "oneOf": [
-                        {"$ref": "/schemas/magnetic/wire.json"},
+                        {"$ref": "./wire.json"},
                         {
                             "description": "The name of the wire",
                             "type": "string"
@@ -474,7 +474,7 @@
             "type": "object",
             "properties": {
                 "type": {
-                    "$ref": "/schemas/utils.json#/$defs/connectionType"
+                    "$ref": "../utils.json#/$defs/connectionType"
                 },
                 "metric": {
                     "description": "Metric of the terminal, if applicable",

@@ -7,11 +7,11 @@
     "properties": {
         "core":{
             "description": "Data describing the magnetic core.",
-            "$ref": "/schemas/magnetic/core.json"
+            "$ref": "./magnetic/core.json"
         },
         "coil":{
             "description": "Data describing the coil",
-            "$ref": "/schemas/magnetic/coil.json"
+            "$ref": "./magnetic/coil.json"
         },
         "manufacturerInfo": {
             "type": "object",
@@ -72,11 +72,11 @@
                         },
                         "insulationType": {
                             "description": "Insulation grade according to manufacturer",
-                            "$ref": "/schemas/utils.json#/$defs/insulationType"
+                            "$ref": "./utils.json#/$defs/insulationType"
                         },
                         "mounting": {
                             "description": "Recommended way of mounting according to manufacturer",
-                            "$ref": "/schemas/utils.json#/$defs/connectionType"
+                            "$ref": "./utils.json#/$defs/connectionType"
                         },
                         "hipotTest": {
                             "description": "Hipot test according to manufacturer",
@@ -84,11 +84,11 @@
                         },
                         "dimensions": {
                             "description": "Dimensions of the magnetic according to manufacturer",
-                            "$ref": "/schemas/utils.json#/$defs/dimensions"
+                            "$ref": "./utils.json#/$defs/dimensions"
                         },
                         "leakageInductance": {
                             "description": "Leakage Inductance of the magnetic according to manufacturer",
-                            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                            "$ref": "./utils.json#/$defs/dimensionWithTolerance"
                         }
                     }
                 }
@@ -99,13 +99,13 @@
             "description": "The lists of distributors of the magnetic",
             "type": "array",
             "items": {
-                "$ref": "/schemas/utils.json#/$defs/distributorInfo"
+                "$ref": "./utils.json#/$defs/distributorInfo"
             },
             "uniqueItems": false
         },
         "rotation": {
             "description": "The rotation of the magnetic, by default the winding column goes vertical",
-            "$ref": "/schemas/utils.json#/$defs/rotation"
+            "$ref": "./utils.json#/$defs/rotation"
         }
     },
     "required": ["core", "coil"]

@@ -21,7 +21,7 @@
             }
         },
         "manufacturerInfo": {
-            "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
+            "$ref": "../../utils.json#/$defs/manufacturerInfo"
         },
         "dielectricStrength":{
             "type": "array",
@@ -59,7 +59,7 @@
             "description": "Resistivity value according to manufacturer",
             "type": "array",
             "items": {
-                "$ref": "/schemas/utils.json#/$defs/resistivityPoint"
+                "$ref": "../../utils.json#/$defs/resistivityPoint"
             },
             "minItems": 1,
             "uniqueItems": true

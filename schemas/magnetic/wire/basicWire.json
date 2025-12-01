@@ -10,7 +10,7 @@
             "type": "string"
         },
         "type": {
-            "$ref": "/schemas/magnetic/wire.json#/$defs/wireType"
+            "$ref": "../wire.json#/$defs/wireType"
         },
         "standard": {
             "description": "The standard of wire",
@@ -23,11 +23,11 @@
             "type": "string"
         },
         "manufacturerInfo": {
-            "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
+            "$ref": "../../utils.json#/$defs/manufacturerInfo"
         },
         "conductingArea": {
             "description": "The conducting area of the wire, in m². Used for some rectangular shapes where the area is smaller than expected due to rounded corners",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "numberConductors": {
             "description": "The number of conductors in the wire",
@@ -36,7 +36,7 @@
         "material": {
             "title": "WireMaterialDataOrNameUnion",
             "oneOf": [
-                {"$ref": "/schemas/magnetic/wire/material.json"},
+                {"$ref": "./material.json"},
                 {
                     "description": "The name of the material used in the wire",
                     "type": "string"
@@ -46,7 +46,7 @@
         "coating": {
             "title": "CoatingDataOrNameUnion",
             "oneOf": [
-                {"$ref": "/schemas/magnetic/insulation/wireCoating.json"},
+                {"$ref": "../insulation/wireCoating.json"},
                 {
                     "description": "The name of the coating used in the wire",
                     "type": "string"

@@ -6,7 +6,7 @@
     "type": "object",
     "properties": {
         "origin":{
-            "$ref": "/schemas/outputs.json#/$defs/resultOrigin"
+            "$ref": "../outputs.json#/$defs/resultOrigin"
         },
         "methodUsed": {
             "description": "Model used to calculate the core losses in the case of simulation, or method used to measure it",
@@ -15,7 +15,7 @@
         "magneticFluxDensity":{
             "description": "Excitation of the B field that produced the core losses",
             "title": "excitation",
-            "$ref": "/schemas/inputs/operatingPointExcitation.json#/$defs/signalDescriptor"
+            "$ref": "../inputs/operatingPointExcitation.json#/$defs/signalDescriptor"
         },
         "temperature":{
             "description": "temperature in the core that produced the core losses",

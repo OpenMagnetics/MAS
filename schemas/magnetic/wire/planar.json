@@ -1,26 +1,26 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "http://openmagnetics.com/schemas/magnetic/wire/planar.json",
-    "$ref": "/schemas/magnetic/wire/basicWire.json",
+    "$ref": "./basicWire.json",
     "title": "wire/planar",
     "description": "The description of a solid planar magnet wire",
     "type": "object",
     "properties": {
         "conductingWidth": {
             "description": "The conducting width of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "conductingHeight": {
             "description": "The conducting height of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "outerWidth": {
             "description": "The outer width of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "outerHeight": {
             "description": "The outer height of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         }
     },
     "required": [ "conductingWidth" ],
