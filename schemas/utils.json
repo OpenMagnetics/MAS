@@ -184,15 +184,11 @@
         },
         "twoDimensionalMatrix":{
             "description": "Data a two dimensional matrix, created as an array of array, where the first coordinate in the X and the second the Y",
-            "type": "array",
-            "items": {
-                "type": "array",
-                "items": {
-                    "$ref": "#/$defs/dimensionWithTolerance"
-                },
-                "minItems": 1
-            },
-            "minItems": 1
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {"$ref": "#/$defs/dimensionWithTolerance"}
+            }
         },
         "dimensionWithTolerance": {
             "description": "A dimension of with minimum, nominal, and maximum values", 
