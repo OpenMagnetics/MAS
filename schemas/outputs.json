@@ -126,7 +126,7 @@
                     "title": "resistanceMatrix",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/resistanceMatrixAtFrequency"
+                        "$ref": "#/$defs/scalarMatrixAtFrequency"
                     }
                 },
                 "dcResistancePerTurn": {
@@ -252,46 +252,111 @@
                             "type": "number"
                         }
                     },
+                    "voltageDropAmongTurns":{
+                        "description": "Voltage drop among all pair of adjacent turns",
+                        "title": "voltageDropAmongTurns",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {"type": "number"}
+                        }
+                    },
+                    "capacitanceAmongTurns":{
+                        "description": "Capacitance among all pair of adjacent turns",
+                        "title": "capacitanceAmongTurns",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {"type": "number"}
+                        }
+                    },
+                    "capacitanceAmongWindings":{
+                        "description": "Capacitance among all windings",
+                        "title": "capacitanceAmongWindings",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {"type": "number"}
+                        }
+                    },
+                    "electricEnergyAmongTurns":{
+                        "description": "Electric energy among all pair of adjacent turns",
+                        "title": "electricEnergyAmongTurns",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {"type": "number"}
+                        }
+                    },
+                    "maxwellCapacitanceMatrix": {
+                        "description": "List of Maxwell capacitance matrix per frequency",
+                        "title": "maxwellCapacitanceMatrix",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/$defs/scalarMatrixAtFrequency"
+                        }
+                    },
+                    "capacitanceMatrix": {
+                        "description": "List of capacitance matrix per frequency",
+                        "title": "capacitanceMatrix",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {"$ref": "#/$defs/scalarMatrixAtFrequency"}
+                        }
+                    },
                     "sixCapacitorNetworkPerWinding": {
                         "description": "Network of six equivalent capacitors that describe the capacitance between two given windings",
                         "type": "object",
-                        "properties": {
-                            "C1":{
-                                "type": "number"
-                            },
-                            "C2":{
-                                "type": "number"
-                            },
-                            "C3":{
-                                "type": "number"
-                            },
-                            "C4":{
-                                "type": "number"
-                            },
-                            "C5":{
-                                "type": "number"
-                            },
-                            "C6":{
-                                "type": "number"
+                        "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "object",
+                                "properties": {
+                                    "C1":{
+                                        "type": "number"
+                                    },
+                                    "C2":{
+                                        "type": "number"
+                                    },
+                                    "C3":{
+                                        "type": "number"
+                                    },
+                                    "C4":{
+                                        "type": "number"
+                                    },
+                                    "C5":{
+                                        "type": "number"
+                                    },
+                                    "C6":{
+                                        "type": "number"
+                                    }
+                                },
+                                "required": ["C1", "C2", "C3", "C4", "C5", "C6"]
                             }
-                        },
-                        "required": ["C1", "C2", "C3", "C4", "C5", "C6"]
+                        }
                     },
                     "tripoleCapacitancePerWinding": {
                         "description": "The three values of a three input electrostatic multipole that describe the capacitance between two given windings",
                         "type": "object",
-                        "properties": {
-                            "C1":{
-                                "type": "number"
-                            },
-                            "C2":{
-                                "type": "number"
-                            },
-                            "C3":{
-                                "type": "number"
+                        "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "object",
+                                "properties": {
+                                    "C1":{
+                                        "type": "number"
+                                    },
+                                    "C2":{
+                                        "type": "number"
+                                    },
+                                    "C3":{
+                                        "type": "number"
+                                    }
+                                },
+                                "required": ["C1", "C2", "C3"]
                             }
-                        },
-                        "required": ["C1", "C2", "C3"]
+                        }
                     }
                 },                    
                 "anyOf": [
@@ -374,7 +439,7 @@
                     "title": "resistanceMatrix",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/resistanceMatrixAtFrequency"
+                        "$ref": "#/$defs/scalarMatrixAtFrequency"
                     }
                 },
                 "inductanceMatrix": {
@@ -382,7 +447,7 @@
                     "title": "inductanceMatrix",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/inductanceMatrixAtFrequency"
+                        "$ref": "#/$defs/scalarMatrixAtFrequency"
                     }
                 },
                 "impedanceMatrix": {
@@ -390,7 +455,7 @@
                     "title": "inductanceMatrix",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/impedanceMatrixAtFrequency"
+                        "$ref": "#/$defs/complexMatrixAtFrequency"
                     }
                 }
             },
@@ -642,36 +707,60 @@
             },
             "minItems": 1
         },
-        "resistanceMatrixAtFrequency": {
-            "title": "resistanceMatrixAtFrequency",
+        "voltageDrop": {
+            "title": "voltageDrop",
+            "type": "object",
+            "properties": {
+                "firstTurnName": {
+                    "description": "Name of the first turn",
+                    "type": "string"
+                },
+                "secondTurnName": {
+                    "description": "Name of the second turn",
+                    "type": "string"
+                },
+                "value":{
+                    "description": "Voltage drop between two turns, in V",
+                    "type": "number"
+                }
+            },
+            "required": ["firstTurnName", "secondTurnName", "value"]
+        },
+        "electricEnergy": {
+            "title": "electricEnergy",
+            "type": "object",
+            "properties": {
+                "firstTurnName": {
+                    "description": "Name of the first turn",
+                    "type": "string"
+                },
+                "secondTurnName": {
+                    "description": "Name of the second turn",
+                    "type": "string"
+                },
+                "value":{
+                    "description": "Electric energy between two turns, in V/m",
+                    "type": "number"
+                }
+            },
+            "required": ["firstTurnName", "secondTurnName", "value"]
+        },
+        "scalarMatrixAtFrequency": {
+            "title": "scalarMatrixAtFrequency",
             "type": "object",
             "properties": {
                 "magnitude": {
                     "$ref": "./utils.json#/$defs/twoDimensionalMatrix"
                 },
                 "frequency":{
-                    "description": "Frequency of the resitance matrix",
+                    "description": "Frequency of the matrix",
                     "type": "number"
                 }
             },
             "required": ["magnitude", "frequency"]
         },
-        "inductanceMatrixAtFrequency": {
-            "title": "inductanceMatrixAtFrequency",
-            "type": "object",
-            "properties": {
-                "magnitude": {
-                    "$ref": "./utils.json#/$defs/twoDimensionalMatrix"
-                },
-                "frequency":{
-                    "description": "Frequency of the inductance matrix",
-                    "type": "number"
-                }
-            },
-            "required": ["magnitude", "frequency"]
-        },
-        "impedanceMatrixAtFrequency": {
-            "title": "impedanceMatrixAtFrequency",
+        "complexMatrixAtFrequency": {
+            "title": "complexMatrixAtFrequency",
             "type": "object",
             "properties": {
                 "magnitude": {
@@ -681,7 +770,7 @@
                     "$ref": "./utils.json#/$defs/twoDimensionalMatrix"
                 },
                 "frequency":{
-                    "description": "Frequency of the inductance matrix",
+                    "description": "Frequency of the matrix",
                     "type": "number"
                 }
             },
