@@ -3,7 +3,6 @@
     "$id": "http://openmagnetics.com/schemas/MAS.json",
     "title": "MAS",
     "description": "All the data structure used in the Magnetic Agnostic Structure",
-    "$schemaVersion": "1.0.0",
     "type": "object",
     "properties": {
         "inputs":{

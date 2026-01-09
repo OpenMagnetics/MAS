@@ -3,7 +3,6 @@
     "$id": "http://openmagnetics.com/schemas/outputs.json",
     "title": "outputs",
     "description": "The description of the outputs that result of simulating a Magnetic",
-    "$schemaVersion": "1.0.0",
     "type": "object",
     "properties": {
         "coreLosses":{

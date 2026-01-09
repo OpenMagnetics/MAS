@@ -3,7 +3,6 @@
     "$id": "http://openmagnetics.com/schemas/inputs.json",
     "title": "inputs",
     "description": "The description of the inputs that can be used to design a Magnetic",
-    "$schemaVersion": "1.0.0",
     "type": "object",
     "properties": {
         "operatingPoints":{

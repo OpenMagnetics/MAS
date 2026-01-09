@@ -114,12 +114,6 @@
                     "type": "string",
                     "enum": ["round", "rectangular", "oval"]
                 },
-                "crossSectionalShape": {
-                    "description": "Shape of the cross section of the turn",
-                    "title": "turnCrossSectionalShape",
-                    "type": "string",
-                    "enum": ["round", "rectangular", "oval"]
-                },
                 "rotation": {
                     "description": "Rotation of the rectangle defining the turn, in degrees",
                     "type": "number",

@@ -3,7 +3,6 @@
     "$id": "http://openmagnetics.com/schemas/utils.json",
     "description": "Some definition utils",
     "title": "utils",
-    "$schemaVersion": "1.0.0",
     "type": "object",
     "properties": {
         "manufacturerInfo": {
