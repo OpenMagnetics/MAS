@@ -3,6 +3,7 @@
     "$id": "http://openmagnetics.com/schemas/inputs.json",
     "title": "inputs",
     "description": "The description of the inputs that can be used to design a Magnetic",
+    "$schemaVersion": "1.0.0",
     "type": "object",
     "properties": {
         "operatingPoints":{
@@ -27,32 +28,32 @@
                     "type": "object",
                     "properties": {
                         "flyback": {
-                            "$ref": "/schemas/inputs/topologies/flyback.json",
+                            "$ref": "/schemas/inputs/topologies/flyback.json"
                         },
                         "currentTransformer": {
-                            "$ref": "/schemas/inputs/topologies/currentTransformer.json",
+                            "$ref": "/schemas/inputs/topologies/currentTransformer.json"
                         },
                         "isolatedBuck": {
-                            "$ref": "/schemas/inputs/topologies/isolatedBuck.json",
+                            "$ref": "/schemas/inputs/topologies/isolatedBuck.json"
                         },
                         "isolatedBuckBoost": {
-                            "$ref": "/schemas/inputs/topologies/isolatedBuckBoost.json",
+                            "$ref": "/schemas/inputs/topologies/isolatedBuckBoost.json"
                         },
                         "buck": {
-                            "$ref": "/schemas/inputs/topologies/buck.json",
+                            "$ref": "/schemas/inputs/topologies/buck.json"
                         },
                         "boost": {
-                            "$ref": "/schemas/inputs/topologies/boost.json",
+                            "$ref": "/schemas/inputs/topologies/boost.json"
                         },
                         "pushPull": {
-                            "$ref": "/schemas/inputs/topologies/pushPull.json",
+                            "$ref": "/schemas/inputs/topologies/pushPull.json"
                         },
                         "forward": {
-                            "$ref": "/schemas/inputs/topologies/forward.json",
+                            "$ref": "/schemas/inputs/topologies/forward.json"
                         }
                     }
                 }
-            },
+            }
         }
     },
     "required": ["operatingPoints", "designRequirements"],

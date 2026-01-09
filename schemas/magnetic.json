@@ -3,6 +3,7 @@
     "$id": "http://openmagnetics.com/schemas/magnetic.json",
     "title": "magnetic",
     "description": "The description of a magnetic",
+    "$schemaVersion": "1.0.0",
     "type": "object",
     "properties": {
         "core":{
