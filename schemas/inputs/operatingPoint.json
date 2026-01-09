@@ -11,7 +11,7 @@
         },
         "conditions":{
             "title": "operatingConditions",
-            "$ref": "/schemas/inputs/operatingConditions.json"
+            "$ref": "./operatingConditions.json"
         },
         "excitationsPerWinding": {
             "title": "excitationsPerWinding",
@@ -19,7 +19,7 @@
             "items": {
                 "title": "OperatingPointExcitationPerWinding",
                 "description": "Data describing the excitation of the winding",
-                "$ref": "/schemas/inputs/operatingPointExcitation.json"
+                "$ref": "./operatingPointExcitation.json"
             },
             "minItems": 1
         }

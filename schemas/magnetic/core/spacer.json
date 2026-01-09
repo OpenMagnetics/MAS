@@ -14,7 +14,7 @@
             "description": "Material of the spacer",
             "title": "InsulationMaterialDataOrNameUnion",
             "oneOf": [
-                {"$ref": "/schemas/magnetic/insulation/material.json"},
+                {"$ref": "../insulation/material.json"},
                 {
                     "description": "The name of the material used in the insulation",
                     "type": "string"
@@ -23,11 +23,11 @@
         },
         "dimensions": {
             "description": "Dimensions of the cube defining the spacer",
-            "$ref": "/schemas/utils.json#/$defs/dimensions"
+            "$ref": "../../utils.json#/$defs/dimensions"
         },
         "coordinates": {
             "description": "The coordinates of the center of the gap, referred to the center of the main column",
-            "$ref": "/schemas/utils.json#/$defs/coordinates"
+            "$ref": "../../utils.json#/$defs/coordinates"
         }
     },
     "required": ["type", "insulationMaterial", "dimensions", "coordinates"]

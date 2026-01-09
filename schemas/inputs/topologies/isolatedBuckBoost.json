@@ -7,7 +7,7 @@
     "properties": {
         "inputVoltage": {
             "description": "The input voltage of the isolatedBuckBoost",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "diodeVoltageDrop": {
             "description": "The voltage drop on the diode",

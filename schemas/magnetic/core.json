@@ -10,13 +10,13 @@
             "type": "string"
         },
         "manufacturerInfo": {
-            "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
+            "$ref": "../utils.json#/$defs/manufacturerInfo"
         },
         "distributorsInfo": {
             "description": "The lists of distributors of the magnetic core",
             "type": "array",
             "items": {
-                "$ref": "/schemas/utils.json#/$defs/distributorInfo"
+                "$ref": "../utils.json#/$defs/distributorInfo"
             },
             "uniqueItems": false
         },
@@ -34,7 +34,7 @@
                 "material": {
                     "title": "CoreMaterialDataOrNameUnion",
                     "oneOf": [
-                        {"$ref": "/schemas/magnetic/core/material.json"},
+                        {"$ref": "./core/material.json"},
                         {
                             "description": "The name of the material used in the core",
                             "type": "string"
@@ -44,7 +44,7 @@
                 "shape": {
                     "title": "CoreShapeDataOrNameUnion",
                     "oneOf": [
-                        {"$ref": "/schemas/magnetic/core/shape.json"},
+                        {"$ref": "./core/shape.json"},
                         {
                             "description": "The name of the shape used in the core",
                             "type": "string"
@@ -55,7 +55,7 @@
                     "description": "The lists of gaps in the magnetic core",
                     "type": "array",
                     "items": {
-                        "$ref": "/schemas/magnetic/core/gap.json"
+                        "$ref": "./core/gap.json"
                     },
                     "uniqueItems": false
                 },
@@ -147,8 +147,8 @@
             "description": "The data from the core based on its geometrical description, in a way that can be used by CAD models.",
             "title": "coreGeometricalDescriptionElement",
             "oneOf": [
-                {"$ref": "/schemas/magnetic/core/piece.json"},
-                {"$ref": "/schemas/magnetic/core/spacer.json"}
+                {"$ref": "./core/piece.json"},
+                {"$ref": "./core/spacer.json"}
             ]
         },
         "effectiveParameters":{
@@ -205,7 +205,7 @@
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the winding window, referred to the center of the main column. In the case of half-sets, the center will be in the top point, where it would join another half-set",
-                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                    "$ref": "../utils.json#/$defs/coordinates"
                 },
                 "sectionsOrientation": {
                     "description": "Way in which the sections are oriented inside the winding window",
@@ -249,7 +249,7 @@
                 },
                 "coordinates": {
                     "description": "The coordinates of the point of the winding window where the middle height touches the main column, referred to the center of the main column. In the case of half-sets, the center will be in the top point, where it would join another half-set",
-                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                    "$ref": "../utils.json#/$defs/coordinates"
                 },
                 "sectionsOrientation": {
                     "description": "Way in which the sections are oriented inside the winding window",
@@ -271,7 +271,7 @@
                 },
                 "shape": {
                     "title": "ColumnShape",
-                    "$ref": "/schemas/utils.json#/$defs/columnShape"
+                    "$ref": "../utils.json#/$defs/columnShape"
                 },
                 "area": {
                     "description": "Area of the section column, normal to the magnetic flux direction",
@@ -305,7 +305,7 @@
                 },
                 "coordinates": {
                     "description": "The coordinates of the center of the column, referred to the center of the main column. In the case of half-sets, the center will be in the top point, where it would join another half-set",
-                    "$ref": "/schemas/utils.json#/$defs/coordinates"
+                    "$ref": "../utils.json#/$defs/coordinates"
                 }
             },
             "required": ["type", "shape", "width", "depth", "height", "area", "coordinates"]

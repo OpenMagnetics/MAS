@@ -23,7 +23,7 @@
             "enum": ["MnZn", "NiZn", "MgZn", "FeSiAl", "FeSi", "FeNi", "FeNiMo", "FeMo", "Carbonyl Iron", "Iron", "Proprietary"]
         },
         "application": {
-            "$ref": "/schemas/utils.json#/$defs/application"
+            "$ref": "../../utils.json#/$defs/application"
         },
         "alternatives": {
             "description": "A list of alternative materials that could replace this one",
@@ -43,7 +43,7 @@
             "type": "string"
         },
         "manufacturerInfo": {
-            "$ref": "/schemas/utils.json#/$defs/manufacturerInfo"
+            "$ref": "../../utils.json#/$defs/manufacturerInfo"
         },
         "family": {
             "description": "The family of a magnetic material according to its manufacturer",
@@ -84,18 +84,18 @@
             "description": "Resistivity value according to manufacturer",
             "type": "array",
             "items": {
-                "$ref": "/schemas/utils.json#/$defs/resistivityPoint"
+                "$ref": "../../utils.json#/$defs/resistivityPoint"
             },
             "minItems": 1,
             "uniqueItems": true
         },
         "heatConductivity": {
             "description": "Heat conductivity value according to manufacturer, in W/m/K",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "heatCapacity": {
             "description": "Heat capacity value according to manufacturer, in J/Kg/K",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "density": {
             "description": "Density value according to manufacturer, in kg/m3",
@@ -396,7 +396,7 @@
             "title": "volumetricLossesPoint",
             "properties": {
                 "magneticFluxDensity": {
-                    "$ref": "/schemas/inputs/operatingPointExcitation.json"
+                    "$ref": "../../inputs/operatingPointExcitation.json"
                 },
                 "temperature": {
                     "description": "temperature value, in Celsius",
@@ -420,7 +420,7 @@
             "title": "massLossesPoint",
             "properties": {
                 "magneticFluxDensity": {
-                    "$ref": "/schemas/inputs/operatingPointExcitation.json"
+                    "$ref": "../../inputs/operatingPointExcitation.json"
                 },
                 "temperature": {
                     "description": "temperature value, in Celsius",

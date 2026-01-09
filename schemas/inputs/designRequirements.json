@@ -11,13 +11,13 @@
         },
         "magnetizingInductance": {
             "description": "Required values for the magnetizing inductance",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../utils.json#/$defs/dimensionWithTolerance"
         },
         "turnsRatios": {
             "description": "Required turns ratios between primary and the rest of windings",
             "type": "array",
             "items": {
-                "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                "$ref": "../utils.json#/$defs/dimensionWithTolerance"
             },
             "minItems": 0
         },
@@ -44,7 +44,7 @@
             "description": "Required values for the leakage inductance",
             "type": "array",
             "items": {
-                "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                "$ref": "../utils.json#/$defs/dimensionWithTolerance"
             },
             "minItems": 0
         },
@@ -52,7 +52,7 @@
             "description": "Required values for the stray capacitance",
             "type": "array",
             "items": {
-                "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                "$ref": "../utils.json#/$defs/dimensionWithTolerance"
             },
             "minItems": 0
         },
@@ -60,13 +60,13 @@
             "description": "Isolation side where each winding is connected to.",
             "type": "array",
             "items": {
-                "$ref": "/schemas/utils.json#/$defs/isolationSide"
+                "$ref": "../utils.json#/$defs/isolationSide"
             },
             "minItems": 1
         },
         "operatingTemperature": {
             "description": "Required values for the temperature that the magnetic can reach under operating",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../utils.json#/$defs/dimensionWithTolerance"
         },
         "insulation": {
             "title": "insulationRequirements",
@@ -74,7 +74,7 @@
             "properties": {
                 "altitude": {
                     "description": "Required values for the altitude",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                    "$ref": "../utils.json#/$defs/dimensionWithTolerance"
                 },
                 "cti": {
                     "description": "Required CTI",
@@ -92,11 +92,11 @@
                     "enum": ["OVC-I", "OVC-II", "OVC-III", "OVC-IV"]
                 },
                 "insulationType": {
-                    "$ref": "/schemas/utils.json#/$defs/insulationType"
+                    "$ref": "../utils.json#/$defs/insulationType"
                 },
                 "mainSupplyVoltage": {
                     "description": "Voltage RMS of the main supply to which this transformer is connected to.",
-                    "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+                    "$ref": "../utils.json#/$defs/dimensionWithTolerance"
                 },
                 "standards": {
                     "description": "VList of standards that will be taken into account for insulation.",
@@ -123,13 +123,13 @@
 
         },
         "application": {
-            "$ref": "/schemas/utils.json#/$defs/application"
+            "$ref": "../utils.json#/$defs/application"
         },
         "subApplication": {
-            "$ref": "/schemas/utils.json#/$defs/subApplication"
+            "$ref": "../utils.json#/$defs/subApplication"
         },
         "wiringTechnology": {
-            "$ref": "/schemas/utils.json#/$defs/wiringTechnology"
+            "$ref": "../utils.json#/$defs/wiringTechnology"
         },
         "maximumWeight": {
             "description": "Maximum weight for the designed magnetic, in Kg",
@@ -154,7 +154,7 @@
             "description": "Type of the terminal that must be used, per winding",
             "type": "array",
             "items": {
-                "$ref": "/schemas/utils.json#/$defs/connectionType"
+                "$ref": "../utils.json#/$defs/connectionType"
             }
         }
     },

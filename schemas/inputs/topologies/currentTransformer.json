@@ -7,7 +7,7 @@
     "properties": {
         "waveformLabel": {
             "description": "Waveform of the signal to measure",
-            "$ref": "/schemas/inputs/operatingPointExcitation.json#/$defs/waveformLabel"
+            "$ref": "../operatingPointExcitation.json#/$defs/waveformLabel"
         },
         "maximumPrimaryCurrentPeak": {
             "description": "The maximum current peak in the input",

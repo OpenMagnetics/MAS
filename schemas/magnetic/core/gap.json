@@ -27,7 +27,7 @@
             "maxItems": 3
         },
         "shape": {
-            "$ref": "/schemas/utils.json#/$defs/columnShape"
+            "$ref": "../../utils.json#/$defs/columnShape"
         },
         "distanceClosestNormalSurface": {
             "description": "The distance where the closest perpendicular surface is. This usually is half the winding height",

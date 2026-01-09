@@ -1,30 +1,30 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "http://openmagnetics.com/schemas/magnetic/wire/rectangular.json",
-    "$ref": "/schemas/magnetic/wire/basicWire.json",
+    "$ref": "./basicWire.json",
     "title": "wire/rectangular",
     "description": "The description of a solid rectangular magnet wire",
     "type": "object",
     "properties": {
         "conductingWidth": {
             "description": "The conducting width of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "conductingHeight": {
             "description": "The conducting height of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "edgeRadius": {
             "description": "The radius of the edge, in case of rectangular wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "outerWidth": {
             "description": "The outer width of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "outerHeight": {
             "description": "The outer height of the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         }
     },
     "required": [ "conductingWidth", "conductingHeight" ],

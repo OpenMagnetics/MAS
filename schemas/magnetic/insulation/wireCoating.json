@@ -12,11 +12,11 @@
         },
         "thickness": {
             "description": "The maximum thickness of the insulation around the wire, in m",
-            "$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "material": {
             "oneOf": [
-                {"$ref": "/schemas/magnetic/insulation/material.json"},
+                {"$ref": "./material.json"},
                 {
                     "description": "The name of the material used in the insulation",
                     "type": "string"

@@ -41,7 +41,7 @@
             "type": "object",
             "additionalProperties": {
                 "oneOf": [
-                    {"$ref": "/schemas/utils.json#/$defs/dimensionWithTolerance"},
+                    {"$ref": "../../utils.json#/$defs/dimensionWithTolerance"},
                     {
                         "type": "number"
                     }

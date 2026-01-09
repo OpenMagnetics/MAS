@@ -11,14 +11,14 @@
             "title": "operatingPoints",
             "type": "array",
             "items": {                
-                "$ref": "/schemas/inputs/operatingPoint.json"
+                "$ref": "./inputs/operatingPoint.json"
             },
             "minItems": 1
         },
         "designRequirements":{
             "description": "Data describing the design requirements",
             "title": "designRequirements",
-            "$ref": "/schemas/inputs/designRequirements.json"
+            "$ref": "./inputs/designRequirements.json"
         },
         "converterInformation":{
             "title": "converterInformation",
@@ -28,28 +28,28 @@
                     "type": "object",
                     "properties": {
                         "flyback": {
-                            "$ref": "/schemas/inputs/topologies/flyback.json"
+                            "$ref": "./inputs/topologies/flyback.json"
                         },
                         "currentTransformer": {
-                            "$ref": "/schemas/inputs/topologies/currentTransformer.json"
+                            "$ref": "./inputs/topologies/currentTransformer.json"
                         },
                         "isolatedBuck": {
-                            "$ref": "/schemas/inputs/topologies/isolatedBuck.json"
+                            "$ref": "./inputs/topologies/isolatedBuck.json"
                         },
                         "isolatedBuckBoost": {
-                            "$ref": "/schemas/inputs/topologies/isolatedBuckBoost.json"
+                            "$ref": "./inputs/topologies/isolatedBuckBoost.json"
                         },
                         "buck": {
-                            "$ref": "/schemas/inputs/topologies/buck.json"
+                            "$ref": "./inputs/topologies/buck.json"
                         },
                         "boost": {
-                            "$ref": "/schemas/inputs/topologies/boost.json"
+                            "$ref": "./inputs/topologies/boost.json"
                         },
                         "pushPull": {
-                            "$ref": "/schemas/inputs/topologies/pushPull.json"
+                            "$ref": "./inputs/topologies/pushPull.json"
                         },
                         "forward": {
-                            "$ref": "/schemas/inputs/topologies/forward.json"
+                            "$ref": "./inputs/topologies/forward.json"
                         }
                     }
                 }

@@ -57,7 +57,7 @@
             "title": "forcedConvectionCooling",
             "properties": {
                 "velocity": {
-                    "$ref": "/schemas/utils.json#/$defs/velocity"
+                    "$ref": "../utils.json#/$defs/velocity"
                 },
                 "flowDiameter": {
                     "description": "Diameter of the fluid flow, normally defined as a fan diameter",
@@ -94,7 +94,7 @@
                 },
                 "dimensions": {
                     "description": "Dimensions of the cube defining the heatsink",
-                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                    "$ref": "../utils.json#/$defs/dimensions"
                 }
             },
             "required": ["thermalResistance"]
@@ -122,7 +122,7 @@
                 },
                 "dimensions": {
                     "description": "Dimensions of the cube defining the cold plate",
-                    "$ref": "/schemas/utils.json#/$defs/dimensions"
+                    "$ref": "../utils.json#/$defs/dimensions"
                 }
             },
             "required": ["maximumTemperature"]

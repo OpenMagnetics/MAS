@@ -3,11 +3,11 @@
     "$id": "http://openmagnetics.com/schemas/magnetic/wire.json",
     "description": "The description of a magnet wire",
     "anyOf": [
-        {"$ref": "/schemas/magnetic/wire/round.json"},
-        {"$ref": "/schemas/magnetic/wire/foil.json"},
-        {"$ref": "/schemas/magnetic/wire/rectangular.json"},
-        {"$ref": "/schemas/magnetic/wire/litz.json"},
-        {"$ref": "/schemas/magnetic/wire/planar.json"}
+        {"$ref": "./wire/round.json"},
+        {"$ref": "./wire/foil.json"},
+        {"$ref": "./wire/rectangular.json"},
+        {"$ref": "./wire/litz.json"},
+        {"$ref": "./wire/planar.json"}
     ],
 
     "$defs": {
