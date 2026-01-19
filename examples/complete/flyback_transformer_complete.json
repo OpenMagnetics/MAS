@@ -1,0 +1,184 @@
+{
+  "inputs": {
+    "designRequirements": {
+      "name": "Flyback Transformer 24V 3A Output",
+      "magnetizingInductance": {
+        "nominal": 500e-6,
+        "minimum": 450e-6,
+        "maximum": 550e-6
+      },
+      "turnsRatios": [
+        {
+          "nominal": 0.125
+        }
+      ],
+      "leakageInductance": [
+        {
+          "maximum": 10e-6
+        }
+      ],
+      "topology": "Flyback Converter",
+      "operatingTemperature": {
+        "maximum": 100
+      },
+      "insulation": {
+        "insulationType": "Reinforced",
+        "overvoltageCategory": "OVC-II",
+        "pollutionDegree": "P2",
+        "altitude": {
+          "maximum": 2000
+        },
+        "cti": "Group IIIA"
+      },
+      "maximumDimensions": {
+        "width": 0.04,
+        "height": 0.04,
+        "depth": 0.035
+      },
+      "market": "Commercial"
+    },
+    "operatingPoints": [
+      {
+        "name": "Nominal 230VAC",
+        "conditions": {
+          "ambientTemperature": 40
+        },
+        "excitationsPerWinding": [
+          {
+            "name": "Primary",
+            "frequency": 100000,
+            "current": {
+              "processed": {
+                "label": "Triangular",
+                "peakToPeak": 1.2,
+                "offset": 0.6,
+                "dutyCycle": 0.35
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 325,
+                "offset": 0,
+                "dutyCycle": 0.35
+              }
+            }
+          },
+          {
+            "name": "Secondary",
+            "frequency": 100000,
+            "current": {
+              "processed": {
+                "label": "Triangular",
+                "peakToPeak": 4.0,
+                "offset": 3.0,
+                "dutyCycle": 0.65
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 24,
+                "offset": 0,
+                "dutyCycle": 0.65
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Low Line 85VAC",
+        "conditions": {
+          "ambientTemperature": 40
+        },
+        "excitationsPerWinding": [
+          {
+            "name": "Primary",
+            "frequency": 100000,
+            "current": {
+              "processed": {
+                "label": "Triangular",
+                "peakToPeak": 2.5,
+                "offset": 1.25,
+                "dutyCycle": 0.45
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 120,
+                "offset": 0,
+                "dutyCycle": 0.45
+              }
+            }
+          },
+          {
+            "name": "Secondary",
+            "frequency": 100000,
+            "current": {
+              "processed": {
+                "label": "Triangular",
+                "peakToPeak": 5.0,
+                "offset": 3.0,
+                "dutyCycle": 0.55
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 24,
+                "offset": 0,
+                "dutyCycle": 0.55
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "magnetic": {
+    "core": {
+      "name": "ETD 34/17/11 N97 Gapped",
+      "functionalDescription": {
+        "type": "two-piece set",
+        "material": "N97",
+        "shape": "ETD 34/17/11",
+        "gapping": [
+          {
+            "type": "subtractive",
+            "length": 0.0008
+          },
+          {
+            "type": "residual",
+            "length": 0.00001
+          },
+          {
+            "type": "residual",
+            "length": 0.00001
+          }
+        ],
+        "numberStacks": 1
+      }
+    },
+    "coil": {
+      "bobbin": "ETD 34/17/11",
+      "functionalDescription": [
+        {
+          "name": "Primary",
+          "numberTurns": 48,
+          "numberParallels": 1,
+          "wire": "Litz 20x0.1 - Grade 1",
+          "isolationSide": "primary"
+        },
+        {
+          "name": "Secondary",
+          "numberTurns": 6,
+          "numberParallels": 4,
+          "wire": "Litz 80x0.1 - Grade 1",
+          "isolationSide": "secondary"
+        }
+      ]
+    }
+  },
+  "outputs": []
+}

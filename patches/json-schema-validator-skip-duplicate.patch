@@ -1,0 +1,14 @@
+diff --git a/src/json-validator.cpp b/src/json-validator.cpp
+--- a/src/json-validator.cpp
++++ b/src/json-validator.cpp
+@@ -181,8 +181,8 @@ class root_schema
+ 		auto &file = get_or_create_file(uri.location());
+ 		auto sch = file.schemas.lower_bound(uri.fragment());
+ 		if (sch != file.schemas.end() && !(file.schemas.key_comp()(uri.fragment(), sch->first))) {
+-			throw std::invalid_argument("schema with " + uri.to_string() + " already inserted");
+-			return;
++			// Skip if already inserted instead of throwing (allows shared $ref dependencies)
++			return;
+ 		}
+ 
+ 		file.schemas.insert({uri.fragment(), s});

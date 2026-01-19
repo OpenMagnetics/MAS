@@ -1,0 +1,91 @@
+{
+  "inputs": {
+    "designRequirements": {
+      "name": "Buck Inductor 12V to 3.3V",
+      "magnetizingInductance": {
+        "nominal": 4.7e-6,
+        "minimum": 4.2e-6,
+        "maximum": 5.2e-6
+      },
+      "turnsRatios": [],
+      "topology": "Buck Converter",
+      "operatingTemperature": {
+        "maximum": 105
+      },
+      "maximumDimensions": {
+        "width": 0.015,
+        "height": 0.015,
+        "depth": 0.012
+      }
+    },
+    "operatingPoints": [
+      {
+        "name": "Full Load",
+        "conditions": {
+          "ambientTemperature": 40
+        },
+        "excitationsPerWinding": [
+          {
+            "name": "Primary",
+            "frequency": 500000,
+            "current": {
+              "processed": {
+                "label": "Triangular",
+                "peakToPeak": 3.0,
+                "offset": 10.0,
+                "dutyCycle": 0.275
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 8.7,
+                "offset": 0,
+                "dutyCycle": 0.275
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "magnetic": {
+    "core": {
+      "name": "Toroid T 10.0/6.0/4.5 High Flux 60",
+      "functionalDescription": {
+        "type": "toroidal",
+        "material": "High Flux 60",
+        "shape": "T 10.0/6.0/4.5",
+        "gapping": [],
+        "numberStacks": 1
+      }
+    },
+    "coil": {
+      "bobbin": {
+        "processedDescription": {
+          "wallThickness": 0,
+          "columnThickness": 0,
+          "columnDepth": 0.0045,
+          "columnShape": "round",
+          "windingWindows": [
+            {
+              "height": 0.0045,
+              "width": 0.002,
+              "coordinates": [0.004, 0, 0]
+            }
+          ]
+        }
+      },
+      "functionalDescription": [
+        {
+          "name": "Primary",
+          "numberTurns": 8,
+          "numberParallels": 3,
+          "isolationSide": "primary",
+          "wire": "Round 0.6 - Grade 1"
+        }
+      ]
+    }
+  },
+  "outputs": []
+}

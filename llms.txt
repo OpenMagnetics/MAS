@@ -1,0 +1,481 @@
+# MAS - Magnetic Agnostic Structure
+
+> JSON Schema for unambiguous description of magnetic components (transformers, inductors, chokes)
+
+MAS (Magnetic Agnostic Structure) is a standardized JSON format for describing magnetic components independently of their kind or application. It enables interoperability between analytical tools, circuit simulators, FEA software, and CAD systems.
+
+## Quick Start
+
+A complete MAS document has three parts:
+
+```json
+{
+  "inputs": {
+    "designRequirements": { ... },
+    "operatingPoints": [ ... ]
+  },
+  "magnetic": {
+    "core": { ... },
+    "coil": { ... }
+  },
+  "outputs": [ ... ]
+}
+```
+
+## Core Concepts
+
+### Inputs
+Design requirements and operating conditions that define what the magnetic must do.
+
+### Magnetic
+Physical description of the component: core (shape, material, gaps) and coil (windings, wires).
+
+### Outputs
+Calculated results: losses, inductance, temperature, field distribution.
+
+---
+
+## Inputs Structure
+
+### Design Requirements
+
+```json
+{
+  "designRequirements": {
+    "name": "Buck Inductor Requirements",
+    "magnetizingInductance": {
+      "nominal": 100e-6
+    },
+    "turnsRatios": [],
+    "topology": "Buck Converter",
+    "operatingTemperature": {
+      "maximum": 100
+    },
+    "maximumDimensions": {
+      "width": 0.03,
+      "height": 0.03,
+      "depth": 0.02
+    }
+  }
+}
+```
+
+**Key Fields:**
+| Field | Type | Description |
+|-------|------|-------------|
+| `magnetizingInductance` | DimensionWithTolerance | Required inductance value |
+| `turnsRatios` | Array | Secondary/primary ratios (empty for inductor) |
+| `topology` | String | Circuit topology (Buck, Boost, Flyback, etc.) |
+| `operatingTemperature` | DimensionWithTolerance | Temperature limits |
+| `maximumDimensions` | Object | {width, height, depth} in meters |
+| `insulation` | Object | Safety requirements (optional) |
+
+### DimensionWithTolerance Format
+Used throughout MAS for specifying values with tolerances:
+
+```json
+{
+  "nominal": 100e-6,
+  "minimum": 90e-6,
+  "maximum": 110e-6,
+  "excludeMinimum": false,
+  "excludeMaximum": false
+}
+```
+
+At least one numeric value is required. Use `nominal` for typical values, `minimum`/`maximum` for limits.
+
+### Operating Points
+
+```json
+{
+  "operatingPoints": [
+    {
+      "name": "Nominal",
+      "conditions": {
+        "ambientTemperature": 40
+      },
+      "excitationsPerWinding": [
+        {
+          "name": "Primary",
+          "frequency": 100000,
+          "current": {
+            "processed": {
+              "label": "Triangular",
+              "peakToPeak": 2.0,
+              "offset": 10.0,
+              "dutyCycle": 0.5
+            }
+          },
+          "voltage": {
+            "processed": {
+              "label": "Rectangular",
+              "peakToPeak": 12.0,
+              "offset": 0,
+              "dutyCycle": 0.5
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Waveform Labels:**
+- `Triangular` - Current in inductors
+- `Rectangular` - Voltage across inductors, current in transformers
+- `Sinusoidal` - AC applications
+- `Custom` - User-defined with data points
+
+### Insulation Requirements (for safety-critical designs)
+
+```json
+{
+  "insulation": {
+    "insulationType": "Reinforced",
+    "overvoltageCategory": "OVC-II",
+    "pollutionDegree": "P2",
+    "altitude": { "maximum": 2000 },
+    "cti": "Group IIIA"
+  }
+}
+```
+
+---
+
+## Magnetic Structure
+
+### Core
+
+**Functional Description (Recommended - Simple)**
+Reference standard components by name:
+
+```json
+{
+  "core": {
+    "name": "E55/28/21 N97",
+    "functionalDescription": {
+      "type": "two-piece set",
+      "material": "N97",
+      "shape": "E 55/28/21",
+      "gapping": [
+        {"type": "subtractive", "length": 0.001},
+        {"type": "residual", "length": 0.00001},
+        {"type": "residual", "length": 0.00001}
+      ],
+      "numberStacks": 1
+    }
+  }
+}
+```
+
+**Core Shape Names** (use exact format):
+- E cores: `"E 55/28/21"`, `"E 42/21/15"`, `"E 19/8/5"`
+- ETD cores: `"ETD 49/25/16"`, `"ETD 34/17/11"`
+- PQ cores: `"PQ 20/16"`, `"PQ 35/35"`
+- RM cores: `"RM 12"`, `"RM 8"`
+- Toroids: `"T 40/24/16"`
+
+**Core Materials** (manufacturer format):
+- TDK/EPCOS: `"N87"`, `"N97"`, `"N49"`
+- Ferroxcube: `"3C90"`, `"3C95"`, `"3C97"`
+- Magnetics Inc: `"MPP"`, `"High Flux"`, `"XFlux"`
+
+**Gapping Types:**
+| Type | Description |
+|------|-------------|
+| `subtractive` | Ground gap in center leg |
+| `additive` | Spacer gap (increases core height) |
+| `residual` | Unavoidable gap at mating surfaces |
+| `distributed` | Air gap distributed across magnetic path |
+
+### Coil
+
+```json
+{
+  "coil": {
+    "bobbin": "E 55/28/21",
+    "functionalDescription": [
+      {
+        "name": "Primary",
+        "numberTurns": 42,
+        "numberParallels": 1,
+        "wire": "Round 1.0 - Grade 1",
+        "isolationSide": "primary"
+      },
+      {
+        "name": "Secondary",
+        "numberTurns": 21,
+        "numberParallels": 2,
+        "wire": "Litz 60x0.1 - Grade 1",
+        "isolationSide": "secondary"
+      }
+    ]
+  }
+}
+```
+
+**Wire Types:**
+- Round: `"Round 1.0 - Grade 1"` (1.0mm conductor diameter)
+- Litz: `"Litz 40x0.1 - Grade 1"` (40 strands of 0.1mm)
+- Rectangular: `"Rectangular 2.0x0.5 - Grade 1"` (2.0mm x 0.5mm)
+- Foil: `"Foil 0.1"` (0.1mm thickness)
+
+---
+
+## Complete Examples
+
+### Buck Inductor (Minimal)
+
+```json
+{
+  "inputs": {
+    "designRequirements": {
+      "magnetizingInductance": {"nominal": 4.7e-6},
+      "turnsRatios": [],
+      "topology": "Buck Converter"
+    },
+    "operatingPoints": [{
+      "conditions": {"ambientTemperature": 40},
+      "excitationsPerWinding": [{
+        "frequency": 500000,
+        "current": {
+          "processed": {
+            "label": "Triangular",
+            "peakToPeak": 3.0,
+            "offset": 10.0,
+            "dutyCycle": 0.275
+          }
+        },
+        "voltage": {
+          "processed": {
+            "label": "Rectangular",
+            "peakToPeak": 8.7,
+            "offset": 0,
+            "dutyCycle": 0.275
+          }
+        }
+      }]
+    }]
+  },
+  "magnetic": {
+    "core": {
+      "functionalDescription": {
+        "type": "two-piece set",
+        "material": "High Flux 60",
+        "shape": "T 20/10/7",
+        "gapping": [],
+        "numberStacks": 1
+      }
+    },
+    "coil": {
+      "bobbin": "T 20/10/7",
+      "functionalDescription": [{
+        "name": "Primary",
+        "numberTurns": 8,
+        "numberParallels": 3,
+        "isolationSide": "primary",
+        "wire": "Round 0.8 - Grade 1"
+      }]
+    }
+  },
+  "outputs": []
+}
+```
+
+### Flyback Transformer (Two Windings)
+
+```json
+{
+  "inputs": {
+    "designRequirements": {
+      "magnetizingInductance": {"nominal": 500e-6},
+      "turnsRatios": [{"nominal": 0.1}],
+      "topology": "Flyback Converter"
+    },
+    "operatingPoints": [{
+      "conditions": {"ambientTemperature": 40},
+      "excitationsPerWinding": [
+        {
+          "name": "Primary",
+          "frequency": 100000,
+          "current": {
+            "processed": {
+              "label": "Triangular",
+              "peakToPeak": 1.0,
+              "offset": 0.5,
+              "dutyCycle": 0.4
+            }
+          },
+          "voltage": {
+            "processed": {
+              "label": "Rectangular",
+              "peakToPeak": 325,
+              "offset": 0,
+              "dutyCycle": 0.4
+            }
+          }
+        },
+        {
+          "name": "Secondary",
+          "frequency": 100000,
+          "current": {
+            "processed": {
+              "label": "Triangular",
+              "peakToPeak": 10.0,
+              "offset": 5.0,
+              "dutyCycle": 0.6
+            }
+          },
+          "voltage": {
+            "processed": {
+              "label": "Rectangular",
+              "peakToPeak": 24,
+              "offset": 0,
+              "dutyCycle": 0.6
+            }
+          }
+        }
+      ]
+    }]
+  },
+  "magnetic": {
+    "core": {
+      "functionalDescription": {
+        "type": "two-piece set",
+        "material": "N97",
+        "shape": "ETD 34/17/11",
+        "gapping": [
+          {"type": "subtractive", "length": 0.0005}
+        ],
+        "numberStacks": 1
+      }
+    },
+    "coil": {
+      "bobbin": "ETD 34/17/11",
+      "functionalDescription": [
+        {
+          "name": "Primary",
+          "numberTurns": 50,
+          "numberParallels": 1,
+          "wire": "Litz 20x0.1 - Grade 1",
+          "isolationSide": "primary"
+        },
+        {
+          "name": "Secondary",
+          "numberTurns": 5,
+          "numberParallels": 4,
+          "wire": "Litz 100x0.1 - Grade 1",
+          "isolationSide": "secondary"
+        }
+      ]
+    }
+  },
+  "outputs": []
+}
+```
+
+---
+
+## Schema Reference
+
+### File Locations
+
+| Schema | Purpose |
+|--------|---------|
+| `schemas/MAS.json` | Root schema (inputs + magnetic + outputs) |
+| `schemas/inputs.json` | Design requirements and operating points |
+| `schemas/magnetic.json` | Core and coil definitions |
+| `schemas/outputs.json` | Simulation results |
+| `schemas/inputs/designRequirements.json` | Requirement specifications |
+| `schemas/inputs/operatingPoint.json` | Operating point structure |
+| `schemas/magnetic/core.json` | Core definitions |
+| `schemas/magnetic/coil.json` | Coil/winding definitions |
+| `schemas/magnetic/wire.json` | Wire specifications |
+
+### Data Files (NDJSON format)
+
+| File | Contents |
+|------|----------|
+| `data/core_shapes.ndjson` | Standard core shape dimensions |
+| `data/core_materials.ndjson` | Magnetic material properties |
+| `data/wires.ndjson` | Wire specifications |
+| `data/bobbins.ndjson` | Bobbin dimensions |
+| `data/cores.ndjson` | Complete core assemblies |
+| `data/cores_stock.ndjson` | Commercially available cores |
+
+---
+
+## Common Patterns
+
+### Inductor (single winding)
+```json
+{
+  "turnsRatios": [],
+  "coil": { "functionalDescription": [{ /* one winding */ }] }
+}
+```
+
+### Transformer (N windings)
+```json
+{
+  "turnsRatios": [{"nominal": 0.5}, {"nominal": 0.1}],
+  "coil": { "functionalDescription": [{ /* primary */ }, { /* sec1 */ }, { /* sec2 */ }] }
+}
+```
+
+### Coupled Inductor / Common Mode Choke
+```json
+{
+  "turnsRatios": [{"nominal": 1.0}],
+  "coil": { "functionalDescription": [{ /* winding1 */ }, { /* winding2 */ }] }
+}
+```
+
+---
+
+## Validation
+
+MAS uses JSON Schema for validation. Validate your JSON against the appropriate schema:
+
+```python
+import json
+import jsonschema
+
+with open("schemas/MAS.json") as f:
+    schema = json.load(f)
+
+with open("my_design.json") as f:
+    data = json.load(f)
+
+jsonschema.validate(data, schema)
+```
+
+---
+
+## Units
+
+All values in MAS use SI base units:
+- Length: meters (m)
+- Mass: kilograms (kg)
+- Time: seconds (s)
+- Temperature: Celsius (°C) for ambient, Kelvin (K) for material properties
+- Frequency: Hertz (Hz)
+- Inductance: Henry (H)
+- Current: Ampere (A)
+- Voltage: Volt (V)
+
+---
+
+## Related Projects
+
+- **PyOpenMagnetics** - Python wrapper for magnetic component simulation
+- **MKF** - C++ simulation engine
+- **OpenMagnetics Web** - Online design tool
+
+## Resources
+
+- Repository: https://github.com/OpenMagnetics/MAS
+- Schema documentation: See `docs/` directory
+- Sample files: See `samples/` directory

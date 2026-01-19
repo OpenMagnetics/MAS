@@ -1,0 +1,138 @@
+{
+  "inputs": {
+    "designRequirements": {
+      "name": "Two Switch Forward Transformer 400V to 5V 20A",
+      "magnetizingInductance": {
+        "nominal": 1.5e-3,
+        "minimum": 1.3e-3,
+        "maximum": 1.7e-3
+      },
+      "turnsRatios": [
+        {
+          "nominal": 0.0125,
+          "minimum": 0.012,
+          "maximum": 0.013
+        }
+      ],
+      "leakageInductance": [
+        {
+          "maximum": 3e-6
+        }
+      ],
+      "topology": "Two Switch Forward Converter",
+      "operatingTemperature": {
+        "maximum": 105
+      },
+      "insulation": {
+        "insulationType": "Reinforced",
+        "overvoltageCategory": "OVC-II",
+        "pollutionDegree": "P2",
+        "altitude": {
+          "maximum": 2000
+        },
+        "cti": "Group IIIA"
+      },
+      "maximumDimensions": {
+        "width": 0.045,
+        "height": 0.040,
+        "depth": 0.035
+      },
+      "market": "Industrial"
+    },
+    "operatingPoints": [
+      {
+        "name": "Full Load",
+        "conditions": {
+          "ambientTemperature": 50
+        },
+        "excitationsPerWinding": [
+          {
+            "name": "Primary",
+            "frequency": 250000,
+            "current": {
+              "processed": {
+                "label": "Triangular",
+                "peakToPeak": 0.6,
+                "offset": 0.35,
+                "dutyCycle": 0.45
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 400,
+                "offset": 0,
+                "dutyCycle": 0.45
+              }
+            }
+          },
+          {
+            "name": "Secondary",
+            "frequency": 250000,
+            "current": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 4.0,
+                "offset": 20.0,
+                "dutyCycle": 0.45
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 5,
+                "offset": 0,
+                "dutyCycle": 0.45
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "magnetic": {
+    "core": {
+      "name": "E 42/21/15 N97 Gapped",
+      "functionalDescription": {
+        "type": "two-piece set",
+        "material": "N97",
+        "shape": "E 42/21/15",
+        "gapping": [
+          {
+            "type": "subtractive",
+            "length": 0.0002
+          },
+          {
+            "type": "residual",
+            "length": 0.00001
+          },
+          {
+            "type": "residual",
+            "length": 0.00001
+          }
+        ],
+        "numberStacks": 1
+      }
+    },
+    "coil": {
+      "bobbin": "E 42/21/15",
+      "functionalDescription": [
+        {
+          "name": "Primary",
+          "numberTurns": 80,
+          "numberParallels": 1,
+          "isolationSide": "primary",
+          "wire": "Litz 30x0.1 - Grade 1"
+        },
+        {
+          "name": "Secondary",
+          "numberTurns": 1,
+          "numberParallels": 8,
+          "isolationSide": "secondary",
+          "wire": "Foil 0.2"
+        }
+      ]
+    }
+  },
+  "outputs": []
+}

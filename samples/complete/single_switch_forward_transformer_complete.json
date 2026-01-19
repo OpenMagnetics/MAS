@@ -1,0 +1,156 @@
+{
+  "inputs": {
+    "designRequirements": {
+      "name": "Single Switch Forward Transformer 400V to 24V 3A",
+      "magnetizingInductance": {
+        "nominal": 2.0e-3,
+        "minimum": 1.8e-3,
+        "maximum": 2.2e-3
+      },
+      "turnsRatios": [
+        {
+          "nominal": 1.0,
+          "minimum": 0.98,
+          "maximum": 1.02
+        },
+        {
+          "nominal": 0.075,
+          "minimum": 0.070,
+          "maximum": 0.080
+        }
+      ],
+      "leakageInductance": [
+        {
+          "maximum": 8e-6
+        }
+      ],
+      "topology": "Single Switch Forward Converter",
+      "operatingTemperature": {
+        "maximum": 100
+      },
+      "insulation": {
+        "insulationType": "Reinforced",
+        "overvoltageCategory": "OVC-II",
+        "pollutionDegree": "P2",
+        "altitude": {
+          "maximum": 2000
+        },
+        "cti": "Group IIIA"
+      },
+      "maximumDimensions": {
+        "width": 0.040,
+        "height": 0.035,
+        "depth": 0.030
+      }
+    },
+    "operatingPoints": [
+      {
+        "name": "Nominal Load",
+        "conditions": {
+          "ambientTemperature": 40
+        },
+        "excitationsPerWinding": [
+          {
+            "name": "Primary",
+            "frequency": 150000,
+            "current": {
+              "processed": {
+                "label": "Triangular",
+                "peakToPeak": 0.5,
+                "offset": 0.3,
+                "dutyCycle": 0.4
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 400,
+                "offset": 0,
+                "dutyCycle": 0.4
+              }
+            }
+          },
+          {
+            "name": "Reset Winding",
+            "frequency": 150000,
+            "current": {
+              "processed": {
+                "label": "Triangular",
+                "peakToPeak": 0.5,
+                "offset": -0.3,
+                "dutyCycle": 0.4
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 400,
+                "offset": 0,
+                "dutyCycle": 0.4
+              }
+            }
+          },
+          {
+            "name": "Secondary",
+            "frequency": 150000,
+            "current": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 0.6,
+                "offset": 3.0,
+                "dutyCycle": 0.4
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 30,
+                "offset": 0,
+                "dutyCycle": 0.4
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "magnetic": {
+    "core": {
+      "name": "RM 12 N97",
+      "functionalDescription": {
+        "type": "two-piece set",
+        "material": "N97",
+        "shape": "RM 12",
+        "gapping": [],
+        "numberStacks": 1
+      }
+    },
+    "coil": {
+      "bobbin": "RM 12",
+      "functionalDescription": [
+        {
+          "name": "Primary",
+          "numberTurns": 80,
+          "numberParallels": 1,
+          "isolationSide": "primary",
+          "wire": "Round 0.35 - Grade 1"
+        },
+        {
+          "name": "Reset Winding",
+          "numberTurns": 80,
+          "numberParallels": 1,
+          "isolationSide": "primary",
+          "wire": "Round 0.35 - Grade 1"
+        },
+        {
+          "name": "Secondary",
+          "numberTurns": 6,
+          "numberParallels": 3,
+          "isolationSide": "secondary",
+          "wire": "Litz 60x0.1 - Grade 1"
+        }
+      ]
+    }
+  },
+  "outputs": []
+}

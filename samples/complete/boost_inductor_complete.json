@@ -1,0 +1,90 @@
+{
+  "inputs": {
+    "designRequirements": {
+      "name": "Boost Inductor 12V to 48V",
+      "magnetizingInductance": {
+        "nominal": 47e-6,
+        "minimum": 42e-6,
+        "maximum": 52e-6
+      },
+      "turnsRatios": [],
+      "topology": "Boost Converter",
+      "operatingTemperature": {
+        "maximum": 100
+      },
+      "maximumDimensions": {
+        "width": 0.025,
+        "height": 0.020,
+        "depth": 0.015
+      }
+    },
+    "operatingPoints": [
+      {
+        "name": "Full Load 2A Output",
+        "conditions": {
+          "ambientTemperature": 40
+        },
+        "excitationsPerWinding": [
+          {
+            "name": "Primary",
+            "frequency": 200000,
+            "current": {
+              "processed": {
+                "label": "Triangular",
+                "peakToPeak": 2.4,
+                "offset": 8.0,
+                "dutyCycle": 0.75
+              }
+            },
+            "voltage": {
+              "processed": {
+                "label": "Rectangular",
+                "peakToPeak": 48.0,
+                "offset": 0,
+                "dutyCycle": 0.75
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "magnetic": {
+    "core": {
+      "name": "PQ 20/16 N97 Gapped",
+      "functionalDescription": {
+        "type": "two-piece set",
+        "material": "N97",
+        "shape": "PQ 20/16",
+        "gapping": [
+          {
+            "type": "subtractive",
+            "length": 0.0012
+          },
+          {
+            "type": "residual",
+            "length": 0.00001
+          },
+          {
+            "type": "residual",
+            "length": 0.00001
+          }
+        ],
+        "numberStacks": 1
+      }
+    },
+    "coil": {
+      "bobbin": "PQ 20/16",
+      "functionalDescription": [
+        {
+          "name": "Primary",
+          "numberTurns": 18,
+          "numberParallels": 2,
+          "isolationSide": "primary",
+          "wire": "Litz 40x0.1 - Grade 1"
+        }
+      ]
+    }
+  },
+  "outputs": []
+}

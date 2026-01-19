@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <map>
 #include <filesystem>
 #include <nlohmann/json-schema.hpp>
 #include "json.hpp"
@@ -30,6 +31,7 @@ SUITE(Samples)
             throw e;
         }
     }
+
     std::string ReplaceAll(std::string str, const std::string& from, const std::string& to) {
         size_t start_pos = 0;
         while((start_pos = str.find(from, start_pos)) != std::string::npos) {
@@ -39,72 +41,113 @@ SUITE(Samples)
         return str;
     }
 
-    static void validate_json(const std::string samples)
+    static bool validate_single_schema(const std::string& validator_path, const std::vector<std::filesystem::path>& files)
     {
         try
         {
-            for (auto const& dir_entry : std::filesystem::recursive_directory_iterator(samples))
+            std::ifstream f(validator_path);
+            if (!f.good()) {
+                std::cerr << "Could not open schema " << validator_path << "\n";
+                return false;
+            }
+            json shape_schema = json::parse(f);
+
+            json_validator validator(loader);
+            try
             {
-                auto path = dir_entry.path();
-                if (path.string().ends_with(".json")) {
-                    std::vector<std::string> v(path.begin(), path.end());
+                validator.set_root_schema(shape_schema);
+            }
+            catch (const std::exception & e)
+            {
+                std::cerr << "Validation of schema " << validator_path << " failed, here is why: " << e.what() << "\n";
+                return false;
+            }
 
-                    auto validator_path = path.parent_path().string() + ".json";
-                    validator_path = ReplaceAll(validator_path, "samples", "schemas");
-                    
-                    try
-                    {
-                        std::ifstream f(validator_path);
-                        json shape_schema = json::parse(f);
-
-                        json_validator validator(loader); // create validator
-                        try
-                        {
-                            validator.set_root_schema(shape_schema); // insert root-schema
-                        }
-                        catch (const std::exception & e)
-                        {
-                            std::cerr << "Validation of schema failed, here is why: " << e.what() << "\n";
-                            CHECK(false); // fails
-                            return;
-                        }
-
-                        std::ifstream json_file(dir_entry.path());
-                        // std::cout << dir_entry.path() << std::endl;
-                        auto jf = json::parse(json_file);
-                        try
-                        {
-                            validator.validate(jf); // validate the document - uses the default throwing error-handler
-                        }
-                        catch (const std::exception & e)
-                        {
-                            std::cerr << "Validation failed, here is why: " << e.what() << "\n";
-                            CHECK(false); // fails
-                            return;
-                        }
-
-                    }
-                    catch (std::exception & e)
-                    {
-                        std::cerr << "Could not open and parse " << validator_path << ": " << e.what() << "\n";
-                        CHECK(false); // fails
-                        return;
-                    }
+            for (const auto& file_path : files)
+            {
+                std::ifstream json_file(file_path);
+                auto jf = json::parse(json_file);
+                try
+                {
+                    validator.validate(jf);
+                }
+                catch (const std::exception & e)
+                {
+                    std::cerr << "Validation of " << file_path << " failed, here is why: " << e.what() << "\n";
+                    return false;
                 }
             }
+            return true;
         }
         catch (std::exception & e)
         {
-            std::cerr << "Could not open and parse " << samples << ": " << e.what() << "\n";
-            CHECK(false); // fails
-            return;
+            std::cerr << "Could not open and parse " << validator_path << ": " << e.what() << "\n";
+            return false;
         }
     }
 
-    TEST(AllSamples)
+    static std::map<std::string, std::vector<std::filesystem::path>> group_samples_by_schema(const std::string& samples)
     {
-        auto samples_file_path = mas_path + "samples/";
-        validate_json(samples_file_path);
+        std::map<std::string, std::vector<std::filesystem::path>> files_by_schema;
+        
+        for (auto const& dir_entry : std::filesystem::recursive_directory_iterator(samples))
+        {
+            auto path = dir_entry.path();
+            if (path.string().ends_with(".json")) {
+                auto validator_path = path.parent_path().string() + ".json";
+                validator_path = ReplaceAll(validator_path, "samples", "schemas");
+                files_by_schema[validator_path].push_back(path);
+            }
+        }
+        return files_by_schema;
+    }
+
+    TEST(Samples_Magnetic_Bobbin)
+    {
+        auto groups = group_samples_by_schema(mas_path + "samples/magnetic/bobbin/");
+        for (const auto& [schema, files] : groups) {
+            CHECK(validate_single_schema(schema, files));
+        }
+    }
+
+    TEST(Samples_Magnetic_Coil)
+    {
+        auto groups = group_samples_by_schema(mas_path + "samples/magnetic/coil/");
+        for (const auto& [schema, files] : groups) {
+            CHECK(validate_single_schema(schema, files));
+        }
+    }
+
+    TEST(Samples_Magnetic_Core)
+    {
+        auto groups = group_samples_by_schema(mas_path + "samples/magnetic/core/");
+        for (const auto& [schema, files] : groups) {
+            CHECK(validate_single_schema(schema, files));
+        }
+    }
+
+    TEST(Samples_Magnetic_Wire)
+    {
+        auto groups = group_samples_by_schema(mas_path + "samples/magnetic/wire/");
+        for (const auto& [schema, files] : groups) {
+            CHECK(validate_single_schema(schema, files));
+        }
+    }
+
+    TEST(Samples_Magnetic_Insulation)
+    {
+        auto groups = group_samples_by_schema(mas_path + "samples/magnetic/insulation/");
+        for (const auto& [schema, files] : groups) {
+            CHECK(validate_single_schema(schema, files));
+        }
+    }
+
+    TEST(Samples_Inputs)
+    {
+        auto groups = group_samples_by_schema(mas_path + "samples/inputs/");
+        for (const auto& [schema, files] : groups) {
+            CHECK(validate_single_schema(schema, files));
+        }
     }
 }
 

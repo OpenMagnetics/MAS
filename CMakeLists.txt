@@ -29,6 +29,15 @@ FetchContent_Declare(json-schema-validator
 
 FetchContent_MakeAvailable(UnitTest++ json json-schema-validator)
 
+# Patch json-schema-validator to skip duplicate schema insertions instead of throwing
+# This fixes an issue where schemas with shared $ref dependencies cause "already inserted" errors
+file(READ "${CMAKE_BINARY_DIR}/_deps/json-schema-validator-src/src/json-validator.cpp" JSON_VALIDATOR_CPP)
+string(REPLACE 
+    "throw std::invalid_argument(\"schema with \" + uri.to_string() + \" already inserted\");"
+    "return; // Skip if already inserted (patched by MAS)"
+    JSON_VALIDATOR_CPP "${JSON_VALIDATOR_CPP}")
+file(WRITE "${CMAKE_BINARY_DIR}/_deps/json-schema-validator-src/src/json-validator.cpp" "${JSON_VALIDATOR_CPP}")
+
 SET(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
 include_directories("${CMAKE_BINARY_DIR}/_deps/unittest++-src/UnitTest++/")
