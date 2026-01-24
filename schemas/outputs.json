@@ -25,13 +25,9 @@
             "description": "Data describing the output magnetic strength field",
             "$ref": "#/$defs/windingWindowMagneticStrengthField"
         },
-        "leakageInductance":{
-            "description": "Data describing the output leakage inductance",
-            "$ref": "#/$defs/leakageInductance"
-        },
-        "magnetizingInductance":{
-            "description": "Data describing the output magnetizing inductance",
-            "$ref": "#/$defs/magnetizingInductance"
+        "inductance":{
+            "description": "Data describing the output inductance",
+            "$ref": "#/$defs/inductance"
         },
         "impedance":{
             "description": "Data describing the output impedance",
@@ -364,6 +360,36 @@
                     {"required": ["origin", "methodUsed", "tripoleCapacitancePerWinding"]}
                 ]
             }
+        },
+        "inductance":{
+            "description": "Data describing the inductance",
+            "title": "inductanceOutput",
+            "type": "object",
+            "properties": {
+                "magnetizingInductance": {
+                    "$ref": "#/$defs/magnetizingInductance"
+                },
+                "leakageInductance": {
+                    "$ref": "#/$defs/leakageInductance"
+                },
+                "inductanceMatrix": {
+                    "description": "List of inductance matrix per frequency",
+                    "title": "inductanceMatrix",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/scalarMatrixAtFrequency"
+                    }
+                },
+                "couplingCoefficientsMatrix": {
+                    "description": "List of coupling coefficients matrix per frequency",
+                    "title": "inductanceMatrix",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/scalarMatrixAtFrequency"
+                    }
+                }
+            },
+            "required": ["magnetizingInductance"]
         },
         "magnetizingInductance":{
             "description": "Data describing the magnetizing inductance and the intermediate inputs used to calculate them",
