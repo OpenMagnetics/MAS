@@ -632,6 +632,10 @@
             "type": "object",
             "title": "windingLossesPerElement",
             "properties": {
+                "name": {
+                    "description": "Name of the element",
+                    "type": "string"
+                },
                 "ohmicLosses":{
                     "description": "List of value of the winding ohmic losses",
                     "type": "object",
