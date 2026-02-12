@@ -1,0 +1,96 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/topologies/phaseShiftFullBridge.json",
+    "title": "phaseShiftFullBridge",
+    "description": "The description of a Phase Shift Full Bridge (PSFB) converter excitation",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the PSFB converter",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 0.97
+        },
+        "seriesInductance": {
+            "description": "The series inductance for ZVS and duty cycle control. If 0, uses transformer leakage inductance",
+            "type": "number",
+            "default": 0
+        },
+        "useLeakageInductance": {
+            "description": "Whether to use transformer leakage inductance as the series inductor",
+            "type": "boolean",
+            "default": true
+        },
+        "outputInductance": {
+            "description": "The output filter inductance",
+            "type": "number",
+            "default": 0
+        },
+        "rectifierType": {
+            "description": "The type of secondary rectifier",
+            "$ref": "#/$defs/psfbRectifierType"
+        },
+        "maximumPhaseShift": {
+            "description": "The maximum phase shift as ratio of half period (0-1)",
+            "type": "number",
+            "default": 0.8
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/psfbOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": ["inputVoltage", "operatingPoints"],
+
+    "$defs": {
+        "psfbRectifierType": {
+            "description": "The type of secondary rectifier",
+            "title": "psfbRectifierType",
+            "type": "string",
+            "enum": ["Full Bridge", "Center Tapped", "Current Doubler"]
+        },
+        "psfbOperatingPoint": {
+            "description": "The description of one PSFB operating point",
+            "title": "psfbOperatingPoint",
+            "type": "object",
+            "properties": {
+                "outputVoltages": {
+                    "description": "A list of output voltages, one per output",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1
+                },
+                "outputCurrents": {
+                    "description": "A list of output currents, one per output",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1
+                },
+                "switchingFrequency": {
+                    "description": "The switching frequency of the operating point",
+                    "type": "number"
+                },
+                "phaseShift": {
+                    "description": "The phase shift at this operating point in degrees",
+                    "type": "number"
+                },
+                "ambientTemperature": {
+                    "description": "The ambient temperature of the operating point",
+                    "type": "number"
+                }
+            },
+            "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "phaseShift", "ambientTemperature"]
+        }
+    }
+}

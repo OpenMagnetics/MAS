@@ -49,6 +49,18 @@
                         },
                         "forward": {
                             "$ref": "./inputs/topologies/forward.json"
+                        },
+                        "dualActiveBridge": {
+                            "$ref": "./inputs/topologies/dualActiveBridge.json"
+                        },
+                        "llcResonant": {
+                            "$ref": "./inputs/topologies/llcResonant.json"
+                        },
+                        "cllcResonant": {
+                            "$ref": "./inputs/topologies/cllcResonant.json"
+                        },
+                        "phaseShiftFullBridge": {
+                            "$ref": "./inputs/topologies/phaseShiftFullBridge.json"
                         }
                     }
                 }
