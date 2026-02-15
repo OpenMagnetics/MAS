@@ -21,6 +21,10 @@
             "description": "The resonant frequency of the tank (optional, will be calculated if not provided)",
             "type": "number"
         },
+        "inductanceRatio": {
+            "description": "The inductance ratio between Lm/Ls",
+            "type": "number"
+        },
         "qualityFactor": {
             "description": "The quality factor of the resonant tank",
             "type": "number",
@@ -49,7 +53,7 @@
             "minItems": 1
         }
     },
-    "required": ["inputVoltage", "minSwitchingFrequency", "maxSwitchingFrequency", "operatingPoints"],
+    "required": ["inputVoltage", "minSwitchingFrequency", "maxSwitchingFrequency", "inductanceRatio", "operatingPoints"],
 
     "$defs": {
         "llcBridgeType": {
