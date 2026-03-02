@@ -44,6 +44,15 @@
                     "description": "The subtype of the shape, in case there are more than one",
                     "type": "string"
                 },
+                "material": {
+                    "oneOf": [
+                        {"$ref": "./insulation/material.json"},
+                        {
+                            "description": "The name of the material used in the bobbin",
+                            "type": "string"
+                        }
+                    ]
+                },
                 "dimensions": {
                     "description": "The dimensions of a bobbin, keys must be as defined in EN 62317",
                     "type": "object",
