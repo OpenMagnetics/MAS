@@ -1,0 +1,89 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/topologies/commonModeChoke.json",
+    "title": "commonModeChoke",
+    "description": "The description of a Common Mode Choke (CMC) for EMI filtering. Common mode chokes use coupled inductors wound on a toroidal core to suppress common mode noise while passing differential signals. The choke presents high impedance to common mode currents (both lines with same phase) and low impedance to differential mode currents (opposite phase).",
+    "type": "object",
+    "properties": {
+        "operatingVoltage": {
+            "description": "The operating voltage across the choke (line-to-line or line-to-neutral)",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "operatingCurrent": {
+            "description": "The nominal operating current through each winding (differential mode current)",
+            "type": "number"
+        },
+        "lineFrequency": {
+            "description": "The mains/line frequency in Hz (50 or 60 Hz typically). This is the frequency of the differential mode current that causes magnetic excitation.",
+            "type": "number"
+        },
+        "minimumImpedance": {
+            "description": "The minimum impedance requirements at specified frequencies",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/impedanceAtFrequency"
+            },
+            "minItems": 1
+        },
+        "targetInsertionLoss": {
+            "description": "Target insertion loss in dB at specified frequencies (optional, alternative to impedance specification)",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/insertionLossAtFrequency"
+            }
+        },
+        "lineImpedance": {
+            "description": "The characteristic line impedance (typically 50 ohms for LISN measurements)",
+            "type": "number",
+            "default": 50
+        },
+        "maximumDcResistance": {
+            "description": "Maximum allowable DC resistance per winding in ohms",
+            "type": "number"
+        },
+        "maximumLeakageInductance": {
+            "description": "Maximum allowable leakage inductance in henries (for tight coupling)",
+            "type": "number"
+        },
+        "ambientTemperature": {
+            "description": "The ambient temperature for the application",
+            "type": "number"
+        }
+    },
+    "required": ["operatingVoltage", "operatingCurrent", "minimumImpedance", "ambientTemperature", "lineFrequency"],
+
+    "$defs": {
+        "impedanceAtFrequency": {
+            "description": "Impedance requirement at a specific frequency",
+            "title": "impedanceAtFrequency",
+            "type": "object",
+            "properties": {
+                "frequency": {
+                    "description": "The frequency in Hz",
+                    "type": "number"
+                },
+                "impedance": {
+                    "description": "The minimum impedance in ohms at this frequency",
+                    "type": "number"
+                }
+            },
+            "required": ["frequency", "impedance"]
+        },
+        "insertionLossAtFrequency": {
+            "description": "Insertion loss requirement at a specific frequency",
+            "title": "insertionLossAtFrequency",
+            "type": "object",
+            "properties": {
+                "frequency": {
+                    "description": "The frequency in Hz",
+                    "type": "number"
+                },
+                "insertionLoss": {
+                    "description": "The target insertion loss in dB at this frequency",
+                    "type": "number"
+                }
+            },
+            "required": ["frequency", "insertionLoss"]
+        }
+    }
+}

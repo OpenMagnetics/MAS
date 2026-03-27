@@ -1,0 +1,110 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/topologies/differentialModeChoke.json",
+    "title": "differentialModeChoke",
+    "description": "The description of a Differential Mode Choke (DMC) for EMI filtering. Differential mode chokes use an inductor to attenuate differential mode noise (noise between line and neutral or between lines). Unlike CMCs, DMCs present impedance to differential signals and are typically used in combination with capacitors to form LC filters.",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the filter stage",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "operatingCurrent": {
+            "description": "The nominal operating current through the choke",
+            "type": "number"
+        },
+        "peakCurrent": {
+            "description": "The peak current including ripple",
+            "type": "number"
+        },
+        "configuration": {
+            "description": "The DMC configuration type",
+            "type": "string",
+            "enum": ["SINGLE_PHASE", "THREE_PHASE", "THREE_PHASE_WITH_NEUTRAL"],
+            "default": "SINGLE_PHASE"
+        },
+        "lineFrequency": {
+            "description": "The mains/line frequency in Hz (50 or 60 Hz typically). This is the frequency of the load current that causes magnetic excitation.",
+            "type": "number"
+        },
+        "minimumInductance": {
+            "description": "The minimum required inductance in henries for the filter cutoff frequency",
+            "type": "number"
+        },
+        "filterCapacitance": {
+            "description": "The filter capacitance in Farads (for LC filter design)",
+            "type": "number"
+        },
+        "minimumImpedance": {
+            "description": "The minimum impedance requirements at specified frequencies",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/impedanceAtFrequency"
+            }
+        },
+        "targetAttenuation": {
+            "description": "Target attenuation in dB at specified frequencies",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/attenuationAtFrequency"
+            }
+        },
+        "switchingFrequency": {
+            "description": "The switching frequency of the converter being filtered",
+            "type": "number"
+        },
+        "maximumDcResistance": {
+            "description": "Maximum allowable DC resistance in ohms",
+            "type": "number"
+        },
+        "maximumCoreTemperatureRise": {
+            "description": "Maximum allowable temperature rise due to core and winding losses",
+            "type": "number"
+        },
+        "ambientTemperature": {
+            "description": "The ambient temperature for the application",
+            "type": "number"
+        }
+    },
+    "required": ["inputVoltage", "operatingCurrent", "ambientTemperature", "lineFrequency"],
+    "anyOf": [
+        {"required": ["minimumInductance"]},
+        {"required": ["minimumImpedance"]},
+        {"required": ["targetAttenuation"]}
+    ],
+
+    "$defs": {
+        "impedanceAtFrequency": {
+            "description": "Impedance requirement at a specific frequency",
+            "title": "impedanceAtFrequency",
+            "type": "object",
+            "properties": {
+                "frequency": {
+                    "description": "The frequency in Hz",
+                    "type": "number"
+                },
+                "impedance": {
+                    "description": "The minimum impedance in ohms at this frequency",
+                    "type": "number"
+                }
+            },
+            "required": ["frequency", "impedance"]
+        },
+        "attenuationAtFrequency": {
+            "description": "Attenuation requirement at a specific frequency",
+            "title": "attenuationAtFrequency",
+            "type": "object",
+            "properties": {
+                "frequency": {
+                    "description": "The frequency in Hz",
+                    "type": "number"
+                },
+                "attenuation": {
+                    "description": "The target attenuation in dB at this frequency",
+                    "type": "number"
+                }
+            },
+            "required": ["frequency", "attenuation"]
+        }
+    }
+}

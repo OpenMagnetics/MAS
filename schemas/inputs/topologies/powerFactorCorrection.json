@@ -1,0 +1,71 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "http://openmagnetics.com/schemas/inputs/topologies/powerFactorCorrection.json",
+    "title": "powerFactorCorrection",
+    "description": "The description of a Power Factor Correction (PFC) boost inductor. PFC converters shape the input current to follow the input voltage waveform, achieving near-unity power factor. The inductor operates with a triangular current ripple superimposed on a half-sinusoidal envelope. This topology covers both continuous (CCM) and discontinuous (DCM) conduction modes.",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The AC input voltage (RMS) with tolerance range (e.g., 85-265V universal input)",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "outputVoltage": {
+            "description": "The DC output voltage (typically 385-400V for universal input)",
+            "type": "number"
+        },
+        "outputPower": {
+            "description": "The output power in watts",
+            "type": "number"
+        },
+        "lineFrequency": {
+            "description": "The AC line frequency (50 or 60 Hz)",
+            "type": "number",
+            "default": 50
+        },
+        "switchingFrequency": {
+            "description": "The switching frequency of the PFC stage",
+            "type": "number"
+        },
+        "currentRippleRatio": {
+            "description": "The peak-to-peak current ripple as a ratio of the average current (typically 0.2-0.4 for CCM)",
+            "type": "number",
+            "default": 0.3
+        },
+        "efficiency": {
+            "description": "The target efficiency of the PFC stage",
+            "type": "number",
+            "default": 0.95
+        },
+        "mode": {
+            "description": "The conduction mode of the PFC",
+            "$ref": "#/$defs/pfcModes"
+        },
+        "diodeVoltageDrop": {
+            "description": "The voltage drop on the boost diode",
+            "type": "number",
+            "default": 0.6
+        },
+        "maximumSwitchCurrent": {
+            "description": "The maximum current rating of the switch (optional constraint)",
+            "type": "number"
+        },
+        "maximumCoreTemperatureRise": {
+            "description": "Maximum allowable temperature rise",
+            "type": "number"
+        },
+        "ambientTemperature": {
+            "description": "The ambient temperature for the application",
+            "type": "number"
+        }
+    },
+    "required": ["inputVoltage", "outputVoltage", "outputPower", "switchingFrequency", "ambientTemperature"],
+
+    "$defs": {
+        "pfcModes": {
+            "description": "The conduction mode of the PFC",
+            "title": "pfcModes",
+            "type": "string",
+            "enum": ["Continuous Conduction Mode", "Discontinuous Conduction Mode", "Critical Conduction Mode", "Transition Mode"]
+        }
+    }
+}
