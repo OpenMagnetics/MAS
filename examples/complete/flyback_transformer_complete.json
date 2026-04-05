@@ -3,9 +3,9 @@
     "designRequirements": {
       "name": "Flyback Transformer 24V 3A Output",
       "magnetizingInductance": {
-        "nominal": 500e-6,
-        "minimum": 450e-6,
-        "maximum": 550e-6
+        "nominal": 0.0005,
+        "minimum": 0.00045,
+        "maximum": 0.00055
       },
       "turnsRatios": [
         {
@@ -14,7 +14,7 @@
       ],
       "leakageInductance": [
         {
-          "maximum": 10e-6
+          "maximum": 1e-05
         }
       ],
       "topology": "Flyback Converter",
@@ -150,11 +150,11 @@
           },
           {
             "type": "residual",
-            "length": 0.00001
+            "length": 1e-05
           },
           {
             "type": "residual",
-            "length": 0.00001
+            "length": 1e-05
           }
         ],
         "numberStacks": 1
@@ -167,14 +167,14 @@
           "name": "Primary",
           "numberTurns": 48,
           "numberParallels": 1,
-          "wire": "Litz 20x0.1 - Grade 1",
+          "wire": "Litz 20x0.1 - Grade 1 - Unserved",
           "isolationSide": "primary"
         },
         {
           "name": "Secondary",
           "numberTurns": 6,
           "numberParallels": 4,
-          "wire": "Litz 80x0.1 - Grade 1",
+          "wire": "Litz 60x0.1 - Grade 1 - Unserved",
           "isolationSide": "secondary"
         }
       ]
