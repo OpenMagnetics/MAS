@@ -68,6 +68,20 @@
                 "ambientTemperature": {
                     "description": "The ambient temperature of the operating point",
                     "type": "number"
+                },
+                "modulationType": {
+                    "description": "DAB modulation type: SPS (Single Phase Shift, default), EPS (Extended Phase Shift, D1>0 on primary only), DPS (Dual Phase Shift, D1=D2), TPS (Triple Phase Shift, D1 and D2 independent)",
+                    "type": "string",
+                    "enum": ["SPS", "EPS", "DPS", "TPS"],
+                    "default": "SPS"
+                },
+                "innerPhaseShift1": {
+                    "description": "Primary bridge inner phase shift in degrees (D1). 0 = square wave. Used for EPS, DPS, TPS.",
+                    "type": "number"
+                },
+                "innerPhaseShift2": {
+                    "description": "Secondary bridge inner phase shift in degrees (D2). Used for TPS. For DPS, if absent, equals innerPhaseShift1.",
+                    "type": "number"
                 }
             },
             "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "phaseShift", "ambientTemperature"]
