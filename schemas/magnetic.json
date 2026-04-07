@@ -62,7 +62,7 @@
             "$ref": "./utils.json#/$defs/rotation"
         }
     },
-    "required": ["core", "coil"],
+    "required": [],
     "$defs": {
         "magneticDatasheetInfo": {
             "description": "All values extracted directly from the component datasheet, organised by domain.",
@@ -83,6 +83,10 @@
                 "mechanical": {
                     "description": "Physical dimensions and mounting style from the datasheet.",
                     "$ref": "#/$defs/magneticDatasheetMechanical"
+                },
+                "application": {
+                    "description": "Application parameters published by the manufacturer — describes the circuit this component was designed for, not the component's intrinsic electrical properties.",
+                    "$ref": "#/$defs/magneticDatasheetApplication"
                 },
                 "business": {
                     "description": "Packaging and supply-chain information from the datasheet or product page.",
@@ -129,6 +133,15 @@
                 "automotive": {
                     "description": "True if the part is qualified for automotive applications (AEC-Q200 or equivalent).",
                     "type": "boolean"
+                },
+                "shielded": {
+                    "description": "True if the component has a shielded construction.",
+                    "type": "boolean"
+                },
+                "insulationGrade": {
+                    "description": "Insulation grade classification as stated in the datasheet (e.g. 'reinforced', 'basic'). Aligns with IEC insulationType vocabulary.",
+                    "type": "string",
+                    "enum": ["functional", "basic", "supplementary", "double", "reinforced"]
                 }
             }
         },
@@ -195,6 +208,66 @@
                 "commonModeFilter": {
                     "description": "Common-mode filter performance figures from the datasheet.",
                     "$ref": "#/$defs/magneticDatasheetCommonModeFilter"
+                },
+                "saturationCurrentPeak": {
+                    "description": "Peak saturation current in Amperes (I_sat from datasheet).",
+                    "type": "number"
+                },
+                "selfResonantFrequency": {
+                    "description": "Self-resonant frequency in Hz.",
+                    "type": "number"
+                },
+                "turnsRatio": {
+                    "description": "Turns ratio (e.g. 100 means 1:100) for coupled inductors / transformers.",
+                    "type": "number"
+                },
+                "couplingCoefficient": {
+                    "description": "Magnetic coupling coefficient k (0–1).",
+                    "type": "number"
+                },
+                "dcResistances": {
+                    "description": "DC resistance per winding for multi-winding parts. Use dcResistance for single-winding parts.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "winding": { "type": "string" },
+                            "resistance": { "type": "number" }
+                        },
+                        "required": ["winding", "resistance"]
+                    }
+                }
+            }
+        },
+        "magneticDatasheetApplication": {
+            "description": "Application parameters published by the manufacturer in the datasheet. These describe the circuit the component was designed for, not the component's intrinsic electrical properties.",
+            "type": "object",
+            "properties": {
+                "switchingFrequency": {
+                    "description": "Nominal switching frequency in Hz for which this component is designed.",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "inputVoltage": {
+                    "description": "Input voltage range for which this component is designed, in Volts.",
+                    "oneOf": [
+                        { "type": "number" },
+                        { "$ref": "./utils.json#/$defs/dimensionWithTolerance" }
+                    ]
+                },
+                "outputVoltages": {
+                    "description": "Output voltages per secondary winding in Volts.",
+                    "type": "array",
+                    "items": { "type": "number" }
+                },
+                "outputCurrents": {
+                    "description": "Output currents per secondary winding in Amperes.",
+                    "type": "array",
+                    "items": { "type": "number" }
+                },
+                "auxiliaryVoltage": {
+                    "description": "Auxiliary winding voltage in Volts.",
+                    "type": "number"
                 }
             }
         },
@@ -224,6 +297,14 @@
                 "operatingTemperature": {
                     "description": "Operating temperature in degrees Celsius.",
                     "$ref": "./utils.json#/$defs/dimensionWithTolerance"
+                },
+                "temperatureRise": {
+                    "description": "Maximum temperature rise above ambient in degrees Celsius.",
+                    "type": "number"
+                },
+                "thermalResistance": {
+                    "description": "Thermal resistance in °C/W.",
+                    "type": "number"
                 }
             }
         },
