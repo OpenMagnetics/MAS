@@ -42,55 +42,9 @@
                     "description": "The manufacturer's price for this part",
                     "type": "string"
                 },
-                "recommendations": {
-                    "type": "object",
-                    "title": "magneticManufacturerRecommendations",
-                    "properties": {
-                        "ratedCurrent": {
-                            "description": "The manufacturer's rated current for this part",
-                            "type": "number"
-                        },
-                        "ratedCurrentTemperatureRise": {
-                            "description": "The temperature rise for which the rated current is calculated",
-                            "type": "number"
-                        },
-                        "ratedMagneticFlux": {
-                            "description": "The manufacturer's rated magnetic flux or volt-seconds for this part",
-                            "type": "number"
-                        },
-                        "saturationCurrent": {
-                            "description": "The manufacturer's saturation current for this part",
-                            "type": "number"
-                        },
-                        "saturationCurrentInductanceDrop": {
-                            "description": "Percentage of inductance drop at saturation current",
-                            "type": "number"
-                        },
-                        "maximumStorableMagneticEnergy": {
-                            "description": "Maximum magnetic energy that can be stored according to manufacturer",
-                            "type": "number"
-                        },
-                        "insulationType": {
-                            "description": "Insulation grade according to manufacturer",
-                            "$ref": "./utils.json#/$defs/insulationType"
-                        },
-                        "mounting": {
-                            "description": "Recommended way of mounting according to manufacturer",
-                            "$ref": "./utils.json#/$defs/connectionType"
-                        },
-                        "hipotTest": {
-                            "description": "Hipot test according to manufacturer",
-                            "type": "number"
-                        },
-                        "dimensions": {
-                            "description": "Dimensions of the magnetic according to manufacturer",
-                            "$ref": "./utils.json#/$defs/dimensions"
-                        },
-                        "leakageInductance": {
-                            "description": "Leakage Inductance of the magnetic according to manufacturer",
-                            "$ref": "./utils.json#/$defs/dimensionWithTolerance"
-                        }
-                    }
+                "datasheetInfo": {
+                    "description": "All values extracted directly from the component datasheet, organised by domain.",
+                    "$ref": "#/$defs/magneticDatasheetInfo"
                 }
             },
             "required": ["name"]
@@ -108,5 +62,206 @@
             "$ref": "./utils.json#/$defs/rotation"
         }
     },
-    "required": ["core", "coil"]
+    "required": ["core", "coil"],
+    "$defs": {
+        "magneticDatasheetInfo": {
+            "description": "All values extracted directly from the component datasheet, organised by domain.",
+            "type": "object",
+            "properties": {
+                "part": {
+                    "description": "Basic part identification from the datasheet.",
+                    "$ref": "#/$defs/magneticDatasheetPart"
+                },
+                "electrical": {
+                    "description": "Electrical characteristics as stated in the datasheet.",
+                    "$ref": "#/$defs/magneticDatasheetElectrical"
+                },
+                "thermal": {
+                    "description": "Operating temperature range from the datasheet.",
+                    "$ref": "#/$defs/magneticDatasheetThermal"
+                },
+                "mechanical": {
+                    "description": "Physical dimensions and mounting style from the datasheet.",
+                    "$ref": "#/$defs/magneticDatasheetMechanical"
+                },
+                "business": {
+                    "description": "Packaging and supply-chain information from the datasheet or product page.",
+                    "$ref": "#/$defs/magneticDatasheetBusiness"
+                }
+            }
+        },
+        "magneticDatasheetPart": {
+            "description": "Basic part identification.",
+            "type": "object",
+            "properties": {
+                "partNumber": {
+                    "description": "Manufacturer part number.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Human-readable product description as given in the datasheet or catalogue.",
+                    "type": "string"
+                },
+                "matchCode": {
+                    "description": "Internal match / order code used by the manufacturer.",
+                    "type": "string"
+                },
+                "family": {
+                    "description": "Product family or series name (e.g. WE-CMB, WE-CNSW).",
+                    "type": "string"
+                },
+                "caseCode": {
+                    "description": "Case or package code / size reference (e.g. '0805', 'SMD-4P').",
+                    "type": "string"
+                },
+                "windingStyle": {
+                    "description": "Winding construction style (e.g. bifilar, sectional, trifilar).",
+                    "type": "string"
+                },
+                "material": {
+                    "description": "Core material designation as given in the datasheet (e.g. NiZn, MnZn).",
+                    "type": "string"
+                },
+                "numberOfWindings": {
+                    "description": "Total number of electrically independent windings.",
+                    "type": "integer"
+                },
+                "automotive": {
+                    "description": "True if the part is qualified for automotive applications (AEC-Q200 or equivalent).",
+                    "type": "boolean"
+                }
+            }
+        },
+        "magneticDatasheetElectrical": {
+            "description": "Electrical characteristics as stated in the datasheet.",
+            "type": "object",
+            "properties": {
+                "inductance": {
+                    "description": "Inductance per winding in Henries, with tolerance.",
+                    "$ref": "./utils.json#/$defs/dimensionWithTolerance"
+                },
+                "dcResistance": {
+                    "description": "DC resistance per winding in Ohms. nominal = typical value, maximum = datasheet max.",
+                    "$ref": "./utils.json#/$defs/dimensionWithTolerance"
+                },
+                "ratedCurrent": {
+                    "description": "Rated DC current per winding in Amperes.",
+                    "type": "number"
+                },
+                "ratedVoltageDC": {
+                    "description": "Maximum rated DC voltage between any two terminals in Volts.",
+                    "type": "number"
+                },
+                "ratedVoltageAC": {
+                    "description": "Maximum rated AC voltage (RMS) between windings in Volts.",
+                    "type": "number"
+                },
+                "insulationTestVoltageAC": {
+                    "description": "Hi-pot / dielectric withstand test voltage (AC RMS) in Volts.",
+                    "type": "number"
+                },
+                "insulationResistance": {
+                    "description": "Minimum insulation resistance between windings in Ohms.",
+                    "type": "number"
+                },
+                "leakageInductance": {
+                    "description": "Leakage inductance in Henries.",
+                    "$ref": "./utils.json#/$defs/dimensionWithTolerance"
+                },
+                "impedancePoints": {
+                    "description": "Impedance vs. frequency points from the datasheet. Uses the same impedanceAtFrequency structure as designRequirements.minimumImpedance.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "title": "impedanceAtFrequency",
+                        "properties": {
+                            "impedance": {
+                                "description": "Impedance value. Uses the same impedancePoint structure as designRequirements.",
+                                "$ref": "./inputs/designRequirements.json#/$defs/impedancePoint"
+                            },
+                            "frequency": {
+                                "description": "Frequency in Hz.",
+                                "type": "number",
+                                "minimum": 0
+                            }
+                        },
+                        "required": ["impedance", "frequency"]
+                    }
+                },
+                "maximumImpedance": {
+                    "description": "Peak / maximum impedance magnitude in Ohms (frequency not specified in datasheet).",
+                    "type": "number"
+                },
+                "commonModeFilter": {
+                    "description": "Common-mode filter performance figures from the datasheet.",
+                    "$ref": "#/$defs/magneticDatasheetCommonModeFilter"
+                }
+            }
+        },
+        "magneticDatasheetCommonModeFilter": {
+            "description": "Common-mode filter performance figures.",
+            "type": "object",
+            "properties": {
+                "cutOffFrequency": {
+                    "description": "-3 dB cut-off frequency of the common-mode filter in Hz.",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "attenuation": {
+                    "description": "Common-mode insertion-loss / attenuation value from the datasheet in dB.",
+                    "type": "number"
+                },
+                "attenuationTestCondition": {
+                    "description": "Test condition string for the attenuation figure (e.g. '100 MHz, 50 Ω').",
+                    "type": "string"
+                }
+            }
+        },
+        "magneticDatasheetThermal": {
+            "description": "Operating temperature range.",
+            "type": "object",
+            "properties": {
+                "operatingTemperature": {
+                    "description": "Operating temperature in degrees Celsius.",
+                    "$ref": "./utils.json#/$defs/dimensionWithTolerance"
+                }
+            }
+        },
+        "magneticDatasheetMechanical": {
+            "description": "Physical dimensions and mounting style.",
+            "type": "object",
+            "properties": {
+                "length": {
+                    "description": "Body length in metres.",
+                    "$ref": "./utils.json#/$defs/dimensionWithTolerance"
+                },
+                "width": {
+                    "description": "Body width in metres.",
+                    "$ref": "./utils.json#/$defs/dimensionWithTolerance"
+                },
+                "height": {
+                    "description": "Body height in metres.",
+                    "$ref": "./utils.json#/$defs/dimensionWithTolerance"
+                },
+                "diameter": {
+                    "description": "Body diameter in metres (for cylindrical parts).",
+                    "$ref": "./utils.json#/$defs/dimensionWithTolerance"
+                },
+                "mounting": {
+                    "description": "PCB mounting style. Uses the same connectionType enum as designRequirements.terminalType.",
+                    "$ref": "./utils.json#/$defs/connectionType"
+                }
+            }
+        },
+        "magneticDatasheetBusiness": {
+            "description": "Packaging and supply-chain information.",
+            "type": "object",
+            "properties": {
+                "packaging": {
+                    "description": "Packaging format (e.g. 'Tape & Reel', 'Bulk', 'Tray').",
+                    "type": "string"
+                }
+            }
+        }
+    }
 }
