@@ -16,7 +16,11 @@
             "description": "The standard of wire",
             "title": "wireStandard",
             "type": "string",
-            "enum": ["IEC 60317", "NEMA MW 1000 C", "IPC-6012"]
+            "enum": [
+                "IEC 60317",
+                "NEMA MW 1000 C",
+                "IPC-6012"
+            ]
         },
         "standardName": {
             "description": "Name according to the standard of wire",
@@ -26,7 +30,7 @@
             "$ref": "../../utils.json#/$defs/manufacturerInfo"
         },
         "conductingArea": {
-            "description": "The conducting area of the wire, in m². Used for some rectangular shapes where the area is smaller than expected due to rounded corners",
+            "description": "The conducting area of the wire, in m\u00b2. Used for some rectangular shapes where the area is smaller than expected due to rounded corners",
             "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "numberConductors": {
@@ -36,7 +40,9 @@
         "material": {
             "title": "WireMaterialDataOrNameUnion",
             "oneOf": [
-                {"$ref": "./material.json"},
+                {
+                    "$ref": "./material.json"
+                },
                 {
                     "description": "The name of the material used in the wire",
                     "type": "string"
@@ -46,7 +52,9 @@
         "coating": {
             "title": "CoatingDataOrNameUnion",
             "oneOf": [
-                {"$ref": "../insulation/wireCoating.json"},
+                {
+                    "$ref": "../insulation/wireCoating.json"
+                },
                 {
                     "description": "The name of the coating used in the wire",
                     "type": "string"
@@ -54,8 +62,8 @@
             ]
         }
     },
-    "required": [ "type" ],
-
-    "$defs": {
-    }
+    "required": [
+        "type"
+    ],
+    "$defs": {}
 }
