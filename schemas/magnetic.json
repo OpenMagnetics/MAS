@@ -26,8 +26,16 @@
                     "type": "string",
                     "enum": ["production", "prototype", "obsolete"]
                 },
+                "description": {
+                    "description": "The description of the part according to its manufacturer",
+                    "type": "string"
+                },
                 "reference": {
                     "description": "The manufacturer's reference of this part",
+                    "type": "string"
+                },
+                "orderCode": {
+                    "description": "The manufacturer's order code of this part",
                     "type": "string"
                 },
                 "family": {
