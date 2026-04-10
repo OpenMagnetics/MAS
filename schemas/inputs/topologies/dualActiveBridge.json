@@ -24,6 +24,12 @@
             "type": "boolean",
             "default": true
         },
+        "perSecondaryLeakage": {
+            "description": "Optional per-secondary leakage inductance in H, one entry per output. Required for physically meaningful multi-output DAB simulation; if absent, all secondaries share the same series inductance.",
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 1
+        },
         "operatingPoints": {
             "description": "A list of operating points",
             "type": "array",
@@ -84,7 +90,7 @@
                     "type": "number"
                 }
             },
-            "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "phaseShift", "ambientTemperature"]
+            "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "ambientTemperature"]
         }
     }
 }

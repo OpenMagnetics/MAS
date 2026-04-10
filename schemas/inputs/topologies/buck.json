@@ -24,7 +24,7 @@
         "efficiency": {
             "description": "The target efficiency",
             "type": "number",
-            "default": 1
+            "default": 0.95
         },
         "operatingPoints": {
             "description": "A list of operating points",
@@ -43,13 +43,17 @@
             "title": "buckOperatingPoint",
             "type": "object",
             "properties": {
-                "outputVoltage": {
-                    "description": "Output voltage",
-                    "type": "number"
+                "outputVoltages": {
+                    "description": "A list of output voltages, one per output",
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "minItems": 1
                 },
-                "outputCurrent": {
-                    "description": "Output current",
-                    "type": "number"
+                "outputCurrents": {
+                    "description": "A list of output currents, one per output",
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "minItems": 1
                 },
                 "switchingFrequency": {
                     "description": "The switching frequency of the operating point",
@@ -60,7 +64,7 @@
                     "type": "number"
                 }
             },
-            "required": ["outputVoltage", "outputCurrent", "switchingFrequency", "ambientTemperature"]
+            "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "ambientTemperature"]
         }
     }
 }

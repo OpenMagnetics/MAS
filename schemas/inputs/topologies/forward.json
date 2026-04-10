@@ -28,7 +28,7 @@
         "efficiency": {
             "description": "The target efficiency",
             "type": "number",
-            "default": 1
+            "default": 0.95
         },
         "operatingPoints": {
             "description": "A list of operating points",

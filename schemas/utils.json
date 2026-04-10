@@ -4,20 +4,6 @@
     "description": "Some definition utils",
     "title": "utils",
     "type": "object",
-    "properties": {
-        "manufacturerInfo": {
-            "$ref": "#/$defs/manufacturerInfo"
-        },
-        "coordinates": {
-            "$ref": "#/$defs/coordinates"
-        },
-        "dimensions": {
-            "$ref": "#/$defs/dimensions"
-        },
-        "dimensionWithTolerance": {
-            "$ref": "#/$defs/dimensionWithTolerance"
-        }
-    },
     "$defs": {
         "insulationType": {
             "description": "Required type of insulation",
@@ -208,14 +194,18 @@
                     "type": "number"
                 },
                 "excludeMinimum": {
-                    "description": "True is the minimum value must be excluded from the range",
+                    "description": "True if the minimum value must be excluded from the range",
                     "type": "boolean",
                     "default": false
                 },
                 "excludeMaximum": {
-                    "description": "True is the maximum value must be excluded from the range",
+                    "description": "True if the maximum value must be excluded from the range",
                     "type": "boolean",
                     "default": false
+                },
+                "unit": {
+                    "description": "Optional SI unit string (e.g. 'H', 'F', 'V', 'A', 'Ohm', 'm', 'kg'). When absent, the unit is implied by the field name.",
+                    "type": "string"
                 }
             },
             "anyOf": [
@@ -339,6 +329,36 @@
                 }
             },
             "required": ["frequency", "data"]
+        },
+        "coordinateSystem": {
+            "description": "System in which dimension and coordinates are expressed",
+            "title": "coordinateSystem",
+            "type": "string",
+            "enum": ["cartesian", "polar"]
+        },
+        "windingOrientation": {
+            "description": "Way in which the elements are oriented inside their parent",
+            "title": "windingOrientation",
+            "type": "string",
+            "enum": ["contiguous", "overlapping"]
+        },
+        "electricalType": {
+            "description": "Type of an electrical element in a coil",
+            "title": "electricalType",
+            "type": "string",
+            "enum": ["conduction", "insulation", "shielding"]
+        },
+        "coilAlignment": {
+            "description": "Way in which elements are aligned inside their parent",
+            "title": "coilAlignment",
+            "type": "string",
+            "enum": ["inner or top", "outer or bottom", "spread", "centered"]
+        },
+        "windingStyle": {
+            "description": "Defines how a section or layer is wound",
+            "title": "windingStyle",
+            "type": "string",
+            "enum": ["windByConsecutiveTurns", "windByConsecutiveParallels"]
         },
         "isolationSide": {
             "description": "Tag to identify windings that are sharing the same ground",
