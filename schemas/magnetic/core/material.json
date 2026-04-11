@@ -170,6 +170,42 @@
                 }
             }
         },
+        "recommendations":{
+            "description": "Manufacturer recommended operating conditions for this material",
+            "type": "object",
+            "title": "coreMaterialRecommendations",
+            "properties": {
+                "minimumFrequency": {
+                    "description": "Minimum recommended operating frequency in Hz",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "maximumFrequency": {
+                    "description": "Maximum recommended operating frequency in Hz",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "maximumMagneticFluxDensity": {
+                    "description": "Maximum recommended AC flux density, in T",
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "maximumOperatingTemperature": {
+                    "description": "Maximum recommended operating temperature in Celsius",
+                    "type": "number"
+                },
+                "typicalApplications": {
+                    "description": "Typical applications per manufacturer",
+                    "type": "array",
+                    "items": { "type": "string" }
+                },
+                "typicalTopologies": {
+                    "description": "Recommended converter topologies",
+                    "type": "array",
+                    "items": { "type": "string" }
+                }
+            }
+        },
         "massLosses":{
             "description": "The data regarding the mass losses of a magnetic material",
             "title": "massLosses",
@@ -257,7 +293,7 @@
             "required": ["method", "factors"]
         },
         "permeabilityPoint": {
-            "description": "data for describing one point of permebility",
+            "description": "data for describing one point of permeability",
             "title": "permeabilityPoint",
             "type": "object",
             "properties": {
@@ -375,12 +411,12 @@
                             "ct1": {
                                 "description": "Proportional negative temperature coefficient ct1",
                                 "type": "number",
-                                "default": 1
+                                "default": 0
                             },
                             "ct2": {
                                 "description": "Square temperature coefficient ct2",
                                 "type": "number",
-                                "default": 1
+                                "default": 0
                             }
                         },
                         "required": ["k", "alpha", "beta"]
@@ -538,7 +574,7 @@
         "magnetecCoreLossesMethodData": {
             "description": "Magnetic method for estimating mass losses",
             "type": "object",
-            "title": "magneticsCoreLossesMethodData",
+            "title": "magnetecCoreLossesMethodData",
             "properties": {
                 "method": {
                     "description": "Name of this method",
