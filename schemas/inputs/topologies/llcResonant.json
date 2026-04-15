@@ -44,6 +44,14 @@
             "type": "boolean",
             "default": true
         },
+        "seriesInductance": {
+            "description": "Optional explicit resonant inductor (Ls) value in H. Overrides the Q/Ln/fr derivation when set.",
+            "type": "number"
+        },
+        "resonantCapacitance": {
+            "description": "Optional explicit resonant capacitor (Cr) value in F. Overrides the Q/Ln/fr derivation when set.",
+            "type": "number"
+        },
         "operatingPoints": {
             "description": "A list of operating points",
             "type": "array",
@@ -53,7 +61,7 @@
             "minItems": 1
         }
     },
-    "required": ["inputVoltage", "minSwitchingFrequency", "maxSwitchingFrequency", "inductanceRatio", "operatingPoints"],
+    "required": ["inputVoltage", "minSwitchingFrequency", "maxSwitchingFrequency", "operatingPoints"],
 
     "$defs": {
         "llcBridgeType": {

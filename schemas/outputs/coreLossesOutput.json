@@ -5,19 +5,19 @@
     "title": "coreLossesOutput",
     "type": "object",
     "properties": {
-        "origin":{
+        "origin": {
             "$ref": "../outputs.json#/$defs/resultOrigin"
         },
         "methodUsed": {
             "description": "Model used to calculate the core losses in the case of simulation, or method used to measure it",
             "type": "string"
         },
-        "magneticFluxDensity":{
+        "magneticFluxDensity": {
             "description": "Excitation of the B field that produced the core losses",
             "title": "excitation",
             "$ref": "../inputs/operatingPointExcitation.json#/$defs/signalDescriptor"
         },
-        "temperature":{
+        "temperature": {
             "description": "temperature in the core that produced the core losses",
             "type": "number"
         },
@@ -47,7 +47,11 @@
             "exclusiveMinimum": 0
         }
     },
-    "required": ["origin", "methodUsed", "coreLosses"],
-        
+    "required": [
+        "origin",
+        "methodUsed",
+        "coreLosses",
+        "temperature"
+    ],
     "$defs": {}
 }

@@ -28,7 +28,7 @@
         "efficiency": {
             "description": "The target efficiency",
             "type": "number",
-            "default": 1
+            "default": 0.95
         },
         "operatingPoints": {
             "description": "A list of operating points",
@@ -49,7 +49,7 @@
             "enum": ["Continuous Conduction Mode", "Discontinuous Conduction Mode", "Quasi Resonant Mode", "Boundary Mode Operation"]
         },
         "flybackOperatingPoint": {
-            "description": "The descriptionof one flyback operating point",
+            "description": "The description of one flyback operating point",
             "title": "flybackOperatingPoint",
             "type": "object",
             "properties": {

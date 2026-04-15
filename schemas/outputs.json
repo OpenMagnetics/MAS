@@ -18,8 +18,8 @@
             "$ref": "#/$defs/windingWindowCurrentField"
         },
         "windingWindowCurrentDensityField":{
-            "description": "Data describing the output current field",
-            "$ref": "#/$defs/windingWindowCurrentField"
+            "description": "Data describing the output current density field",
+            "$ref": "#/$defs/windingWindowCurrentDensityField"
         },
         "windingWindowMagneticStrengthField":{
             "description": "Data describing the output magnetic strength field",
@@ -382,7 +382,7 @@
                 },
                 "couplingCoefficientsMatrix": {
                     "description": "List of coupling coefficients matrix per frequency",
-                    "title": "inductanceMatrix",
+                    "title": "couplingCoefficientsMatrix",
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/scalarMatrixAtFrequency"
@@ -438,7 +438,7 @@
                     "type": "number"
                 },
                 "reluctancePerGap": {
-                    "description": "Value of the maximum magnetic energy storable in the gaps",
+                    "description": "Reluctance per gap in the magnetic core",
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/airGapReluctance"
@@ -478,7 +478,7 @@
                 },
                 "impedanceMatrix": {
                     "description": "List of impedance matrix per frequency",
-                    "title": "inductanceMatrix",
+                    "title": "impedanceMatrix",
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/complexMatrixAtFrequency"
@@ -518,7 +518,7 @@
             "required": ["origin", "methodUsed", "reluctance", "fringingFactor", "maximumStorableMagneticEnergy"]
         },
         "windingWindowCurrentField": {
-            "description": "Data describing the curren in the different chunks used in field calculation",
+            "description": "Data describing the current in the different chunks used in field calculation",
             "title": "windingWindowCurrentFieldOutput",
             "type": "object",
             "properties": {
@@ -540,7 +540,7 @@
             "required": ["origin", "methodUsed", "fieldPerFrequency"]
         },
         "windingWindowCurrentDensityField": {
-            "description": "Data describing the curren in the different chunks used in field calculation",
+            "description": "Data describing the current in the different chunks used in field calculation",
             "title": "windingWindowCurrentDensityFieldOutput",
             "type": "object",
             "properties": {
@@ -696,7 +696,7 @@
                     "enum": ["AC", "DC"]
                 },
                 "withstandVoltageDuration": {
-                    "description": "Duration of the voltate, or undefined if the field is not present",
+                    "description": "Duration of the voltage test, or undefined if the field is not present",
                     "type": "number"
                 }
             },
@@ -729,7 +729,7 @@
                         "enum": ["AC", "DC"]
                     },
                     "duration": {
-                        "description": "Duration of the voltate, or undefined if the field is not present",
+                        "description": "Duration of the voltage test, or undefined if the field is not present",
                         "type": "number"
                     }
                 },
@@ -769,7 +769,7 @@
                     "type": "string"
                 },
                 "value":{
-                    "description": "Electric energy between two turns, in V/m",
+                    "description": "Electric energy between two turns, in J",
                     "type": "number"
                 }
             },

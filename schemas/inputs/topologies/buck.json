@@ -24,7 +24,7 @@
         "efficiency": {
             "description": "The target efficiency",
             "type": "number",
-            "default": 1
+            "default": 0.95
         },
         "operatingPoints": {
             "description": "A list of operating points",
@@ -41,26 +41,7 @@
         "buckOperatingPoint": {
             "description": "The description of one buck operating point",
             "title": "buckOperatingPoint",
-            "type": "object",
-            "properties": {
-                "outputVoltage": {
-                    "description": "Output voltage",
-                    "type": "number"
-                },
-                "outputCurrent": {
-                    "description": "Output current",
-                    "type": "number"
-                },
-                "switchingFrequency": {
-                    "description": "The switching frequency of the operating point",
-                    "type": "number"
-                },
-                "ambientTemperature": {
-                    "description": "The ambient temperature of the operating point",
-                    "type": "number"
-                }
-            },
-            "required": ["outputVoltage", "outputCurrent", "switchingFrequency", "ambientTemperature"]
+            "$ref": "../../utils.json#/$defs/baseOperatingPoint"
         }
     }
 }
