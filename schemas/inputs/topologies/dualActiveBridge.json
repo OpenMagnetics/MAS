@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "http://openmagnetics.com/schemas/inputs/topologies/dualActiveBridge.json",
     "title": "dualActiveBridge",
-    "description": "The description of a Dual Active Bridge (DAB) converter excitation",
+    "description": "Dual Active Bridge (DAB) DC-DC converter excitation. Modulation parameters follow the standard Triple Phase Shift (TPS) convention: D1 = primary-bridge intra-leg shift, D2 = secondary-bridge intra-leg shift, D3 = inter-bridge (outer) shift. See Huang et al., Energies 11(9):2419 (2018) and Maniktala & Rosano, 'Power Supplies A to Z', 3rd ed. (Ch. 2).",
     "type": "object",
     "properties": {
         "inputVoltage": {
@@ -43,7 +43,7 @@
 
     "$defs": {
         "dabOperatingPoint": {
-            "description": "The description of one DAB operating point",
+            "description": "One DAB operating point. Modulation is parameterised by three phase-shift variables D1, D2, D3 (Huang et al. 2018 convention): D1 and D2 are intra-bridge (leg-to-leg) shifts that control each bridge's effective duty cycle, and D3 is the outer inter-bridge shift that controls power transfer. SPS uses D3 only (D1=D2=0). EPS uses D3 + one inner shift (D1, with D2=0). DPS uses D3 + one symmetric inner shift (D1=D2). TPS uses all three independently.",
             "title": "dabOperatingPoint",
             "type": "object",
             "properties": {
@@ -63,10 +63,6 @@
                     },
                     "minItems": 1
                 },
-                "phaseShift": {
-                    "description": "The phase shift at this operating point in degrees",
-                    "type": "number"
-                },
                 "switchingFrequency": {
                     "description": "The switching frequency of the operating point",
                     "type": "number"
@@ -76,17 +72,21 @@
                     "type": "number"
                 },
                 "modulationType": {
-                    "description": "DAB modulation type: SPS (Single Phase Shift, default), EPS (Extended Phase Shift, D1>0 on primary only), DPS (Dual Phase Shift, D1=D2), TPS (Triple Phase Shift, D1 and D2 independent)",
+                    "description": "DAB modulation scheme. SPS (Single Phase Shift): only D3 is non-zero. EPS (Extended Phase Shift): D1>0 on primary bridge, D2=0, D3 controls power. DPS (Dual Phase Shift): D1=D2>0 symmetric, D3 controls power. TPS (Triple Phase Shift): D1, D2, D3 independent. Ref: Huang et al., Energies 11(9):2419 (2018).",
                     "type": "string",
                     "enum": ["SPS", "EPS", "DPS", "TPS"],
                     "default": "SPS"
                 },
                 "innerPhaseShift1": {
-                    "description": "Primary bridge inner phase shift in degrees (D1). 0 = square wave. Used for EPS, DPS, TPS.",
+                    "description": "D1 — primary-bridge intra-leg phase shift in degrees (shift between the two legs of the primary full-bridge). Range [0, 90). 0 = square wave (50% duty). Used in EPS, DPS, TPS.",
                     "type": "number"
                 },
                 "innerPhaseShift2": {
-                    "description": "Secondary bridge inner phase shift in degrees (D2). Used for TPS. For DPS, if absent, equals innerPhaseShift1.",
+                    "description": "D2 — secondary-bridge intra-leg phase shift in degrees (shift between the two legs of the secondary full-bridge). Range [0, 90). 0 = square wave (50% duty). Used in TPS. For DPS, if absent, defaults to D1 (symmetric).",
+                    "type": "number"
+                },
+                "innerPhaseShift3": {
+                    "description": "D3 — inter-bridge (outer) phase shift in degrees between primary and secondary bridges. Signed: positive = forward power flow (primary → secondary). Used in all modulation modes. This is the primary power-transfer control variable.",
                     "type": "number"
                 }
             },
