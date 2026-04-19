@@ -34,7 +34,7 @@
                     "description": "The family of a bobbin",
                     "title": "bobbinFamily",
                     "type": "string",
-                    "enum": ["u", "e", "etd", "er", "p", "rm", "ep", "pm", "el", "er", "pq", "efd", "ec"]
+                    "enum": ["u", "e", "etd", "er", "p", "rm", "ep", "pm", "el", "er", "pq", "efd", "ec", "t"]
                 },
                 "shape": {
                     "description": "The name of a bobbin that this bobbin belongs to",
