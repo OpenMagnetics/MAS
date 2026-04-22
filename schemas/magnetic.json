@@ -30,16 +30,8 @@
                         "obsolete"
                     ]
                 },
-                "description": {
-                    "description": "The description of the part according to its manufacturer",
-                    "type": "string"
-                },
                 "reference": {
                     "description": "The manufacturer's reference of this part",
-                    "type": "string"
-                },
-                "orderCode": {
-                    "description": "The manufacturer's order code of this part",
                     "type": "string"
                 },
                 "family": {
@@ -53,56 +45,6 @@
                 "cost": {
                     "description": "The manufacturer's price for this part",
                     "type": "string"
-                },
-                "recommendations": {
-                    "type": "object",
-                    "title": "magneticManufacturerRecommendations",
-                    "properties": {
-                        "ratedCurrent": {
-                            "description": "The manufacturer's rated current for this part",
-                            "type": "number"
-                        },
-                        "ratedCurrentTemperatureRise": {
-                            "description": "The temperature rise for which the rated current is calculated",
-                            "type": "number"
-                        },
-                        "ratedMagneticFlux": {
-                            "description": "The manufacturer's rated magnetic flux or volt-seconds for this part",
-                            "type": "number"
-                        },
-                        "saturationCurrent": {
-                            "description": "The manufacturer's saturation current for this part",
-                            "type": "number"
-                        },
-                        "saturationCurrentInductanceDrop": {
-                            "description": "Percentage of inductance drop at saturation current",
-                            "type": "number"
-                        },
-                        "maximumStorableMagneticEnergy": {
-                            "description": "Maximum magnetic energy that can be stored according to manufacturer",
-                            "type": "number"
-                        },
-                        "insulationType": {
-                            "description": "Insulation grade according to manufacturer",
-                            "$ref": "./utils.json#/$defs/insulationType"
-                        },
-                        "mounting": {
-                            "description": "Recommended way of mounting according to manufacturer",
-                            "$ref": "./utils.json#/$defs/connectionType"
-                        },
-                        "hipotTest": {
-                            "description": "Hipot test according to manufacturer",
-                            "type": "number"
-                        },
-                        "dimensions": {
-                            "description": "Dimensions of the magnetic according to manufacturer",
-                            "$ref": "./utils.json#/$defs/dimensions"
-                        },
-                        "leakageInductance": {
-                            "description": "Leakage Inductance of the magnetic according to manufacturer",
-                            "$ref": "./utils.json#/$defs/dimensionWithTolerance"
-                        }
-                    }
                 },
                 "datasheetInfo": {
                     "description": "All values extracted directly from the component datasheet, organised by domain.",
