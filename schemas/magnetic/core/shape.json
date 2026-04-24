@@ -40,12 +40,7 @@
             "description": "The dimensions of a magnetic shape, keys must be as defined in EN 62317",
             "type": "object",
             "additionalProperties": {
-                "oneOf": [
-                    {"$ref": "../../utils.json#/$defs/dimensionWithTolerance"},
-                    {
-                        "type": "number"
-                    }
-                ]
+                "$ref": "../../utils.json#/$defs/dimension"
             }
         }
     },

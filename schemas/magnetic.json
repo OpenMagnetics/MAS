@@ -201,7 +201,7 @@
                     "type": "array",
                     "items": {
                         "type": "object",
-                        "title": "impedanceAtFrequency",
+                        "title": "DatasheetImpedancePoint",
                         "properties": {
                             "impedance": {
                                 "description": "Impedance value. Uses the same impedancePoint structure as designRequirements.",
@@ -265,6 +265,7 @@
             }
         },
         "magneticDatasheetApplication": {
+            "title": "MagneticDatasheetApplication",
             "description": "Application parameters published by the manufacturer in the datasheet. These describe the circuit the component was designed for, not the component's intrinsic electrical properties.",
             "type": "object",
             "properties": {
@@ -275,14 +276,7 @@
                 },
                 "inputVoltage": {
                     "description": "Input voltage range for which this component is designed, in Volts.",
-                    "oneOf": [
-                        {
-                            "type": "number"
-                        },
-                        {
-                            "$ref": "./utils.json#/$defs/dimensionWithTolerance"
-                        }
-                    ]
+                    "$ref": "./utils.json#/$defs/dimension"
                 },
                 "outputVoltages": {
                     "description": "Output voltages per secondary winding in Volts.",

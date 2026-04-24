@@ -242,6 +242,18 @@
                 {"required": ["maximum"]}
             ]
         },
+        "dimension": {
+            "description": "A dimension that can be either a simple number or a dimensionWithTolerance",
+            "title": "dimension",
+            "oneOf": [
+                {
+                    "type": "number"
+                },
+                {
+                    "$ref": "#/$defs/dimensionWithTolerance"
+                }
+            ]
+        },
         "columnShape": {
             "description": "Shape of the column, also used for gaps",
             "type": "string",
