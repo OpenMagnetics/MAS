@@ -23,27 +23,27 @@
             "type": "number"
         },
         "volumetricLosses": {
-            "description": "Volumetric value of the core losses",
+            "description": "Volumetric value of the core losses. Unit: W/m^3.",
             "type": "number",
             "exclusiveMinimum": 0
         },
         "massLosses": {
-            "description": "Mass value of the core losses",
+            "description": "Mass-specific value of the core losses. Unit: W/kg.",
             "type": "number",
             "exclusiveMinimum": 0
         },
         "eddyCurrentCoreLosses": {
-            "description": "Part of the core losses due to eddy currents",
+            "description": "Part of the core losses due to eddy currents. Unit: W.",
             "type": "number",
-            "exclusiveMinimum": 0
+            "minimum": 0
         },
         "hysteresisCoreLosses": {
-            "description": "Part of the core losses due to hysteresis",
+            "description": "Part of the core losses due to hysteresis. Unit: W.",
             "type": "number",
-            "exclusiveMinimum": 0
+            "minimum": 0
         },
         "coreLosses": {
-            "description": "Value of the core losses",
+            "description": "Total core losses. Unit: W.",
             "type": "number",
             "exclusiveMinimum": 0
         }

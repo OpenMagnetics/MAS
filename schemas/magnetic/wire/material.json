@@ -52,12 +52,12 @@
             "type": "object",
             "properties": {
                 "value": {
-                    "description": "Thermal conductivity value, in W / m * K",
+                    "description": "Thermal conductivity value. Unit: W/(m*K).",
                     "type": "number",
                     "exclusiveMinimum": 0
                 },
                 "temperature": {
-                    "description": "Temperature for the field value, in Celsius",
+                    "description": "Temperature for the field value, in Celsius.",
                     "type": "number"
                 }
             },

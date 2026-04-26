@@ -180,7 +180,7 @@
                     "required": ["value", "coordinates"]
                 },
                 "bulkThermalResistance": {
-                    "description": "bulk thermal resistance of the whole magnetic",
+                    "description": "Bulk thermal resistance of the whole magnetic. Unit: K/W.",
                     "type": "number"
                 }
             },
@@ -481,7 +481,7 @@
             "required": ["origin", "methodUsed", "magnetizingInductance", "coreReluctance"]
         },
         "impedance":{
-            "description": "Data describing the impendance and the intermediate inputs used to calculate them",
+            "description": "Data describing the impedance and the intermediate inputs used to calculate it",
             "title": "impedanceOutput",
             "type": "object",
             "properties": {
@@ -704,31 +704,31 @@
             "type": "object",
             "properties": {
                 "creepageDistance":{
-                    "description": "Creepage distance required for this magnetic",
+                    "description": "Creepage distance required for this magnetic. Unit: m.",
                     "type": "number",
                     "minimum": 0
                 },
                 "clearance":{
-                    "description": "Clearance required for this magnetic",
+                    "description": "Clearance required for this magnetic. Unit: m.",
                     "type": "number",
                     "minimum": 0
                 },
                 "distanceThroughInsulation":{
-                    "description": "Distance through insulation required for this magnetic",
+                    "description": "Distance through insulation required for this magnetic. Unit: m.",
                     "type": "number",
                     "minimum": 0
                 },
                 "withstandVoltage": {
-                    "description": "Voltage that the magnetic withstands",
+                    "description": "Voltage that the magnetic withstands. Unit: V.",
                     "type": "number"
                 },
                 "withstandVoltageType": {
-                    "description": "Type of the voltage",
+                    "description": "Type of the voltage.",
                     "type": "string",
                     "enum": ["AC", "DC"]
                 },
                 "withstandVoltageDuration": {
-                    "description": "Duration of the voltage test, or undefined if the field is not present",
+                    "description": "Duration of the voltage test. Unit: s. Absent if the test specification does not require a fixed duration.",
                     "type": "number"
                 }
             },

@@ -124,8 +124,7 @@
                     "$ref": "#/$defs/cost"
                 }
             },
-            "required": ["name"],
-            "additionalProperties": false
+            "required": ["name"]
         },
         "distributorInfo":{
             "description": "Data from the distributor for a given part",

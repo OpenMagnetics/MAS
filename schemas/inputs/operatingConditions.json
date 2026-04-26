@@ -82,11 +82,11 @@
             "title": "heatsinkCooling",
             "properties": {
                 "thermalResistance": {
-                    "description": "Bulk thermal resistance of the heat sink, in W/K",
+                    "description": "Bulk thermal resistance of the heat sink. Unit: K/W.",
                     "type": "number"
                 },
                 "interfaceThermalResistance": {
-                    "description": "Thermal resistance of the thermal interface used to connect the device to the heatsink, in K/W",
+                    "description": "Thermal resistance of the thermal interface used to connect the device to the heatsink. Unit: K/W.",
                     "type": "number"
                 },
                 "interfaceThickness": {
@@ -106,15 +106,15 @@
             "title": "coldPlateCooling",
             "properties": {
                 "thermalResistance": {
-                    "description": "Bulk thermal resistance of the cold plate, in W/K",
+                    "description": "Bulk thermal resistance of the cold plate. Unit: K/W.",
                     "type": "number"
                 },
                 "maximumTemperature": {
-                    "description": "Maximum temperature of the cold plate",
+                    "description": "Maximum temperature of the cold plate. Unit: Celsius.",
                     "type": "number"
                 },
                 "interfaceThermalResistance": {
-                    "description": "Thermal resistance of the thermal interface used to connect the device to the cold plate, in K/W",
+                    "description": "Thermal resistance of the thermal interface used to connect the device to the cold plate. Unit: K/W.",
                     "type": "number"
                 },
                 "interfaceThickness": {

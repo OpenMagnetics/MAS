@@ -15,45 +15,19 @@
             "$ref": "./magnetic/coil.json"
         },
         "manufacturerInfo": {
-            "type": "object",
             "title": "magneticManufacturerInfo",
-            "properties": {
-                "name": {
-                    "description": "The name of the manufacturer of the part",
-                    "type": "string"
-                },
-                "status": {
-                    "description": "The production status of a part according to its manufacturer",
-                    "type": "string",
-                    "enum": [
-                        "production",
-                        "prototype",
-                        "obsolete"
-                    ]
-                },
-                "reference": {
-                    "description": "The manufacturer's reference of this part",
-                    "type": "string"
-                },
-                "family": {
-                    "description": "The family of a magnetic, as defined by the manufacturer",
-                    "type": "string"
-                },
-                "datasheetUrl": {
-                    "description": "The manufacturer's URL to the datasheet of the product",
-                    "type": "string"
-                },
-                "cost": {
-                    "description": "The manufacturer's price for this part",
-                    "type": "string"
-                },
-                "datasheetInfo": {
-                    "description": "All values extracted directly from the component datasheet, organised by domain.",
-                    "$ref": "#/$defs/magneticDatasheetInfo"
+            "description": "Manufacturer information for the magnetic. Extends the shared manufacturerInfo with a datasheetInfo block for catalogue-level data.",
+            "allOf": [
+                { "$ref": "./utils.json#/$defs/manufacturerInfo" },
+                {
+                    "type": "object",
+                    "properties": {
+                        "datasheetInfo": {
+                            "description": "All values extracted directly from the component datasheet, organised by domain.",
+                            "$ref": "#/$defs/magneticDatasheetInfo"
+                        }
+                    }
                 }
-            },
-            "required": [
-                "name"
             ]
         },
         "distributorsInfo": {
@@ -327,11 +301,11 @@
                     "$ref": "./utils.json#/$defs/dimensionWithTolerance"
                 },
                 "temperatureRise": {
-                    "description": "Maximum temperature rise above ambient in degrees Celsius.",
+                    "description": "Maximum temperature rise above ambient. Unit: K (numerically equivalent to a Celsius difference).",
                     "type": "number"
                 },
                 "thermalResistance": {
-                    "description": "Thermal resistance in \u00b0C/W.",
+                    "description": "Thermal resistance. Unit: K/W (numerically equivalent to \u00b0C/W).",
                     "type": "number"
                 }
             }

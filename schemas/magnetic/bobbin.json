@@ -92,12 +92,12 @@
             "title": "coreBobbinProcessedDescription",
             "properties": {
                 "wallThickness": {
-                    "description": "The thicknes of the walls that hold the wire on both sides of the column",
+                    "description": "The thickness of the walls that hold the wire on both sides of the column",
                     "type": "number",
                     "minimum": 0
                 },
                 "columnThickness": {
-                    "description": "The thicknes of the central column wall, where the wire is wound, in the X axis",
+                    "description": "The thickness of the central column wall, where the wire is wound, in the X axis",
                     "type": "number",
                     "minimum": 0
                 },
@@ -144,7 +144,7 @@
                     "uniqueItems": true
                 },
                 "coordinates": {
-                    "description": "The coordinates of the center of the bobbin central wall, whre the wires are wound, referred to the center of the main column.",
+                    "description": "The coordinates of the center of the bobbin central wall, where the wires are wound, referred to the center of the main column.",
                     "$ref": "../utils.json#/$defs/coordinates"
                 }
             },

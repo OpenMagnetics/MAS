@@ -51,7 +51,7 @@
             "type": "string"
         },
         "curieTemperature": {
-            "description": "The temperature at which this material losses all ferromagnetism",
+            "description": "The temperature at which this material loses all ferromagnetism. Unit: Celsius.",
             "type": "number"
         },
         "saturation": {
@@ -91,11 +91,11 @@
             "uniqueItems": true
         },
         "heatConductivity": {
-            "description": "Heat conductivity value according to manufacturer, in W/m/K",
+            "description": "Thermal conductivity value according to manufacturer. Unit: W/(m*K).",
             "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "heatCapacity": {
-            "description": "Heat capacity value according to manufacturer, in J/Kg/K",
+            "description": "Specific heat capacity value according to manufacturer. Unit: J/(kg*K).",
             "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "density": {
@@ -326,7 +326,7 @@
                     "exclusiveMinimum": 0
                 },
                 "modifiers": {
-                    "description": "The initial permeability of a magnetic material according to its manufacturer",
+                    "description": "Per-manufacturer factor blocks applied to the base permeability value to account for DC bias, frequency and temperature dependence.",
                     "type": "object",
                     "additionalProperties": {
                         "description": "Object where keys are shape families for which this permeability is valid. If missing, the variant is valid for all shapes",
@@ -574,7 +574,7 @@
             "required": ["method", "a", "b", "c"]
         },
         "magnetecCoreLossesMethodData": {
-            "description": "Magnetic method for estimating mass losses",
+            "description": "Magnetec method for estimating mass losses",
             "type": "object",
             "title": "magnetecCoreLossesMethodData",
             "properties": {

@@ -233,7 +233,7 @@
                     "type": "string"
                 },
                 "type": {
-                    "description": "Type of the layer",
+                    "description": "Type of the group",
                     "$ref": "../utils.json#/$defs/wiringTechnology"
                 },
                 "sectionsOrientation": {
@@ -276,7 +276,7 @@
                     "type": "string"
                 },
                 "type": {
-                    "description": "Type of the layer",
+                    "description": "Type of the section",
                     "title": "electricalType",
                     "type": "string",
                     "enum": ["conduction", "insulation", "shielding"]
@@ -331,7 +331,7 @@
                     "enum": ["windByConsecutiveTurns", "windByConsecutiveParallels"]
                 },
                 "margin": {
-                    "description": "Defines the distance in extremes of the section that is reserved to be filled with margin tape. It is an array os two elements from inner or top, to outer or bottom",
+                    "description": "Defines the distance at the extremes of the section reserved for margin tape. Two-element array, from 'inner or top' to 'outer or bottom'.",
                     "oneOf": [
                         {"$ref": "#/$defs/marginInfo"},
                         {
@@ -454,7 +454,7 @@
                     ]
                 },
                 "connections": {
-                    "description": "Array on elements, representing the all the pins this winding is connected to",
+                    "description": "Array of all the pins this winding is connected to.",
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/connection"

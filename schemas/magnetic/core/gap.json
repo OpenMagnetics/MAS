@@ -19,13 +19,8 @@
             "exclusiveMinimum": 0
         },
         "coordinates": {
-            "description": "The coordinates of the center of the gap, referred to the center of the main column",
-            "type": "array",
-            "items": {
-                "type": "number"
-            },
-            "minItems": 3,
-            "maxItems": 3
+            "description": "The coordinates of the center of the gap, referred to the center of the main column.",
+            "$ref": "../../utils.json#/$defs/coordinates"
         },
         "shape": {
             "$ref": "../../utils.json#/$defs/columnShape"

@@ -109,12 +109,12 @@
                             "minimum": 0
                         },
                         "effectiveFrequency": {
-                            "description": "The effective frequency value of the waveform, according to IEEE 750181, Appendix C",
+                            "description": "Effective (equivalent-sine) frequency of the waveform, defined as the frequency of a sinusoid with the same RMS rate of change. Unit: Hz.",
                             "type": "number",
                             "minimum": 0
                         },
                         "acEffectiveFrequency": {
-                            "description": "The effective frequency value of the AC component of the waveform, according to IEEE 750181, Appendix C",
+                            "description": "Effective (equivalent-sine) frequency of the AC component of the waveform (DC component removed). Unit: Hz.",
                             "type": "number",
                             "minimum": 0
                         },

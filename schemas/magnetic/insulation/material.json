@@ -27,7 +27,7 @@
         "dielectricStrength":{
             "type": "array",
             "items": {
-                "$ref": "#/$defs/dieletricStrengthPoint"
+                "$ref": "#/$defs/dielectricStrengthPoint"
             },
             "minItems": 1
         },
@@ -37,12 +37,12 @@
             "exclusiveMinimum": 0
         },
         "thermalConductivity": {
-            "description": "The thermal conductivity of the insulation material, in W / (m * K)",
+            "description": "Thermal conductivity of the insulation material. Unit: W/(m*K).",
             "type": "number",
             "exclusiveMinimum": 0
         },
         "specificHeat": {
-            "description": "The specific heat of the insulation material, in J / (Kg * K)",
+            "description": "Specific heat capacity of the insulation material. Unit: J/(kg*K).",
             "type": "number",
             "exclusiveMinimum": 0
         },
@@ -86,12 +86,12 @@
     "required": ["name", "dielectricStrength"],
 
     "$defs": {
-        "dieletricStrengthPoint": {
-            "description": "data for describing one point of dieletric strength",
+        "dielectricStrengthPoint": {
+            "description": "data for describing one point of dielectric strength",
             "type": "object",
             "properties": {
                 "value": {
-                    "description": "Dieletric strength value, in V / m",
+                    "description": "Dielectric strength value, in V / m",
                     "type": "number",
                     "exclusiveMinimum": 0
                 },

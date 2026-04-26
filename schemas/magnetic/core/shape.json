@@ -38,7 +38,7 @@
             "type": "string"
         },
         "dimensions": {
-            "description": "The dimensions of a magnetic shape, keys must be as defined in EN 62317",
+            "description": "The dimensions of a magnetic shape. Keys are the dimension labels defined in IEC 62317 (and the modernised IEC 63093 series for planar cores).",
             "type": "object",
             "additionalProperties": {
                 "$ref": "../../utils.json#/$defs/dimension"

@@ -27,7 +27,7 @@
 
     "$defs": {
         "flybuckOperatingPoint": {
-            "description": "The descriptionof one flybuck operating point",
+            "description": "The description of one flybuck operating point",
             "title": "flybuckOperatingPoint",
             "type": "object",
             "properties": {
