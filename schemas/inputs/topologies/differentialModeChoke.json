@@ -21,8 +21,12 @@
         "configuration": {
             "description": "The DMC configuration type",
             "type": "string",
-            "enum": ["SINGLE_PHASE", "THREE_PHASE", "THREE_PHASE_WITH_NEUTRAL"],
-            "default": "SINGLE_PHASE"
+            "enum": [
+                "singlePhase",
+                "threePhase",
+                "threePhaseWithNeutral"
+            ],
+            "default": "singlePhase"
         },
         "lineFrequency": {
             "description": "The mains/line frequency in Hz (50 or 60 Hz typically). This is the frequency of the load current that causes magnetic excitation.",
@@ -67,13 +71,29 @@
             "type": "number"
         }
     },
-    "required": ["inputVoltage", "operatingCurrent", "ambientTemperature", "lineFrequency"],
-    "anyOf": [
-        {"required": ["minimumInductance"]},
-        {"required": ["minimumImpedance"]},
-        {"required": ["targetAttenuation"]}
+    "required": [
+        "inputVoltage",
+        "operatingCurrent",
+        "ambientTemperature",
+        "lineFrequency"
     ],
-
+    "anyOf": [
+        {
+            "required": [
+                "minimumInductance"
+            ]
+        },
+        {
+            "required": [
+                "minimumImpedance"
+            ]
+        },
+        {
+            "required": [
+                "targetAttenuation"
+            ]
+        }
+    ],
     "$defs": {
         "attenuationAtFrequency": {
             "description": "Attenuation requirement at a specific frequency",
@@ -89,7 +109,10 @@
                     "type": "number"
                 }
             },
-            "required": ["frequency", "attenuation"]
+            "required": [
+                "frequency",
+                "attenuation"
+            ]
         }
     }
 }

@@ -10,7 +10,10 @@
         "strand": {
             "description": "The wire used as strands",
             "oneOf": [
-                {"title": "wireRound", "$ref": "./round.json"},
+                {
+                    "title": "wireRound",
+                    "$ref": "./round.json"
+                },
                 {
                     "description": "The name of the wire used as strand",
                     "type": "string"
@@ -31,5 +34,8 @@
             "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         }
     },
-    "required": ["strand", "outerDiameter"]
+    "required": [
+        "strand",
+        "outerDiameter"
+    ]
 }

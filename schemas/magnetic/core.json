@@ -21,7 +21,7 @@
             },
             "uniqueItems": false
         },
-        "functionalDescription":{
+        "functionalDescription": {
             "description": "The data from the core based on its function, in a way that can be used by analytical models.",
             "type": "object",
             "title": "coreFunctionalDescription",
@@ -30,12 +30,19 @@
                     "description": "The type of core",
                     "title": "coreType",
                     "type": "string",
-                    "enum": ["two-piece set", "piece and plate", "toroidal", "closed shape"]
+                    "enum": [
+                        "twoPieceSet",
+                        "pieceAndPlate",
+                        "toroidal",
+                        "closedShape"
+                    ]
                 },
                 "material": {
                     "title": "CoreMaterialDataOrNameUnion",
                     "oneOf": [
-                        {"$ref": "./core/material.json"},
+                        {
+                            "$ref": "./core/material.json"
+                        },
                         {
                             "description": "The name of the material used in the core",
                             "type": "string"
@@ -45,7 +52,9 @@
                 "shape": {
                     "title": "CoreShapeDataOrNameUnion",
                     "oneOf": [
-                        {"$ref": "./core/shape.json"},
+                        {
+                            "$ref": "./core/shape.json"
+                        },
                         {
                             "description": "The name of the shape used in the core",
                             "type": "string"
@@ -68,12 +77,20 @@
                 "coating": {
                     "description": "The coating of the core",
                     "type": "string",
-                    "enum": ["epoxy", "parylene"]
+                    "enum": [
+                        "epoxy",
+                        "parylene"
+                    ]
                 }
             },
-            "required": ["type", "material", "shape", "gapping"]
+            "required": [
+                "type",
+                "material",
+                "shape",
+                "gapping"
+            ]
         },
-        "processedDescription":{
+        "processedDescription": {
             "description": "The data from the core after been processed, and ready to use by the analytical models",
             "type": "object",
             "title": "coreProcessedDescription",
@@ -108,14 +125,18 @@
                         {
                             "description": "List of rectangular winding windows",
                             "type": "array",
-                            "items": {"$ref": "#/$defs/rectangularWindingWindow"},
+                            "items": {
+                                "$ref": "#/$defs/rectangularWindingWindow"
+                            },
                             "minItems": 1,
                             "uniqueItems": false
                         },
                         {
                             "description": "List of radial winding windows",
                             "type": "array",
-                            "items": {"$ref": "#/$defs/radialWindingWindow"},
+                            "items": {
+                                "$ref": "#/$defs/radialWindingWindow"
+                            },
                             "minItems": 1,
                             "uniqueItems": false
                         }
@@ -124,14 +145,23 @@
                 "columns": {
                     "description": "List of columns in the core",
                     "type": "array",
-                    "items": {"$ref": "#/$defs/columnData"},
+                    "items": {
+                        "$ref": "#/$defs/columnData"
+                    },
                     "minItems": 1,
                     "uniqueItems": false
                 }
             },
-            "required": ["effectiveParameters", "width", "height", "depth", "windingWindows", "columns"]
+            "required": [
+                "effectiveParameters",
+                "width",
+                "height",
+                "depth",
+                "windingWindows",
+                "columns"
+            ]
         },
-        "geometricalDescription":{
+        "geometricalDescription": {
             "description": "List with data from the core based on its geometrical description, in a way that can be used by CAD models.",
             "title": "coreGeometricalDescription",
             "type": "array",
@@ -141,18 +171,23 @@
             "uniqueItems": true
         }
     },
-    "required": ["functionalDescription"],
-
+    "required": [
+        "functionalDescription"
+    ],
     "$defs": {
-        "coreGeometricalDescriptionElement":{
+        "coreGeometricalDescriptionElement": {
             "description": "The data from the core based on its geometrical description, in a way that can be used by CAD models.",
             "title": "coreGeometricalDescriptionElement",
             "oneOf": [
-                {"$ref": "./core/piece.json"},
-                {"$ref": "./core/spacer.json"}
+                {
+                    "$ref": "./core/piece.json"
+                },
+                {
+                    "$ref": "./core/spacer.json"
+                }
             ]
         },
-        "effectiveParameters":{
+        "effectiveParameters": {
             "description": "Effective data of the magnetic core",
             "type": "object",
             "properties": {
@@ -177,9 +212,14 @@
                     "exclusiveMinimum": 0
                 }
             },
-            "required": ["effectiveLength", "effectiveArea", "minimumArea", "effectiveVolume"]
+            "required": [
+                "effectiveLength",
+                "effectiveArea",
+                "minimumArea",
+                "effectiveVolume"
+            ]
         },
-        "rectangularWindingWindow":{
+        "rectangularWindingWindow": {
             "description": "It is the area between the winding column and the closest lateral column, and it represents the area where all the wires of the magnetic will have to fit, and equivalently, where all the current must circulate once, in the case of inductors, or twice, in the case of transformers",
             "type": "object",
             "properties": {
@@ -212,18 +252,29 @@
                     "description": "Way in which the sections are oriented inside the winding window",
                     "title": "windingOrientation",
                     "type": "string",
-                    "enum": ["contiguous", "overlapping"]
+                    "enum": [
+                        "contiguous",
+                        "overlapping"
+                    ]
                 },
                 "sectionsAlignment": {
                     "description": "Way in which the sections are aligned inside the winding window",
                     "title": "coilAlignment",
                     "type": "string",
-                    "enum": ["inner or top", "outer or bottom", "spread", "centered"]
+                    "enum": [
+                        "innerOrTop",
+                        "outerOrBottom",
+                        "spread",
+                        "centered"
+                    ]
                 }
             },
-            "required": ["width", "height"]
+            "required": [
+                "width",
+                "height"
+            ]
         },
-        "radialWindingWindow":{
+        "radialWindingWindow": {
             "description": "It is the area between the delimited between a height from the surface of the toroidal core at a given angle, and it represents the area where all the wires of the magnetic will have to fit, and equivalently, where all the current must circulate once, in the case of inductors, or twice, in the case of transformers",
             "type": "object",
             "properties": {
@@ -256,19 +307,28 @@
                     "description": "Way in which the sections are oriented inside the winding window",
                     "title": "windingOrientation",
                     "type": "string",
-                    "enum": ["contiguous", "overlapping"]
+                    "enum": [
+                        "contiguous",
+                        "overlapping"
+                    ]
                 }
             },
-            "required": ["angle", "radialHeight"]
+            "required": [
+                "angle",
+                "radialHeight"
+            ]
         },
-        "columnData":{
+        "columnData": {
             "description": "Data describing a column of the core",
             "type": "object",
             "properties": {
                 "type": {
                     "description": "Name of the column",
                     "type": "string",
-                    "enum": ["central", "lateral"]
+                    "enum": [
+                        "central",
+                        "lateral"
+                    ]
                 },
                 "shape": {
                     "title": "ColumnShape",
@@ -309,7 +369,15 @@
                     "$ref": "../utils.json#/$defs/coordinates"
                 }
             },
-            "required": ["type", "shape", "width", "depth", "height", "area", "coordinates"]
+            "required": [
+                "type",
+                "shape",
+                "width",
+                "depth",
+                "height",
+                "area",
+                "coordinates"
+            ]
         }
     }
 }

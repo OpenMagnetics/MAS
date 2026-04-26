@@ -21,18 +21,18 @@
                     "maximum": 5e-06
                 }
             ],
-            "topology": "Active Clamp Forward Converter",
+            "topology": "activeClampForwardConverter",
             "operatingTemperature": {
                 "maximum": 100
             },
             "insulation": {
-                "insulationType": "Reinforced",
-                "overvoltageCategory": "OVC-II",
-                "pollutionDegree": "P2",
+                "insulationType": "reinforced",
+                "overvoltageCategory": "II",
+                "pollutionDegree": "PD2",
                 "altitude": {
                     "maximum": 2000
                 },
-                "cti": "Group IIIA"
+                "cti": "groupIIIA"
             },
             "maximumDimensions": {
                 "width": 0.035,
@@ -52,7 +52,7 @@
                         "frequency": 200000,
                         "current": {
                             "processed": {
-                                "label": "Triangular",
+                                "label": "triangular",
                                 "peakToPeak": 0.8,
                                 "offset": 0.25,
                                 "dutyCycle": 0.45
@@ -60,7 +60,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 400,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -72,7 +72,7 @@
                         "frequency": 200000,
                         "current": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 1.0,
                                 "offset": 5.0,
                                 "dutyCycle": 0.45
@@ -80,7 +80,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 12,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -95,7 +95,7 @@
         "core": {
             "name": "RM 10 N97 Gapped",
             "functionalDescription": {
-                "type": "two-piece set",
+                "type": "twoPieceSet",
                 "material": "N97",
                 "shape": "RM 10",
                 "gapping": [

@@ -10,7 +10,9 @@
         "material": {
             "title": "WireMaterialDataOrNameUnion",
             "oneOf": [
-                {"$ref": "./material.json"},
+                {
+                    "$ref": "./material.json"
+                },
                 {
                     "description": "The name of the material used in the wire",
                     "type": "string"
@@ -26,8 +28,8 @@
             "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         }
     },
-    "required": [ "conductingDiameter" ],
-
-    "$defs": {
-    }
+    "required": [
+        "conductingDiameter"
+    ],
+    "$defs": {}
 }

@@ -74,8 +74,8 @@
             "title": "llcBridgeType",
             "type": "string",
             "enum": [
-                "Half Bridge",
-                "Full Bridge"
+                "halfBridge",
+                "fullBridge"
             ]
         },
         "llcOperatingPoint": {

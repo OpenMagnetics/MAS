@@ -21,7 +21,7 @@
             },
             "uniqueItems": false
         },
-        "functionalDescription":{
+        "functionalDescription": {
             "description": "Bobbin data described in functional terms, in a form suitable for analytical models.",
             "type": "object",
             "title": "bobbinFunctionalDescription",
@@ -29,13 +29,30 @@
                 "type": {
                     "description": "Whether the bobbin is a standard catalogue part or a custom design.",
                     "type": "string",
-                    "enum": ["standard", "custom"]
+                    "enum": [
+                        "standard",
+                        "custom"
+                    ]
                 },
                 "family": {
                     "description": "Bobbin family, named after the core shape family it is intended to fit. See IEC 62317 / IEC 63093.",
                     "title": "bobbinFamily",
                     "type": "string",
-                    "enum": ["u", "e", "etd", "er", "p", "rm", "ep", "pm", "el", "pq", "efd", "ec", "t"]
+                    "enum": [
+                        "u",
+                        "e",
+                        "etd",
+                        "er",
+                        "p",
+                        "rm",
+                        "ep",
+                        "pm",
+                        "el",
+                        "pq",
+                        "efd",
+                        "ec",
+                        "t"
+                    ]
                 },
                 "shape": {
                     "description": "Name of the core shape this bobbin is matched to.",
@@ -47,7 +64,9 @@
                 },
                 "material": {
                     "oneOf": [
-                        {"$ref": "./insulation/material.json"},
+                        {
+                            "$ref": "./insulation/material.json"
+                        },
                         {
                             "description": "Name of the material used in the bobbin.",
                             "type": "string"
@@ -85,9 +104,14 @@
                     "uniqueItems": true
                 }
             },
-            "required": ["type", "family", "shape", "dimensions"]
+            "required": [
+                "type",
+                "family",
+                "shape",
+                "dimensions"
+            ]
         },
-        "processedDescription":{
+        "processedDescription": {
             "type": "object",
             "title": "coreBobbinProcessedDescription",
             "properties": {
@@ -121,14 +145,18 @@
                         {
                             "description": "List of rectangular winding windows",
                             "type": "array",
-                            "items": {"$ref": "./core.json#/$defs/rectangularWindingWindow"},
+                            "items": {
+                                "$ref": "./core.json#/$defs/rectangularWindingWindow"
+                            },
                             "minItems": 1,
                             "uniqueItems": false
                         },
                         {
                             "description": "List of radial winding windows",
                             "type": "array",
-                            "items": {"$ref": "./core.json#/$defs/radialWindingWindow"},
+                            "items": {
+                                "$ref": "./core.json#/$defs/radialWindingWindow"
+                            },
                             "minItems": 1,
                             "uniqueItems": false
                         }
@@ -148,15 +176,29 @@
                     "$ref": "../utils.json#/$defs/coordinates"
                 }
             },
-            "required": ["columnShape", "wallThickness", "columnThickness", "columnDepth", "windingWindows"]
+            "required": [
+                "columnShape",
+                "wallThickness",
+                "columnThickness",
+                "columnDepth",
+                "windingWindows"
+            ]
         }
     },
     "anyOf": [
-        {"required": ["functionalDescription"]},
-        {"required": ["processedDescription"]}
+        {
+            "required": [
+                "functionalDescription"
+            ]
+        },
+        {
+            "required": [
+                "processedDescription"
+            ]
+        }
     ],
     "$defs": {
-        "pin":{
+        "pin": {
             "description": "Data describing one pin in a bobbin",
             "title": "pin",
             "type": "object",
@@ -169,12 +211,19 @@
                     "description": "The shape of the pin",
                     "title": "pinShape",
                     "type": "string",
-                    "enum": ["round", "rectangular", "irregular"]
+                    "enum": [
+                        "round",
+                        "rectangular",
+                        "irregular"
+                    ]
                 },
                 "type": {
                     "description": "Type of pin",
                     "type": "string",
-                    "enum": ["smd", "tht"]
+                    "enum": [
+                        "smd",
+                        "tht"
+                    ]
                 },
                 "rotation": {
                     "description": "The rotation of the pin, default is vertical",
@@ -189,9 +238,13 @@
                     "$ref": "../utils.json#/$defs/coordinates"
                 }
             },
-            "required": ["shape", "type", "dimensions"]
+            "required": [
+                "shape",
+                "type",
+                "dimensions"
+            ]
         },
-        "pinout":{
+        "pinout": {
             "description": "Data describing the pinout of a bobbin",
             "title": "pinout",
             "type": "object",
@@ -239,7 +292,12 @@
                     "$ref": "#/$defs/pin"
                 }
             },
-            "required": ["pitch", "rowDistance", "numberPins", "pinDescription"]
+            "required": [
+                "pitch",
+                "rowDistance",
+                "numberPins",
+                "pinDescription"
+            ]
         }
     }
 }

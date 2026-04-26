@@ -6,11 +6,11 @@
     "description": "Data describing one operating point, including the operating conditions and the excitations for all ports",
     "type": "object",
     "properties": {
-        "name":{
+        "name": {
             "description": "Name describing this operating point",
             "type": "string"
         },
-        "conditions":{
+        "conditions": {
             "title": "operatingConditions",
             "$ref": "./operatingConditions.json"
         },
@@ -25,8 +25,9 @@
             "minItems": 1
         }
     },
-    "required": ["conditions", "excitationsPerWinding"],
-
-    "$defs": {
-    }
+    "required": [
+        "conditions",
+        "excitationsPerWinding"
+    ],
+    "$defs": {}
 }

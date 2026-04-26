@@ -28,8 +28,9 @@
             "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         }
     },
-    "required": [ "conductingWidth", "conductingHeight" ],
-
-    "$defs": {
-    }
+    "required": [
+        "conductingWidth",
+        "conductingHeight"
+    ],
+    "$defs": {}
 }

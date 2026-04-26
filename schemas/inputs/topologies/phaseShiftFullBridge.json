@@ -58,9 +58,9 @@
             "title": "psfbRectifierType",
             "type": "string",
             "enum": [
-                "Full Bridge",
-                "Center Tapped",
-                "Current Doubler"
+                "fullBridge",
+                "centerTapped",
+                "currentDoubler"
             ]
         },
         "psfbOperatingPoint": {

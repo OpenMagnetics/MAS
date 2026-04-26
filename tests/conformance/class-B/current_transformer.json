@@ -14,7 +14,7 @@
                     "maximum": 101.0
                 }
             ],
-            "topology": "Current Transformer",
+            "topology": "currentTransformer",
             "operatingTemperature": {
                 "maximum": 85
             },
@@ -36,7 +36,7 @@
                         "frequency": 50,
                         "current": {
                             "processed": {
-                                "label": "Sinusoidal",
+                                "label": "sinusoidal",
                                 "peakToPeak": 141.4,
                                 "offset": 0,
                                 "dutyCycle": 0.5
@@ -44,7 +44,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Sinusoidal",
+                                "label": "sinusoidal",
                                 "peakToPeak": 0.1,
                                 "offset": 0,
                                 "dutyCycle": 0.5
@@ -56,7 +56,7 @@
                         "frequency": 50,
                         "current": {
                             "processed": {
-                                "label": "Sinusoidal",
+                                "label": "sinusoidal",
                                 "peakToPeak": 1.414,
                                 "offset": 0,
                                 "dutyCycle": 0.5
@@ -64,7 +64,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Sinusoidal",
+                                "label": "sinusoidal",
                                 "peakToPeak": 10.0,
                                 "offset": 0,
                                 "dutyCycle": 0.5
@@ -84,7 +84,7 @@
                         "frequency": 100000,
                         "current": {
                             "processed": {
-                                "label": "Sinusoidal",
+                                "label": "sinusoidal",
                                 "peakToPeak": 28.3,
                                 "offset": 0,
                                 "dutyCycle": 0.5
@@ -92,7 +92,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Sinusoidal",
+                                "label": "sinusoidal",
                                 "peakToPeak": 0.02,
                                 "offset": 0,
                                 "dutyCycle": 0.5
@@ -104,7 +104,7 @@
                         "frequency": 100000,
                         "current": {
                             "processed": {
-                                "label": "Sinusoidal",
+                                "label": "sinusoidal",
                                 "peakToPeak": 0.283,
                                 "offset": 0,
                                 "dutyCycle": 0.5
@@ -112,7 +112,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Sinusoidal",
+                                "label": "sinusoidal",
                                 "peakToPeak": 2.0,
                                 "offset": 0,
                                 "dutyCycle": 0.5

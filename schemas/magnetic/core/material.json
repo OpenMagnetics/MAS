@@ -9,19 +9,40 @@
         "type": {
             "description": "The type of a magnetic material",
             "type": "string",
-            "enum": ["commercial", "custom"]
+            "enum": [
+                "commercial",
+                "custom"
+            ]
         },
         "material": {
             "description": "The composition of a magnetic material",
             "title": "materialType",
             "type": "string",
-            "enum": ["ferrite", "powder", "nanocrystalline", "amorphous", "electricalSteel"]
+            "enum": [
+                "ferrite",
+                "powder",
+                "nanocrystalline",
+                "amorphous",
+                "electricalSteel"
+            ]
         },
         "materialComposition": {
             "description": "The composition of a magnetic material",
             "title": "materialComposition",
             "type": "string",
-            "enum": ["MnZn", "NiZn", "MgZn", "FeSiAl", "FeSi", "FeNi", "FeNiMo", "FeMo", "Carbonyl Iron", "Iron", "Proprietary"]
+            "enum": [
+                "MnZn",
+                "NiZn",
+                "MgZn",
+                "FeSiAl",
+                "FeSi",
+                "FeNi",
+                "FeNiMo",
+                "FeMo",
+                "carbonylIron",
+                "iron",
+                "proprietary"
+            ]
         },
         "application": {
             "$ref": "../../utils.json#/$defs/application"
@@ -103,7 +124,7 @@
             "type": "number",
             "exclusiveMinimum": 0
         },
-        "permeability":{
+        "permeability": {
             "description": "Relative permeability of the magnetic material, broken down by which kind of permeability was measured. At minimum `initial` is required for materials that have one (essentially all ferrites and tape-wound alloys). Each entry uses permeabilityPoint, which pins frequency, temperature, AC peak flux density and DC bias per measurement.",
             "title": "permeabilities",
             "type": "object",
@@ -136,19 +157,24 @@
                             "$ref": "#/$defs/permeability"
                         }
                     },
-                    "required": ["real", "imaginary"]
+                    "required": [
+                        "real",
+                        "imaginary"
+                    ]
                 }
             },
-            "required": ["initial"]
+            "required": [
+                "initial"
+            ]
         },
-        "bhCycle":{
+        "bhCycle": {
             "type": "array",
             "items": {
                 "$ref": "#/$defs/bhCyclePoint"
             },
             "minItems": 4
         },
-        "volumetricLosses":{
+        "volumetricLosses": {
             "description": "Volumetric core losses. Values throughout this block are in watts per cubic metre (W/m^3). Coefficient-based methods (Steinmetz, Roshen, ...) assume the same unit system: P in W/m^3, f in Hz, B in T (peak). See docs/units.md and docs/normative-references.md.",
             "title": "volumetricLosses",
             "type": "object",
@@ -159,12 +185,24 @@
                 "items": {
                     "title": "volumetricLossesMethod",
                     "anyOf": [
-                        { "$ref": "#/$defs/steinmetzCoreLossesMethodData" },
-                        { "$ref": "#/$defs/roshenCoreLossesMethodData" },
-                        { "$ref": "#/$defs/micrometalsCoreLossesMethodData" },
-                        { "$ref": "#/$defs/magneticsCoreLossesMethodData" },
-                        { "$ref": "#/$defs/pocoCoreLossesMethodData" },
-                        { "$ref": "#/$defs/tdgCoreLossesMethodData" },
+                        {
+                            "$ref": "#/$defs/steinmetzCoreLossesMethodData"
+                        },
+                        {
+                            "$ref": "#/$defs/roshenCoreLossesMethodData"
+                        },
+                        {
+                            "$ref": "#/$defs/micrometalsCoreLossesMethodData"
+                        },
+                        {
+                            "$ref": "#/$defs/magneticsCoreLossesMethodData"
+                        },
+                        {
+                            "$ref": "#/$defs/pocoCoreLossesMethodData"
+                        },
+                        {
+                            "$ref": "#/$defs/tdgCoreLossesMethodData"
+                        },
                         {
                             "description": "List of volumetric losses points",
                             "type": "array",
@@ -177,12 +215,14 @@
                         {
                             "$ref": "#/$defs/lossFactorCoreLossesMethodData"
                         },
-                        { "$ref": "#/$defs/customCoreLossesMethodData" }
+                        {
+                            "$ref": "#/$defs/customCoreLossesMethodData"
+                        }
                     ]
                 }
             }
         },
-        "recommendations":{
+        "recommendations": {
             "description": "Manufacturer recommended operating conditions for this material",
             "type": "object",
             "title": "coreMaterialRecommendations",
@@ -209,16 +249,20 @@
                 "typicalApplications": {
                     "description": "Typical applications per manufacturer",
                     "type": "array",
-                    "items": { "type": "string" }
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "typicalTopologies": {
                     "description": "Recommended converter topologies",
                     "type": "array",
-                    "items": { "type": "string" }
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
-        "massLosses":{
+        "massLosses": {
             "description": "Mass-specific core losses. Values throughout this block are in watts per kilogram (W/kg). Note: this is the per-mass form used for tape-wound, amorphous and nanocrystalline materials; the per-volume form lives in `volumetricLosses` and uses W/m^3. The two are NOT interchangeable without the material density. See docs/units.md and docs/normative-references.md.",
             "title": "massLosses",
             "type": "object",
@@ -229,8 +273,12 @@
                 "items": {
                     "title": "massLossesMethod",
                     "anyOf": [
-                        { "$ref": "#/$defs/magnetecCoreLossesMethodData" },
-                        { "$ref": "#/$defs/customCoreLossesMethodData" },
+                        {
+                            "$ref": "#/$defs/magnetecCoreLossesMethodData"
+                        },
+                        {
+                            "$ref": "#/$defs/customCoreLossesMethodData"
+                        },
                         {
                             "description": "List of mass losses points",
                             "type": "array",
@@ -245,8 +293,16 @@
             }
         }
     },
-    "required": ["material", "type", "name", "permeability", "saturation", "resistivity", "volumetricLosses", "manufacturerInfo"],
-
+    "required": [
+        "material",
+        "type",
+        "name",
+        "permeability",
+        "saturation",
+        "resistivity",
+        "volumetricLosses",
+        "manufacturerInfo"
+    ],
     "$defs": {
         "permeability": {
             "title": "permeability",
@@ -297,13 +353,18 @@
                                 "exclusiveMinimum": 0
                             }
                         },
-                        "required": ["value"]
+                        "required": [
+                            "value"
+                        ]
                     },
                     "minItems": 1,
                     "uniqueItems": true
                 }
             },
-            "required": ["method", "factors"]
+            "required": [
+                "method",
+                "factors"
+            ]
         },
         "permeabilityPoint": {
             "description": "data for describing one point of permeability",
@@ -344,16 +405,28 @@
                         "description": "Object where keys are shape families for which this permeability is valid. If missing, the variant is valid for all shapes",
                         "title": "initialPermeabilitModifier",
                         "oneOf": [
-                            {"$ref": "#/$defs/magneticsPermeabilityMethodData" },
-                            {"$ref": "#/$defs/micrometalsPermeabilityMethodData" },
-                            {"$ref": "#/$defs/fairRitePermeabilityMethodData" },
-                            {"$ref": "#/$defs/pocoPermeabilityMethodData" },
-                            {"$ref": "#/$defs/tdgPermeabilityMethodData" }
+                            {
+                                "$ref": "#/$defs/magneticsPermeabilityMethodData"
+                            },
+                            {
+                                "$ref": "#/$defs/micrometalsPermeabilityMethodData"
+                            },
+                            {
+                                "$ref": "#/$defs/fairRitePermeabilityMethodData"
+                            },
+                            {
+                                "$ref": "#/$defs/pocoPermeabilityMethodData"
+                            },
+                            {
+                                "$ref": "#/$defs/tdgPermeabilityMethodData"
+                            }
                         ]
                     }
                 }
             },
-            "required": ["value"]
+            "required": [
+                "value"
+            ]
         },
         "bhCyclePoint": {
             "description": "One point of the BH cycle.",
@@ -372,7 +445,11 @@
                     "type": "number"
                 }
             },
-            "required": ["magneticFluxDensity", "magneticField", "temperature"],
+            "required": [
+                "magneticFluxDensity",
+                "magneticField",
+                "temperature"
+            ],
             "additionalProperties": false
         },
         "steinmetzCoreLossesMethodData": {
@@ -433,12 +510,19 @@
                                 "default": 0
                             }
                         },
-                        "required": ["k", "alpha", "beta"]
+                        "required": [
+                            "k",
+                            "alpha",
+                            "beta"
+                        ]
                     },
                     "minItems": 1
                 }
             },
-            "required": ["method", "ranges"]
+            "required": [
+                "method",
+                "ranges"
+            ]
         },
         "volumetricLossesPoint": {
             "description": "data for describing the volumetric losses at a given point of magnetic flux density, frequency and temperature",
@@ -462,7 +546,12 @@
                     "type": "string"
                 }
             },
-            "required": ["magneticFluxDensity", "origin", "temperature", "value"]
+            "required": [
+                "magneticFluxDensity",
+                "origin",
+                "temperature",
+                "value"
+            ]
         },
         "massLossesPoint": {
             "description": "Mass-specific losses at a given point of magnetic flux density, frequency and temperature. Unit: W/kg.",
@@ -486,7 +575,12 @@
                     "type": "string"
                 }
             },
-            "required": ["magneticFluxDensity", "origin", "temperature", "value"]
+            "required": [
+                "magneticFluxDensity",
+                "origin",
+                "temperature",
+                "value"
+            ]
         },
         "roshenCoreLossesMethodData": {
             "description": "Roshen coefficients for estimating volumetric losses",
@@ -529,10 +623,18 @@
                             "type": "number"
                         }
                     },
-                    "required": ["excessLossesCoefficient", "resistivityFrequencyCoefficient", "resistivityMagneticFluxDensityCoefficient", "resistivityOffset", "resistivityTemperatureCoefficient"]
+                    "required": [
+                        "excessLossesCoefficient",
+                        "resistivityFrequencyCoefficient",
+                        "resistivityMagneticFluxDensityCoefficient",
+                        "resistivityOffset",
+                        "resistivityTemperatureCoefficient"
+                    ]
                 }
             },
-            "required": ["method"]
+            "required": [
+                "method"
+            ]
         },
         "micrometalsCoreLossesMethodData": {
             "description": "Micrometals method for estimating volumetric losses",
@@ -557,9 +659,14 @@
                 "d": {
                     "type": "number"
                 }
-
             },
-            "required": ["method", "a", "b", "c", "d"]
+            "required": [
+                "method",
+                "a",
+                "b",
+                "c",
+                "d"
+            ]
         },
         "magneticsCoreLossesMethodData": {
             "description": "Magnetics method for estimating volumetric losses",
@@ -581,9 +688,13 @@
                 "c": {
                     "type": "number"
                 }
-
             },
-            "required": ["method", "a", "b", "c"]
+            "required": [
+                "method",
+                "a",
+                "b",
+                "c"
+            ]
         },
         "magnetecCoreLossesMethodData": {
             "description": "Magnetec method for estimating mass losses",
@@ -596,9 +707,10 @@
                     "title": "MassCoreLossesMethodType",
                     "const": "magnetec"
                 }
-
             },
-            "required": ["method"]
+            "required": [
+                "method"
+            ]
         },
         "customCoreLossesMethodData": {
             "description": "Open-registry escape hatch for loss methods that are not represented by any of the named branches above. The `method` string identifies the model (e.g. a vendor name or a published reference); `parameters` carries arbitrary method-specific data. `source` is a free-form citation (DOI, datasheet revision, vendor app-note) so the model is traceable. New vendor models can be carried in MAS without a schema change.",
@@ -619,7 +731,10 @@
                     "type": "string"
                 }
             },
-            "required": ["method", "parameters"]
+            "required": [
+                "method",
+                "parameters"
+            ]
         },
         "pocoCoreLossesMethodData": {
             "description": "Poco method for estimating volumetric losses",
@@ -642,7 +757,12 @@
                     "type": "number"
                 }
             },
-            "required": ["method", "a", "b", "c"]
+            "required": [
+                "method",
+                "a",
+                "b",
+                "c"
+            ]
         },
         "tdgCoreLossesMethodData": {
             "description": "TDG method for estimating volumetric losses",
@@ -668,7 +788,13 @@
                     "type": "number"
                 }
             },
-            "required": ["method", "a", "b", "c", "d"]
+            "required": [
+                "method",
+                "a",
+                "b",
+                "c",
+                "d"
+            ]
         },
         "magneticsPermeabilityMethodData": {
             "description": "Coefficients given by Magnetics in order to calculate the permeability of their cores",
@@ -695,7 +821,11 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a", "b", "c"]
+                    "required": [
+                        "a",
+                        "b",
+                        "c"
+                    ]
                 },
                 "frequencyFactor": {
                     "description": "Field with the coefficients used to calculate how much the permeability decreases with the frequency, as factor = a + b * f + c * pow(f, 2) + d * pow(f, 3) + e * pow(f, 4)",
@@ -717,7 +847,13 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a", "b", "c", "d", "e"]
+                    "required": [
+                        "a",
+                        "b",
+                        "c",
+                        "d",
+                        "e"
+                    ]
                 },
                 "temperatureFactor": {
                     "description": "Field with the coefficients used to calculate how much the permeability decreases with the temperature, as factor = a + b * T + c * pow(T, 2) + d * pow(T, 3) + e * pow(T, 4)",
@@ -739,10 +875,18 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a", "b", "c", "d", "e"]
+                    "required": [
+                        "a",
+                        "b",
+                        "c",
+                        "d",
+                        "e"
+                    ]
                 }
             },
-            "required": ["magneticFieldDcBiasFactor"]
+            "required": [
+                "magneticFieldDcBiasFactor"
+            ]
         },
         "micrometalsPermeabilityMethodData": {
             "description": "Coefficients given by Micrometals in order to calculate the permeability of their cores",
@@ -772,7 +916,12 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a", "b", "c", "d"]
+                    "required": [
+                        "a",
+                        "b",
+                        "c",
+                        "d"
+                    ]
                 },
                 "magneticFluxDensityFactor": {
                     "description": "Field with the coefficients used to calculate how much the permeability decreases with the B field, as factor = = 1 / ( 1 / ( a + b * pow(B,c)) + 1 / (d * pow(B, e) ) + 1 / f )",
@@ -797,7 +946,14 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a", "b", "c", "d", "e", "f"]
+                    "required": [
+                        "a",
+                        "b",
+                        "c",
+                        "d",
+                        "e",
+                        "f"
+                    ]
                 },
                 "frequencyFactor": {
                     "description": "Field with the coefficients used to calculate how much the permeability decreases with the frequency, as factor = 1 / (a + b * pow(f, c) ) + d",
@@ -816,7 +972,12 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a", "b", "c", "d"]
+                    "required": [
+                        "a",
+                        "b",
+                        "c",
+                        "d"
+                    ]
                 },
                 "temperatureFactor": {
                     "description": "Field with the coefficients used to calculate how much the permeability decreases with the temperature, as either factor = a * (T -20) * 0.0001 or factor = (a + c * T + e * pow(T, 2)) / (1 + b * T + d * pow(T, 2))",
@@ -838,10 +999,18 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a"]
+                    "required": [
+                        "a"
+                    ]
                 }
             },
-            "required": ["method", "magneticFieldDcBiasFactor", "magneticFluxDensityFactor", "frequencyFactor", "temperatureFactor"]
+            "required": [
+                "method",
+                "magneticFieldDcBiasFactor",
+                "magneticFluxDensityFactor",
+                "frequencyFactor",
+                "temperatureFactor"
+            ]
         },
         "fairRitePermeabilityMethodData": {
             "description": "Coefficients given by Fair-Rite in order to calculate the permeability of their materials",
@@ -862,10 +1031,15 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a"]
+                    "required": [
+                        "a"
+                    ]
                 }
             },
-            "required": ["method", "temperatureFactor"]
+            "required": [
+                "method",
+                "temperatureFactor"
+            ]
         },
         "pocoPermeabilityMethodData": {
             "description": "Coefficients given by Poco in order to calculate the permeability of their materials",
@@ -895,10 +1069,18 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a", "b", "c", "d"]
+                    "required": [
+                        "a",
+                        "b",
+                        "c",
+                        "d"
+                    ]
                 }
             },
-            "required": ["method", "magneticFieldDcBiasFactor"]
+            "required": [
+                "method",
+                "magneticFieldDcBiasFactor"
+            ]
         },
         "tdgPermeabilityMethodData": {
             "description": "Coefficients given by TDG in order to calculate the permeability of their materials",
@@ -925,10 +1107,17 @@
                             "type": "number"
                         }
                     },
-                    "required": ["a", "b", "c"]
+                    "required": [
+                        "a",
+                        "b",
+                        "c"
+                    ]
                 }
             },
-            "required": ["method", "magneticFieldDcBiasFactor"]
+            "required": [
+                "method",
+                "magneticFieldDcBiasFactor"
+            ]
         }
     }
 }

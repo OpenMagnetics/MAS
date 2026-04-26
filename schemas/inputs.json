@@ -6,25 +6,25 @@
     "description": "The description of the inputs that can be used to design a Magnetic",
     "type": "object",
     "properties": {
-        "operatingPoints":{
+        "operatingPoints": {
             "description": "Data describing the operating points",
             "title": "operatingPoints",
             "type": "array",
-            "items": {                
+            "items": {
                 "$ref": "./inputs/operatingPoint.json"
             },
             "minItems": 1
         },
-        "designRequirements":{
+        "designRequirements": {
             "description": "Data describing the design requirements",
             "title": "designRequirements",
             "$ref": "./inputs/designRequirements.json"
         },
-        "converterInformation":{
+        "converterInformation": {
             "title": "converterInformation",
             "type": "object",
             "properties": {
-                "supportedTopologies":{
+                "supportedTopologies": {
                     "type": "object",
                     "properties": {
                         "flyback": {
@@ -68,8 +68,9 @@
             }
         }
     },
-    "required": ["operatingPoints", "designRequirements"],
-
-    "$defs": {
-    }
+    "required": [
+        "operatingPoints",
+        "designRequirements"
+    ],
+    "$defs": {}
 }

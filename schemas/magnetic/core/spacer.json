@@ -9,13 +9,17 @@
         "type": {
             "description": "The type of spacer",
             "type": "string",
-            "enum": ["spacer"]
+            "enum": [
+                "spacer"
+            ]
         },
         "insulationMaterial": {
             "description": "Material of the spacer",
             "title": "InsulationMaterialDataOrNameUnion",
             "oneOf": [
-                {"$ref": "../insulation/material.json"},
+                {
+                    "$ref": "../insulation/material.json"
+                },
                 {
                     "description": "The name of the material used in the insulation",
                     "type": "string"
@@ -31,5 +35,10 @@
             "$ref": "../../utils.json#/$defs/coordinates"
         }
     },
-    "required": ["type", "insulationMaterial", "dimensions", "coordinates"]
+    "required": [
+        "type",
+        "insulationMaterial",
+        "dimensions",
+        "coordinates"
+    ]
 }

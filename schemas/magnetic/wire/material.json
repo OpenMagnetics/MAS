@@ -6,17 +6,19 @@
     "description": "A material for wire",
     "type": "object",
     "properties": {
-        "name": {   
+        "name": {
             "description": "The name of a wire material",
             "type": "string"
         },
-        "permeability":{
+        "permeability": {
             "description": "The permeability of a wire material",
             "type": "number",
             "exclusiveMinimum": 0
         },
-        "resistivity":{"$ref": "#/$defs/resistivity"},
-        "thermalConductivity":{
+        "resistivity": {
+            "$ref": "#/$defs/resistivity"
+        },
+        "thermalConductivity": {
             "type": "array",
             "items": {
                 "$ref": "#/$defs/thermalConductivityPoint"
@@ -24,8 +26,11 @@
             "minItems": 1
         }
     },
-    "required": ["name", "permeability", "resistivity"],
-
+    "required": [
+        "name",
+        "permeability",
+        "resistivity"
+    ],
     "$defs": {
         "resistivity": {
             "description": "data for describing the resistivity of a wire",
@@ -45,7 +50,11 @@
                     "type": "number"
                 }
             },
-            "required": ["referenceValue", "referenceTemperature", "temperatureCoefficient"]
+            "required": [
+                "referenceValue",
+                "referenceTemperature",
+                "temperatureCoefficient"
+            ]
         },
         "thermalConductivityPoint": {
             "description": "data for describing one point of thermal conductivity",
@@ -61,7 +70,10 @@
                     "type": "number"
                 }
             },
-            "required": ["value", "temperature"]
+            "required": [
+                "value",
+                "temperature"
+            ]
         }
     }
 }

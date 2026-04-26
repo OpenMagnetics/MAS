@@ -59,14 +59,24 @@
             "type": "number"
         }
     },
-    "required": ["inputVoltage", "outputVoltage", "outputPower", "switchingFrequency", "ambientTemperature"],
-
+    "required": [
+        "inputVoltage",
+        "outputVoltage",
+        "outputPower",
+        "switchingFrequency",
+        "ambientTemperature"
+    ],
     "$defs": {
         "pfcModes": {
             "description": "The conduction mode of the PFC",
             "title": "pfcModes",
             "type": "string",
-            "enum": ["Continuous Conduction Mode", "Discontinuous Conduction Mode", "Critical Conduction Mode", "Transition Mode"]
+            "enum": [
+                "continuousConductionMode",
+                "discontinuousConductionMode",
+                "criticalConductionMode",
+                "transitionMode"
+            ]
         }
     }
 }

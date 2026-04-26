@@ -18,7 +18,9 @@
             "title": "magneticManufacturerInfo",
             "description": "Manufacturer information for the magnetic. Extends the shared manufacturerInfo with a datasheetInfo block for catalogue-level data.",
             "allOf": [
-                { "$ref": "./utils.json#/$defs/manufacturerInfo" },
+                {
+                    "$ref": "./utils.json#/$defs/manufacturerInfo"
+                },
                 {
                     "type": "object",
                     "properties": {

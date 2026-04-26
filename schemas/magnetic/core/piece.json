@@ -9,12 +9,20 @@
         "type": {
             "description": "The type of piece",
             "type": "string",
-            "enum": ["half set", "toroidal", "plate", "sheet", "closed"]
+            "enum": [
+                "halfSet",
+                "toroidal",
+                "plate",
+                "sheet",
+                "closed"
+            ]
         },
         "material": {
             "title": "CoreMaterialDataOrNameUnion",
             "oneOf": [
-                {"$ref": "./material.json"},
+                {
+                    "$ref": "./material.json"
+                },
                 {
                     "description": "The name of the material used in the piece",
                     "type": "string"
@@ -24,7 +32,9 @@
         "shape": {
             "title": "CoreShapeDataOrNameUnion",
             "oneOf": [
-                {"$ref": "./shape.json"},
+                {
+                    "$ref": "./shape.json"
+                },
                 {
                     "description": "The name of the shape used in the piece",
                     "type": "string"
@@ -47,10 +57,15 @@
             "uniqueItems": true
         }
     },
-    "required": ["type", "material", "shape", "coordinates", "rotation"],
-
+    "required": [
+        "type",
+        "material",
+        "shape",
+        "coordinates",
+        "rotation"
+    ],
     "$defs": {
-        "machining":{
+        "machining": {
             "description": "Data describing the machining applied to a piece",
             "title": "machining",
             "type": "object",
@@ -65,7 +80,10 @@
                     "$ref": "../../utils.json#/$defs/coordinates"
                 }
             },
-            "required": ["length", "coordinates"]
+            "required": [
+                "length",
+                "coordinates"
+            ]
         }
     }
 }

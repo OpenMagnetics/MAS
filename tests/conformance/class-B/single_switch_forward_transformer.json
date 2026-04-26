@@ -26,18 +26,18 @@
                     "maximum": 8e-06
                 }
             ],
-            "topology": "Single Switch Forward Converter",
+            "topology": "singleSwitchForwardConverter",
             "operatingTemperature": {
                 "maximum": 100
             },
             "insulation": {
-                "insulationType": "Reinforced",
-                "overvoltageCategory": "OVC-II",
-                "pollutionDegree": "P2",
+                "insulationType": "reinforced",
+                "overvoltageCategory": "II",
+                "pollutionDegree": "PD2",
                 "altitude": {
                     "maximum": 2000
                 },
-                "cti": "Group IIIA"
+                "cti": "groupIIIA"
             },
             "maximumDimensions": {
                 "width": 0.04,
@@ -57,7 +57,7 @@
                         "frequency": 150000,
                         "current": {
                             "processed": {
-                                "label": "Triangular",
+                                "label": "triangular",
                                 "peakToPeak": 0.5,
                                 "offset": 0.3,
                                 "dutyCycle": 0.4
@@ -65,7 +65,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 400,
                                 "offset": 0,
                                 "dutyCycle": 0.4
@@ -77,7 +77,7 @@
                         "frequency": 150000,
                         "current": {
                             "processed": {
-                                "label": "Triangular",
+                                "label": "triangular",
                                 "peakToPeak": 0.5,
                                 "offset": -0.3,
                                 "dutyCycle": 0.4
@@ -85,7 +85,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 400,
                                 "offset": 0,
                                 "dutyCycle": 0.4
@@ -97,7 +97,7 @@
                         "frequency": 150000,
                         "current": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 0.6,
                                 "offset": 3.0,
                                 "dutyCycle": 0.4
@@ -105,7 +105,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 30,
                                 "offset": 0,
                                 "dutyCycle": 0.4
@@ -120,7 +120,7 @@
         "core": {
             "name": "RM 12 N97",
             "functionalDescription": {
-                "type": "two-piece set",
+                "type": "twoPieceSet",
                 "material": "N97",
                 "shape": "RM 12",
                 "gapping": [],

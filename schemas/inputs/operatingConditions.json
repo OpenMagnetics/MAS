@@ -25,17 +25,26 @@
             "description": "Cooling method for the magnetic component",
             "title": "cooling",
             "oneOf": [
-                {"$ref": "#/$defs/naturalConvectionCooling"},
-                {"$ref": "#/$defs/forcedConvectionCooling"},
-                {"$ref": "#/$defs/heatsinkCooling"},
-                {"$ref": "#/$defs/coldPlateCooling"}
+                {
+                    "$ref": "#/$defs/naturalConvectionCooling"
+                },
+                {
+                    "$ref": "#/$defs/forcedConvectionCooling"
+                },
+                {
+                    "$ref": "#/$defs/heatsinkCooling"
+                },
+                {
+                    "$ref": "#/$defs/coldPlateCooling"
+                }
             ]
         }
     },
-    "required": ["ambientTemperature"],
-
+    "required": [
+        "ambientTemperature"
+    ],
     "$defs": {
-        "naturalConvectionCooling":{
+        "naturalConvectionCooling": {
             "description": "Data describing a natural convection cooling",
             "type": "object",
             "title": "naturalConvectionCooling",
@@ -52,7 +61,7 @@
             },
             "required": []
         },
-        "forcedConvectionCooling":{
+        "forcedConvectionCooling": {
             "description": "Data describing a forced convection cooling",
             "type": "object",
             "title": "forcedConvectionCooling",
@@ -74,9 +83,11 @@
                     "default": "air"
                 }
             },
-            "required": ["velocity"]
+            "required": [
+                "velocity"
+            ]
         },
-        "heatsinkCooling":{
+        "heatsinkCooling": {
             "description": "Data describing a heatsink cooling",
             "type": "object",
             "title": "heatsinkCooling",
@@ -98,9 +109,11 @@
                     "$ref": "../utils.json#/$defs/dimensions"
                 }
             },
-            "required": ["thermalResistance"]
+            "required": [
+                "thermalResistance"
+            ]
         },
-        "coldPlateCooling":{
+        "coldPlateCooling": {
             "description": "Data describing a cold plate cooling",
             "type": "object",
             "title": "coldPlateCooling",
@@ -126,7 +139,9 @@
                     "$ref": "../utils.json#/$defs/dimensions"
                 }
             },
-            "required": ["maximumTemperature"]
+            "required": [
+                "maximumTemperature"
+            ]
         }
     }
 }

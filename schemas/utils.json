@@ -14,25 +14,41 @@
                 "outputVoltages": {
                     "description": "List of output voltages, one per output. Interpreted per outputVoltagesType (default: dc). See docs/normative-references.md.",
                     "type": "array",
-                    "items": {"type": "number"},
+                    "items": {
+                        "type": "number"
+                    },
                     "minItems": 1
                 },
                 "outputVoltagesType": {
                     "description": "Type of value carried in outputVoltages: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).",
                     "type": "string",
-                    "enum": ["dc", "rms", "peak", "peakToPeak", "average"],
+                    "enum": [
+                        "dc",
+                        "rms",
+                        "peak",
+                        "peakToPeak",
+                        "average"
+                    ],
                     "default": "dc"
                 },
                 "outputCurrents": {
                     "description": "List of output currents, one per output. Interpreted per outputCurrentsType (default: dc). See docs/normative-references.md.",
                     "type": "array",
-                    "items": {"type": "number"},
+                    "items": {
+                        "type": "number"
+                    },
                     "minItems": 1
                 },
                 "outputCurrentsType": {
                     "description": "Type of value carried in outputCurrents: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).",
                     "type": "string",
-                    "enum": ["dc", "rms", "peak", "peakToPeak", "average"],
+                    "enum": [
+                        "dc",
+                        "rms",
+                        "peak",
+                        "peakToPeak",
+                        "average"
+                    ],
                     "default": "dc"
                 },
                 "switchingFrequency": {
@@ -44,29 +60,55 @@
                     "type": "number"
                 }
             },
-            "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "ambientTemperature"]
+            "required": [
+                "outputVoltages",
+                "outputCurrents",
+                "switchingFrequency",
+                "ambientTemperature"
+            ]
         },
         "insulationType": {
             "description": "Required type of insulation",
             "type": "string",
-            "enum": ["Functional", "Basic", "Supplementary", "Double", "Reinforced"]
+            "enum": [
+                "functional",
+                "basic",
+                "supplementary",
+                "double",
+                "reinforced"
+            ]
         },
         "wiringTechnology": {
             "description": "Technology that must be used to create the wiring",
             "type": "string",
-            "enum": ["Wound", "Printed", "Stamped", "Deposition"]
+            "enum": [
+                "wound",
+                "printed",
+                "stamped",
+                "deposition"
+            ]
         },
         "application": {
             "description": "Application of the magnetic, can be Power, Signal Processing, or Interference Suppression",
             "title": "application",
             "type": "string",
-            "enum": ["Power", "Signal Processing", "Interference Suppression"]
+            "enum": [
+                "power",
+                "signalProcessing",
+                "interferenceSuppression"
+            ]
         },
         "subApplication": {
             "description": "Sub application of the magnetic, can be Power Filtering, Transforming, Isolation, Common Mode Noise Filtering, Differential Mode Noise Filtering",
             "title": "subApplication",
             "type": "string",
-            "enum": ["Power Filtering", "Transforming", "Isolation", "Common Mode Noise Filtering", "Differential Mode Noise Filtering"]
+            "enum": [
+                "powerFiltering",
+                "transforming",
+                "isolation",
+                "commonModeNoiseFiltering",
+                "differentialModeNoiseFiltering"
+            ]
         },
         "resistivityPoint": {
             "description": "data for describing one point of resistivity",
@@ -83,10 +125,12 @@
                     "type": "number"
                 }
             },
-            "required": ["value"],
+            "required": [
+                "value"
+            ],
             "additionalProperties": false
         },
-        "irdi":{
+        "irdi": {
             "description": "International Registration Data Identifier per ISO/IEC 11179-6 / ISO 29002-5, in the form `RAI#DI#VI` where RAI is the registration-authority identifier (e.g. `0112` for IEC CDD, `0173-1` for ECLASS), DI the data identifier and VI the version identifier. MAS does not mint private IRDIs; populate only with values issued by an authoritative registry. See docs/normative-references.md.",
             "title": "irdi",
             "type": "string",
@@ -96,7 +140,7 @@
                 "0112/2///60404#FERRITE-N97#002"
             ]
         },
-        "manufacturerInfo":{
+        "manufacturerInfo": {
             "description": "Data from the manufacturer for a given part",
             "type": "object",
             "properties": {
@@ -111,7 +155,11 @@
                 "status": {
                     "description": "The production status of a part according to its manufacturer",
                     "type": "string",
-                    "enum": ["production", "prototype", "obsolete"]
+                    "enum": [
+                        "production",
+                        "prototype",
+                        "obsolete"
+                    ]
                 },
                 "description": {
                     "description": "The description of the part according to its manufacturer",
@@ -138,9 +186,11 @@
                     "$ref": "#/$defs/cost"
                 }
             },
-            "required": ["name"]
+            "required": [
+                "name"
+            ]
         },
-        "distributorInfo":{
+        "distributorInfo": {
             "description": "Data from the distributor for a given part",
             "title": "distributorInfo",
             "type": "object",
@@ -186,7 +236,11 @@
                     "$ref": "#/$defs/cost"
                 }
             },
-            "required": ["name", "reference", "quantity"],
+            "required": [
+                "name",
+                "reference",
+                "quantity"
+            ],
             "additionalProperties": false
         },
         "cost": {
@@ -194,17 +248,23 @@
             "title": "cost",
             "type": "object",
             "properties": {
-                "value":    { "type": "number", "minimum": 0 },
+                "value": {
+                    "type": "number",
+                    "minimum": 0
+                },
                 "currency": {
                     "type": "string",
                     "pattern": "^[A-Z]{3}$",
                     "description": "ISO 4217 three-letter currency code, e.g. EUR, USD, CNY, JPY."
                 }
             },
-            "required": ["value", "currency"],
+            "required": [
+                "value",
+                "currency"
+            ],
             "additionalProperties": false
         },
-        "rotation":{
+        "rotation": {
             "description": "Euler angle triplet [rx, ry, rz] describing the rotation around each cartesian axis, in radians",
             "type": "array",
             "items": {
@@ -213,8 +273,8 @@
             "minItems": 3,
             "maxItems": 3
         },
-        "coordinates":{
-            "description": "Coordinates in 2D or 3D space. Interpretation depends on the sibling coordinateSystem (default: cartesian). Cartesian: (x, y) or (x, y, z). Polar (2D only): (r, theta). Cylindrical (3D only): (r, theta, z) — natural for toroidal geometry.",
+        "coordinates": {
+            "description": "Coordinates in 2D or 3D space. Interpretation depends on the sibling coordinateSystem (default: cartesian). Cartesian: (x, y) or (x, y, z). Polar (2D only): (r, theta). Cylindrical (3D only): (r, theta, z) \u2014 natural for toroidal geometry.",
             "type": "array",
             "items": {
                 "type": "number"
@@ -222,8 +282,8 @@
             "minItems": 2,
             "maxItems": 3
         },
-        "dimensions":{
-            "description": "Dimensions in 2D or 3D space. Interpretation depends on the sibling coordinateSystem (default: cartesian). Cartesian: (x, y) or (x, y, z). Polar (2D only): (r, theta). Cylindrical (3D only): (r, theta, z) — natural for toroidal geometry.",
+        "dimensions": {
+            "description": "Dimensions in 2D or 3D space. Interpretation depends on the sibling coordinateSystem (default: cartesian). Cartesian: (x, y) or (x, y, z). Polar (2D only): (r, theta). Cylindrical (3D only): (r, theta, z) \u2014 natural for toroidal geometry.",
             "type": "array",
             "items": {
                 "type": "number"
@@ -231,7 +291,7 @@
             "minItems": 2,
             "maxItems": 3
         },
-        "velocity":{
+        "velocity": {
             "description": "Data describing a velocity in cartesian 2 or 3 dimensional space",
             "type": "array",
             "items": {
@@ -240,16 +300,18 @@
             "minItems": 2,
             "maxItems": 3
         },
-        "twoDimensionalMatrix":{
+        "twoDimensionalMatrix": {
             "description": "Data a two dimensional matrix, created as an array of array, where the first coordinate in the X and the second the Y",
             "type": "object",
             "additionalProperties": {
                 "type": "object",
-                "additionalProperties": {"$ref": "#/$defs/dimensionWithTolerance"}
+                "additionalProperties": {
+                    "$ref": "#/$defs/dimensionWithTolerance"
+                }
             }
         },
         "dimensionWithTolerance": {
-            "description": "A dimension of with minimum, nominal, and maximum values", 
+            "description": "A dimension of with minimum, nominal, and maximum values",
             "title": "dimensionWithTolerance",
             "type": "object",
             "properties": {
@@ -281,9 +343,21 @@
                 }
             },
             "anyOf": [
-                {"required": ["minimum"]},
-                {"required": ["nominal"]},
-                {"required": ["maximum"]}
+                {
+                    "required": [
+                        "minimum"
+                    ]
+                },
+                {
+                    "required": [
+                        "nominal"
+                    ]
+                },
+                {
+                    "required": [
+                        "maximum"
+                    ]
+                }
             ]
         },
         "dimension": {
@@ -301,32 +375,44 @@
         "columnShape": {
             "description": "Shape of the column, also used for gaps",
             "type": "string",
-            "enum": ["oblong", "round", "rectangular", "irregular"]
+            "enum": [
+                "oblong",
+                "round",
+                "rectangular",
+                "irregular"
+            ]
         },
         "connectionType": {
             "description": "Type of the terminal",
             "title": "connectionType",
             "type": "string",
-            "enum": ["Pin", "Screw", "SMT", "Flying Lead", "THT", "PCB Pad"]
+            "enum": [
+                "pin",
+                "screw",
+                "smt",
+                "flyingLead",
+                "tht",
+                "pcbPad"
+            ]
         },
-        "complexFieldPoint":{
+        "complexFieldPoint": {
             "description": "Data describing the complex value of a field in a 2D or 3D space",
             "title": "complexFieldPoint",
             "type": "object",
             "properties": {
-                "turnIndex":{
+                "turnIndex": {
                     "description": "If this field point is inside of a wire, this is the index of the turn",
                     "type": "integer"
                 },
-                "turnLength":{
+                "turnLength": {
                     "description": "If this field point is inside of a wire, this is the length of the turn",
                     "type": "number"
                 },
-                "label":{
+                "label": {
                     "description": "If this point has some special significance, can be identified with this label",
                     "type": "string"
                 },
-                "point":{
+                "point": {
                     "description": "The coordinates of the point of the field",
                     "$ref": "#/$defs/coordinates"
                 },
@@ -339,10 +425,14 @@
                     "type": "number"
                 }
             },
-            "required": ["point", "real", "imaginary"],
+            "required": [
+                "point",
+                "real",
+                "imaginary"
+            ],
             "additionalProperties": false
         },
-        "complexField":{
+        "complexField": {
             "description": "Data describing a field in a 2D or 3D space",
             "title": "complexField",
             "type": "object",
@@ -360,26 +450,29 @@
                     "minItems": 1
                 }
             },
-            "required": ["frequency", "data"]
+            "required": [
+                "frequency",
+                "data"
+            ]
         },
-        "fieldPoint":{
+        "fieldPoint": {
             "description": "Data describing the value of a field in a 2D or 3D space",
             "title": "fieldPoint",
             "type": "object",
             "properties": {
-                "turnIndex":{
+                "turnIndex": {
                     "description": "If this field point is inside of a wire, this is the index of the turn",
                     "type": "integer"
                 },
-                "turnLength":{
+                "turnLength": {
                     "description": "If this field point is inside of a wire, this is the length of the turn",
                     "type": "number"
                 },
-                "label":{
+                "label": {
                     "description": "If this point has some special significance, can be identified with this label",
                     "type": "string"
                 },
-                "point":{
+                "point": {
                     "description": "The coordinates of the point of the field",
                     "$ref": "#/$defs/coordinates"
                 },
@@ -393,10 +486,13 @@
                     "type": "number"
                 }
             },
-            "required": ["point", "value"],
+            "required": [
+                "point",
+                "value"
+            ],
             "additionalProperties": false
         },
-        "field":{
+        "field": {
             "description": "Data describing a field in a 2D or 3D space",
             "title": "field",
             "type": "object",
@@ -414,38 +510,60 @@
                     "minItems": 1
                 }
             },
-            "required": ["frequency", "data"]
+            "required": [
+                "frequency",
+                "data"
+            ]
         },
         "coordinateSystem": {
-            "description": "System in which dimensions and coordinates are expressed. Cartesian: (x, y) or (x, y, z). Polar: (r, theta) — 2D only. Cylindrical: (r, theta, z) — 3D only, natural for toroidal cores. Spherical is not used in magnetic-component description.",
+            "description": "System in which dimensions and coordinates are expressed. Cartesian: (x, y) or (x, y, z). Polar: (r, theta) \u2014 2D only. Cylindrical: (r, theta, z) \u2014 3D only, natural for toroidal cores. Spherical is not used in magnetic-component description.",
             "title": "coordinateSystem",
             "type": "string",
-            "enum": ["cartesian", "polar", "cylindrical"],
+            "enum": [
+                "cartesian",
+                "polar",
+                "cylindrical"
+            ],
             "default": "cartesian"
         },
         "windingOrientation": {
             "description": "Way in which the elements are oriented inside their parent",
             "title": "windingOrientation",
             "type": "string",
-            "enum": ["contiguous", "overlapping"]
+            "enum": [
+                "contiguous",
+                "overlapping"
+            ]
         },
         "electricalType": {
             "description": "Type of an electrical element in a coil",
             "title": "electricalType",
             "type": "string",
-            "enum": ["conduction", "insulation", "shielding"]
+            "enum": [
+                "conduction",
+                "insulation",
+                "shielding"
+            ]
         },
         "coilAlignment": {
             "description": "Way in which elements are aligned inside their parent",
             "title": "coilAlignment",
             "type": "string",
-            "enum": ["inner or top", "outer or bottom", "spread", "centered"]
+            "enum": [
+                "innerOrTop",
+                "outerOrBottom",
+                "spread",
+                "centered"
+            ]
         },
         "windingStyle": {
             "description": "Defines how a section or layer is wound",
             "title": "windingStyle",
             "type": "string",
-            "enum": ["windByConsecutiveTurns", "windByConsecutiveParallels"]
+            "enum": [
+                "windByConsecutiveTurns",
+                "windByConsecutiveParallels"
+            ]
         },
         "impedanceAtFrequency": {
             "description": "An impedance value pinned to a specific frequency. The impedance may be expressed as a bare magnitude (Ohm) or as a structured impedancePoint that carries magnitude, phase and real/imaginary parts. Used by EMI-choke topologies and by designRequirements.minimumImpedance.",
@@ -470,14 +588,30 @@
                     ]
                 }
             },
-            "required": ["frequency", "impedance"],
+            "required": [
+                "frequency",
+                "impedance"
+            ],
             "additionalProperties": false
         },
         "isolationSide": {
             "description": "Tag to identify windings that are sharing the same ground",
             "title": "isolationSide",
             "type": "string",
-            "enum": ["primary", "secondary", "tertiary", "quaternary", "quinary", "senary", "septenary", "octonary", "nonary", "denary", "undenary", "duodenary"]
+            "enum": [
+                "primary",
+                "secondary",
+                "tertiary",
+                "quaternary",
+                "quinary",
+                "senary",
+                "septenary",
+                "octonary",
+                "nonary",
+                "denary",
+                "undenary",
+                "duodenary"
+            ]
         }
     }
 }

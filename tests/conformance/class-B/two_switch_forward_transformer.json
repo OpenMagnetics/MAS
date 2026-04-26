@@ -21,25 +21,25 @@
                     "maximum": 3e-06
                 }
             ],
-            "topology": "Two Switch Forward Converter",
+            "topology": "twoSwitchForwardConverter",
             "operatingTemperature": {
                 "maximum": 105
             },
             "insulation": {
-                "insulationType": "Reinforced",
-                "overvoltageCategory": "OVC-II",
-                "pollutionDegree": "P2",
+                "insulationType": "reinforced",
+                "overvoltageCategory": "II",
+                "pollutionDegree": "PD2",
                 "altitude": {
                     "maximum": 2000
                 },
-                "cti": "Group IIIA"
+                "cti": "groupIIIA"
             },
             "maximumDimensions": {
                 "width": 0.045,
                 "height": 0.04,
                 "depth": 0.035
             },
-            "market": "Industrial"
+            "market": "industrial"
         },
         "operatingPoints": [
             {
@@ -53,7 +53,7 @@
                         "frequency": 250000,
                         "current": {
                             "processed": {
-                                "label": "Triangular",
+                                "label": "triangular",
                                 "peakToPeak": 0.6,
                                 "offset": 0.35,
                                 "dutyCycle": 0.45
@@ -61,7 +61,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 400,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -73,7 +73,7 @@
                         "frequency": 250000,
                         "current": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 4.0,
                                 "offset": 20.0,
                                 "dutyCycle": 0.45
@@ -81,7 +81,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 5,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -96,7 +96,7 @@
         "core": {
             "name": "E 42/21/15 N97 Gapped",
             "functionalDescription": {
-                "type": "two-piece set",
+                "type": "twoPieceSet",
                 "material": "N97",
                 "shape": "E 42/21/15",
                 "gapping": [

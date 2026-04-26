@@ -10,7 +10,7 @@
                 "maximum": 5.2e-05
             },
             "turnsRatios": [],
-            "topology": "Boost Converter",
+            "topology": "boostConverter",
             "operatingTemperature": {
                 "maximum": 100
             },
@@ -32,7 +32,7 @@
                         "frequency": 200000,
                         "current": {
                             "processed": {
-                                "label": "Triangular",
+                                "label": "triangular",
                                 "peakToPeak": 2.4,
                                 "offset": 8.0,
                                 "dutyCycle": 0.75
@@ -40,7 +40,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 48.0,
                                 "offset": 0,
                                 "dutyCycle": 0.75
@@ -55,7 +55,7 @@
         "core": {
             "name": "PQ 20/16 N97 Gapped",
             "functionalDescription": {
-                "type": "two-piece set",
+                "type": "twoPieceSet",
                 "material": "N97",
                 "shape": "PQ 20/16",
                 "gapping": [

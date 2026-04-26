@@ -36,8 +36,11 @@
             "minItems": 1
         }
     },
-    "required": ["inputVoltage", "diodeVoltageDrop", "operatingPoints"],
-
+    "required": [
+        "inputVoltage",
+        "diodeVoltageDrop",
+        "operatingPoints"
+    ],
     "$defs": {
         "buckOperatingPoint": {
             "description": "The description of one buck operating point",

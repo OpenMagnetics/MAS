@@ -24,7 +24,7 @@
         "manufacturerInfo": {
             "$ref": "../../utils.json#/$defs/manufacturerInfo"
         },
-        "dielectricStrength":{
+        "dielectricStrength": {
             "type": "array",
             "items": {
                 "$ref": "#/$defs/dielectricStrengthPoint"
@@ -51,7 +51,19 @@
             "oneOf": [
                 {
                     "type": "string",
-                    "enum": ["Y", "A", "E", "B", "F", "H", "N", "R", "200", "220", "250"]
+                    "enum": [
+                        "Y",
+                        "A",
+                        "E",
+                        "B",
+                        "F",
+                        "H",
+                        "N",
+                        "R",
+                        "200",
+                        "220",
+                        "250"
+                    ]
                 },
                 {
                     "type": "number",
@@ -83,8 +95,10 @@
             "uniqueItems": true
         }
     },
-    "required": ["name", "dielectricStrength"],
-
+    "required": [
+        "name",
+        "dielectricStrength"
+    ],
     "$defs": {
         "dielectricStrengthPoint": {
             "description": "data for describing one point of dielectric strength",
@@ -111,7 +125,9 @@
                     "maximum": 1
                 }
             },
-            "required": ["value"]
+            "required": [
+                "value"
+            ]
         }
     }
 }

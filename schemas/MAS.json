@@ -6,37 +6,49 @@
     "description": "All the data structure used in the Magnetic Agnostic Structure",
     "type": "object",
     "properties": {
-        "masVersion":{
+        "masVersion": {
             "description": "SemVer version of the MAS specification this document conforms to (MAJOR.MINOR.PATCH). Optional in 0.x; will become required in 1.0.",
             "title": "MAS Version",
             "type": "string",
             "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$",
-            "examples": ["0.1.0", "1.0.0", "1.2.3-rc.1"]
+            "examples": [
+                "0.1.0",
+                "1.0.0",
+                "1.2.3-rc.1"
+            ]
         },
-        "masConformance":{
-            "description": "Optional declaration of which MAS conformance class this document targets. Class A — Inductor Basic. Class B — Transformer (multi-winding, insulation, isolated topologies). Class C — Full (all schemas, all topologies). See docs/conformance.md and schemas/conformance/.",
+        "masConformance": {
+            "description": "Optional declaration of which MAS conformance class this document targets. Class A \u2014 Inductor Basic. Class B \u2014 Transformer (multi-winding, insulation, isolated topologies). Class C \u2014 Full (all schemas, all topologies). See docs/conformance.md and schemas/conformance/.",
             "title": "MAS Conformance",
             "type": "string",
-            "enum": ["A", "B", "C"]
+            "enum": [
+                "A",
+                "B",
+                "C"
+            ]
         },
-        "inputs":{
+        "inputs": {
             "description": "The description of the inputs that can be used to design a Magnetic",
             "title": "Inputs",
             "$ref": "./inputs.json"
         },
-        "magnetic":{
+        "magnetic": {
             "description": "The description of a magnetic",
             "title": "Magnetic",
             "$ref": "./magnetic.json"
         },
-        "outputs":{
+        "outputs": {
             "description": "The description of the outputs that are produced after designing a Magnetic",
             "title": "Outputs",
             "type": "array",
-            "items": {                
+            "items": {
                 "$ref": "./outputs.json"
             }
         }
     },
-    "required": ["inputs", "magnetic", "outputs"]
+    "required": [
+        "inputs",
+        "magnetic",
+        "outputs"
+    ]
 }

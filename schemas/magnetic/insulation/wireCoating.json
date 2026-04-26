@@ -9,7 +9,14 @@
         "type": {
             "description": "The type of the coating",
             "type": "string",
-            "enum": ["bare", "enamelled", "insulated", "served", "taped", "extruded"]
+            "enum": [
+                "bare",
+                "enamelled",
+                "insulated",
+                "served",
+                "taped",
+                "extruded"
+            ]
         },
         "thickness": {
             "description": "The maximum thickness of the insulation around the wire, in m",
@@ -17,7 +24,9 @@
         },
         "material": {
             "oneOf": [
-                {"$ref": "./material.json"},
+                {
+                    "$ref": "./material.json"
+                },
                 {
                     "description": "The name of the material used in the insulation",
                     "type": "string"
@@ -53,26 +62,48 @@
     "allOf": [
         {
             "if": {
-                "properties": { "type": { "const": "bare" } }
+                "properties": {
+                    "type": {
+                        "const": "bare"
+                    }
+                }
             },
             "then": {
-                "required": ["type"]
+                "required": [
+                    "type"
+                ]
             }
         },
         {
             "if": {
-                "properties": { "type": { "const": "insulated" } }
+                "properties": {
+                    "type": {
+                        "const": "insulated"
+                    }
+                }
             },
             "then": {
-                "required": ["type", "material", "numberLayers", "thicknessLayers"]
+                "required": [
+                    "type",
+                    "material",
+                    "numberLayers",
+                    "thicknessLayers"
+                ]
             }
         },
         {
             "if": {
-                "properties": { "type": { "const": "enamelled" } }
+                "properties": {
+                    "type": {
+                        "const": "enamelled"
+                    }
+                }
             },
             "then": {
-                "required": ["type", "grade"]
+                "required": [
+                    "type",
+                    "grade"
+                ]
             }
         }
     ]

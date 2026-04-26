@@ -53,10 +53,10 @@
             "title": "flybackModes",
             "type": "string",
             "enum": [
-                "Continuous Conduction Mode",
-                "Discontinuous Conduction Mode",
-                "Quasi Resonant Mode",
-                "Boundary Mode Operation"
+                "continuousConductionMode",
+                "discontinuousConductionMode",
+                "quasiResonantMode",
+                "boundaryModeOperation"
             ]
         },
         "flybackOperatingPoint": {

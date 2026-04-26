@@ -9,18 +9,54 @@
         "type": {
             "description": "The type of a magnetic shape",
             "type": "string",
-            "enum": ["standard", "custom"]
+            "enum": [
+                "standard",
+                "custom"
+            ]
         },
         "family": {
             "description": "The family of a magnetic shape",
             "title": "CoreShapeFamily",
             "type": "string",
-            "enum": ["u", "ur", "e", "etd", "p", "rm", "ep", "epx", "lp", "pm", "el", "er", "pq", "efd", "elp", "planar e", "planar er", "planar el", "ec", "eq", "ui", "pqi", "ut", "t", "drum", "rod", "ei", "h", "c"]
+            "enum": [
+                "u",
+                "ur",
+                "e",
+                "etd",
+                "p",
+                "rm",
+                "ep",
+                "epx",
+                "lp",
+                "pm",
+                "el",
+                "er",
+                "pq",
+                "efd",
+                "elp",
+                "planarE",
+                "planarER",
+                "planarEL",
+                "ec",
+                "eq",
+                "ui",
+                "pqi",
+                "ut",
+                "t",
+                "drum",
+                "rod",
+                "ei",
+                "h",
+                "c"
+            ]
         },
         "magneticCircuit": {
             "description": "Describes if the magnetic circuit of the shape is open, and can be combined with others; or closed, and has to be used by itself",
             "type": "string",
-            "enum": ["open", "closed"]
+            "enum": [
+                "open",
+                "closed"
+            ]
         },
         "name": {
             "description": "The name of a magnetic shape",
@@ -45,5 +81,8 @@
             }
         }
     },
-    "required": ["type", "family"]
+    "required": [
+        "type",
+        "family"
+    ]
 }

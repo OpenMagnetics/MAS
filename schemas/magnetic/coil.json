@@ -9,14 +9,16 @@
         "bobbin": {
             "title": "BobbinDataOrNameUnion",
             "oneOf": [
-                {"$ref": "./bobbin.json"},
+                {
+                    "$ref": "./bobbin.json"
+                },
                 {
                     "description": "The name of the bobbin used in the core",
                     "type": "string"
                 }
             ]
         },
-        "functionalDescription":{
+        "functionalDescription": {
             "description": "Coil data described in functional terms (the windings, per IEV 151-13-17), in a form suitable for purely magnetic analytical models.",
             "title": "coilFunctionalDescription",
             "type": "array",
@@ -25,7 +27,7 @@
             },
             "minItems": 1
         },
-        "groupsDescription":{
+        "groupsDescription": {
             "description": "Coil data at the group level. A group may define a PCB or distinct winding windows.",
             "type": "array",
             "items": {
@@ -33,7 +35,7 @@
             },
             "minItems": 1
         },
-        "sectionsDescription":{
+        "sectionsDescription": {
             "description": "Coil data at the section level, suitable for more advanced analytical and finite-element models.",
             "type": "array",
             "items": {
@@ -41,7 +43,7 @@
             },
             "minItems": 1
         },
-        "layersDescription":{
+        "layersDescription": {
             "description": "The data from the coil at the layer level, in a way that can be used by more advanced analytical and finite element models",
             "type": "array",
             "items": {
@@ -49,7 +51,7 @@
             },
             "minItems": 1
         },
-        "turnsDescription":{
+        "turnsDescription": {
             "description": "The data from the coil at the turn level, in a way that can be used by the most advanced analytical and finite element models",
             "type": "array",
             "items": {
@@ -59,14 +61,36 @@
         }
     },
     "anyOf": [
-        {"required": ["bobbin", "functionalDescription"]},
-        {"required": ["bobbin", "functionalDescription", "sectionsDescription"]},
-        {"required": ["bobbin", "functionalDescription", "layersDescription"]},
-        {"required": ["bobbin", "functionalDescription", "turnsDescription"]}
+        {
+            "required": [
+                "bobbin",
+                "functionalDescription"
+            ]
+        },
+        {
+            "required": [
+                "bobbin",
+                "functionalDescription",
+                "sectionsDescription"
+            ]
+        },
+        {
+            "required": [
+                "bobbin",
+                "functionalDescription",
+                "layersDescription"
+            ]
+        },
+        {
+            "required": [
+                "bobbin",
+                "functionalDescription",
+                "turnsDescription"
+            ]
+        }
     ],
-
     "$defs": {
-        "turn":{
+        "turn": {
             "description": "Data describing one turn in a magnetic",
             "title": "turn",
             "type": "object",
@@ -95,7 +119,10 @@
                     "description": "Way in which the turn is wound",
                     "title": "turnOrientation",
                     "type": "string",
-                    "enum": ["clockwise", "counterClockwise"]
+                    "enum": [
+                        "clockwise",
+                        "counterClockwise"
+                    ]
                 },
                 "length": {
                     "description": "The length of the turn, referred from the center of its cross section, in m",
@@ -113,7 +140,11 @@
                 "crossSectionalShape": {
                     "title": "turnCrossSectionalShape",
                     "type": "string",
-                    "enum": ["round", "rectangular", "oval"]
+                    "enum": [
+                        "round",
+                        "rectangular",
+                        "oval"
+                    ]
                 },
                 "rotation": {
                     "description": "Rotation of the rectangle defining the turn, in degrees",
@@ -127,7 +158,7 @@
                 "additionalCoordinates": {
                     "description": "List of additional coordinates of the center of the turn, referred to the center of the main column, in case the turn is not symmetrical, as in toroids",
                     "type": "array",
-                    "items":{
+                    "items": {
                         "$ref": "../utils.json#/$defs/coordinates"
                     }
                 },
@@ -135,12 +166,22 @@
                     "description": "System in which dimension and coordinates are in",
                     "title": "coordinateSystem",
                     "type": "string",
-                    "enum": ["cartesian", "polar", "cylindrical"]
+                    "enum": [
+                        "cartesian",
+                        "polar",
+                        "cylindrical"
+                    ]
                 }
             },
-            "required": ["name", "winding", "parallel", "length", "coordinates"]
+            "required": [
+                "name",
+                "winding",
+                "parallel",
+                "length",
+                "coordinates"
+            ]
         },
-        "layer":{
+        "layer": {
             "description": "Data describing one layer in a magnetic",
             "title": "layer",
             "type": "object",
@@ -153,7 +194,11 @@
                     "description": "Type of the layer",
                     "title": "electricalType",
                     "type": "string",
-                    "enum": ["conduction", "insulation", "shielding"]
+                    "enum": [
+                        "conduction",
+                        "insulation",
+                        "shielding"
+                    ]
                 },
                 "section": {
                     "description": "The name of the section that this layer belongs to",
@@ -163,26 +208,36 @@
                     "description": "Way in which the layer is oriented inside the section",
                     "title": "windingOrientation",
                     "type": "string",
-                    "enum": ["contiguous", "overlapping"]
+                    "enum": [
+                        "contiguous",
+                        "overlapping"
+                    ]
                 },
                 "turnsAlignment": {
                     "description": "Way in which the turns are aligned inside the layer",
                     "title": "coilAlignment",
                     "type": "string",
-                    "enum": ["inner or top", "outer or bottom", "spread", "centered"],
+                    "enum": [
+                        "innerOrTop",
+                        "outerOrBottom",
+                        "spread",
+                        "centered"
+                    ],
                     "default": "centered"
                 },
                 "partialWindings": {
                     "description": "List of partial windings in this layer",
                     "type": "array",
-                    "items":{
+                    "items": {
                         "$ref": "#/$defs/partialWinding"
                     }
                 },
                 "insulationMaterial": {
                     "description": "In case of insulating layer, the material used",
                     "oneOf": [
-                        {"$ref": "./insulation/material.json"},
+                        {
+                            "$ref": "./insulation/material.json"
+                        },
                         {
                             "description": "The insulating material",
                             "type": "string"
@@ -200,7 +255,7 @@
                 "additionalCoordinates": {
                     "description": "List of additional coordinates of the center of the layer, referred to the center of the main column, in case the layer is not symmetrical, as in toroids",
                     "type": "array",
-                    "items":{
+                    "items": {
                         "$ref": "../utils.json#/$defs/coordinates"
                     }
                 },
@@ -208,7 +263,11 @@
                     "description": "System in which dimension and coordinates are in",
                     "title": "coordinateSystem",
                     "type": "string",
-                    "enum": ["cartesian", "polar", "cylindrical"]
+                    "enum": [
+                        "cartesian",
+                        "polar",
+                        "cylindrical"
+                    ]
                 },
                 "fillingFactor": {
                     "description": "How much space in this layer is used by wires compared to the total",
@@ -218,12 +277,22 @@
                 "windingStyle": {
                     "description": "Defines if the layer is wound by consecutive turns or parallels",
                     "type": "string",
-                    "enum": ["windByConsecutiveTurns", "windByConsecutiveParallels"]
+                    "enum": [
+                        "windByConsecutiveTurns",
+                        "windByConsecutiveParallels"
+                    ]
                 }
             },
-            "required": ["name", "type", "orientation", "partialWindings", "dimensions", "coordinates"]
+            "required": [
+                "name",
+                "type",
+                "orientation",
+                "partialWindings",
+                "dimensions",
+                "coordinates"
+            ]
         },
-        "group":{
+        "group": {
             "description": "Data describing one group in a magnetic, which can include several sections. Ideally this is used for PCB or different winding windows",
             "title": "group",
             "type": "object",
@@ -240,12 +309,15 @@
                     "description": "Way in which the sections are oriented inside the winding window",
                     "title": "windingOrientation",
                     "type": "string",
-                    "enum": ["contiguous", "overlapping"]
+                    "enum": [
+                        "contiguous",
+                        "overlapping"
+                    ]
                 },
                 "partialWindings": {
                     "description": "List of partial windings in this group",
                     "type": "array",
-                    "items":{
+                    "items": {
                         "$ref": "#/$defs/partialWinding"
                     }
                 },
@@ -261,12 +333,23 @@
                     "description": "System in which dimension and coordinates are in",
                     "title": "coordinateSystem",
                     "type": "string",
-                    "enum": ["cartesian", "polar", "cylindrical"]
+                    "enum": [
+                        "cartesian",
+                        "polar",
+                        "cylindrical"
+                    ]
                 }
             },
-            "required": ["name", "type", "sectionsOrientation", "partialWindings", "dimensions", "coordinates"]
+            "required": [
+                "name",
+                "type",
+                "sectionsOrientation",
+                "partialWindings",
+                "dimensions",
+                "coordinates"
+            ]
         },
-        "section":{
+        "section": {
             "description": "Data describing one section in a magnetic",
             "title": "section",
             "type": "object",
@@ -279,18 +362,25 @@
                     "description": "Type of the section",
                     "title": "electricalType",
                     "type": "string",
-                    "enum": ["conduction", "insulation", "shielding"]
+                    "enum": [
+                        "conduction",
+                        "insulation",
+                        "shielding"
+                    ]
                 },
                 "layersOrientation": {
                     "description": "Way in which the layers are oriented inside the section",
                     "title": "windingOrientation",
                     "type": "string",
-                    "enum": ["contiguous", "overlapping"]
+                    "enum": [
+                        "contiguous",
+                        "overlapping"
+                    ]
                 },
                 "partialWindings": {
                     "description": "List of partial windings in this section",
                     "type": "array",
-                    "items":{
+                    "items": {
                         "$ref": "#/$defs/partialWinding"
                     }
                 },
@@ -298,7 +388,12 @@
                     "description": "Way in which the layers are aligned inside the section",
                     "title": "coilAlignment",
                     "type": "string",
-                    "enum": ["inner or top", "outer or bottom", "spread", "centered"],
+                    "enum": [
+                        "innerOrTop",
+                        "outerOrBottom",
+                        "spread",
+                        "centered"
+                    ],
                     "default": "centered"
                 },
                 "numberLayers": {
@@ -318,7 +413,11 @@
                     "description": "System in which dimension and coordinates are in",
                     "title": "coordinateSystem",
                     "type": "string",
-                    "enum": ["cartesian", "polar", "cylindrical"]
+                    "enum": [
+                        "cartesian",
+                        "polar",
+                        "cylindrical"
+                    ]
                 },
                 "fillingFactor": {
                     "description": "How much space in this section is used by wires compared to the total",
@@ -328,15 +427,20 @@
                 "windingStyle": {
                     "description": "Defines if the section is wound by consecutive turns or parallels",
                     "type": "string",
-                    "enum": ["windByConsecutiveTurns", "windByConsecutiveParallels"]
+                    "enum": [
+                        "windByConsecutiveTurns",
+                        "windByConsecutiveParallels"
+                    ]
                 },
                 "margin": {
                     "description": "Defines the distance at the extremes of the section reserved for margin tape. Two-element array, from 'inner or top' to 'outer or bottom'.",
                     "oneOf": [
-                        {"$ref": "#/$defs/marginInfo"},
+                        {
+                            "$ref": "#/$defs/marginInfo"
+                        },
                         {
                             "type": "array",
-                            "items":{
+                            "items": {
                                 "type": "number"
                             }
                         }
@@ -349,9 +453,16 @@
                     "type": "string"
                 }
             },
-            "required": ["name", "type", "layersOrientation", "partialWindings", "dimensions", "coordinates"]
+            "required": [
+                "name",
+                "type",
+                "layersOrientation",
+                "partialWindings",
+                "dimensions",
+                "coordinates"
+            ]
         },
-        "marginInfo":{
+        "marginInfo": {
             "description": "Data describing the information about the margin of a section",
             "title": "marginInfo",
             "type": "object",
@@ -367,7 +478,9 @@
                 "insulationMaterial": {
                     "description": "In case of insulating layer, the material used",
                     "oneOf": [
-                        {"$ref": "./insulation/material.json"},
+                        {
+                            "$ref": "./insulation/material.json"
+                        },
                         {
                             "description": "The insulating material",
                             "type": "string"
@@ -385,10 +498,15 @@
                     "exclusiveMinimum": 0
                 }
             },
-            "required": ["topOrLeftWidth", "bottomOrRightWidth", "numberLayers", "layerThickness"],
+            "required": [
+                "topOrLeftWidth",
+                "bottomOrRightWidth",
+                "numberLayers",
+                "layerThickness"
+            ],
             "additionalProperties": false
         },
-        "partialWinding":{
+        "partialWinding": {
             "description": "One part of a winding, described by the proportion of each parallel that is contained here.",
             "title": "partialWinding",
             "type": "object",
@@ -419,10 +537,13 @@
                     "uniqueItems": true
                 }
             },
-            "required": ["winding", "parallelsProportion"],
+            "required": [
+                "winding",
+                "parallelsProportion"
+            ],
             "additionalProperties": false
         },
-        "winding":{
+        "winding": {
             "description": "One winding (assembly of interconnected turns and/or coils intended for common operation, per IEV 151-13-17). Examples: primary, secondary, auxiliary.",
             "type": "object",
             "properties": {
@@ -446,7 +567,9 @@
                 "wire": {
                     "title": "WireDataOrNameUnion",
                     "oneOf": [
-                        {"$ref": "./wire.json"},
+                        {
+                            "$ref": "./wire.json"
+                        },
                         {
                             "description": "The name of the wire",
                             "type": "string"
@@ -470,7 +593,13 @@
                     }
                 }
             },
-            "required": ["name", "numberTurns", "numberParallels", "isolationSide", "wire"]
+            "required": [
+                "name",
+                "numberTurns",
+                "numberParallels",
+                "isolationSide",
+                "wire"
+            ]
         },
         "connection": {
             "description": "Connection of a wire to a terminal.",
@@ -490,7 +619,10 @@
                 "direction": {
                     "description": "Direction of the current in the connection.",
                     "type": "string",
-                    "enum": ["input", "output"]
+                    "enum": [
+                        "input",
+                        "output"
+                    ]
                 },
                 "length": {
                     "description": "Length of the connection, from the exit of the last turn to the terminal. Unit: m.",

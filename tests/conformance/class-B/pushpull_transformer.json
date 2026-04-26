@@ -26,14 +26,14 @@
                     "maximum": 0.26
                 }
             ],
-            "topology": "Push-Pull Converter",
+            "topology": "pushPullConverter",
             "operatingTemperature": {
                 "maximum": 100
             },
             "insulation": {
-                "insulationType": "Functional",
-                "overvoltageCategory": "OVC-II",
-                "pollutionDegree": "P2"
+                "insulationType": "functional",
+                "overvoltageCategory": "II",
+                "pollutionDegree": "PD2"
             },
             "maximumDimensions": {
                 "width": 0.045,
@@ -53,7 +53,7 @@
                         "frequency": 100000,
                         "current": {
                             "processed": {
-                                "label": "Bipolar Rectangular",
+                                "label": "bipolarRectangular",
                                 "peakToPeak": 3.0,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -61,7 +61,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Bipolar Rectangular",
+                                "label": "bipolarRectangular",
                                 "peakToPeak": 96,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -73,7 +73,7 @@
                         "frequency": 100000,
                         "current": {
                             "processed": {
-                                "label": "Bipolar Rectangular",
+                                "label": "bipolarRectangular",
                                 "peakToPeak": 3.0,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -81,7 +81,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Bipolar Rectangular",
+                                "label": "bipolarRectangular",
                                 "peakToPeak": 96,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -93,7 +93,7 @@
                         "frequency": 100000,
                         "current": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 2.0,
                                 "offset": 10.0,
                                 "dutyCycle": 0.45
@@ -101,7 +101,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 24,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -113,7 +113,7 @@
                         "frequency": 100000,
                         "current": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 2.0,
                                 "offset": 10.0,
                                 "dutyCycle": 0.45
@@ -121,7 +121,7 @@
                         },
                         "voltage": {
                             "processed": {
-                                "label": "Rectangular",
+                                "label": "rectangular",
                                 "peakToPeak": 24,
                                 "offset": 0,
                                 "dutyCycle": 0.45
@@ -136,7 +136,7 @@
         "core": {
             "name": "ETD 44/22/15 3C95",
             "functionalDescription": {
-                "type": "two-piece set",
+                "type": "twoPieceSet",
                 "material": "3C95",
                 "shape": "ETD 44/22/15",
                 "gapping": [],

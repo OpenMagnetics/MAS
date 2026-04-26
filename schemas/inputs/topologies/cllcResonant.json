@@ -59,8 +59,8 @@
             "title": "cllcPowerFlow",
             "type": "string",
             "enum": [
-                "Forward",
-                "Reverse"
+                "forward",
+                "reverse"
             ]
         },
         "cllcOperatingPoint": {

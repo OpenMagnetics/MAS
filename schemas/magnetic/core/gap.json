@@ -10,7 +10,11 @@
             "description": "The type of a gap",
             "title": "GapType",
             "type": "string",
-            "enum": ["additive", "subtractive", "residual"],
+            "enum": [
+                "additive",
+                "subtractive",
+                "residual"
+            ],
             "default": "subtractive"
         },
         "length": {
@@ -50,5 +54,8 @@
             "maxItems": 2
         }
     },
-    "required": ["length", "type"]
+    "required": [
+        "length",
+        "type"
+    ]
 }

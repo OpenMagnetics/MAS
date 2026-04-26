@@ -15,43 +15,74 @@
             "type": "number",
             "minimum": 0
         },
-        "current":{
+        "current": {
             "$ref": "#/$defs/signalDescriptor"
         },
-        "voltage":{
+        "voltage": {
             "$ref": "#/$defs/signalDescriptor"
         },
-        "magneticFluxDensity":{
+        "magneticFluxDensity": {
             "$ref": "#/$defs/signalDescriptor"
         },
-        "magneticFieldStrength":{
+        "magneticFieldStrength": {
             "$ref": "#/$defs/signalDescriptor"
         },
-        "magnetizingCurrent":{
+        "magnetizingCurrent": {
             "$ref": "#/$defs/signalDescriptor"
         }
     },
     "anyOf": [
-        {"required": ["frequency", "current", "voltage"]},
-        {"required": ["frequency", "magneticFluxDensity"]}
+        {
+            "required": [
+                "frequency",
+                "current",
+                "voltage"
+            ]
+        },
+        {
+            "required": [
+                "frequency",
+                "magneticFluxDensity"
+            ]
+        }
     ],
-
     "$defs": {
         "waveformLabel": {
             "description": "Label of the waveform, if applicable. Used for common waveforms",
             "title": "waveformLabel",
             "type": "string",
-            "enum": ["Custom", "Triangular", "Sinusoidal", "Rectangular", "Unipolar Rectangular", "Unipolar Triangular", "Bipolar Rectangular", "Bipolar Triangular", "Flyback Primary", "Flyback Secondary", "Rectangular With Deadtime", "Flyback Secondary With Deadtime", "Rectangular DCM", "Secondary Rectangular", "Secondary Rectangular With Deadtime", "Triangular With Deadtime"]
+            "enum": [
+                "custom",
+                "triangular",
+                "sinusoidal",
+                "rectangular",
+                "unipolarRectangular",
+                "unipolarTriangular",
+                "bipolarRectangular",
+                "bipolarTriangular",
+                "flybackPrimary",
+                "flybackSecondary",
+                "rectangularWithDeadtime",
+                "flybackSecondaryWithDeadtime",
+                "rectangularDCM",
+                "secondaryRectangular",
+                "secondaryRectangularWithDeadtime",
+                "triangularWithDeadtime"
+            ]
         },
-        "signalDescriptor":{
+        "signalDescriptor": {
             "description": "Structure definining one electromagnetic parameters: current, voltage, magnetic flux density",
             "type": "object",
             "title": "signalDescriptor",
             "properties": {
                 "waveform": {
                     "oneOf": [
-                        {"$ref": "#/$defs/equidistantWaveform"},
-                        {"$ref": "#/$defs/compressedWaveform"}
+                        {
+                            "$ref": "#/$defs/equidistantWaveform"
+                        },
+                        {
+                            "$ref": "#/$defs/compressedWaveform"
+                        }
                     ]
                 },
                 "processed": {
@@ -124,8 +155,20 @@
                         }
                     },
                     "anyOf": [
-                        {"required": ["label", "peakToPeak", "offset" ]},
-                        {"required": ["label", "peak", "offset" ]}
+                        {
+                            "required": [
+                                "label",
+                                "peakToPeak",
+                                "offset"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "label",
+                                "peak",
+                                "offset"
+                            ]
+                        }
                     ]
                 },
                 "harmonics": {
@@ -149,15 +192,26 @@
                             "uniqueItems": true
                         }
                     },
-                    "required": ["amplitudes", "frequencies"]
+                    "required": [
+                        "amplitudes",
+                        "frequencies"
+                    ]
                 }
             },
             "anyOf": [
-                {"required": ["waveform"]},
-                {"required": ["processed"]}
+                {
+                    "required": [
+                        "waveform"
+                    ]
+                },
+                {
+                    "required": [
+                        "processed"
+                    ]
+                }
             ]
         },
-        "equidistantWaveform":{
+        "equidistantWaveform": {
             "description": "Data containing the points that define an arbitrary waveform with equidistant points",
             "type": "object",
             "properties": {
@@ -176,9 +230,11 @@
                     "default": 1
                 }
             },
-            "required": ["data"]
+            "required": [
+                "data"
+            ]
         },
-        "compressedWaveform":{
+        "compressedWaveform": {
             "description": "Data containing the points that define an arbitrary waveform with non-equidistant points paired with their time in the period",
             "type": "object",
             "properties": {
@@ -200,7 +256,10 @@
                     "$ref": "#/$defs/waveformLabel"
                 }
             },
-            "required": ["data", "time"]
+            "required": [
+                "data",
+                "time"
+            ]
         }
     }
 }

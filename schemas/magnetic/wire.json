@@ -4,19 +4,34 @@
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "description": "The description of a magnet wire",
     "anyOf": [
-        {"$ref": "./wire/round.json"},
-        {"$ref": "./wire/foil.json"},
-        {"$ref": "./wire/rectangular.json"},
-        {"$ref": "./wire/litz.json"},
-        {"$ref": "./wire/planar.json"}
+        {
+            "$ref": "./wire/round.json"
+        },
+        {
+            "$ref": "./wire/foil.json"
+        },
+        {
+            "$ref": "./wire/rectangular.json"
+        },
+        {
+            "$ref": "./wire/litz.json"
+        },
+        {
+            "$ref": "./wire/planar.json"
+        }
     ],
-
     "$defs": {
         "wireType": {
             "description": "The type of wire",
             "title": "wireType",
             "type": "string",
-            "enum": ["round", "litz", "rectangular", "foil", "planar"]
+            "enum": [
+                "round",
+                "litz",
+                "rectangular",
+                "foil",
+                "planar"
+            ]
         }
     }
 }

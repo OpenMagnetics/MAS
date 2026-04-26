@@ -35,5 +35,13 @@
             "type": "number"
         }
     },
-    "required": ["waveformLabel", "maximumPrimaryCurrentPeak", "frequency", "maximumDutyCycle", "burdenResistor", "diodeVoltageDrop", "ambientTemperature"]
+    "required": [
+        "waveformLabel",
+        "maximumPrimaryCurrentPeak",
+        "frequency",
+        "maximumDutyCycle",
+        "burdenResistor",
+        "diodeVoltageDrop",
+        "ambientTemperature"
+    ]
 }
