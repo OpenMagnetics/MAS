@@ -1,6 +1,6 @@
 # MAS-RFC 0005 — Permeability variants (incremental and reversible)
 
-- **Status:** Draft
+- **Status:** Implemented (schema landed)
 - **Type:** Additive (target: 0.2.0)
 - **Author:** _to be assigned_
 - **Created:** 2026-04-26

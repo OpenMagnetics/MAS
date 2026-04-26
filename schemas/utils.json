@@ -86,6 +86,16 @@
             "required": ["value"],
             "additionalProperties": false
         },
+        "irdi":{
+            "description": "International Registration Data Identifier per ISO/IEC 11179-6 / ISO 29002-5, in the form `RAI#DI#VI` where RAI is the registration-authority identifier (e.g. `0112` for IEC CDD, `0173-1` for ECLASS), DI the data identifier and VI the version identifier. MAS does not mint private IRDIs; populate only with values issued by an authoritative registry. See docs/normative-references.md.",
+            "title": "irdi",
+            "type": "string",
+            "pattern": "^[0-9A-Za-z]{4}(?:-[0-9A-Za-z]+)*#[0-9A-Za-z./-]+#[0-9A-Za-z.-]+$",
+            "examples": [
+                "0112/2///62317#ETD-34-17-11#001",
+                "0112/2///60404#FERRITE-N97#002"
+            ]
+        },
         "manufacturerInfo":{
             "description": "Data from the manufacturer for a given part",
             "type": "object",
@@ -93,6 +103,10 @@
                 "name": {
                     "description": "The name of the manufacturer of the part",
                     "type": "string"
+                },
+                "irdi": {
+                    "description": "Optional International Registration Data Identifier (per ISO/IEC 11179-6) issued by an authoritative registry such as IEC CDD or ECLASS. When populated, this is the canonical machine-readable identifier for the part class.",
+                    "$ref": "#/$defs/irdi"
                 },
                 "status": {
                     "description": "The production status of a part according to its manufacturer",
@@ -209,7 +223,7 @@
             "maxItems": 3
         },
         "dimensions":{
-            "description": "Data describing a dimensions in 2 or 3 dimensional space. In case of cartesian coordinates, they represent x, y and z; in case of spherical, they represent r, tetha and gamma, in mathematics convention",
+            "description": "Dimensions in 2D or 3D space. Interpretation depends on the sibling coordinateSystem (default: cartesian). Cartesian: (x, y) or (x, y, z). Polar (2D only): (r, theta). Cylindrical (3D only): (r, theta, z) — natural for toroidal geometry.",
             "type": "array",
             "items": {
                 "type": "number"

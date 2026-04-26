@@ -104,18 +104,28 @@
             "exclusiveMinimum": 0
         },
         "permeability":{
-            "description": "The data regarding the relative permeability of a magnetic material",
+            "description": "Relative permeability of the magnetic material, broken down by which kind of permeability was measured. At minimum `initial` is required for materials that have one (essentially all ferrites and tape-wound alloys). Each entry uses permeabilityPoint, which pins frequency, temperature, AC peak flux density and DC bias per measurement.",
             "title": "permeabilities",
             "type": "object",
             "properties": {
                 "initial": {
+                    "description": "Initial relative permeability mu_i. Measured at near-zero AC excitation (e.g. B < 0.25 mT) and low frequency (typically <= 10 kHz) at the material's reference temperature, per the IEC 60401-3 catalogue convention.",
                     "$ref": "#/$defs/permeability"
                 },
                 "amplitude": {
+                    "description": "Amplitude relative permeability mu_a. The secant slope of the BH curve at a specified peak AC flux density on a defined geometry. Each point pins B_peak, frequency and temperature.",
+                    "$ref": "#/$defs/permeability"
+                },
+                "incremental": {
+                    "description": "Incremental relative permeability mu_delta. The slope of a small AC excursion superimposed on a non-zero DC bias H. Each point pins magneticFieldDcBias and the AC magneticFluxDensityPeak. Required to model inductors operating under DC bias (PFC chokes, output filters, flyback primaries).",
+                    "$ref": "#/$defs/permeability"
+                },
+                "reversible": {
+                    "description": "Reversible relative permeability mu_rev. The limit of mu_delta as the AC excursion tends to zero. Tabulated vs magneticFieldDcBias; used for small-signal AC analysis around a DC operating point.",
                     "$ref": "#/$defs/permeability"
                 },
                 "complex": {
-                    "description": "The data regarding the complex permeability of a magnetic material",
+                    "description": "Complex relative permeability (mu' + j*mu''), used for high-frequency loss modelling.",
                     "title": "complexPermeabilityData",
                     "type": "object",
                     "properties": {
