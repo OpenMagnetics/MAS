@@ -139,13 +139,13 @@
             "minItems": 4
         },
         "volumetricLosses":{
-            "description": "The data regarding the volumetric losses of a magnetic material",
+            "description": "Volumetric core losses. Values throughout this block are in watts per cubic metre (W/m^3). Coefficient-based methods (Steinmetz, Roshen, ...) assume the same unit system: P in W/m^3, f in Hz, B in T (peak). See docs/units.md and docs/normative-references.md.",
             "title": "volumetricLosses",
             "type": "object",
             "additionalProperties": {
                 "type": "array",
                 "title": "volumetricLossesMethodsData",
-                "description": "Object where keys are shape families for which this volumetric losses are valid. If missing, the variant is valid for all shapes",
+                "description": "Object whose keys are the shape families for which these volumetric losses are valid. If the key is absent the variant applies to all shapes.",
                 "items": {
                     "title": "volumetricLossesMethod",
                     "anyOf": [
@@ -208,13 +208,13 @@
             }
         },
         "massLosses":{
-            "description": "The data regarding the mass losses of a magnetic material",
+            "description": "Mass-specific core losses. Values throughout this block are in watts per kilogram (W/kg). Note: this is the per-mass form used for tape-wound, amorphous and nanocrystalline materials; the per-volume form lives in `volumetricLosses` and uses W/m^3. The two are NOT interchangeable without the material density. See docs/units.md and docs/normative-references.md.",
             "title": "massLosses",
             "type": "object",
             "additionalProperties": {
                 "type": "array",
                 "title": "massLossesMethodsData",
-                "description": "Object where keys are shape families for which this mass losses are valid. If missing, the variant is valid for all shapes",
+                "description": "Object whose keys are the shape families for which these mass losses are valid. If the key is absent the variant applies to all shapes.",
                 "items": {
                     "title": "massLossesMethod",
                     "anyOf": [
@@ -364,7 +364,7 @@
             "additionalProperties": false
         },
         "steinmetzCoreLossesMethodData": {
-            "description": "Steinmetz coefficients for estimating volumetric losses in a given frequency range",
+            "description": "Steinmetz coefficients for estimating volumetric losses in a given frequency range. The model is P = k * f^alpha * B^beta. By normative convention in MAS, P is in W/m^3, f in Hz and B in T (peak); k therefore has units of W/(m^3 * Hz^alpha * T^beta). Datasheets that publish coefficients in scaled units (kW/m^3, mW/cm^3, kHz, mT) must be converted before serialisation.",
             "title": "steinmetzCoreLossesMethodData",
             "type": "object",
             "properties": {
@@ -441,19 +441,19 @@
                     "type": "number"
                 },
                 "value": {
-                    "description": "volumetric losses value, in W/m3",
+                    "description": "Volumetric losses value. Unit: W/m^3.",
                     "type": "number",
                     "exclusiveMinimum": 0
                 },
                 "origin": {
-                    "description": "origin of the data",
+                    "description": "Origin of the data (datasheet, measurement, simulation, fitted).",
                     "type": "string"
                 }
             },
             "required": ["magneticFluxDensity", "origin", "temperature", "value"]
         },
         "massLossesPoint": {
-            "description": "data for describing the mass losses at a given point of magnetic flux density, frequency and temperature",
+            "description": "Mass-specific losses at a given point of magnetic flux density, frequency and temperature. Unit: W/kg.",
             "type": "object",
             "title": "massLossesPoint",
             "properties": {
@@ -461,11 +461,11 @@
                     "$ref": "../../inputs/operatingPointExcitation.json"
                 },
                 "temperature": {
-                    "description": "temperature value, in Celsius",
+                    "description": "Temperature value, in Celsius.",
                     "type": "number"
                 },
                 "value": {
-                    "description": "mass losses value, in W/Kg",
+                    "description": "Mass-specific losses value. Unit: W/kg.",
                     "type": "number",
                     "exclusiveMinimum": 0
                 },

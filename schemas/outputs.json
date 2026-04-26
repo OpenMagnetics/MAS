@@ -405,9 +405,40 @@
                     "type": "string"
                 },
                 "magnetizingInductance": {
-                    "description": "Value of the magnetizing inductance",
+                    "description": "Value of the magnetizing inductance. Unit: H. The operating point at which this value applies (frequency, AC test amplitude, DC bias, temperature) is recorded in the optional `measurementCondition` block; if absent, small-signal at 0 A DC bias and the ambient temperature of the operating point is assumed.",
                     "$ref": "./utils.json#/$defs/dimensionWithTolerance",
                     "exclusiveMinimum": 0
+                },
+                "measurementCondition": {
+                    "description": "Operating point at which `magnetizingInductance` was measured or computed. All fields optional; absence implies the conventional small-signal default. See docs/normative-references.md.",
+                    "title": "inductanceMeasurementCondition",
+                    "type": "object",
+                    "properties": {
+                        "frequency": {
+                            "description": "Test frequency. Unit: Hz.",
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                        },
+                        "voltageRms": {
+                            "description": "RMS test voltage applied across the winding (small-signal characterisation). Unit: V.",
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                        },
+                        "currentRms": {
+                            "description": "RMS test current through the winding. Unit: A.",
+                            "type": "number",
+                            "minimum": 0
+                        },
+                        "dcBiasCurrent": {
+                            "description": "DC bias current through the winding at which this inductance was measured. Unit: A.",
+                            "type": "number"
+                        },
+                        "temperature": {
+                            "description": "Temperature at which this inductance was measured. Unit: Celsius.",
+                            "type": "number"
+                        }
+                    },
+                    "additionalProperties": false
                 },
                 "coreReluctance": {
                     "description": "Value of the reluctance of the core",

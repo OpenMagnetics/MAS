@@ -47,9 +47,17 @@
             "exclusiveMinimum": 0
         },
         "temperatureClass": {
-            "description": "The temperature class of the insulation material, in Celsius",
-            "type": "number",
-            "exclusiveMinimum": 0
+            "description": "Insulation thermal class per IEC 60085. May be expressed as the IEC letter class (Y, A, E, B, F, H, N, R, 200, 220, 250) or as the numeric maximum continuous operating temperature in Celsius (the form printed on most magnet-wire spools and IEC 60317 sub-spec datasheets). The two forms are interchangeable per the IEC 60085 mapping. See docs/normative-references.md.",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "enum": ["Y", "A", "E", "B", "F", "H", "N", "R", "200", "220", "250"]
+                },
+                {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            ]
         },
         "meltingPoint": {
             "description": "The melting temperature of the insulation material, in Celsius",
