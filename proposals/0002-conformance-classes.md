@@ -1,6 +1,6 @@
 # MAS-RFC 0002 — Conformance classes
 
-- **Status:** Draft
+- **Status:** Implemented (initial bundles + masConformance field landed; per-class test vectors deferred)
 - **Type:** Additive (target: 0.2.0); enforcement breaking at 1.0.0
 - **Author:** _to be assigned_
 - **Created:** 2026-04-26
