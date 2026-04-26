@@ -12,25 +12,25 @@
             "type": "object",
             "properties": {
                 "outputVoltages": {
-                    "description": "List of output voltages, one per output. Interpreted per outputVoltagesForm (default: dc). See docs/normative-references.md.",
+                    "description": "List of output voltages, one per output. Interpreted per outputVoltagesType (default: dc). See docs/normative-references.md.",
                     "type": "array",
                     "items": {"type": "number"},
                     "minItems": 1
                 },
-                "outputVoltagesForm": {
-                    "description": "How values in outputVoltages are interpreted. Defaults to dc.",
+                "outputVoltagesType": {
+                    "description": "Type of value carried in outputVoltages: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).",
                     "type": "string",
                     "enum": ["dc", "rms", "peak", "peakToPeak", "average"],
                     "default": "dc"
                 },
                 "outputCurrents": {
-                    "description": "List of output currents, one per output. Interpreted per outputCurrentsForm (default: dc). See docs/normative-references.md.",
+                    "description": "List of output currents, one per output. Interpreted per outputCurrentsType (default: dc). See docs/normative-references.md.",
                     "type": "array",
                     "items": {"type": "number"},
                     "minItems": 1
                 },
-                "outputCurrentsForm": {
-                    "description": "How values in outputCurrents are interpreted. Defaults to dc.",
+                "outputCurrentsType": {
+                    "description": "Type of value carried in outputCurrents: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).",
                     "type": "string",
                     "enum": ["dc", "rms", "peak", "peakToPeak", "average"],
                     "default": "dc"
@@ -200,7 +200,7 @@
             "maxItems": 3
         },
         "coordinates":{
-            "description": "Data describing coordinates in 2 or 3 dimensional space. In case of cartesian coordinates, they represent x, y and z; in case of spherical, they represent r, tetha and gamma, in mathematics convention",
+            "description": "Coordinates in 2D or 3D space. Interpretation depends on the sibling coordinateSystem (default: cartesian). Cartesian: (x, y) or (x, y, z). Polar (2D only): (r, theta). Cylindrical (3D only): (r, theta, z) — natural for toroidal geometry.",
             "type": "array",
             "items": {
                 "type": "number"
@@ -403,10 +403,11 @@
             "required": ["frequency", "data"]
         },
         "coordinateSystem": {
-            "description": "System in which dimension and coordinates are expressed",
+            "description": "System in which dimensions and coordinates are expressed. Cartesian: (x, y) or (x, y, z). Polar: (r, theta) — 2D only. Cylindrical: (r, theta, z) — 3D only, natural for toroidal cores. Spherical is not used in magnetic-component description.",
             "title": "coordinateSystem",
             "type": "string",
-            "enum": ["cartesian", "polar"]
+            "enum": ["cartesian", "polar", "cylindrical"],
+            "default": "cartesian"
         },
         "windingOrientation": {
             "description": "Way in which the elements are oriented inside their parent",

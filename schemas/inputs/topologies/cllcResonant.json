@@ -47,14 +47,21 @@
             "minItems": 1
         }
     },
-    "required": ["inputVoltage", "minSwitchingFrequency", "maxSwitchingFrequency", "operatingPoints"],
-
+    "required": [
+        "inputVoltage",
+        "minSwitchingFrequency",
+        "maxSwitchingFrequency",
+        "operatingPoints"
+    ],
     "$defs": {
         "cllcPowerFlow": {
             "description": "The power flow direction",
             "title": "cllcPowerFlow",
             "type": "string",
-            "enum": ["Forward", "Reverse"]
+            "enum": [
+                "Forward",
+                "Reverse"
+            ]
         },
         "cllcOperatingPoint": {
             "description": "The description of one CLLC operating point",
@@ -69,6 +76,18 @@
                     },
                     "minItems": 1
                 },
+                "outputVoltagesType": {
+                    "description": "Type of value carried in outputVoltages: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02.",
+                    "type": "string",
+                    "enum": [
+                        "dc",
+                        "rms",
+                        "peak",
+                        "peakToPeak",
+                        "average"
+                    ],
+                    "default": "dc"
+                },
                 "outputCurrents": {
                     "description": "A list of output currents, one per output",
                     "type": "array",
@@ -76,6 +95,18 @@
                         "type": "number"
                     },
                     "minItems": 1
+                },
+                "outputCurrentsType": {
+                    "description": "Type of value carried in outputCurrents: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02.",
+                    "type": "string",
+                    "enum": [
+                        "dc",
+                        "rms",
+                        "peak",
+                        "peakToPeak",
+                        "average"
+                    ],
+                    "default": "dc"
                 },
                 "switchingFrequency": {
                     "description": "The switching frequency of the operating point",
@@ -90,7 +121,13 @@
                     "type": "number"
                 }
             },
-            "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "powerFlow", "ambientTemperature"]
+            "required": [
+                "outputVoltages",
+                "outputCurrents",
+                "switchingFrequency",
+                "powerFlow",
+                "ambientTemperature"
+            ]
         }
     }
 }

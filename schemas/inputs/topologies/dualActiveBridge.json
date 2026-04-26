@@ -28,7 +28,9 @@
         "perSecondaryLeakage": {
             "description": "Optional per-secondary leakage inductance in H, one entry per output. Required for physically meaningful multi-output DAB simulation; if absent, all secondaries share the same series inductance.",
             "type": "array",
-            "items": {"type": "number"},
+            "items": {
+                "type": "number"
+            },
             "minItems": 1
         },
         "operatingPoints": {
@@ -40,8 +42,10 @@
             "minItems": 1
         }
     },
-    "required": ["inputVoltage", "operatingPoints"],
-
+    "required": [
+        "inputVoltage",
+        "operatingPoints"
+    ],
     "$defs": {
         "dabOperatingPoint": {
             "description": "One DAB operating point. Modulation is parameterised by three phase-shift variables D1, D2, D3 (Huang et al. 2018 convention): D1 and D2 are intra-bridge (leg-to-leg) shifts that control each bridge's effective duty cycle, and D3 is the outer inter-bridge shift that controls power transfer. SPS uses D3 only (D1=D2=0). EPS uses D3 + one inner shift (D1, with D2=0). DPS uses D3 + one symmetric inner shift (D1=D2). TPS uses all three independently.",
@@ -56,6 +60,18 @@
                     },
                     "minItems": 1
                 },
+                "outputVoltagesType": {
+                    "description": "Type of value carried in outputVoltages: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02.",
+                    "type": "string",
+                    "enum": [
+                        "dc",
+                        "rms",
+                        "peak",
+                        "peakToPeak",
+                        "average"
+                    ],
+                    "default": "dc"
+                },
                 "outputCurrents": {
                     "description": "A list of output currents, one per output",
                     "type": "array",
@@ -63,6 +79,18 @@
                         "type": "number"
                     },
                     "minItems": 1
+                },
+                "outputCurrentsType": {
+                    "description": "Type of value carried in outputCurrents: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02.",
+                    "type": "string",
+                    "enum": [
+                        "dc",
+                        "rms",
+                        "peak",
+                        "peakToPeak",
+                        "average"
+                    ],
+                    "default": "dc"
                 },
                 "switchingFrequency": {
                     "description": "The switching frequency of the operating point",
@@ -75,23 +103,33 @@
                 "modulationType": {
                     "description": "DAB modulation scheme. SPS (Single Phase Shift): only D3 is non-zero. EPS (Extended Phase Shift): D1>0 on primary bridge, D2=0, D3 controls power. DPS (Dual Phase Shift): D1=D2>0 symmetric, D3 controls power. TPS (Triple Phase Shift): D1, D2, D3 independent. Ref: Huang et al., Energies 11(9):2419 (2018).",
                     "type": "string",
-                    "enum": ["SPS", "EPS", "DPS", "TPS"],
+                    "enum": [
+                        "SPS",
+                        "EPS",
+                        "DPS",
+                        "TPS"
+                    ],
                     "default": "SPS"
                 },
                 "innerPhaseShift1": {
-                    "description": "D1 — primary-bridge intra-leg phase shift in degrees (shift between the two legs of the primary full-bridge). Range [0, 90). 0 = square wave (50% duty). Used in EPS, DPS, TPS.",
+                    "description": "D1 \u2014 primary-bridge intra-leg phase shift in degrees (shift between the two legs of the primary full-bridge). Range [0, 90). 0 = square wave (50% duty). Used in EPS, DPS, TPS.",
                     "type": "number"
                 },
                 "innerPhaseShift2": {
-                    "description": "D2 — secondary-bridge intra-leg phase shift in degrees (shift between the two legs of the secondary full-bridge). Range [0, 90). 0 = square wave (50% duty). Used in TPS. For DPS, if absent, defaults to D1 (symmetric).",
+                    "description": "D2 \u2014 secondary-bridge intra-leg phase shift in degrees (shift between the two legs of the secondary full-bridge). Range [0, 90). 0 = square wave (50% duty). Used in TPS. For DPS, if absent, defaults to D1 (symmetric).",
                     "type": "number"
                 },
                 "innerPhaseShift3": {
-                    "description": "D3 — inter-bridge (outer) phase shift in degrees between primary and secondary bridges. Signed: positive = forward power flow (primary → secondary). Used in all modulation modes. This is the primary power-transfer control variable.",
+                    "description": "D3 \u2014 inter-bridge (outer) phase shift in degrees between primary and secondary bridges. Signed: positive = forward power flow (primary \u2192 secondary). Used in all modulation modes. This is the primary power-transfer control variable.",
                     "type": "number"
                 }
             },
-            "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "ambientTemperature"]
+            "required": [
+                "outputVoltages",
+                "outputCurrents",
+                "switchingFrequency",
+                "ambientTemperature"
+            ]
         }
     }
 }

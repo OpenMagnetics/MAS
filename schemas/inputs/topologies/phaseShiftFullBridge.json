@@ -48,14 +48,20 @@
             "minItems": 1
         }
     },
-    "required": ["inputVoltage", "operatingPoints"],
-
+    "required": [
+        "inputVoltage",
+        "operatingPoints"
+    ],
     "$defs": {
         "psfbRectifierType": {
             "description": "The type of secondary rectifier",
             "title": "psfbRectifierType",
             "type": "string",
-            "enum": ["Full Bridge", "Center Tapped", "Current Doubler"]
+            "enum": [
+                "Full Bridge",
+                "Center Tapped",
+                "Current Doubler"
+            ]
         },
         "psfbOperatingPoint": {
             "description": "The description of one PSFB operating point",
@@ -70,6 +76,18 @@
                     },
                     "minItems": 1
                 },
+                "outputVoltagesType": {
+                    "description": "Type of value carried in outputVoltages: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02.",
+                    "type": "string",
+                    "enum": [
+                        "dc",
+                        "rms",
+                        "peak",
+                        "peakToPeak",
+                        "average"
+                    ],
+                    "default": "dc"
+                },
                 "outputCurrents": {
                     "description": "A list of output currents, one per output",
                     "type": "array",
@@ -77,6 +95,18 @@
                         "type": "number"
                     },
                     "minItems": 1
+                },
+                "outputCurrentsType": {
+                    "description": "Type of value carried in outputCurrents: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02.",
+                    "type": "string",
+                    "enum": [
+                        "dc",
+                        "rms",
+                        "peak",
+                        "peakToPeak",
+                        "average"
+                    ],
+                    "default": "dc"
                 },
                 "switchingFrequency": {
                     "description": "The switching frequency of the operating point",
@@ -91,7 +121,13 @@
                     "type": "number"
                 }
             },
-            "required": ["outputVoltages", "outputCurrents", "switchingFrequency", "phaseShift", "ambientTemperature"]
+            "required": [
+                "outputVoltages",
+                "outputCurrents",
+                "switchingFrequency",
+                "phaseShift",
+                "ambientTemperature"
+            ]
         }
     }
 }

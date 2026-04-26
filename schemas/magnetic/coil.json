@@ -135,7 +135,7 @@
                     "description": "System in which dimension and coordinates are in",
                     "title": "coordinateSystem",
                     "type": "string",
-                    "enum": ["cartesian", "polar"]
+                    "enum": ["cartesian", "polar", "cylindrical"]
                 }
             },
             "required": ["name", "winding", "parallel", "length", "coordinates"]
@@ -208,7 +208,7 @@
                     "description": "System in which dimension and coordinates are in",
                     "title": "coordinateSystem",
                     "type": "string",
-                    "enum": ["cartesian", "polar"]
+                    "enum": ["cartesian", "polar", "cylindrical"]
                 },
                 "fillingFactor": {
                     "description": "How much space in this layer is used by wires compared to the total",
@@ -261,7 +261,7 @@
                     "description": "System in which dimension and coordinates are in",
                     "title": "coordinateSystem",
                     "type": "string",
-                    "enum": ["cartesian", "polar"]
+                    "enum": ["cartesian", "polar", "cylindrical"]
                 }
             },
             "required": ["name", "type", "sectionsOrientation", "partialWindings", "dimensions", "coordinates"]
@@ -318,7 +318,7 @@
                     "description": "System in which dimension and coordinates are in",
                     "title": "coordinateSystem",
                     "type": "string",
-                    "enum": ["cartesian", "polar"]
+                    "enum": ["cartesian", "polar", "cylindrical"]
                 },
                 "fillingFactor": {
                     "description": "How much space in this section is used by wires compared to the total",
