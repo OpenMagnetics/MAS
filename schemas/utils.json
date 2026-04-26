@@ -583,7 +583,7 @@
                             "minimum": 0
                         },
                         {
-                            "$ref": "../inputs/designRequirements.json#/$defs/impedancePoint"
+                            "$ref": "./inputs/designRequirements.json#/$defs/impedancePoint"
                         }
                     ]
                 }
