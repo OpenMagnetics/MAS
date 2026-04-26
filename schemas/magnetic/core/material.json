@@ -176,7 +176,8 @@
                         },
                         {
                             "$ref": "#/$defs/lossFactorCoreLossesMethodData"
-                        }
+                        },
+                        { "$ref": "#/$defs/customCoreLossesMethodData" }
                     ]
                 }
             }
@@ -229,6 +230,7 @@
                     "title": "massLossesMethod",
                     "anyOf": [
                         { "$ref": "#/$defs/magnetecCoreLossesMethodData" },
+                        { "$ref": "#/$defs/customCoreLossesMethodData" },
                         {
                             "description": "List of mass losses points",
                             "type": "array",
@@ -597,6 +599,27 @@
 
             },
             "required": ["method"]
+        },
+        "customCoreLossesMethodData": {
+            "description": "Open-registry escape hatch for loss methods that are not represented by any of the named branches above. The `method` string identifies the model (e.g. a vendor name or a published reference); `parameters` carries arbitrary method-specific data. `source` is a free-form citation (DOI, datasheet revision, vendor app-note) so the model is traceable. New vendor models can be carried in MAS without a schema change.",
+            "type": "object",
+            "title": "customCoreLossesMethodData",
+            "properties": {
+                "method": {
+                    "description": "Identifier for the loss method. Convention: lowercase vendor or first-author name (e.g. 'newVendor', 'mySimulator'). The reserved values 'steinmetz', 'roshen', 'micrometals', 'magnetics', 'poco', 'tdg', 'magnetec', 'lossFactor' must use the corresponding named branches instead.",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "parameters": {
+                    "description": "Method-specific parameters. Shape and meaning are defined by the method.",
+                    "type": "object"
+                },
+                "source": {
+                    "description": "Free-form citation: DOI, datasheet revision, vendor app-note, or other primary reference for the model.",
+                    "type": "string"
+                }
+            },
+            "required": ["method", "parameters"]
         },
         "pocoCoreLossesMethodData": {
             "description": "Poco method for estimating volumetric losses",

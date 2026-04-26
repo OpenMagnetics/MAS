@@ -40,7 +40,7 @@
             "description": "The minimum impedance requirements at specified frequencies",
             "type": "array",
             "items": {
-                "$ref": "#/$defs/impedanceAtFrequency"
+                "$ref": "../../utils.json#/$defs/impedanceAtFrequency"
             }
         },
         "targetAttenuation": {
@@ -75,22 +75,6 @@
     ],
 
     "$defs": {
-        "impedanceAtFrequency": {
-            "description": "Impedance requirement at a specific frequency",
-            "title": "impedanceAtFrequency",
-            "type": "object",
-            "properties": {
-                "frequency": {
-                    "description": "The frequency in Hz",
-                    "type": "number"
-                },
-                "impedance": {
-                    "description": "The minimum impedance in ohms at this frequency",
-                    "type": "number"
-                }
-            },
-            "required": ["frequency", "impedance"]
-        },
         "attenuationAtFrequency": {
             "description": "Attenuation requirement at a specific frequency",
             "title": "attenuationAtFrequency",

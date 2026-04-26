@@ -26,18 +26,7 @@
             "description": "List of minimum impedance at given frequency in the primary",
             "type": "array",
             "items": {
-                "type": "object",
-                "title": "impedanceAtFrequency",
-                "properties": {
-                    "impedance": {
-                        "$ref": "#/$defs/impedancePoint"
-                    },
-                    "frequency": {
-                        "type": "number",
-                        "minimum": 0
-                    }
-                },
-                "required": ["impedance", "frequency"]
+                "$ref": "../utils.json#/$defs/impedanceAtFrequency"
             },
             "minItems": 1
         },

@@ -18,7 +18,16 @@
             ]
         },
         "outerDiameter": {
-            "description": "The outer diameter of the wire, in m",
+            "description": "The outer diameter of the wire. Unit: m.",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "numberStrands": {
+            "description": "Number of strands in the litz construction. Equivalent to numberConductors on basicWire; provided here for clarity since litz is the only wire type where the strand count is intrinsic to the geometry.",
+            "type": "integer",
+            "minimum": 2
+        },
+        "twistPitch": {
+            "description": "Length of one full twist of the litz bundle along the wire axis. Unit: m. Vendors quote this in mm or as 'lay length'; convert to metres before serialisation. No international standard exists for litz construction; this field captures the most commonly published vendor parameter.",
             "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         }
     },

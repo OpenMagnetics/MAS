@@ -447,6 +447,32 @@
             "type": "string",
             "enum": ["windByConsecutiveTurns", "windByConsecutiveParallels"]
         },
+        "impedanceAtFrequency": {
+            "description": "An impedance value pinned to a specific frequency. The impedance may be expressed as a bare magnitude (Ohm) or as a structured impedancePoint that carries magnitude, phase and real/imaginary parts. Used by EMI-choke topologies and by designRequirements.minimumImpedance.",
+            "title": "impedanceAtFrequency",
+            "type": "object",
+            "properties": {
+                "frequency": {
+                    "description": "Frequency at which the impedance applies. Unit: Hz.",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "impedance": {
+                    "oneOf": [
+                        {
+                            "description": "Impedance magnitude. Unit: Ohm.",
+                            "type": "number",
+                            "minimum": 0
+                        },
+                        {
+                            "$ref": "../inputs/designRequirements.json#/$defs/impedancePoint"
+                        }
+                    ]
+                }
+            },
+            "required": ["frequency", "impedance"],
+            "additionalProperties": false
+        },
         "isolationSide": {
             "description": "Tag to identify windings that are sharing the same ground",
             "title": "isolationSide",
