@@ -10,11 +10,9 @@
 
 Define a single normative table that fixes the unit of every numeric field
 in MAS. Numeric fields stay bare numbers — no `{value, unit}` wrapper, no
-per-document unit declaration. The schema documents reference the table
-instead of repeating "in Celsius" / "in Hz" prose 50+ times. Add a small
-`MeasuredValue` type only for catalogue fields that legitimately carry a
-tolerance band, where the structure is paying for information beyond the
-unit.
+per-document unit declaration, no per-value tolerance struct. The schema
+documents reference the table instead of repeating "in Celsius" / "in Hz"
+prose 50+ times.
 
 ## Why v2 (and what changed)
 
@@ -91,38 +89,7 @@ with a uniform pointer:
 Generated tooltips, IDE hovers and quicktype documentation comments stay
 useful, and the unit is now in the spot the eye looks for it.
 
-### 3. New `MeasuredValue` type in `utils.json`
-
-For catalogue fields that carry a tolerance band, ship a small structure
-— *not* applied universally:
-
-```json
-"MeasuredValue": {
-  "description": "A measured catalogue value with optional tolerance band. The unit is fixed by the field that uses this type and is documented in docs/units.md.",
-  "type": "object",
-  "properties": {
-    "nominal":  { "type": "number" },
-    "minimum":  { "type": "number" },
-    "maximum":  { "type": "number" },
-    "typical":  { "type": "number" },
-    "method":   { "type": "string", "description": "How the value was obtained: datasheet, measured, fitted, derived." }
-  },
-  "required": ["nominal"],
-  "additionalProperties": false
-}
-```
-
-Apply selectively, only where there's information beyond the number, e.g.:
-
-- `coreMaterial.permeability.initial` — datasheets quote ranges, not points.
-- `wire.material.resistivity` — ditto.
-- `gap.length` — manufacturing tolerance is real.
-
-A simple operating-point field like `switchingFrequency` stays a bare
-number. We are paying for structure only when the structure is doing
-work.
-
-### 4. SPDX header on every schema file
+### 3. SPDX header on every schema file
 
 Add to each schema `$comment`:
 
@@ -134,15 +101,16 @@ Independent of the units work but small enough to land in the same PR.
 
 ## Migration policy
 
-- **0.2.0:** add `docs/units.md`, sweep schema descriptions, add
-  `MeasuredValue` to `utils.json`. **Non-breaking** — bare numbers stay
-  bare; the unit they always meant is now formalised.
-- **0.3.0:** start migrating selected catalogue fields to
-  `MeasuredValue`. Each migration is a MINOR change (additive: nominal
-  is required, old consumers can still read `nominal` as the only number
-  they care about).
+- **0.2.0:** add `docs/units.md`, sweep schema descriptions. **Non-breaking** —
+  bare numbers stay bare; the unit they always meant is now formalised.
 - **No 1.0 break planned** for this RFC. The unit table can be tightened
   in PATCH releases.
+
+If a future field genuinely needs a tolerance band (datasheet quotes
+min/max with no nominal, manufacturing acceptance criteria, etc.), add
+sibling fields at that point (`<field>Min`, `<field>Max`) rather than
+introducing a wrapper struct that pays no rent on the 99% of fields that
+are single numbers.
 
 ## Cost
 
@@ -175,12 +143,6 @@ revision history visible via `git log --follow`.
 
 ## Open questions
 
-1. Should the bundled component database (`data/*.ndjson`) be migrated
-   to `MeasuredValue` for permeability and similar fields up-front, or
-   gradually? Recommendation: gradually, one record class per release.
-2. Do we want a `prefix` enum on `MeasuredValue` for length only
-   (`m` vs `mm`)? Recommendation: no — keep one canonical wire format,
-   let tools handle display.
-3. Does the IEC 61360 / CDD registration work (RFC 0003) need the
+1. Does the IEC 61360 / CDD registration work (RFC 0003) need the
    table to use IRDIs as well as UCUM codes? Probably yes once CDD
    classes are minted; add a column then.

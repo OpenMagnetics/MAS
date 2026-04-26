@@ -78,21 +78,13 @@ Field names always disambiguate: `rmsCurrent`, `peakCurrent`,
 `dcCurrent`. A bare `current` (without a qualifier) is a documentation
 defect — open an issue.
 
-### Vendor-published tolerances
+### Single numbers, not tolerance bands
 
-Catalogue values that legitimately carry a tolerance band use the
-`MeasuredValue` type from `utils.json` (introduced in 0.2.0). The unit
-of `nominal`, `minimum`, `maximum`, `typical` is the unit fixed by the
-field, per this table. Example:
-
-```json
-"initialPermeability": {
-  "nominal": 2300,
-  "minimum": 1840,
-  "maximum": 2760,
-  "method": "datasheet"
-}
-```
+Datasheet values are encoded as single numbers. Permeability, saturation
+flux density, gap length, resistivity — one nominal value per field, no
+`{nominal, minimum, maximum}` wrapper. If a future field genuinely needs
+a band, sibling fields (`<field>Min`, `<field>Max`) are added at that
+point.
 
 ### Out-of-table units
 
