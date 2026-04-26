@@ -140,12 +140,63 @@ become the primary reference if standardisation is later pursued.
 
 ## 6. Quantities, units, and vocabulary
 
+### 6a. Units
+
 | Standard | Title | Status | Cite at |
 |----|----|----|----|
 | **ISO 80000-6** | Quantities and units — Part 6: Electromagnetism | Normative | `docs/units.md`, top |
 | **ISO 80000-5** | Quantities and units — Part 5: Thermodynamics (justifies Celsius alongside Kelvin) | Normative | `docs/units.md` (temperature note) |
-| **IEC 60050-121** | International Electrotechnical Vocabulary — Electromagnetism | Normative | top of `docs/` |
-| **IEC 60050-221** | International Electrotechnical Vocabulary — Magnetic materials and components | Normative | top of `docs/` |
+
+### 6b. Vocabulary — IEV (International Electrotechnical Vocabulary)
+
+The verbatim definitions below are reproduced from IEC 60050. They are the
+authoritative anchor for the corresponding terms used throughout the MAS
+schema. Every MAS field name and description is consistent with these
+definitions. PSMA holds copies of IEV 60050-151 and 60050-221; consult
+electropedia.org for the on-line edition.
+
+**From IEV 60050-151 (Electrical and magnetic devices):**
+
+| IEV | Term | Verbatim definition | Used in MAS as |
+|----|----|----|----|
+| 151-13-14 | turn | Conductor formed into a curve with the end points close together but not coincident. | `winding.numberTurns` |
+| 151-13-15 | coil | Set of series-connected turns, usually coaxial. | strict-sense reference; MAS uses `coil` more broadly for the wound assembly (industry usage) |
+| 151-13-16 | solenoid | Cylindrical coil, the length of which is much greater than its transverse dimensions and which is used to produce a magnetic field. | informative |
+| 151-13-17 | winding | Assembly of interconnected turns and/or coils intended for common operation. NOTE — A winding is provided with terminals and is intended to produce a magnetic field when carrying electric currents or to produce voltages between appropriate points when placed in a time-varying magnetic field or moved through a magnetic field. | `winding` (primary, secondary, auxiliary, ...) |
+| 151-13-18 | bifilar winding | Set of two coils the turns of which consist of two contiguous conductors isolated from one another. | informative; specific topologies |
+
+**From IEV 60050-221 (Magnetic materials and components):**
+
+| IEV | Term | Verbatim definition | Used in MAS as |
+|----|----|----|----|
+| 221-04-13 | (air) gap | A gap between the magnetic parts of a magnetic circuit, crossed by the magnetic flux lines and short relative to the total magnetic path length. | `core/gap` |
+| 221-04-24 | (magnetic) core | (1) That part of a magnetic circuit composed of magnetic material. (2) That part of a magnetic circuit which is intended to be placed inside a coil in a fixed position relative to the coil. | `magnetic.core` (both senses) |
+| 221-04-25 | laminated (magnetic) core | A core made of magnetically soft sheet material, or pieces cut thereof, stacked in parallel configuration and having an interlamination resistance that is sufficiently high for the application. | informative; future construction-type enum |
+| 221-04-26 | magnetic powder core | A core consisting of a compact of magnetic powder particles having contact resistance between particles that is sufficiently high for the application. | core material classification |
+| 221-04-27 | strip-wound (magnetic) core | A core made of a strip or strips of magnetically soft material, wound spirally layer upon layer, and having an interlayer resistance that is sufficiently high for the application. | informative; future construction-type enum |
+| 221-04-32 | yoke | A part of a magnetic circuit, the main function of which is to provide a low reluctance path for the magnetic flux. | informative; not currently modelled in MAS (yokes are not a distinct piece in the SMPS magnetics MAS targets) |
+| 221-04-38 | search coil | A coil or loop of conductor used to detect or measure a magnetic field. | informative |
+
+**Industry term not yet in IEV:**
+
+- **bobbin** — the insulating former on which one or more windings are
+  arranged. Universally used in industry but not currently defined in
+  IEV 151 or 221. PSMA's queue of items to submit to IEC TC 51 / TC 1
+  for inclusion in IEV 221.
+
+### 6c. Construction families (MAS-defined)
+
+IEC publishes individual core *shapes* (IEC 62317, IEC 63093) but no
+umbrella terms for the higher-level construction *family*. MAS therefore
+defines and uses the following enum values in
+`core.functionalDescription.type`:
+
+| Value | Definition |
+|----|----|
+| `two-piece set` | A core consisting of two identical or mirror-image pieces (e.g. ETD+ETD, PQ+PQ, RM+RM, EP+EP). |
+| `piece and plate` | A core consisting of one shaped piece and one flat plate (e.g. EI, U+I, ER+I, EFD+I). |
+| `toroidal` | A single ring (toroid) per IEC 62317-7. |
+| `closed shape` | A single closed-loop core piece (e.g. one-piece pot core). |
 
 ## 7. Test and measurement methods
 
@@ -169,6 +220,25 @@ become the primary reference if standardisation is later pursued.
 > curve-fitting model. Each MAS loss-method block should carry a
 > `source` field citing the primary literature or vendor reference for
 > traceability.
+
+## 8a. Operating-point conventions (MAS-defined)
+
+The values in `outputVoltages` and `outputCurrents` are *interpreted*
+according to the optional sibling fields `outputVoltagesForm` and
+`outputCurrentsForm`, with the following allowed values:
+
+| Form | Meaning |
+|----|----|
+| `dc` (default) | DC value at the load terminal. |
+| `rms` | Root-mean-square value over one cycle. |
+| `peak` | Maximum absolute instantaneous value. |
+| `peakToPeak` | Difference between maximum and minimum instantaneous values. |
+| `average` | Mean of the absolute instantaneous values. |
+
+If the form field is absent, the value is interpreted as `dc`. AC
+quantities at the magnetic itself (waveforms, harmonics, peak/RMS at
+each winding) live in `inputs/operatingPointExcitation`, not at the
+top-level operating point.
 
 ## 9. Identifier registries (downstream interop)
 

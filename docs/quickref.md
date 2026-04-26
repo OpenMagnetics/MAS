@@ -1,5 +1,11 @@
 # MAS Quick Reference
 
+> Companion to the README. For the normative units table see
+> [`units.md`](units.md); for the mapping of MAS to existing standards
+> (IEC, ASTM, MPIF, JIS, NEMA, IEV vocabulary) see
+> [`normative-references.md`](normative-references.md).
+
+
 ## Minimal Inductor
 
 ```json

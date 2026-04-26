@@ -1,8 +1,8 @@
 # MAS - Magnetic Agnostic Structure
 
-> JSON Schema for unambiguous description of magnetic components (transformers, inductors, chokes)
+> Vendor-neutral JSON-Schema data model for magnetic components used in power electronics; candidate IEC International Standard via PSMA / JTC 1 PAS.
 
-MAS (Magnetic Agnostic Structure) is a standardized JSON format for describing magnetic components independently of their kind or application. It enables interoperability between analytical tools, circuit simulators, FEA software, and CAD systems.
+MAS (Magnetic Agnostic Structure) is a JSON-Schema-based data model for describing magnetic components (transformers, inductors, chokes, current transformers) independently of any one tool or vendor. It enables interoperability between analytical tools, circuit simulators, FEA software and CAD systems, and is being prepared for transfer to the PSMA Magnetics Committee and onward to an IEC International Standard. See README.md, GOVERNANCE.md, docs/normative-references.md and docs/units.md for the full picture.
 
 ## Quick Start
 

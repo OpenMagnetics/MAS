@@ -1,6 +1,17 @@
 # Wire
-As is the philosophy of the whole MAS format, the wire definition and usage tries to resemble reality as much as possible by making its definition independent of the winding where it is used.
-This allows the user to have a collection of defined wires that are ready to be used in any magnetic component, or even have the collection from other users or manufacturers.
+
+> Conductor sizes defer to **IEC 60228** (metric) and **ASTM B258**
+> (AWG). Magnet-wire enamel grades defer to **IEC 60317** (sub-parts by
+> chemistry) and **NEMA MW 1000** for the US-market equivalent. Litz
+> construction is not standardised; see
+> [`../normative-references.md`](../normative-references.md) §3 for the
+> full picture.
+
+Following the philosophy of the rest of the MAS format, a wire is
+defined independently of the winding in which it will be used. This
+lets a user maintain a collection of wires that can be reused across
+magnetic components, or share collections with other users and
+manufacturers.
 The wire structure is designed to be able to describe any kind of wire, from Litz wires to planar PCB tracks. It contains some fields that are common for all kinds of wires and some specific ones. The common field are:
 
 * Name: Reference name of the wire.

@@ -1,6 +1,19 @@
 # Coil
-Following the same principle as with the core, the coil is defined in an equivalent way as how they are manufactured: The wires are selected, prepared, and wound over a coil former following a series of steps. For this reason the bobbin or coil former is included in this section as part of the coil, which gives the possibility of defining a coil without a specific core, just its bobbin.
-The nomenclature of the different elements of the coil used in this document tries to follow the most common practices in the industry, but in order to avoid misinterpretation they will be defined here:
+
+> Vocabulary in this chapter is anchored to **IEV 60050-151** (turn,
+> coil, winding, bifilar winding). Verbatim definitions are reproduced
+> in [`../normative-references.md`](../normative-references.md) §6b.
+
+Following the same principle as with the core, the coil is described
+the way it is manufactured: wires are selected, prepared and wound onto
+a bobbin (coil former) in a defined sequence. The bobbin is therefore
+included in this section as part of the coil, which makes it possible
+to describe a coil without committing to a specific core — only the
+bobbin and the windings.
+
+The terms used here align with industry practice. To avoid
+misinterpretation they are defined explicitly below, with the IEV
+reference number where one applies.
 
 * Coil: This refers to the whole set of windings, 
 * Winding: This refers to an individual winding when specifically indicated (e.g.: “primary winding”, “winding 1”)

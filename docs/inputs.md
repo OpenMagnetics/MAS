@@ -1,5 +1,15 @@
 # Inputs
-We have finished describing the magnetic core, but as we commented at the beginning, a magnetic core without its inputs cannot really be defined, as we cannot even establish if it will work. Only by describing the requirements of the application, and the excitations to the Electronics system, can a magnetic component be correct.
+
+> Walk-through of the `inputs` section of a MAS document. For unit
+> conventions see [`units.md`](units.md); for the standards MAS defers
+> to (IEC, IEV vocabulary) see
+> [`normative-references.md`](normative-references.md).
+
+A magnetic component cannot be evaluated in isolation. A description of
+the application's design requirements and the excitations applied at
+each operating point is required before any output (losses, temperature
+rise, inductance under bias) can be computed. The `inputs` section of a
+MAS document carries that information.
 
 The specification of the inputs is therefore divided into two parts, a list of design requirements for the magnetic to comply with, and a list of operating points, which the magnetic has to be optimized for.
 

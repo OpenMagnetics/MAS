@@ -1,5 +1,15 @@
 # Magnetic
-I am going to separate into different specifications (and therefore files or entries in the database) anything that has to do with input to the system (operating points and requirements) from the physical system itself (the magnetic component). This first chapter describes how a magnetic can be described.
+
+> Walk-through of the `magnetic` section of a MAS document. For unit
+> conventions see [`units.md`](units.md); for the standards MAS defers
+> to and the IEV vocabulary anchors see
+> [`normative-references.md`](normative-references.md).
+
+The `magnetic` section describes the physical component itself —
+distinct from the inputs (operating points and design requirements) and
+from the outputs (computed results). It is composed of a `core` and a
+`coil`; the `coil` may reference a `bobbin`. This chapter walks through
+how each of these is described.
 
 It is a common practice of magnetics manufacturers to decouple cores (including gaps) and windings, having collections of compatible cores and wound bobbins, which allows having a multitude of different magnetics by combining them.
 

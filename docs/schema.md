@@ -1,6 +1,10 @@
 # MAS Schema Documentation
 
-This document describes the JSON Schema structure for MAS (Magnetic Agnostic Structure).
+This document describes the JSON Schema structure for MAS (Magnetic
+Agnostic Structure). For unit conventions see [`units.md`](units.md);
+for the mapping of MAS to existing IEC / ASTM / MPIF / JIS / NEMA
+standards and IEV vocabulary see
+[`normative-references.md`](normative-references.md).
 
 ## Schema Hierarchy
 

@@ -1,5 +1,16 @@
 # Core
-This section must completely define the magnetic core used in our magnetic component. It must support Commercial off-the-shelf (COTS) core as well as customized ones. With the information in this section any user or software must be able to identify and buy the core from a distributor, create a 3D model for simulation, or be able to manufacture it.
+
+> Vocabulary anchored to **IEV 60050-221** (magnetic core, air gap,
+> laminated core, magnetic powder core, strip-wound core). Shape
+> dimensions defer to **IEC 62317** and **IEC 63093**. See
+> [`../normative-references.md`](../normative-references.md) §1, §2a,
+> §6b.
+
+This section completely defines the magnetic core of the component. It
+supports both commercial off-the-shelf (COTS) cores referenced from the
+bundled catalogue and custom geometries. With the information in this
+section, any tool must be able to identify and source the core, build a
+3-D model for simulation, or manufacture it.
 
 In order to achieve this, the information is grouped in three levels or descriptions, each one independent from the others. Ideally any level / description must be able to describe the core, and all the information of the core can be extracted from any of them. This descriptions are:
 * **Functional description**: The most commonly used in core datasheets, here is the information that describes the core from the functional point of view: shape, material, number of stacks, etc. Practical for humans.

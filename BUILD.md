@@ -1,3 +1,10 @@
+# Reference implementation — build instructions
+
+These instructions cover the C++ reference binding (`MAS.hpp`) and its
+test harness, which are what live in this repository alongside the
+schema. Conforming implementations of the MAS specification need not
+follow this build; they need only consume MAS documents that validate
+against `schemas/MAS.json`.
 
 ## Build steps
 
