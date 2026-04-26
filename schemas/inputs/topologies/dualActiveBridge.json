@@ -1,6 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/inputs/topologies/dualActiveBridge.json",
+    "$id": "https://schemas.psma.com/mas/inputs/topologies/dualActiveBridge.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "dualActiveBridge",
     "description": "Dual Active Bridge (DAB) DC-DC converter excitation. Modulation parameters follow the standard Triple Phase Shift (TPS) convention: D1 = primary-bridge intra-leg shift, D2 = secondary-bridge intra-leg shift, D3 = inter-bridge (outer) shift. See Huang et al., Energies 11(9):2419 (2018) and Maniktala & Rosano, 'Power Supplies A to Z', 3rd ed. (Ch. 2).",
     "type": "object",

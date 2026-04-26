@@ -1,6 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/magnetic/core/spacer.json",
+    "$id": "https://schemas.psma.com/mas/magnetic/core/spacer.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "core/spacer",
     "description": "Data describing the spacer used to separate cores in additive gaps",
     "type": "object",
