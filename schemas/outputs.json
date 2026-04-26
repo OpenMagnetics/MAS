@@ -77,6 +77,7 @@
                 },
                 "currentPerWinding": {
                     "description": "Excitation of the current per winding that produced the winding losses.",
+                    "title": "operatingPoint",
                     "$ref": "./inputs/operatingPoint.json"
                 },
                 "currentDividerPerTurn": {
