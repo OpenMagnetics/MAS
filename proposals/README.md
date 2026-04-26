@@ -28,3 +28,4 @@ before any schema or code lands.
 | [0002](0002-conformance-classes.md) | Conformance classes (A / B / C) | Draft | 0.2.0 / 1.0.0 |
 | [0003](0003-irdi-identifiers.md) | IRDI identifiers via IEC CDD | Draft | 0.2.0 |
 | [0004](0004-temperature-kelvin.md) | Temperature in Kelvin everywhere | Withdrawn (MAS already uses Celsius consistently) | — |
+| [0005](0005-permeability-variants.md) | Permeability variants (incremental, reversible) | Draft | 0.2.0 |
