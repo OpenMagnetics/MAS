@@ -1,9 +1,29 @@
-# MAS-RFC 0004 — Temperature in Kelvin everywhere
+# MAS-RFC 0004 — Temperature in Kelvin everywhere (WITHDRAWN)
 
-- **Status:** Draft
-- **Type:** Breaking (target: 1.0.0)
+- **Status:** Withdrawn 2026-04-26
+- **Type:** Was breaking (target: 1.0.0)
 - **Author:** _to be assigned_
 - **Created:** 2026-04-26
+
+> **Withdrawal note (2026-04-26):** This RFC was drafted on the mistaken
+> premise that MAS mixes °C and K (ambient in °C, material curves in K).
+> A subsequent audit of every schema and doc found **no Kelvin reference
+> anywhere** in MAS — every temperature field is annotated "in Celsius."
+> There is no °C/K split to fix.
+>
+> The unit-correctness problem this RFC was trying to solve (units
+> documented in prose only, not enforced) is addressed by RFC 0001 v2's
+> normative units table. The trivial wording inconsistencies
+> ("in Celsius" vs "degrees Celsius") are folded into RFC 0001 v2's
+> schema-text sweep.
+>
+> Celsius is retained because every ferrite datasheet, every IEC 60085
+> insulation thermal class, and every relevant IEC magnetics standard
+> publishes temperatures in °C. ISO 80000-5 explicitly accepts °C
+> alongside K.
+
+---
+
 
 ## Summary
 

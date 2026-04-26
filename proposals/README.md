@@ -23,7 +23,8 @@ before any schema or code lands.
 
 | # | Title | Status | Target |
 |---|-------|--------|--------|
-| [0001](0001-quantity-units.md) | `Quantity` type and explicit SI units | Draft | 1.0.0 |
+| [0001](0001-units.md) | Normative SI units table | Draft | 0.2.0 |
+| [0001 v1](0001-quantity-units.v1.md) | `Quantity` type wrapper (original) | Superseded | — |
 | [0002](0002-conformance-classes.md) | Conformance classes (A / B / C) | Draft | 0.2.0 / 1.0.0 |
 | [0003](0003-irdi-identifiers.md) | IRDI identifiers via IEC CDD | Draft | 0.2.0 |
-| [0004](0004-temperature-kelvin.md) | Temperature in Kelvin everywhere | Draft | 1.0.0 |
+| [0004](0004-temperature-kelvin.md) | Temperature in Kelvin everywhere | Withdrawn (MAS already uses Celsius consistently) | — |

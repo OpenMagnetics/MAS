@@ -1,8 +1,17 @@
-# MAS-RFC 0001 — `Quantity` type and explicit SI units
+# MAS-RFC 0001 v1 — `Quantity` type and explicit SI units (SUPERSEDED)
 
-- **Status:** Draft
-- **Type:** Breaking (target: 1.0.0)
+- **Status:** Superseded by RFC 0001 v2 (`0001-units.md`)
+- **Type:** Breaking (target: 1.0.0) — withdrawn
 - **Author:** _to be assigned_
+
+> **Note (2026-04-26):** This v1 design proposed wrapping every numeric
+> field in `{value, unit}`. After a cost assessment against MKF (the
+> largest known consumer), the wrapper approach was rejected in favour
+> of a normative units table — see `0001-units.md`. v1 is preserved
+> here for historical record only.
+
+---
+
 - **Created:** 2026-04-26
 
 ## Summary
