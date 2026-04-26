@@ -29,3 +29,7 @@ before any schema or code lands.
 | [0003](0003-irdi-identifiers.md) | IRDI identifiers via IEC CDD | Draft | 0.2.0 |
 | [0004](0004-temperature-kelvin.md) | Temperature in Kelvin everywhere | Withdrawn (MAS already uses Celsius consistently) | — |
 | [0005](0005-permeability-variants.md) | Permeability variants (incremental, reversible) | Draft | 0.2.0 |
+| [0006](0006-topology-operating-point-deduplication.md) | Topology operating-point deduplication | Draft | 0.2.0 |
+| [0007](0007-enum-casing-convention.md) | Enum value casing convention | Draft | 1.0.0 |
+| [0008](0008-pollution-overvoltage-iec60664.md) | Pollution/overvoltage IEC 60664 alignment | Draft | 1.0.0 |
+| [0009](0009-coordinate-system-cleanup.md) | Coordinate-system cleanup (polar vs spherical) | Draft | 0.2.0 |
