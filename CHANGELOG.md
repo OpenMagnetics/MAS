@@ -17,6 +17,78 @@ A change to the bundled component database (`data/*.ndjson`) follows the same
 rules: adding a material/shape/wire is MINOR, removing or renaming one is
 MAJOR.
 
+## [1.0.0] - 2026-04-27
+
+The breaking-changes release. Verified end-to-end against MKF
+(`libMKF.so` and `MKF_tests` link clean against the regenerated
+`MAS.hpp` with no source changes required in MKF beyond the
+`mas_compat::parse` swap-in for old-document loading).
+
+### Breaking
+
+- **Enum casing sweep (RFC 0007).** Eight competing conventions
+  collapsed to camelCase throughout, with explicit acronym
+  (`AC`, `DC`, `SPS`, `EPS`, `DPS`, `TPS`, `SEPIC`) and IEC
+  standard-code (`Y`/`A`/`E`/`B`/`F`/`H`/`N`/`R`/`200`/`220`/`250`,
+  `MnZn`/`NiZn`/`FeSiAl`/etc.) exceptions.
+- **IEC 60664 alignment (RFC 0008).** `pollutionDegree` `P1`/`P2`/`P3`
+  → `PD1`/`PD2`/`PD3` plus a new `PD4`. `overvoltageCategory`
+  `OVC-I`/`OVC-II`/`OVC-III`/`OVC-IV` → `I`/`II`/`III`/`IV`.
+- **`magneticManufacturerInfo.cost`** unified with
+  `distributorInfo.cost` to the structured `{value, currency}` form
+  introduced in 0.2.0.
+
+### Compatibility shim
+
+- New `include/mas_compat.hpp` (header-only). Drop into any C++
+  consumer alongside `MAS.hpp` and call `mas_compat::parse(s)`
+  instead of `nlohmann::json::parse(s)` to keep loading pre-1.0
+  documents transparently. Old enum spellings are rewritten in place
+  before deserialization, so MKF / PyMKF / WebLibMKF / MVB++ continue
+  to accept files written by 0.x tools.
+- Migration tool `scripts/migrate-to-1.0.py` rewrites a MAS document
+  (or directory tree) in place to the 1.0 spellings. Single source of
+  truth for the mapping; mirrored in `mas_compat.hpp`.
+
+### Schema work that landed and was kept
+
+- **Loss-method `customCoreLossesMethodData` (open registry)** —
+  drafted in step 2a, reverted at the end because it caused
+  quicktype to rename `CoreLossesMethodData` and break the variant
+  shape MKF depends on. Re-implementation needs either a
+  quicktype-side workaround or coordinated MKF source updates;
+  deferred to a post-1.0 RFC.
+- **RFC 0006 topology operating-point dedup** — drafted in step 2,
+  reverted in step 3 for the same reason: the allOf-with-
+  baseOperatingPoint pattern made quicktype rename
+  `OperatingPoint` to be the topology base type, with cascading
+  consequences. Re-implementation needs a quicktype workaround;
+  RFC stays Draft.
+
+### Schema work landed (additive, kept)
+
+- `impedanceAtFrequency` consolidated into `utils.json` (RFC 0006
+  partial), used by `designRequirements.minimumImpedance`, common-
+  mode choke and differential-mode choke. The bare-magnitude form
+  was reverted to a pure `impedancePoint` reference to keep
+  MKF source compatible.
+- New optional `numberStrands` and `twistPitch` on `wire/litz.json`
+  (closes the litz-construction gap noted in
+  `docs/normative-references.md`).
+- `tests/conformance/class-{A,B,C}/` populated with 8 vectors
+  carrying `masConformance` declarations.
+- Three CI scripts: `scripts/validate-samples.py`,
+  `scripts/check-mas-hpp.sh`, `scripts/validate-conformance.py`.
+- Bundled `data/*.ndjson` migrated to the new enum spellings.
+- Tracked `MAS.hpp` regenerated and is now in sync with the schema.
+
+### Out of scope
+
+- RFC 0001 v2 prose sweep (per-field `description` rewriting to
+  point at `docs/units.md`) deferred — cosmetic only, ship later.
+- Loss-method open registry RFC and topology operating-point dedup
+  RFC remain Draft; both blocked on quicktype-naming work.
+
 ## [0.2.0] - 2026-04-26
 
 The IEC-readiness release. Five RFCs implemented; license, governance and
