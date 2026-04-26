@@ -1,6 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/magnetic/core/material.json",
+    "$id": "https://schemas.psma.com/mas/magnetic/core/material.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "core/material",
     "description": "A material for the magnetic cores",
     "type": "object",
@@ -54,7 +55,7 @@
             "type": "number"
         },
         "saturation": {
-            "description": "BH Cycle points where a non-negligible increase in magnetic field produces a negligible increase of magnetic flux density",
+            "description": "BH curve points characterising the saturation flux density of the material. By convention, saturation is reported at the field strength at which the relative differential permeability has fallen to approximately 10 % of the initial permeability. See docs/normative-references.md.",
             "type": "array",
             "items": {
                 "$ref": "#/$defs/bhCyclePoint"
@@ -343,23 +344,24 @@
             "required": ["value"]
         },
         "bhCyclePoint": {
-            "description": "data for describing one point of the BH cycle",
+            "description": "One point of the BH cycle.",
             "type": "object",
             "properties": {
                 "magneticFluxDensity": {
-                    "description": "magnetic flux density value, in T",
+                    "description": "Magnetic flux density value. Unit: T.",
                     "type": "number"
                 },
                 "magneticField": {
-                    "description": "magnetic field value, in A/m",
+                    "description": "Magnetic field strength value. Unit: A/m.",
                     "type": "number"
                 },
                 "temperature": {
-                    "description": "temperature for the field value, in Celsius",
+                    "description": "Temperature for the field value, in Celsius.",
                     "type": "number"
                 }
             },
-            "required": ["magneticFluxDensity", "magneticField", "temperature"]
+            "required": ["magneticFluxDensity", "magneticField", "temperature"],
+            "additionalProperties": false
         },
         "steinmetzCoreLossesMethodData": {
             "description": "Steinmetz coefficients for estimating volumetric losses in a given frequency range",

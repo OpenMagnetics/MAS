@@ -1,6 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/magnetic/coil.json",
+    "$id": "https://schemas.psma.com/mas/magnetic/coil.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "coil",
     "description": "The description of a magnetic coil",
     "type": "object",
@@ -16,7 +17,7 @@
             ]
         },
         "functionalDescription":{
-            "description": "The data from the coil based on its function, in a way that can be used by analytical models of only Magnetism.",
+            "description": "Coil data described in functional terms (the windings, per IEV 151-13-17), in a form suitable for purely magnetic analytical models.",
             "title": "coilFunctionalDescription",
             "type": "array",
             "items": {
@@ -25,7 +26,7 @@
             "minItems": 1
         },
         "groupsDescription":{
-            "description": "The data from the coil at the gtoup level. A group may define a PCB, or different winding windows.",
+            "description": "Coil data at the group level. A group may define a PCB or distinct winding windows.",
             "type": "array",
             "items": {
                 "$ref": "#/$defs/group"
@@ -33,7 +34,7 @@
             "minItems": 1
         },
         "sectionsDescription":{
-            "description": "The data from the coil at the section level, in a way that can be used by more advanced analytical and finite element models",
+            "description": "Coil data at the section level, suitable for more advanced analytical and finite-element models.",
             "type": "array",
             "items": {
                 "$ref": "#/$defs/section"
@@ -379,27 +380,28 @@
                     "exclusiveMinimum": 0
                 },
                 "layerThickness": {
-                    "description": "Thickness of the layers to implement the margin",
+                    "description": "Thickness of the layers used to implement the margin.",
                     "type": "number",
                     "exclusiveMinimum": 0
                 }
             },
-            "required": ["topOrLeftWidth", "bottomOrRightWidth", "numberLayers", "layerThickness"]
+            "required": ["topOrLeftWidth", "bottomOrRightWidth", "numberLayers", "layerThickness"],
+            "additionalProperties": false
         },
         "partialWinding":{
-            "description": "Data describing one part of winding, described by a list with the proportion of each parallel in the winding that is contained here",
+            "description": "One part of a winding, described by the proportion of each parallel that is contained here.",
             "title": "partialWinding",
             "type": "object",
             "properties": {
                 "winding": {
-                    "description": "The name of the winding that this part belongs to",
+                    "description": "Name of the winding that this part belongs to.",
                     "type": "string"
                 },
                 "parallelsProportion": {
-                    "description": "Number of parallels in winding",
+                    "description": "Per-parallel proportion of turns contained in this part.",
                     "type": "array",
                     "items": {
-                        "description": "Proportion of turns that are contained in this part for the parallel in this index",
+                        "description": "Proportion of turns contained in this part for the parallel at this index.",
                         "type": "number",
                         "minimum": 0,
                         "maximum": 1
@@ -407,7 +409,7 @@
                     "uniqueItems": false
                 },
                 "connections": {
-                    "description": "Array on two elements, representing the input and output connection for this partial winding",
+                    "description": "Two-element array representing the input and output connections of this partial winding.",
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/connection"
@@ -417,23 +419,24 @@
                     "uniqueItems": true
                 }
             },
-            "required": ["winding", "parallelsProportion"]
+            "required": ["winding", "parallelsProportion"],
+            "additionalProperties": false
         },
         "winding":{
-            "description": "Data describing one winding associated with a magnetic",
+            "description": "One winding (assembly of interconnected turns and/or coils intended for common operation, per IEV 151-13-17). Examples: primary, secondary, auxiliary.",
             "type": "object",
             "properties": {
                 "name": {
-                    "description": "Name given to the winding",
+                    "description": "Name of the winding (e.g. primary, secondary).",
                     "type": "string"
                 },
                 "numberTurns": {
-                    "description": "Number of turns in winding",
+                    "description": "Number of turns (per IEV 151-13-14) in the winding.",
                     "type": "integer",
                     "exclusiveMinimum": 0
                 },
                 "numberParallels": {
-                    "description": "Number of parallels in winding",
+                    "description": "Number of parallel-connected conductors making up one electrical turn of the winding.",
                     "type": "integer",
                     "exclusiveMinimum": 0
                 },
@@ -460,7 +463,7 @@
                     "uniqueItems": true
                 },
                 "woundWith": {
-                    "description": "Lis of winding names that are wound together with this winding",
+                    "description": "List of winding names that are wound together with this winding.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -470,30 +473,31 @@
             "required": ["name", "numberTurns", "numberParallels", "isolationSide", "wire"]
         },
         "connection": {
-            "description": "Data describing the connection of the a wire",
+            "description": "Connection of a wire to a terminal.",
             "type": "object",
             "properties": {
                 "type": {
                     "$ref": "../utils.json#/$defs/connectionType"
                 },
                 "metric": {
-                    "description": "Metric of the terminal, if applicable",
+                    "description": "Metric of the terminal, if applicable.",
                     "type": "integer"
                 },
                 "pinName": {
-                    "description": "Name of the pin where it is connected, if applicable",
+                    "description": "Name of the pin where the wire is connected, if applicable.",
                     "type": "string"
                 },
                 "direction": {
-                    "description": "Direction of the current in the connection",
+                    "description": "Direction of the current in the connection.",
                     "type": "string",
                     "enum": ["input", "output"]
                 },
                 "length": {
-                    "description": "Length of the connection, counted from the exit of the last turn until the terminal, in m",
+                    "description": "Length of the connection, from the exit of the last turn to the terminal. Unit: m.",
                     "type": "number"
                 }
-            }
+            },
+            "additionalProperties": false
         }
     }
 }

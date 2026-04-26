@@ -1,19 +1,20 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/magnetic/bobbin.json",
+    "$id": "https://schemas.psma.com/mas/magnetic/bobbin.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "bobbin",
-    "description": "The description of a bobbin",
+    "description": "Description of a bobbin (the insulating former on which one or more windings are arranged). The term is industry-conventional; an IEV entry is being proposed by PSMA. See docs/normative-references.md.",
     "type": "object",
     "properties": {
         "name": {
-            "description": "The name of bobbin",
+            "description": "Name of the bobbin.",
             "type": "string"
         },
         "manufacturerInfo": {
             "$ref": "../utils.json#/$defs/manufacturerInfo"
         },
         "distributorsInfo": {
-            "description": "The lists of distributors of the magnetic bobbin",
+            "description": "List of distributors of this bobbin.",
             "type": "array",
             "items": {
                 "$ref": "../utils.json#/$defs/distributorInfo"
@@ -21,40 +22,40 @@
             "uniqueItems": false
         },
         "functionalDescription":{
-            "description": "The data from the bobbin based on its function, in a way that can be used by analytical models.",
+            "description": "Bobbin data described in functional terms, in a form suitable for analytical models.",
             "type": "object",
             "title": "bobbinFunctionalDescription",
             "properties": {
                 "type": {
-                    "description": "The type of a bobbin",
+                    "description": "Whether the bobbin is a standard catalogue part or a custom design.",
                     "type": "string",
                     "enum": ["standard", "custom"]
                 },
                 "family": {
-                    "description": "The family of a bobbin",
+                    "description": "Bobbin family, named after the core shape family it is intended to fit. See IEC 62317 / IEC 63093.",
                     "title": "bobbinFamily",
                     "type": "string",
-                    "enum": ["u", "e", "etd", "er", "p", "rm", "ep", "pm", "el", "er", "pq", "efd", "ec", "t"]
+                    "enum": ["u", "e", "etd", "er", "p", "rm", "ep", "pm", "el", "pq", "efd", "ec", "t"]
                 },
                 "shape": {
-                    "description": "The name of a bobbin that this bobbin belongs to",
+                    "description": "Name of the core shape this bobbin is matched to.",
                     "type": "string"
                 },
                 "familySubtype": {
-                    "description": "The subtype of the shape, in case there are more than one",
+                    "description": "Subtype of the shape, where more than one variant exists in the family.",
                     "type": "string"
                 },
                 "material": {
                     "oneOf": [
                         {"$ref": "./insulation/material.json"},
                         {
-                            "description": "The name of the material used in the bobbin",
+                            "description": "Name of the material used in the bobbin.",
                             "type": "string"
                         }
                     ]
                 },
                 "dimensions": {
-                    "description": "The dimensions of a bobbin, keys must be as defined in EN 62317",
+                    "description": "Bobbin dimensions. Keys are the dimension labels defined in IEC 62317 / IEC 63093 for the parent core shape.",
                     "type": "object",
                     "additionalProperties": {
                         "$ref": "../utils.json#/$defs/dimension"

@@ -1,6 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/magnetic/insulation/material.json",
+    "$id": "https://schemas.psma.com/mas/magnetic/insulation/material.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "insulation/material",
     "description": "A material for insulation",
     "type": "object",
@@ -56,7 +57,16 @@
             "exclusiveMinimum": 0
         },
         "resistivity": {
-            "description": "Resistivity value according to manufacturer",
+            "description": "Volume resistivity per IEC 60093. Unit: ohm metre (Ohm.m).",
+            "type": "array",
+            "items": {
+                "$ref": "../../utils.json#/$defs/resistivityPoint"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "surfaceResistivity": {
+            "description": "Surface resistivity per IEC 60093. Unit: ohm per square (Ohm/sq). Relevant to tracking and creepage assessment per IEC 60112 / IEC 60664-1.",
             "type": "array",
             "items": {
                 "$ref": "../../utils.json#/$defs/resistivityPoint"
@@ -83,7 +93,7 @@
                     "exclusiveMinimum": 0
                 },
                 "temperature": {
-                    "description": "Temperature for the field value, in Celsius ",
+                    "description": "Temperature for the field value, in Celsius.",
                     "type": "number"
                 },
                 "humidity": {

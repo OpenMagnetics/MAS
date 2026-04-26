@@ -1,6 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "http://openmagnetics.com/schemas/utils.json",
+    "$id": "https://schemas.psma.com/mas/utils.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
     "description": "Some definition utils",
     "title": "utils",
     "type": "object",
@@ -11,23 +12,35 @@
             "type": "object",
             "properties": {
                 "outputVoltages": {
-                    "description": "A list of output voltages, one per output",
+                    "description": "List of output voltages, one per output. Interpreted per outputVoltagesForm (default: dc). See docs/normative-references.md.",
                     "type": "array",
                     "items": {"type": "number"},
                     "minItems": 1
+                },
+                "outputVoltagesForm": {
+                    "description": "How values in outputVoltages are interpreted. Defaults to dc.",
+                    "type": "string",
+                    "enum": ["dc", "rms", "peak", "peakToPeak", "average"],
+                    "default": "dc"
                 },
                 "outputCurrents": {
-                    "description": "A list of output currents, one per output",
+                    "description": "List of output currents, one per output. Interpreted per outputCurrentsForm (default: dc). See docs/normative-references.md.",
                     "type": "array",
                     "items": {"type": "number"},
                     "minItems": 1
                 },
+                "outputCurrentsForm": {
+                    "description": "How values in outputCurrents are interpreted. Defaults to dc.",
+                    "type": "string",
+                    "enum": ["dc", "rms", "peak", "peakToPeak", "average"],
+                    "default": "dc"
+                },
                 "switchingFrequency": {
-                    "description": "The switching frequency of the operating point",
+                    "description": "Switching frequency of the operating point. Unit: Hz. See docs/units.md.",
                     "type": "number"
                 },
                 "ambientTemperature": {
-                    "description": "The ambient temperature of the operating point",
+                    "description": "Ambient temperature of the operating point. Unit: Celsius. See docs/units.md.",
                     "type": "number"
                 }
             },
@@ -66,11 +79,12 @@
                     "exclusiveMinimum": 0
                 },
                 "temperature": {
-                    "description": "temperature for the field value, in Celsius",
+                    "description": "Temperature for the field value, in Celsius.",
                     "type": "number"
                 }
             },
-            "required": ["value"]
+            "required": ["value"],
+            "additionalProperties": false
         },
         "manufacturerInfo":{
             "description": "Data from the manufacturer for a given part",
@@ -106,11 +120,12 @@
                     "type": "string"
                 },
                 "cost": {
-                    "description": "The manufacturer's price for this part",
-                    "type": "string"
+                    "description": "The manufacturer's reference price for this part.",
+                    "$ref": "#/$defs/cost"
                 }
             },
-            "required": ["name"]
+            "required": ["name"],
+            "additionalProperties": false
         },
         "distributorInfo":{
             "description": "Data from the distributor for a given part",
@@ -138,7 +153,7 @@
                     "type": "string"
                 },
                 "distributedArea": {
-                    "description": "The area where the distributor doistributes",
+                    "description": "Geographical area in which the distributor operates.",
                     "type": "string"
                 },
                 "reference": {
@@ -154,11 +169,27 @@
                     "type": "string"
                 },
                 "cost": {
-                    "description": "The distributor's price for this part",
-                    "type": "number"
+                    "description": "The distributor's price for this part.",
+                    "$ref": "#/$defs/cost"
                 }
             },
-            "required": ["name", "reference", "quantity"]
+            "required": ["name", "reference", "quantity"],
+            "additionalProperties": false
+        },
+        "cost": {
+            "description": "A monetary value with an explicit currency (ISO 4217 code).",
+            "title": "cost",
+            "type": "object",
+            "properties": {
+                "value":    { "type": "number", "minimum": 0 },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$",
+                    "description": "ISO 4217 three-letter currency code, e.g. EUR, USD, CNY, JPY."
+                }
+            },
+            "required": ["value", "currency"],
+            "additionalProperties": false
         },
         "rotation":{
             "description": "Euler angle triplet [rx, ry, rz] describing the rotation around each cartesian axis, in radians",
@@ -291,11 +322,12 @@
                     "type": "number"
                 },
                 "imaginary": {
-                    "description": "Imaginary value of the field at this point",
+                    "description": "Imaginary value of the field at this point.",
                     "type": "number"
                 }
             },
-            "required": ["point", "real", "imaginary"]
+            "required": ["point", "real", "imaginary"],
+            "additionalProperties": false
         },
         "complexField":{
             "description": "Data describing a field in a 2D or 3D space",
@@ -344,11 +376,12 @@
                     "default": 0
                 },
                 "value": {
-                    "description": "Value of the field at this point",
+                    "description": "Value of the field at this point.",
                     "type": "number"
                 }
             },
-            "required": ["point", "value"]
+            "required": ["point", "value"],
+            "additionalProperties": false
         },
         "field":{
             "description": "Data describing a field in a 2D or 3D space",
