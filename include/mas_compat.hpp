@@ -18,6 +18,16 @@
 //
 // Header-only. Requires nlohmann::json.
 //
+// Includes a small set of typedef aliases for topology operating-point
+// classes that quicktype merged into BaseOperatingPoint at 1.0 (because
+// their schema $defs are pure $refs to baseOperatingPoint with no extras).
+// Pre-1.0 consumers referenced these by name; the typedefs keep that
+// source compatible. To activate them, also include MAS.hpp before
+// using any *OperatingPoint type:
+//
+//     #include <MAS.hpp>
+//     #include <mas_compat.hpp>
+//
 // SPDX-License-Identifier: Apache-2.0
 
 #pragma once
@@ -26,6 +36,23 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+
+// Topology operating-point typedefs. Six topologies use $ref baseOperatingPoint
+// with no extras after RFC 0006; quicktype emits only BaseOperatingPoint for
+// them. These typedefs preserve the pre-1.0 names so source code that referenced
+// them keeps compiling.
+//
+// MAS.hpp must be included before this header for these typedefs to expand.
+#if defined(QUICKTYPE_MAS_HPP) || __has_include(<MAS.hpp>)
+namespace MAS {
+    using ForwardOperatingPoint           = BaseOperatingPoint;
+    using PushPullOperatingPoint          = BaseOperatingPoint;
+    using LlcOperatingPoint               = BaseOperatingPoint;
+    using IsolatedBuckOperatingPoint      = BaseOperatingPoint;
+    using IsolatedBuckBoostOperatingPoint = BaseOperatingPoint;
+    using FlybuckOperatingPoint           = BaseOperatingPoint;
+}
+#endif
 
 namespace mas_compat {
 
