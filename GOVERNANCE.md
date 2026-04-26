@@ -1,0 +1,90 @@
+# MAS Governance
+
+This document describes how the **Magnetic Agnostic Structure (MAS)** is
+maintained and how decisions are made. It is a working draft intended to
+support transition of the project to the **PSMA Magnetics Committee** and,
+subsequently, formal international standardisation.
+
+## 1. Scope
+
+MAS is a vendor-neutral data model for describing magnetic components used in
+power electronics: their inputs (operating points, requirements), construction
+(core, coil, materials, gaps, insulation) and computed outputs (losses,
+inductance, temperature). The deliverables governed by this document are:
+
+- The JSON Schema files under `schemas/`.
+- The bundled reference component database under `data/`.
+- The conformance test suite (samples + validators).
+- Generated language bindings (currently `MAS.hpp`).
+
+Out of scope: any specific implementation of a magnetic-design tool.
+
+## 2. Stewardship
+
+| Phase | Steward | Status |
+|------|---------|--------|
+| Incubation | OpenMagnetics maintainers | current |
+| Industry adoption | PSMA Magnetics Committee Working Group on MAS | proposed |
+| International standard | IEC (via JTC 1 PAS submitter, candidate hosts: PSMA or Linux Foundation JDF) | proposed |
+
+The roadmap deliberately routes through **JTC 1 PAS transposition** rather
+than a direct IEC TC 51 New Work Item Proposal. This preserves open
+GitHub-based development while granting International Standard status,
+following the precedent set by glTF (ISO/IEC 12113), ODF and OpenUSD.
+
+## 3. Roles
+
+- **Maintainers** — merge PRs, cut releases, triage issues. Listed in
+  `MAINTAINERS.md` (to be added).
+- **Working Group** — open meeting body with representatives from
+  manufacturers, tool vendors and end-users; reviews proposals for MAJOR
+  changes and conformance profiles.
+- **Editor** — single named individual responsible for spec text consistency
+  and for the IEC submission package, when applicable.
+
+## 4. Decision making
+
+- **PATCH / MINOR changes**: lazy consensus on the PR. Any maintainer may
+  merge after 72 h with no unresolved objection.
+- **MAJOR changes**: require a written proposal (issue or `proposals/`
+  directory), a 14-day comment period, and explicit approval by a
+  super-majority (2/3) of the Working Group.
+- **License, governance and IPR changes**: require unanimous maintainer
+  approval and notification to all known contributors.
+
+## 5. Intellectual property
+
+- All contributions are licensed under **Apache-2.0**, including the explicit
+  patent grant in §3 of that license.
+- Contributors must agree to the project DCO (`Signed-off-by:` trailer) on
+  every commit. A formal CLA may be introduced if required by the chosen
+  IEC PAS submitter organisation.
+- Schema files carry SPDX headers (`SPDX-License-Identifier: Apache-2.0`).
+- The bundled component database (`data/*.ndjson`) contains catalogue data
+  derived from publicly available manufacturer datasheets. Each record
+  identifies its source manufacturer; corrections from manufacturers are
+  welcome and processed under the same governance.
+
+## 6. Versioning and stability
+
+See `CHANGELOG.md` for the versioning policy. The summary:
+
+- Pre-1.0: minor breaking changes are permitted but must be flagged in the
+  changelog.
+- 1.0 onward: SemVer applies strictly. Breaking changes require a MAJOR
+  bump, a deprecation period of at least one MINOR release, and a
+  documented migration path.
+
+## 7. Conformance
+
+MAS will define conformance **classes** (Class A — Inductor Basic, Class B —
+Transformer, Class C — Full) so that small implementations may claim
+partial conformance. Conformance class definitions, once added, are
+governed as MAJOR changes.
+
+## 8. Communication
+
+- Issue tracker: GitHub issues on the canonical repository.
+- Working Group meetings: cadence and venue to be set by the PSMA
+  Magnetics Committee chair upon adoption.
+- Security / IPR concerns: see `SECURITY.md` (to be added).
