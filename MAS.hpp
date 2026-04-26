@@ -348,6 +348,12 @@ namespace MAS {
      *
      * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
      * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+     *
+     * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+     * number represents. Defaults to dc. See IEV 103-02.
+     *
+     * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+     * number represents. Defaults to dc. See IEV 103-02.
      */
     enum class OutputSType : int { AVERAGE, DC, PEAK, PEAK_TO_PEAK, RMS };
 
@@ -357,16 +363,6 @@ namespace MAS {
      * Base fields common to all topology operating points
      *
      * The description of one buck operating point
-     *
-     * The description of one forward operating point
-     *
-     * The description of one isolatedBuck operating point
-     *
-     * The description of one isolatedBuckBoost operating point
-     *
-     * The description of one LLC operating point
-     *
-     * The description of one pushPull operating point
      */
     class BaseOperatingPoint {
         public:
@@ -542,30 +538,12 @@ namespace MAS {
     };
 
     /**
-     * The power flow direction.
-     *
      * The power flow direction
      */
     enum class CllcPowerFlow : int { FORWARD, REVERSE };
 
     /**
      * The description of one CLLC operating point
-     *
-     * The description of one boost operating point
-     *
-     * Base fields common to all topology operating points
-     *
-     * The description of one buck operating point
-     *
-     * The description of one forward operating point
-     *
-     * The description of one isolatedBuck operating point
-     *
-     * The description of one isolatedBuckBoost operating point
-     *
-     * The description of one LLC operating point
-     *
-     * The description of one pushPull operating point
      */
     class CllcOperatingPoint {
         public:
@@ -578,20 +556,19 @@ namespace MAS {
         std::optional<OutputSType> output_currents_type;
         std::vector<double> output_voltages;
         std::optional<OutputSType> output_voltages_type;
-        double switching_frequency;
         CllcPowerFlow power_flow;
+        double switching_frequency;
 
         public:
         /**
-         * Ambient temperature of the operating point. Unit: Celsius. See docs/units.md.
+         * The ambient temperature of the operating point
          */
         const double & get_ambient_temperature() const { return ambient_temperature; }
         double & get_mutable_ambient_temperature() { return ambient_temperature; }
         void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
 
         /**
-         * List of output currents, one per output. Interpreted per outputCurrentsType (default:
-         * dc). See docs/normative-references.md.
+         * A list of output currents, one per output
          */
         const std::vector<double> & get_output_currents() const { return output_currents; }
         std::vector<double> & get_mutable_output_currents() { return output_currents; }
@@ -599,14 +576,13 @@ namespace MAS {
 
         /**
          * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
-         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         * number represents. Defaults to dc. See IEV 103-02.
          */
         std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
         void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
 
         /**
-         * List of output voltages, one per output. Interpreted per outputVoltagesType (default:
-         * dc). See docs/normative-references.md.
+         * A list of output voltages, one per output
          */
         const std::vector<double> & get_output_voltages() const { return output_voltages; }
         std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
@@ -614,24 +590,24 @@ namespace MAS {
 
         /**
          * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
-         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         * number represents. Defaults to dc. See IEV 103-02.
          */
         std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
         void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
 
         /**
-         * Switching frequency of the operating point. Unit: Hz. See docs/units.md.
-         */
-        const double & get_switching_frequency() const { return switching_frequency; }
-        double & get_mutable_switching_frequency() { return switching_frequency; }
-        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
-
-        /**
-         * The power flow direction.
+         * The power flow direction
          */
         const CllcPowerFlow & get_power_flow() const { return power_flow; }
         CllcPowerFlow & get_mutable_power_flow() { return power_flow; }
         void set_power_flow(const CllcPowerFlow & value) { this->power_flow = value; }
+
+        /**
+         * The switching frequency of the operating point
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
     };
 
     /**
@@ -796,22 +772,6 @@ namespace MAS {
      * that controls power transfer. SPS uses D3 only (D1=D2=0). EPS uses D3 + one inner shift
      * (D1, with D2=0). DPS uses D3 + one symmetric inner shift (D1=D2). TPS uses all three
      * independently.
-     *
-     * The description of one boost operating point
-     *
-     * Base fields common to all topology operating points
-     *
-     * The description of one buck operating point
-     *
-     * The description of one forward operating point
-     *
-     * The description of one isolatedBuck operating point
-     *
-     * The description of one isolatedBuckBoost operating point
-     *
-     * The description of one LLC operating point
-     *
-     * The description of one pushPull operating point
      */
     class DabOperatingPoint {
         public:
@@ -820,78 +780,42 @@ namespace MAS {
 
         private:
         double ambient_temperature;
+        std::optional<double> inner_phase_shift1;
+        std::optional<double> inner_phase_shift2;
+        std::optional<double> inner_phase_shift3;
+        std::optional<ModulationType> modulation_type;
         std::vector<double> output_currents;
         std::optional<OutputSType> output_currents_type;
         std::vector<double> output_voltages;
         std::optional<OutputSType> output_voltages_type;
         double switching_frequency;
-        std::optional<double> inner_phase_shift1;
-        std::optional<double> inner_phase_shift2;
-        std::optional<double> inner_phase_shift3;
-        std::optional<ModulationType> modulation_type;
 
         public:
         /**
-         * Ambient temperature of the operating point. Unit: Celsius. See docs/units.md.
+         * The ambient temperature of the operating point
          */
         const double & get_ambient_temperature() const { return ambient_temperature; }
         double & get_mutable_ambient_temperature() { return ambient_temperature; }
         void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
 
         /**
-         * List of output currents, one per output. Interpreted per outputCurrentsType (default:
-         * dc). See docs/normative-references.md.
-         */
-        const std::vector<double> & get_output_currents() const { return output_currents; }
-        std::vector<double> & get_mutable_output_currents() { return output_currents; }
-        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
-
-        /**
-         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
-         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
-         */
-        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
-        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
-
-        /**
-         * List of output voltages, one per output. Interpreted per outputVoltagesType (default:
-         * dc). See docs/normative-references.md.
-         */
-        const std::vector<double> & get_output_voltages() const { return output_voltages; }
-        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
-        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
-
-        /**
-         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
-         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
-         */
-        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
-        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
-
-        /**
-         * Switching frequency of the operating point. Unit: Hz. See docs/units.md.
-         */
-        const double & get_switching_frequency() const { return switching_frequency; }
-        double & get_mutable_switching_frequency() { return switching_frequency; }
-        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
-
-        /**
-         * D1 - primary-bridge intra-leg phase shift in degrees. Range [0, 90). 0 = square wave (50%
-         * duty). Used in EPS, DPS, TPS.
+         * D1 — primary-bridge intra-leg phase shift in degrees (shift between the two legs of the
+         * primary full-bridge). Range [0, 90). 0 = square wave (50% duty). Used in EPS, DPS, TPS.
          */
         std::optional<double> get_inner_phase_shift1() const { return inner_phase_shift1; }
         void set_inner_phase_shift1(std::optional<double> value) { this->inner_phase_shift1 = value; }
 
         /**
-         * D2 - secondary-bridge intra-leg phase shift in degrees. Range [0, 90). 0 = square wave
-         * (50% duty). Used in TPS. For DPS, if absent, defaults to D1 (symmetric).
+         * D2 — secondary-bridge intra-leg phase shift in degrees (shift between the two legs of the
+         * secondary full-bridge). Range [0, 90). 0 = square wave (50% duty). Used in TPS. For DPS,
+         * if absent, defaults to D1 (symmetric).
          */
         std::optional<double> get_inner_phase_shift2() const { return inner_phase_shift2; }
         void set_inner_phase_shift2(std::optional<double> value) { this->inner_phase_shift2 = value; }
 
         /**
-         * D3 - inter-bridge (outer) phase shift in degrees between primary and secondary bridges.
-         * Signed: positive = forward power flow (primary -> secondary). Used in all modulation
+         * D3 — inter-bridge (outer) phase shift in degrees between primary and secondary bridges.
+         * Signed: positive = forward power flow (primary → secondary). Used in all modulation
          * modes. This is the primary power-transfer control variable.
          */
         std::optional<double> get_inner_phase_shift3() const { return inner_phase_shift3; }
@@ -905,6 +829,41 @@ namespace MAS {
          */
         std::optional<ModulationType> get_modulation_type() const { return modulation_type; }
         void set_modulation_type(std::optional<ModulationType> value) { this->modulation_type = value; }
+
+        /**
+         * A list of output currents, one per output
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * A list of output voltages, one per output
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * The switching frequency of the operating point
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
     };
 
     /**
@@ -971,7 +930,7 @@ namespace MAS {
     };
 
     /**
-     * The mode of the operating point.
+     * The mode of the operating point
      *
      * The conduction mode of the Flyback
      */
@@ -979,22 +938,6 @@ namespace MAS {
 
     /**
      * The description of one flyback operating point
-     *
-     * The description of one boost operating point
-     *
-     * Base fields common to all topology operating points
-     *
-     * The description of one buck operating point
-     *
-     * The description of one forward operating point
-     *
-     * The description of one isolatedBuck operating point
-     *
-     * The description of one isolatedBuckBoost operating point
-     *
-     * The description of one LLC operating point
-     *
-     * The description of one pushPull operating point
      */
     class FlybackOperatingPoint {
         public:
@@ -1003,24 +946,29 @@ namespace MAS {
 
         private:
         double ambient_temperature;
+        std::optional<FlybackModes> mode;
         std::vector<double> output_currents;
         std::optional<OutputSType> output_currents_type;
         std::vector<double> output_voltages;
         std::optional<OutputSType> output_voltages_type;
-        double switching_frequency;
-        std::optional<FlybackModes> mode;
+        std::optional<double> switching_frequency;
 
         public:
         /**
-         * Ambient temperature of the operating point. Unit: Celsius. See docs/units.md.
+         * The ambient temperature of the operating point
          */
         const double & get_ambient_temperature() const { return ambient_temperature; }
         double & get_mutable_ambient_temperature() { return ambient_temperature; }
         void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
 
         /**
-         * List of output currents, one per output. Interpreted per outputCurrentsType (default:
-         * dc). See docs/normative-references.md.
+         * The mode of the operating point
+         */
+        std::optional<FlybackModes> get_mode() const { return mode; }
+        void set_mode(std::optional<FlybackModes> value) { this->mode = value; }
+
+        /**
+         * A list of output currents, one per output
          */
         const std::vector<double> & get_output_currents() const { return output_currents; }
         std::vector<double> & get_mutable_output_currents() { return output_currents; }
@@ -1028,14 +976,13 @@ namespace MAS {
 
         /**
          * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
-         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         * number represents. Defaults to dc. See IEV 103-02.
          */
         std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
         void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
 
         /**
-         * List of output voltages, one per output. Interpreted per outputVoltagesType (default:
-         * dc). See docs/normative-references.md.
+         * A list of output voltages, one per output
          */
         const std::vector<double> & get_output_voltages() const { return output_voltages; }
         std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
@@ -1043,23 +990,16 @@ namespace MAS {
 
         /**
          * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
-         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         * number represents. Defaults to dc. See IEV 103-02.
          */
         std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
         void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
 
         /**
-         * Switching frequency of the operating point. Unit: Hz. See docs/units.md.
+         * The switching frequency of the operating point
          */
-        const double & get_switching_frequency() const { return switching_frequency; }
-        double & get_mutable_switching_frequency() { return switching_frequency; }
-        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
-
-        /**
-         * The mode of the operating point.
-         */
-        std::optional<FlybackModes> get_mode() const { return mode; }
-        void set_mode(std::optional<FlybackModes> value) { this->mode = value; }
+        std::optional<double> get_switching_frequency() const { return switching_frequency; }
+        void set_switching_frequency(std::optional<double> value) { this->switching_frequency = value; }
     };
 
     /**
@@ -1129,6 +1069,66 @@ namespace MAS {
     };
 
     /**
+     * The description of one forward operating point
+     */
+    class ForwardOperatingPoint {
+        public:
+        ForwardOperatingPoint() = default;
+        virtual ~ForwardOperatingPoint() = default;
+
+        private:
+        double ambient_temperature;
+        std::vector<double> output_currents;
+        std::optional<OutputSType> output_currents_type;
+        std::vector<double> output_voltages;
+        std::optional<OutputSType> output_voltages_type;
+        double switching_frequency;
+
+        public:
+        /**
+         * The ambient temperature of the operating point
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * A list of output currents, one per output
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * A list of output voltages, one per output
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * The switching frequency of the operating point
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+    };
+
+    /**
      * The description of a Forward converter excitation
      */
     class Forward {
@@ -1143,7 +1143,7 @@ namespace MAS {
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<BaseOperatingPoint> operating_points;
+        std::vector<ForwardOperatingPoint> operating_points;
 
         public:
         /**
@@ -1188,9 +1188,69 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<ForwardOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<ForwardOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<ForwardOperatingPoint> & value) { this->operating_points = value; }
+    };
+
+    /**
+     * The description of one isolatedBuck operating point
+     */
+    class IsolatedBuckOperatingPoint {
+        public:
+        IsolatedBuckOperatingPoint() = default;
+        virtual ~IsolatedBuckOperatingPoint() = default;
+
+        private:
+        double ambient_temperature;
+        std::vector<double> output_currents;
+        std::optional<OutputSType> output_currents_type;
+        std::vector<double> output_voltages;
+        std::optional<OutputSType> output_voltages_type;
+        double switching_frequency;
+
+        public:
+        /**
+         * The ambient temperature of the operating point
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * A list of output currents, one per output
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * A list of output voltages, one per output
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * The switching frequency of the operating point
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
     };
 
     /**
@@ -1207,7 +1267,7 @@ namespace MAS {
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<BaseOperatingPoint> operating_points;
+        std::vector<IsolatedBuckOperatingPoint> operating_points;
 
         public:
         /**
@@ -1245,9 +1305,69 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<IsolatedBuckOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<IsolatedBuckOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<IsolatedBuckOperatingPoint> & value) { this->operating_points = value; }
+    };
+
+    /**
+     * The description of one isolatedBuckBoost operating point
+     */
+    class IsolatedBuckBoostOperatingPoint {
+        public:
+        IsolatedBuckBoostOperatingPoint() = default;
+        virtual ~IsolatedBuckBoostOperatingPoint() = default;
+
+        private:
+        double ambient_temperature;
+        std::vector<double> output_currents;
+        std::optional<OutputSType> output_currents_type;
+        std::vector<double> output_voltages;
+        std::optional<OutputSType> output_voltages_type;
+        double switching_frequency;
+
+        public:
+        /**
+         * The ambient temperature of the operating point
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * A list of output currents, one per output
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * A list of output voltages, one per output
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * The switching frequency of the operating point
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
     };
 
     /**
@@ -1264,7 +1384,7 @@ namespace MAS {
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<BaseOperatingPoint> operating_points;
+        std::vector<IsolatedBuckBoostOperatingPoint> operating_points;
 
         public:
         /**
@@ -1302,9 +1422,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<IsolatedBuckBoostOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<IsolatedBuckBoostOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<IsolatedBuckBoostOperatingPoint> & value) { this->operating_points = value; }
     };
 
     /**
@@ -1313,6 +1433,66 @@ namespace MAS {
      * The type of primary bridge for LLC
      */
     enum class LlcBridgeType : int { FULL_BRIDGE, HALF_BRIDGE };
+
+    /**
+     * The description of one LLC operating point
+     */
+    class LlcOperatingPoint {
+        public:
+        LlcOperatingPoint() = default;
+        virtual ~LlcOperatingPoint() = default;
+
+        private:
+        double ambient_temperature;
+        std::vector<double> output_currents;
+        std::optional<OutputSType> output_currents_type;
+        std::vector<double> output_voltages;
+        std::optional<OutputSType> output_voltages_type;
+        double switching_frequency;
+
+        public:
+        /**
+         * The ambient temperature of the operating point
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * A list of output currents, one per output
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * A list of output voltages, one per output
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * The switching frequency of the operating point
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+    };
 
     /**
      * The description of an LLC Resonant converter excitation
@@ -1330,7 +1510,7 @@ namespace MAS {
         std::optional<bool> integrated_resonant_inductor;
         double max_switching_frequency;
         double min_switching_frequency;
-        std::vector<BaseOperatingPoint> operating_points;
+        std::vector<LlcOperatingPoint> operating_points;
         std::optional<double> quality_factor;
         std::optional<double> resonant_capacitance;
         std::optional<double> resonant_frequency;
@@ -1385,9 +1565,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<LlcOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<LlcOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<LlcOperatingPoint> & value) { this->operating_points = value; }
 
         /**
          * The quality factor of the resonant tank
@@ -1418,22 +1598,6 @@ namespace MAS {
 
     /**
      * The description of one PSFB operating point
-     *
-     * The description of one boost operating point
-     *
-     * Base fields common to all topology operating points
-     *
-     * The description of one buck operating point
-     *
-     * The description of one forward operating point
-     *
-     * The description of one isolatedBuck operating point
-     *
-     * The description of one isolatedBuckBoost operating point
-     *
-     * The description of one LLC operating point
-     *
-     * The description of one pushPull operating point
      */
     class PsfbOperatingPoint {
         public:
@@ -1446,20 +1610,19 @@ namespace MAS {
         std::optional<OutputSType> output_currents_type;
         std::vector<double> output_voltages;
         std::optional<OutputSType> output_voltages_type;
-        double switching_frequency;
         double phase_shift;
+        double switching_frequency;
 
         public:
         /**
-         * Ambient temperature of the operating point. Unit: Celsius. See docs/units.md.
+         * The ambient temperature of the operating point
          */
         const double & get_ambient_temperature() const { return ambient_temperature; }
         double & get_mutable_ambient_temperature() { return ambient_temperature; }
         void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
 
         /**
-         * List of output currents, one per output. Interpreted per outputCurrentsType (default:
-         * dc). See docs/normative-references.md.
+         * A list of output currents, one per output
          */
         const std::vector<double> & get_output_currents() const { return output_currents; }
         std::vector<double> & get_mutable_output_currents() { return output_currents; }
@@ -1467,14 +1630,13 @@ namespace MAS {
 
         /**
          * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
-         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         * number represents. Defaults to dc. See IEV 103-02.
          */
         std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
         void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
 
         /**
-         * List of output voltages, one per output. Interpreted per outputVoltagesType (default:
-         * dc). See docs/normative-references.md.
+         * A list of output voltages, one per output
          */
         const std::vector<double> & get_output_voltages() const { return output_voltages; }
         std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
@@ -1482,24 +1644,24 @@ namespace MAS {
 
         /**
          * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
-         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         * number represents. Defaults to dc. See IEV 103-02.
          */
         std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
         void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
 
         /**
-         * Switching frequency of the operating point. Unit: Hz. See docs/units.md.
-         */
-        const double & get_switching_frequency() const { return switching_frequency; }
-        double & get_mutable_switching_frequency() { return switching_frequency; }
-        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
-
-        /**
-         * The phase shift at this operating point. Unit: degrees.
+         * The phase shift at this operating point in degrees
          */
         const double & get_phase_shift() const { return phase_shift; }
         double & get_mutable_phase_shift() { return phase_shift; }
         void set_phase_shift(const double & value) { this->phase_shift = value; }
+
+        /**
+         * The switching frequency of the operating point
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
     };
 
     /**
@@ -1579,6 +1741,66 @@ namespace MAS {
     };
 
     /**
+     * The description of one pushPull operating point
+     */
+    class PushPullOperatingPoint {
+        public:
+        PushPullOperatingPoint() = default;
+        virtual ~PushPullOperatingPoint() = default;
+
+        private:
+        double ambient_temperature;
+        std::vector<double> output_currents;
+        std::optional<OutputSType> output_currents_type;
+        std::vector<double> output_voltages;
+        std::optional<OutputSType> output_voltages_type;
+        double switching_frequency;
+
+        public:
+        /**
+         * The ambient temperature of the operating point
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * A list of output currents, one per output
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * A list of output voltages, one per output
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02.
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * The switching frequency of the operating point
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+    };
+
+    /**
      * The description of a Push-Pull excitation
      */
     class PushPull {
@@ -1594,7 +1816,7 @@ namespace MAS {
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_drain_source_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<BaseOperatingPoint> operating_points;
+        std::vector<PushPullOperatingPoint> operating_points;
 
         public:
         /**
@@ -1645,9 +1867,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<PushPullOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<PushPullOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<PushPullOperatingPoint> & value) { this->operating_points = value; }
     };
 
     class SupportedTopologies {
@@ -1876,13 +2098,10 @@ namespace MAS {
         void set_real_part(std::optional<double> value) { this->real_part = value; }
     };
 
-    using Impedance = std::variant<ImpedancePoint, double>;
-
     /**
-     * An impedance value pinned to a specific frequency. The impedance may be expressed as a
-     * bare magnitude (Ohm) or as a structured impedancePoint that carries magnitude, phase and
-     * real/imaginary parts. Used by EMI-choke topologies and by
-     * designRequirements.minimumImpedance.
+     * An impedance value pinned to a specific frequency. The impedance is a structured
+     * impedancePoint with magnitude, phase and real/imaginary parts. Bare-magnitude callers
+     * populate magnitude only and leave phase / real / imaginary unset.
      */
     class ImpedanceAtFrequency {
         public:
@@ -1894,7 +2113,7 @@ namespace MAS {
         private:
         double frequency;
         ClassMemberConstraints frequency_constraint;
-        Impedance impedance;
+        ImpedancePoint impedance;
 
         public:
         /**
@@ -1904,9 +2123,9 @@ namespace MAS {
         double & get_mutable_frequency() { return frequency; }
         void set_frequency(const double & value) { CheckConstraint("frequency", frequency_constraint, value); this->frequency = value; }
 
-        const Impedance & get_impedance() const { return impedance; }
-        Impedance & get_mutable_impedance() { return impedance; }
-        void set_impedance(const Impedance & value) { this->impedance = value; }
+        const ImpedancePoint & get_impedance() const { return impedance; }
+        ImpedancePoint & get_mutable_impedance() { return impedance; }
+        void set_impedance(const ImpedancePoint & value) { this->impedance = value; }
     };
 
     /**
@@ -4677,65 +4896,29 @@ namespace MAS {
         void set_value(const double & value) { this->value = value; }
     };
 
-    enum class CoreLossesMethodType : int { CUSTOM, MAGNETEC };
+    enum class MassCoreLossesMethodType : int { MAGNETEC };
 
     /**
      * Magnetec method for estimating mass losses
-     *
-     * Open-registry escape hatch for loss methods that are not represented by any of the named
-     * branches above. The `method` discriminator is the literal 'custom'; `methodName` carries
-     * the actual model identifier; `parameters` carries arbitrary method-specific data;
-     * `source` is a free-form citation. New vendor models can be carried in MAS without a
-     * schema change.
      */
-    class MagnetecCoreLossesMethodDataClass {
+    class MagnetecCoreLossesMethodData {
         public:
-        MagnetecCoreLossesMethodDataClass() :
-            method_name_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt)
-        {}
-        virtual ~MagnetecCoreLossesMethodDataClass() = default;
+        MagnetecCoreLossesMethodData() = default;
+        virtual ~MagnetecCoreLossesMethodData() = default;
 
         private:
-        CoreLossesMethodType method;
-        std::optional<std::string> method_name;
-        ClassMemberConstraints method_name_constraint;
-        std::optional<std::map<std::string, nlohmann::json>> parameters;
-        std::optional<std::string> source;
+        MassCoreLossesMethodType method;
 
         public:
         /**
          * Name of this method
-         *
-         * Discriminator selecting the open-registry branch. Always the literal string 'custom'.
          */
-        const CoreLossesMethodType & get_method() const { return method; }
-        CoreLossesMethodType & get_mutable_method() { return method; }
-        void set_method(const CoreLossesMethodType & value) { this->method = value; }
-
-        /**
-         * Identifier for the actual loss model carried in this entry. Convention: lowercase vendor
-         * or first-author name (e.g. 'newVendor', 'mySimulator'). The reserved values 'steinmetz',
-         * 'roshen', 'micrometals', 'magnetics', 'poco', 'tdg', 'magnetec', 'lossFactor' must use
-         * the corresponding named branches instead.
-         */
-        std::optional<std::string> get_method_name() const { return method_name; }
-        void set_method_name(std::optional<std::string> value) { if (value) CheckConstraint("method_name", method_name_constraint, *value); this->method_name = value; }
-
-        /**
-         * Method-specific parameters. Shape and meaning are defined by the methodName.
-         */
-        std::optional<std::map<std::string, nlohmann::json>> get_parameters() const { return parameters; }
-        void set_parameters(std::optional<std::map<std::string, nlohmann::json>> value) { this->parameters = value; }
-
-        /**
-         * Free-form citation: DOI, datasheet revision, vendor app-note, or other primary reference
-         * for the model.
-         */
-        std::optional<std::string> get_source() const { return source; }
-        void set_source(std::optional<std::string> value) { this->source = value; }
+        const MassCoreLossesMethodType & get_method() const { return method; }
+        MassCoreLossesMethodType & get_mutable_method() { return method; }
+        void set_method(const MassCoreLossesMethodType & value) { this->method = value; }
     };
 
-    using MassLossesMethod = std::variant<std::vector<MassLossesPoint>, MagnetecCoreLossesMethodDataClass>;
+    using MassLossesMethod = std::variant<std::vector<MassLossesPoint>, MagnetecCoreLossesMethodData>;
 
     /**
      * The composition of a magnetic material
@@ -5315,7 +5498,7 @@ namespace MAS {
         void set_value(const double & value) { this->value = value; }
     };
 
-    enum class VolumetricCoreLossesMethodType : int { CUSTOM, LOSS_FACTOR, MAGNETICS, MICROMETALS, POCO, ROSHEN, STEINMETZ, TDG };
+    enum class VolumetricCoreLossesMethodType : int { LOSS_FACTOR, MAGNETICS, MICROMETALS, POCO, ROSHEN, STEINMETZ, TDG };
 
     class SteinmetzCoreLossesMethodRangeDatum {
         public:
@@ -5403,19 +5586,11 @@ namespace MAS {
      * TDG method for estimating volumetric losses
      *
      * Loss factor method for estimating volumetric losses
-     *
-     * Open-registry escape hatch for loss methods that are not represented by any of the named
-     * branches above. The `method` discriminator is the literal 'custom'; `methodName` carries
-     * the actual model identifier; `parameters` carries arbitrary method-specific data;
-     * `source` is a free-form citation. New vendor models can be carried in MAS without a
-     * schema change.
      */
-    class SteinmetzCoreLossesMethodDataClass {
+    class CoreLossesMethodData {
         public:
-        SteinmetzCoreLossesMethodDataClass() :
-            method_name_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt)
-        {}
-        virtual ~SteinmetzCoreLossesMethodDataClass() = default;
+        CoreLossesMethodData() = default;
+        virtual ~CoreLossesMethodData() = default;
 
         private:
         VolumetricCoreLossesMethodType method;
@@ -5427,16 +5602,10 @@ namespace MAS {
         std::optional<double> c;
         std::optional<double> d;
         std::optional<std::vector<LossFactorPoint>> factors;
-        std::optional<std::string> method_name;
-        ClassMemberConstraints method_name_constraint;
-        std::optional<std::map<std::string, nlohmann::json>> parameters;
-        std::optional<std::string> source;
 
         public:
         /**
          * Name of this method
-         *
-         * Discriminator selecting the open-registry branch. Always the literal string 'custom'.
          */
         const VolumetricCoreLossesMethodType & get_method() const { return method; }
         VolumetricCoreLossesMethodType & get_mutable_method() { return method; }
@@ -5472,31 +5641,9 @@ namespace MAS {
 
         std::optional<std::vector<LossFactorPoint>> get_factors() const { return factors; }
         void set_factors(std::optional<std::vector<LossFactorPoint>> value) { this->factors = value; }
-
-        /**
-         * Identifier for the actual loss model carried in this entry. Convention: lowercase vendor
-         * or first-author name (e.g. 'newVendor', 'mySimulator'). The reserved values 'steinmetz',
-         * 'roshen', 'micrometals', 'magnetics', 'poco', 'tdg', 'magnetec', 'lossFactor' must use
-         * the corresponding named branches instead.
-         */
-        std::optional<std::string> get_method_name() const { return method_name; }
-        void set_method_name(std::optional<std::string> value) { if (value) CheckConstraint("method_name", method_name_constraint, *value); this->method_name = value; }
-
-        /**
-         * Method-specific parameters. Shape and meaning are defined by the methodName.
-         */
-        std::optional<std::map<std::string, nlohmann::json>> get_parameters() const { return parameters; }
-        void set_parameters(std::optional<std::map<std::string, nlohmann::json>> value) { this->parameters = value; }
-
-        /**
-         * Free-form citation: DOI, datasheet revision, vendor app-note, or other primary reference
-         * for the model.
-         */
-        std::optional<std::string> get_source() const { return source; }
-        void set_source(std::optional<std::string> value) { this->source = value; }
     };
 
-    using VolumetricLossesMethod = std::variant<std::vector<VolumetricLossesPoint>, SteinmetzCoreLossesMethodDataClass>;
+    using VolumetricLossesMethod = std::variant<std::vector<VolumetricLossesPoint>, CoreLossesMethodData>;
 
     /**
      * A material for the magnetic cores
@@ -8344,14 +8491,26 @@ void to_json(json & j, const FlybackOperatingPoint & x);
 void from_json(const json & j, Flyback & x);
 void to_json(json & j, const Flyback & x);
 
+void from_json(const json & j, ForwardOperatingPoint & x);
+void to_json(json & j, const ForwardOperatingPoint & x);
+
 void from_json(const json & j, Forward & x);
 void to_json(json & j, const Forward & x);
+
+void from_json(const json & j, IsolatedBuckOperatingPoint & x);
+void to_json(json & j, const IsolatedBuckOperatingPoint & x);
 
 void from_json(const json & j, IsolatedBuck & x);
 void to_json(json & j, const IsolatedBuck & x);
 
+void from_json(const json & j, IsolatedBuckBoostOperatingPoint & x);
+void to_json(json & j, const IsolatedBuckBoostOperatingPoint & x);
+
 void from_json(const json & j, IsolatedBuckBoost & x);
 void to_json(json & j, const IsolatedBuckBoost & x);
+
+void from_json(const json & j, LlcOperatingPoint & x);
+void to_json(json & j, const LlcOperatingPoint & x);
 
 void from_json(const json & j, LlcResonant & x);
 void to_json(json & j, const LlcResonant & x);
@@ -8361,6 +8520,9 @@ void to_json(json & j, const PsfbOperatingPoint & x);
 
 void from_json(const json & j, PhaseShiftFullBridge & x);
 void to_json(json & j, const PhaseShiftFullBridge & x);
+
+void from_json(const json & j, PushPullOperatingPoint & x);
+void to_json(json & j, const PushPullOperatingPoint & x);
 
 void from_json(const json & j, PushPull & x);
 void to_json(json & j, const PushPull & x);
@@ -8506,8 +8668,8 @@ void to_json(json & j, const BhCycleElement & x);
 void from_json(const json & j, MassLossesPoint & x);
 void to_json(json & j, const MassLossesPoint & x);
 
-void from_json(const json & j, MagnetecCoreLossesMethodDataClass & x);
-void to_json(json & j, const MagnetecCoreLossesMethodDataClass & x);
+void from_json(const json & j, MagnetecCoreLossesMethodData & x);
+void to_json(json & j, const MagnetecCoreLossesMethodData & x);
 
 void from_json(const json & j, FrequencyFactor & x);
 void to_json(json & j, const FrequencyFactor & x);
@@ -8548,8 +8710,8 @@ void to_json(json & j, const LossFactorPoint & x);
 void from_json(const json & j, SteinmetzCoreLossesMethodRangeDatum & x);
 void to_json(json & j, const SteinmetzCoreLossesMethodRangeDatum & x);
 
-void from_json(const json & j, SteinmetzCoreLossesMethodDataClass & x);
-void to_json(json & j, const SteinmetzCoreLossesMethodDataClass & x);
+void from_json(const json & j, CoreLossesMethodData & x);
+void to_json(json & j, const CoreLossesMethodData & x);
 
 void from_json(const json & j, CoreMaterial & x);
 void to_json(json & j, const CoreMaterial & x);
@@ -8821,8 +8983,8 @@ void to_json(json & j, const Coating & x);
 void from_json(const json & j, GapType & x);
 void to_json(json & j, const GapType & x);
 
-void from_json(const json & j, CoreLossesMethodType & x);
-void to_json(json & j, const CoreLossesMethodType & x);
+void from_json(const json & j, MassCoreLossesMethodType & x);
+void to_json(json & j, const MassCoreLossesMethodType & x);
 
 void from_json(const json & j, MaterialType & x);
 void to_json(json & j, const MaterialType & x);
@@ -8864,12 +9026,6 @@ void from_json(const json & j, VoltageType & x);
 void to_json(json & j, const VoltageType & x);
 }
 namespace nlohmann {
-template <>
-struct adl_serializer<std::variant<MAS::ImpedancePoint, double>> {
-    static void from_json(const json & j, std::variant<MAS::ImpedancePoint, double> & x);
-    static void to_json(json & j, const std::variant<MAS::ImpedancePoint, double> & x);
-};
-
 template <>
 struct adl_serializer<std::variant<MAS::DimensionWithTolerance, double>> {
     static void from_json(const json & j, std::variant<MAS::DimensionWithTolerance, double> & x);
@@ -8931,9 +9087,9 @@ struct adl_serializer<std::variant<std::vector<double>, MAS::MarginInfo>> {
 };
 
 template <>
-struct adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass>> {
-    static void from_json(const json & j, std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass> & x);
-    static void to_json(json & j, const std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass> & x);
+struct adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData>> {
+    static void from_json(const json & j, std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData> & x);
+    static void to_json(json & j, const std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData> & x);
 };
 
 template <>
@@ -8943,9 +9099,9 @@ struct adl_serializer<std::variant<std::vector<MAS::PermeabilityPoint>, MAS::Per
 };
 
 template <>
-struct adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass>> {
-    static void from_json(const json & j, std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass> & x);
-    static void to_json(json & j, const std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass> & x);
+struct adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData>> {
+    static void from_json(const json & j, std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData> & x);
+    static void to_json(json & j, const std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData> & x);
 };
 
 template <>
@@ -9043,8 +9199,8 @@ namespace MAS {
         x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
         x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
         x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
-        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
         x.set_power_flow(j.at("powerFlow").get<CllcPowerFlow>());
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
     }
 
     inline void to_json(json & j, const CllcOperatingPoint & x) {
@@ -9054,8 +9210,8 @@ namespace MAS {
         j["outputCurrentsType"] = x.get_output_currents_type();
         j["outputVoltages"] = x.get_output_voltages();
         j["outputVoltagesType"] = x.get_output_voltages_type();
-        j["switchingFrequency"] = x.get_switching_frequency();
         j["powerFlow"] = x.get_power_flow();
+        j["switchingFrequency"] = x.get_switching_frequency();
     }
 
     inline void from_json(const json & j, CllcResonant& x) {
@@ -9104,29 +9260,29 @@ namespace MAS {
 
     inline void from_json(const json & j, DabOperatingPoint& x) {
         x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_inner_phase_shift1(get_stack_optional<double>(j, "innerPhaseShift1"));
+        x.set_inner_phase_shift2(get_stack_optional<double>(j, "innerPhaseShift2"));
+        x.set_inner_phase_shift3(get_stack_optional<double>(j, "innerPhaseShift3"));
+        x.set_modulation_type(get_stack_optional<ModulationType>(j, "modulationType"));
         x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
         x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
         x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
         x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
         x.set_switching_frequency(j.at("switchingFrequency").get<double>());
-        x.set_inner_phase_shift1(get_stack_optional<double>(j, "innerPhaseShift1"));
-        x.set_inner_phase_shift2(get_stack_optional<double>(j, "innerPhaseShift2"));
-        x.set_inner_phase_shift3(get_stack_optional<double>(j, "innerPhaseShift3"));
-        x.set_modulation_type(get_stack_optional<ModulationType>(j, "modulationType"));
     }
 
     inline void to_json(json & j, const DabOperatingPoint & x) {
         j = json::object();
         j["ambientTemperature"] = x.get_ambient_temperature();
+        j["innerPhaseShift1"] = x.get_inner_phase_shift1();
+        j["innerPhaseShift2"] = x.get_inner_phase_shift2();
+        j["innerPhaseShift3"] = x.get_inner_phase_shift3();
+        j["modulationType"] = x.get_modulation_type();
         j["outputCurrents"] = x.get_output_currents();
         j["outputCurrentsType"] = x.get_output_currents_type();
         j["outputVoltages"] = x.get_output_voltages();
         j["outputVoltagesType"] = x.get_output_voltages_type();
         j["switchingFrequency"] = x.get_switching_frequency();
-        j["innerPhaseShift1"] = x.get_inner_phase_shift1();
-        j["innerPhaseShift2"] = x.get_inner_phase_shift2();
-        j["innerPhaseShift3"] = x.get_inner_phase_shift3();
-        j["modulationType"] = x.get_modulation_type();
     }
 
     inline void from_json(const json & j, DualActiveBridge& x) {
@@ -9150,23 +9306,23 @@ namespace MAS {
 
     inline void from_json(const json & j, FlybackOperatingPoint& x) {
         x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_mode(get_stack_optional<FlybackModes>(j, "mode"));
         x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
         x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
         x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
         x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
-        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
-        x.set_mode(get_stack_optional<FlybackModes>(j, "mode"));
+        x.set_switching_frequency(get_stack_optional<double>(j, "switchingFrequency"));
     }
 
     inline void to_json(json & j, const FlybackOperatingPoint & x) {
         j = json::object();
         j["ambientTemperature"] = x.get_ambient_temperature();
+        j["mode"] = x.get_mode();
         j["outputCurrents"] = x.get_output_currents();
         j["outputCurrentsType"] = x.get_output_currents_type();
         j["outputVoltages"] = x.get_output_voltages();
         j["outputVoltagesType"] = x.get_output_voltages_type();
         j["switchingFrequency"] = x.get_switching_frequency();
-        j["mode"] = x.get_mode();
     }
 
     inline void from_json(const json & j, Flyback& x) {
@@ -9190,6 +9346,25 @@ namespace MAS {
         j["operatingPoints"] = x.get_operating_points();
     }
 
+    inline void from_json(const json & j, ForwardOperatingPoint& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
+        x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
+        x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
+        x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+    }
+
+    inline void to_json(json & j, const ForwardOperatingPoint & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["outputCurrents"] = x.get_output_currents();
+        j["outputCurrentsType"] = x.get_output_currents_type();
+        j["outputVoltages"] = x.get_output_voltages();
+        j["outputVoltagesType"] = x.get_output_voltages_type();
+        j["switchingFrequency"] = x.get_switching_frequency();
+    }
+
     inline void from_json(const json & j, Forward& x) {
         x.set_current_ripple_ratio(j.at("currentRippleRatio").get<double>());
         x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
@@ -9197,7 +9372,7 @@ namespace MAS {
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<ForwardOperatingPoint>>());
     }
 
     inline void to_json(json & j, const Forward & x) {
@@ -9211,13 +9386,32 @@ namespace MAS {
         j["operatingPoints"] = x.get_operating_points();
     }
 
+    inline void from_json(const json & j, IsolatedBuckOperatingPoint& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
+        x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
+        x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
+        x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+    }
+
+    inline void to_json(json & j, const IsolatedBuckOperatingPoint & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["outputCurrents"] = x.get_output_currents();
+        j["outputCurrentsType"] = x.get_output_currents_type();
+        j["outputVoltages"] = x.get_output_voltages();
+        j["outputVoltagesType"] = x.get_output_voltages_type();
+        j["switchingFrequency"] = x.get_switching_frequency();
+    }
+
     inline void from_json(const json & j, IsolatedBuck& x) {
         x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
         x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<IsolatedBuckOperatingPoint>>());
     }
 
     inline void to_json(json & j, const IsolatedBuck & x) {
@@ -9230,13 +9424,32 @@ namespace MAS {
         j["operatingPoints"] = x.get_operating_points();
     }
 
+    inline void from_json(const json & j, IsolatedBuckBoostOperatingPoint& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
+        x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
+        x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
+        x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+    }
+
+    inline void to_json(json & j, const IsolatedBuckBoostOperatingPoint & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["outputCurrents"] = x.get_output_currents();
+        j["outputCurrentsType"] = x.get_output_currents_type();
+        j["outputVoltages"] = x.get_output_voltages();
+        j["outputVoltagesType"] = x.get_output_voltages_type();
+        j["switchingFrequency"] = x.get_switching_frequency();
+    }
+
     inline void from_json(const json & j, IsolatedBuckBoost& x) {
         x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
         x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<IsolatedBuckBoostOperatingPoint>>());
     }
 
     inline void to_json(json & j, const IsolatedBuckBoost & x) {
@@ -9249,6 +9462,25 @@ namespace MAS {
         j["operatingPoints"] = x.get_operating_points();
     }
 
+    inline void from_json(const json & j, LlcOperatingPoint& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
+        x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
+        x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
+        x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+    }
+
+    inline void to_json(json & j, const LlcOperatingPoint & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["outputCurrents"] = x.get_output_currents();
+        j["outputCurrentsType"] = x.get_output_currents_type();
+        j["outputVoltages"] = x.get_output_voltages();
+        j["outputVoltagesType"] = x.get_output_voltages_type();
+        j["switchingFrequency"] = x.get_switching_frequency();
+    }
+
     inline void from_json(const json & j, LlcResonant& x) {
         x.set_bridge_type(get_stack_optional<LlcBridgeType>(j, "bridgeType"));
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
@@ -9257,7 +9489,7 @@ namespace MAS {
         x.set_integrated_resonant_inductor(get_stack_optional<bool>(j, "integratedResonantInductor"));
         x.set_max_switching_frequency(j.at("maxSwitchingFrequency").get<double>());
         x.set_min_switching_frequency(j.at("minSwitchingFrequency").get<double>());
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<LlcOperatingPoint>>());
         x.set_quality_factor(get_stack_optional<double>(j, "qualityFactor"));
         x.set_resonant_capacitance(get_stack_optional<double>(j, "resonantCapacitance"));
         x.set_resonant_frequency(get_stack_optional<double>(j, "resonantFrequency"));
@@ -9286,8 +9518,8 @@ namespace MAS {
         x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
         x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
         x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
-        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
         x.set_phase_shift(j.at("phaseShift").get<double>());
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
     }
 
     inline void to_json(json & j, const PsfbOperatingPoint & x) {
@@ -9297,8 +9529,8 @@ namespace MAS {
         j["outputCurrentsType"] = x.get_output_currents_type();
         j["outputVoltages"] = x.get_output_voltages();
         j["outputVoltagesType"] = x.get_output_voltages_type();
-        j["switchingFrequency"] = x.get_switching_frequency();
         j["phaseShift"] = x.get_phase_shift();
+        j["switchingFrequency"] = x.get_switching_frequency();
     }
 
     inline void from_json(const json & j, PhaseShiftFullBridge& x) {
@@ -9324,6 +9556,25 @@ namespace MAS {
         j["useLeakageInductance"] = x.get_use_leakage_inductance();
     }
 
+    inline void from_json(const json & j, PushPullOperatingPoint& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
+        x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
+        x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
+        x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+    }
+
+    inline void to_json(json & j, const PushPullOperatingPoint & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["outputCurrents"] = x.get_output_currents();
+        j["outputCurrentsType"] = x.get_output_currents_type();
+        j["outputVoltages"] = x.get_output_voltages();
+        j["outputVoltagesType"] = x.get_output_voltages_type();
+        j["switchingFrequency"] = x.get_switching_frequency();
+    }
+
     inline void from_json(const json & j, PushPull& x) {
         x.set_current_ripple_ratio(j.at("currentRippleRatio").get<double>());
         x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
@@ -9332,7 +9583,7 @@ namespace MAS {
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_drain_source_voltage(get_stack_optional<double>(j, "maximumDrainSourceVoltage"));
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<PushPullOperatingPoint>>());
     }
 
     inline void to_json(json & j, const PushPull & x) {
@@ -9438,7 +9689,7 @@ namespace MAS {
 
     inline void from_json(const json & j, ImpedanceAtFrequency& x) {
         x.set_frequency(j.at("frequency").get<double>());
-        x.set_impedance(j.at("impedance").get<Impedance>());
+        x.set_impedance(j.at("impedance").get<ImpedancePoint>());
     }
 
     inline void to_json(json & j, const ImpedanceAtFrequency & x) {
@@ -10304,19 +10555,13 @@ namespace MAS {
         j["value"] = x.get_value();
     }
 
-    inline void from_json(const json & j, MagnetecCoreLossesMethodDataClass& x) {
-        x.set_method(j.at("method").get<CoreLossesMethodType>());
-        x.set_method_name(get_stack_optional<std::string>(j, "methodName"));
-        x.set_parameters(get_stack_optional<std::map<std::string, nlohmann::json>>(j, "parameters"));
-        x.set_source(get_stack_optional<std::string>(j, "source"));
+    inline void from_json(const json & j, MagnetecCoreLossesMethodData& x) {
+        x.set_method(j.at("method").get<MassCoreLossesMethodType>());
     }
 
-    inline void to_json(json & j, const MagnetecCoreLossesMethodDataClass & x) {
+    inline void to_json(json & j, const MagnetecCoreLossesMethodData & x) {
         j = json::object();
         j["method"] = x.get_method();
-        j["methodName"] = x.get_method_name();
-        j["parameters"] = x.get_parameters();
-        j["source"] = x.get_source();
     }
 
     inline void from_json(const json & j, FrequencyFactor& x) {
@@ -10540,7 +10785,7 @@ namespace MAS {
         j["minimumFrequency"] = x.get_minimum_frequency();
     }
 
-    inline void from_json(const json & j, SteinmetzCoreLossesMethodDataClass& x) {
+    inline void from_json(const json & j, CoreLossesMethodData& x) {
         x.set_method(j.at("method").get<VolumetricCoreLossesMethodType>());
         x.set_ranges(get_stack_optional<std::vector<SteinmetzCoreLossesMethodRangeDatum>>(j, "ranges"));
         x.set_coefficients(get_stack_optional<RoshenAdditionalCoefficients>(j, "coefficients"));
@@ -10550,12 +10795,9 @@ namespace MAS {
         x.set_c(get_stack_optional<double>(j, "c"));
         x.set_d(get_stack_optional<double>(j, "d"));
         x.set_factors(get_stack_optional<std::vector<LossFactorPoint>>(j, "factors"));
-        x.set_method_name(get_stack_optional<std::string>(j, "methodName"));
-        x.set_parameters(get_stack_optional<std::map<std::string, nlohmann::json>>(j, "parameters"));
-        x.set_source(get_stack_optional<std::string>(j, "source"));
     }
 
-    inline void to_json(json & j, const SteinmetzCoreLossesMethodDataClass & x) {
+    inline void to_json(json & j, const CoreLossesMethodData & x) {
         j = json::object();
         j["method"] = x.get_method();
         j["ranges"] = x.get_ranges();
@@ -10566,9 +10808,6 @@ namespace MAS {
         j["c"] = x.get_c();
         j["d"] = x.get_d();
         j["factors"] = x.get_factors();
-        j["methodName"] = x.get_method_name();
-        j["parameters"] = x.get_parameters();
-        j["source"] = x.get_source();
     }
 
     inline void from_json(const json & j, CoreMaterial& x) {
@@ -11530,15 +11769,15 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, CllcPowerFlow & x) {
-        if (j == "forward") x = CllcPowerFlow::FORWARD;
-        else if (j == "reverse") x = CllcPowerFlow::REVERSE;
+        if (j == "Forward") x = CllcPowerFlow::FORWARD;
+        else if (j == "Reverse") x = CllcPowerFlow::REVERSE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const CllcPowerFlow & x) {
         switch (x) {
-            case CllcPowerFlow::FORWARD: j = "forward"; break;
-            case CllcPowerFlow::REVERSE: j = "reverse"; break;
+            case CllcPowerFlow::FORWARD: j = "Forward"; break;
+            case CllcPowerFlow::REVERSE: j = "Reverse"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -11609,49 +11848,49 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, FlybackModes & x) {
-        if (j == "boundaryModeOperation") x = FlybackModes::BOUNDARY_MODE_OPERATION;
-        else if (j == "continuousConductionMode") x = FlybackModes::CONTINUOUS_CONDUCTION_MODE;
-        else if (j == "discontinuousConductionMode") x = FlybackModes::DISCONTINUOUS_CONDUCTION_MODE;
-        else if (j == "quasiResonantMode") x = FlybackModes::QUASI_RESONANT_MODE;
+        if (j == "Boundary Mode Operation") x = FlybackModes::BOUNDARY_MODE_OPERATION;
+        else if (j == "Continuous Conduction Mode") x = FlybackModes::CONTINUOUS_CONDUCTION_MODE;
+        else if (j == "Discontinuous Conduction Mode") x = FlybackModes::DISCONTINUOUS_CONDUCTION_MODE;
+        else if (j == "Quasi Resonant Mode") x = FlybackModes::QUASI_RESONANT_MODE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const FlybackModes & x) {
         switch (x) {
-            case FlybackModes::BOUNDARY_MODE_OPERATION: j = "boundaryModeOperation"; break;
-            case FlybackModes::CONTINUOUS_CONDUCTION_MODE: j = "continuousConductionMode"; break;
-            case FlybackModes::DISCONTINUOUS_CONDUCTION_MODE: j = "discontinuousConductionMode"; break;
-            case FlybackModes::QUASI_RESONANT_MODE: j = "quasiResonantMode"; break;
+            case FlybackModes::BOUNDARY_MODE_OPERATION: j = "Boundary Mode Operation"; break;
+            case FlybackModes::CONTINUOUS_CONDUCTION_MODE: j = "Continuous Conduction Mode"; break;
+            case FlybackModes::DISCONTINUOUS_CONDUCTION_MODE: j = "Discontinuous Conduction Mode"; break;
+            case FlybackModes::QUASI_RESONANT_MODE: j = "Quasi Resonant Mode"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, LlcBridgeType & x) {
-        if (j == "fullBridge") x = LlcBridgeType::FULL_BRIDGE;
-        else if (j == "halfBridge") x = LlcBridgeType::HALF_BRIDGE;
+        if (j == "Full Bridge") x = LlcBridgeType::FULL_BRIDGE;
+        else if (j == "Half Bridge") x = LlcBridgeType::HALF_BRIDGE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const LlcBridgeType & x) {
         switch (x) {
-            case LlcBridgeType::FULL_BRIDGE: j = "fullBridge"; break;
-            case LlcBridgeType::HALF_BRIDGE: j = "halfBridge"; break;
+            case LlcBridgeType::FULL_BRIDGE: j = "Full Bridge"; break;
+            case LlcBridgeType::HALF_BRIDGE: j = "Half Bridge"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, PsfbRectifierType & x) {
-        if (j == "centerTapped") x = PsfbRectifierType::CENTER_TAPPED;
-        else if (j == "currentDoubler") x = PsfbRectifierType::CURRENT_DOUBLER;
-        else if (j == "fullBridge") x = PsfbRectifierType::FULL_BRIDGE;
+        if (j == "Center Tapped") x = PsfbRectifierType::CENTER_TAPPED;
+        else if (j == "Current Doubler") x = PsfbRectifierType::CURRENT_DOUBLER;
+        else if (j == "Full Bridge") x = PsfbRectifierType::FULL_BRIDGE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const PsfbRectifierType & x) {
         switch (x) {
-            case PsfbRectifierType::CENTER_TAPPED: j = "centerTapped"; break;
-            case PsfbRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
-            case PsfbRectifierType::FULL_BRIDGE: j = "fullBridge"; break;
+            case PsfbRectifierType::CENTER_TAPPED: j = "Center Tapped"; break;
+            case PsfbRectifierType::CURRENT_DOUBLER: j = "Current Doubler"; break;
+            case PsfbRectifierType::FULL_BRIDGE: j = "Full Bridge"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -12313,16 +12552,14 @@ namespace MAS {
         }
     }
 
-    inline void from_json(const json & j, CoreLossesMethodType & x) {
-        if (j == "custom") x = CoreLossesMethodType::CUSTOM;
-        else if (j == "magnetec") x = CoreLossesMethodType::MAGNETEC;
+    inline void from_json(const json & j, MassCoreLossesMethodType & x) {
+        if (j == "magnetec") x = MassCoreLossesMethodType::MAGNETEC;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
-    inline void to_json(json & j, const CoreLossesMethodType & x) {
+    inline void to_json(json & j, const MassCoreLossesMethodType & x) {
         switch (x) {
-            case CoreLossesMethodType::CUSTOM: j = "custom"; break;
-            case CoreLossesMethodType::MAGNETEC: j = "magnetec"; break;
+            case MassCoreLossesMethodType::MAGNETEC: j = "magnetec"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -12414,8 +12651,7 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, VolumetricCoreLossesMethodType & x) {
-        if (j == "custom") x = VolumetricCoreLossesMethodType::CUSTOM;
-        else if (j == "lossFactor") x = VolumetricCoreLossesMethodType::LOSS_FACTOR;
+        if (j == "lossFactor") x = VolumetricCoreLossesMethodType::LOSS_FACTOR;
         else if (j == "magnetics") x = VolumetricCoreLossesMethodType::MAGNETICS;
         else if (j == "micrometals") x = VolumetricCoreLossesMethodType::MICROMETALS;
         else if (j == "poco") x = VolumetricCoreLossesMethodType::POCO;
@@ -12427,7 +12663,6 @@ namespace MAS {
 
     inline void to_json(json & j, const VolumetricCoreLossesMethodType & x) {
         switch (x) {
-            case VolumetricCoreLossesMethodType::CUSTOM: j = "custom"; break;
             case VolumetricCoreLossesMethodType::LOSS_FACTOR: j = "lossFactor"; break;
             case VolumetricCoreLossesMethodType::MAGNETICS: j = "magnetics"; break;
             case VolumetricCoreLossesMethodType::MICROMETALS: j = "micrometals"; break;
@@ -12627,26 +12862,6 @@ namespace MAS {
     }
 }
 namespace nlohmann {
-    inline void adl_serializer<std::variant<MAS::ImpedancePoint, double>>::from_json(const json & j, std::variant<MAS::ImpedancePoint, double> & x) {
-        if (j.is_number())
-            x = j.get<double>();
-        else if (j.is_object())
-            x = j.get<MAS::ImpedancePoint>();
-        else throw std::runtime_error("Could not deserialise!");
-    }
-
-    inline void adl_serializer<std::variant<MAS::ImpedancePoint, double>>::to_json(json & j, const std::variant<MAS::ImpedancePoint, double> & x) {
-        switch (x.index()) {
-            case 0:
-                j = std::get<MAS::ImpedancePoint>(x);
-                break;
-            case 1:
-                j = std::get<double>(x);
-                break;
-            default: throw std::runtime_error("Input JSON does not conform to schema!");
-        }
-    }
-
     inline void adl_serializer<std::variant<MAS::DimensionWithTolerance, double>>::from_json(const json & j, std::variant<MAS::DimensionWithTolerance, double> & x) {
         if (j.is_number())
             x = j.get<double>();
@@ -12847,21 +13062,21 @@ namespace nlohmann {
         }
     }
 
-    inline void adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass>>::from_json(const json & j, std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass> & x) {
+    inline void adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData>>::from_json(const json & j, std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData> & x) {
         if (j.is_object())
-            x = j.get<MAS::MagnetecCoreLossesMethodDataClass>();
+            x = j.get<MAS::MagnetecCoreLossesMethodData>();
         else if (j.is_array())
             x = j.get<std::vector<MAS::MassLossesPoint>>();
         else throw std::runtime_error("Could not deserialise!");
     }
 
-    inline void adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass>>::to_json(json & j, const std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass> & x) {
+    inline void adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData>>::to_json(json & j, const std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData> & x) {
         switch (x.index()) {
             case 0:
                 j = std::get<std::vector<MAS::MassLossesPoint>>(x);
                 break;
             case 1:
-                j = std::get<MAS::MagnetecCoreLossesMethodDataClass>(x);
+                j = std::get<MAS::MagnetecCoreLossesMethodData>(x);
                 break;
             default: throw std::runtime_error("Input JSON does not conform to schema!");
         }
@@ -12887,21 +13102,21 @@ namespace nlohmann {
         }
     }
 
-    inline void adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass>>::from_json(const json & j, std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass> & x) {
+    inline void adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData>>::from_json(const json & j, std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData> & x) {
         if (j.is_object())
-            x = j.get<MAS::SteinmetzCoreLossesMethodDataClass>();
+            x = j.get<MAS::CoreLossesMethodData>();
         else if (j.is_array())
             x = j.get<std::vector<MAS::VolumetricLossesPoint>>();
         else throw std::runtime_error("Could not deserialise!");
     }
 
-    inline void adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass>>::to_json(json & j, const std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass> & x) {
+    inline void adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData>>::to_json(json & j, const std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData> & x) {
         switch (x.index()) {
             case 0:
                 j = std::get<std::vector<MAS::VolumetricLossesPoint>>(x);
                 break;
             case 1:
-                j = std::get<MAS::SteinmetzCoreLossesMethodDataClass>(x);
+                j = std::get<MAS::CoreLossesMethodData>(x);
                 break;
             default: throw std::runtime_error("Input JSON does not conform to schema!");
         }
