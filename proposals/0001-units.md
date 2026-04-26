@@ -89,7 +89,16 @@ with a uniform pointer:
 Generated tooltips, IDE hovers and quicktype documentation comments stay
 useful, and the unit is now in the spot the eye looks for it.
 
-### 3. SPDX header on every schema file
+### 3. Companion document `docs/normative-references.md`
+
+Maps each MAS area (shapes, wires, insulation, materials, test methods)
+to the external standards it defers to, plus the four genuine gaps where
+no standard exists and MAS is the de-facto registry. Schema
+`description` strings append a one-line pointer
+(`"... See docs/normative-references.md §2a."`) so the link is
+discoverable from the JSON.
+
+### 4. SPDX header on every schema file
 
 Add to each schema `$comment`:
 
