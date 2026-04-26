@@ -54,4 +54,19 @@ export GIT_LFS_SKIP_SMUDGE=1
 
 quicktype -l c++ -s schema ./schemas/MAS.json -S ./schemas/magnetic.json -S ./schemas/magnetic/core.json -S ./schemas/magnetic/coil.json -S ./schemas/utils.json -S ./schemas/magnetic/core/gap.json -S ./schemas/magnetic/core/shape.json -S ./schemas/magnetic/core/material.json -S ./schemas/magnetic/insulation/material.json -S ./schemas/magnetic/insulation/wireCoating.json -S ./schemas/magnetic/bobbin.json -S ./schemas/magnetic/core/piece.json -S ./schemas/magnetic/core/spacer.json -S ./schemas/magnetic/wire/basicWire.json -S ./schemas/magnetic/wire/round.json -S ./schemas/magnetic/wire/rectangular.json -S ./schemas/magnetic/wire/foil.json -S ./schemas/magnetic/wire/planar.json -S ./schemas/magnetic/wire/litz.json -S ./schemas/magnetic/wire/material.json -S ./schemas/magnetic/wire.json -S ./schemas/utils.json -S ./schemas/magnetic/insulation/wireCoating.json -S ./schemas/magnetic/insulation/material.json -S ./schemas/inputs.json -S ./schemas/outputs.json -S ./schemas/outputs/coreLossesOutput.json -S ./schemas/inputs/designRequirements.json -S ./schemas/inputs/operatingPoint.json -S ./schemas/inputs/operatingConditions.json -S ./schemas/inputs/operatingPointExcitation.json -S ./schemas/inputs/topologies/flyback.json -S ./schemas/inputs/topologies/currentTransformer.json -S ./schemas/inputs/topologies/buck.json -S ./schemas/inputs/topologies/isolatedBuck.json -S ./schemas/inputs/topologies/isolatedBuckBoost.json -S ./schemas/inputs/topologies/boost.json -S ./schemas/inputs/topologies/pushPull.json -S ./schemas/inputs/topologies/forward.json -o build/MAS.hpp --namespace MAS --source-style single-source --type-style pascal-case --member-style underscore-case --enumerator-style upper-underscore-case --no-boost
 
+# REQUIRED post-processing: swap quicktype's misnamed classes.
+# quicktype's type unifier collapses inputs.operatingPoints (full operating
+# point) and outputs.windingLosses.currentPerWinding (same shape via $ref)
+# into one class and names it "CurrentPerWindingElement" (semantically wrong),
+# while baseOperatingPoint becomes "OperatingPoint" because of the topology
+# operating-point class names. Swap atomically via a placeholder so the order
+# is safe.
+sed -E -i \
+    -e 's/\bOperatingPoint\b/__SWAP_BASE_OP__/g' \
+    -e 's/\bCurrentPerWindingElement\b/OperatingPoint/g' \
+    -e 's/\bcurrent_per_winding_element\b/operating_point/g' \
+    -e 's/\bCURRENT_PER_WINDING_ELEMENT\b/OPERATING_POINT/g' \
+    -e 's/\b__SWAP_BASE_OP__\b/BaseOperatingPoint/g' \
+    build/MAS.hpp
+
 generate-schema-doc --config expand_buttons=true schemas/MAS.json mas_documentation.html

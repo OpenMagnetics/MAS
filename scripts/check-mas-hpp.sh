@@ -49,6 +49,26 @@ quicktype -l c++ -s schema ./schemas/MAS.json \
     --type-style pascal-case --member-style underscore-case \
     --enumerator-style upper-underscore-case --no-boost
 
+# Post-process: quicktype's type unifier collapses inputs.operatingPoints
+# (full operating point with conditions+excitations) and outputs.windingLosses.
+# currentPerWinding (same shape via $ref) into a single class. The chosen name
+# is "CurrentPerWindingElement" (from the property name in outputs), which is
+# semantically wrong - the type is fundamentally an operating point. Meanwhile,
+# the title used by the topology operating-point classes (FlybackOperatingPoint,
+# CllcOperatingPoint, etc.) makes quicktype name the baseOperatingPoint $def
+# "OperatingPoint", which is also semantically wrong - it's a converter operating
+# point, not the full operating point.
+#
+# Swap the two, atomically, via a temporary placeholder so the rename is
+# safe regardless of file order:
+sed -E -i \
+    -e 's/\bOperatingPoint\b/__SWAP_BASE_OP__/g' \
+    -e 's/\bCurrentPerWindingElement\b/OperatingPoint/g' \
+    -e 's/\bcurrent_per_winding_element\b/operating_point/g' \
+    -e 's/\bCURRENT_PER_WINDING_ELEMENT\b/OPERATING_POINT/g' \
+    -e 's/\b__SWAP_BASE_OP__\b/BaseOperatingPoint/g' \
+    "$tmp"
+
 if diff -q MAS.hpp "$tmp" >/dev/null; then
     echo "MAS.hpp is up to date"
     exit 0

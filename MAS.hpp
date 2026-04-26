@@ -253,6 +253,13 @@ namespace MAS {
      *
      * The radius of the edge, in case of rectangular wire, in m
      *
+     * The outer diameter of the wire. Unit: m.
+     *
+     * Length of one full twist of the litz bundle along the wire axis. Unit: m. Vendors quote
+     * this in mm or as 'lay length'; convert to metres before serialisation. No international
+     * standard exists for litz construction; this field captures the most commonly published
+     * vendor parameter.
+     *
      * Specific heat capacity value according to manufacturer. Unit: J/(kg*K).
      *
      * Thermal conductivity value according to manufacturer. Unit: W/(m*K).
@@ -361,10 +368,10 @@ namespace MAS {
      *
      * The description of one pushPull operating point
      */
-    class OperatingPoint {
+    class BaseOperatingPoint {
         public:
-        OperatingPoint() = default;
-        virtual ~OperatingPoint() = default;
+        BaseOperatingPoint() = default;
+        virtual ~BaseOperatingPoint() = default;
 
         private:
         double ambient_temperature;
@@ -434,7 +441,7 @@ namespace MAS {
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<OperatingPoint> operating_points;
+        std::vector<BaseOperatingPoint> operating_points;
 
         public:
         /**
@@ -472,9 +479,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
     };
 
     /**
@@ -491,7 +498,7 @@ namespace MAS {
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<OperatingPoint> operating_points;
+        std::vector<BaseOperatingPoint> operating_points;
 
         public:
         /**
@@ -529,9 +536,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
     };
 
     /**
@@ -1136,7 +1143,7 @@ namespace MAS {
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<OperatingPoint> operating_points;
+        std::vector<BaseOperatingPoint> operating_points;
 
         public:
         /**
@@ -1181,9 +1188,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
     };
 
     /**
@@ -1200,7 +1207,7 @@ namespace MAS {
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<OperatingPoint> operating_points;
+        std::vector<BaseOperatingPoint> operating_points;
 
         public:
         /**
@@ -1238,9 +1245,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
     };
 
     /**
@@ -1257,7 +1264,7 @@ namespace MAS {
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<OperatingPoint> operating_points;
+        std::vector<BaseOperatingPoint> operating_points;
 
         public:
         /**
@@ -1295,9 +1302,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
     };
 
     /**
@@ -1323,7 +1330,7 @@ namespace MAS {
         std::optional<bool> integrated_resonant_inductor;
         double max_switching_frequency;
         double min_switching_frequency;
-        std::vector<OperatingPoint> operating_points;
+        std::vector<BaseOperatingPoint> operating_points;
         std::optional<double> quality_factor;
         std::optional<double> resonant_capacitance;
         std::optional<double> resonant_frequency;
@@ -1378,9 +1385,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
 
         /**
          * The quality factor of the resonant tank
@@ -1587,7 +1594,7 @@ namespace MAS {
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_drain_source_voltage;
         std::optional<double> maximum_switch_current;
-        std::vector<OperatingPoint> operating_points;
+        std::vector<BaseOperatingPoint> operating_points;
 
         public:
         /**
@@ -1638,9 +1645,9 @@ namespace MAS {
         /**
          * A list of operating points
          */
-        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
     };
 
     class SupportedTopologies {
@@ -1725,18 +1732,21 @@ namespace MAS {
 
     /**
      * Required type of insulation
+     *
+     * Insulation grade classification as stated in the datasheet (e.g. 'reinforced', 'basic').
+     * Aligns with IEC insulationType vocabulary.
      */
     enum class InsulationType : int { BASIC, DOUBLE, FUNCTIONAL, REINFORCED, SUPPLEMENTARY };
 
     /**
      * Required overvoltage category
      */
-    enum class OvervoltageCategory : int { OVC_I, OVC_II, OVC_III, OVC_IV };
+    enum class OvervoltageCategory : int { I, II, III, IV };
 
     /**
      * Required pollution for the magnetic to work under
      */
-    enum class PollutionDegree : int { P1, P2, P3 };
+    enum class PollutionDegree : int { PD1, PD2, PD3, PD4 };
 
     enum class InsulationStandards : int { IEC_603351, IEC_606641, IEC_615581, IEC_623681 };
 
@@ -1866,6 +1876,14 @@ namespace MAS {
         void set_real_part(std::optional<double> value) { this->real_part = value; }
     };
 
+    using Impedance = std::variant<ImpedancePoint, double>;
+
+    /**
+     * An impedance value pinned to a specific frequency. The impedance may be expressed as a
+     * bare magnitude (Ohm) or as a structured impedancePoint that carries magnitude, phase and
+     * real/imaginary parts. Used by EMI-choke topologies and by
+     * designRequirements.minimumImpedance.
+     */
     class ImpedanceAtFrequency {
         public:
         ImpedanceAtFrequency() :
@@ -1876,16 +1894,19 @@ namespace MAS {
         private:
         double frequency;
         ClassMemberConstraints frequency_constraint;
-        ImpedancePoint impedance;
+        Impedance impedance;
 
         public:
+        /**
+         * Frequency at which the impedance applies. Unit: Hz.
+         */
         const double & get_frequency() const { return frequency; }
         double & get_mutable_frequency() { return frequency; }
         void set_frequency(const double & value) { CheckConstraint("frequency", frequency_constraint, value); this->frequency = value; }
 
-        const ImpedancePoint & get_impedance() const { return impedance; }
-        ImpedancePoint & get_mutable_impedance() { return impedance; }
-        void set_impedance(const ImpedancePoint & value) { this->impedance = value; }
+        const Impedance & get_impedance() const { return impedance; }
+        Impedance & get_mutable_impedance() { return impedance; }
+        void set_impedance(const Impedance & value) { this->impedance = value; }
     };
 
     /**
@@ -2457,12 +2478,12 @@ namespace MAS {
      * Data describing one operating point, including the operating conditions and the
      * excitations for all ports
      *
-     * Excitation of the current per winding that produced the winding losses
+     * Excitation of the current per winding that produced the winding losses.
      */
-    class CurrentPerWindingElement {
+    class OperatingPoint {
         public:
-        CurrentPerWindingElement() = default;
-        virtual ~CurrentPerWindingElement() = default;
+        OperatingPoint() = default;
+        virtual ~OperatingPoint() = default;
 
         private:
         OperatingConditions conditions;
@@ -2496,7 +2517,7 @@ namespace MAS {
         private:
         std::optional<ConverterInformation> converter_information;
         DesignRequirements design_requirements;
-        std::vector<CurrentPerWindingElement> operating_points;
+        std::vector<OperatingPoint> operating_points;
 
         public:
         std::optional<ConverterInformation> get_converter_information() const { return converter_information; }
@@ -2512,9 +2533,9 @@ namespace MAS {
         /**
          * Data describing the operating points
          */
-        const std::vector<CurrentPerWindingElement> & get_operating_points() const { return operating_points; }
-        std::vector<CurrentPerWindingElement> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<CurrentPerWindingElement> & value) { this->operating_points = value; }
+        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
     };
 
     /**
@@ -3704,7 +3725,9 @@ namespace MAS {
      */
     class Wire {
         public:
-        Wire() = default;
+        Wire() :
+            number_strands_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
+        {}
         virtual ~Wire() = default;
 
         private:
@@ -3724,7 +3747,10 @@ namespace MAS {
         std::optional<DimensionWithTolerance> outer_height;
         std::optional<DimensionWithTolerance> outer_width;
         std::optional<DimensionWithTolerance> edge_radius;
+        std::optional<int64_t> number_strands;
+        ClassMemberConstraints number_strands_constraint;
         std::optional<Strand> strand;
+        std::optional<DimensionWithTolerance> twist_pitch;
 
         public:
         /**
@@ -3738,6 +3764,8 @@ namespace MAS {
 
         /**
          * The outer diameter of the wire, in m
+         *
+         * The outer diameter of the wire. Unit: m.
          */
         std::optional<DimensionWithTolerance> get_outer_diameter() const { return outer_diameter; }
         void set_outer_diameter(std::optional<DimensionWithTolerance> value) { this->outer_diameter = value; }
@@ -3814,10 +3842,27 @@ namespace MAS {
         void set_edge_radius(std::optional<DimensionWithTolerance> value) { this->edge_radius = value; }
 
         /**
+         * Number of strands in the litz construction. Equivalent to numberConductors on basicWire;
+         * provided here for clarity since litz is the only wire type where the strand count is
+         * intrinsic to the geometry.
+         */
+        std::optional<int64_t> get_number_strands() const { return number_strands; }
+        void set_number_strands(std::optional<int64_t> value) { if (value) CheckConstraint("number_strands", number_strands_constraint, *value); this->number_strands = value; }
+
+        /**
          * The wire used as strands
          */
         std::optional<Strand> get_strand() const { return strand; }
         void set_strand(std::optional<Strand> value) { this->strand = value; }
+
+        /**
+         * Length of one full twist of the litz bundle along the wire axis. Unit: m. Vendors quote
+         * this in mm or as 'lay length'; convert to metres before serialisation. No international
+         * standard exists for litz construction; this field captures the most commonly published
+         * vendor parameter.
+         */
+        std::optional<DimensionWithTolerance> get_twist_pitch() const { return twist_pitch; }
+        void set_twist_pitch(std::optional<DimensionWithTolerance> value) { this->twist_pitch = value; }
     };
 
     using WireDataOrNameUnion = std::variant<Wire, std::string>;
@@ -4632,29 +4677,65 @@ namespace MAS {
         void set_value(const double & value) { this->value = value; }
     };
 
-    enum class MassCoreLossesMethodType : int { MAGNETEC };
+    enum class CoreLossesMethodType : int { CUSTOM, MAGNETEC };
 
     /**
      * Magnetec method for estimating mass losses
+     *
+     * Open-registry escape hatch for loss methods that are not represented by any of the named
+     * branches above. The `method` discriminator is the literal 'custom'; `methodName` carries
+     * the actual model identifier; `parameters` carries arbitrary method-specific data;
+     * `source` is a free-form citation. New vendor models can be carried in MAS without a
+     * schema change.
      */
-    class MagnetecCoreLossesMethodData {
+    class MagnetecCoreLossesMethodDataClass {
         public:
-        MagnetecCoreLossesMethodData() = default;
-        virtual ~MagnetecCoreLossesMethodData() = default;
+        MagnetecCoreLossesMethodDataClass() :
+            method_name_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt)
+        {}
+        virtual ~MagnetecCoreLossesMethodDataClass() = default;
 
         private:
-        MassCoreLossesMethodType method;
+        CoreLossesMethodType method;
+        std::optional<std::string> method_name;
+        ClassMemberConstraints method_name_constraint;
+        std::optional<std::map<std::string, nlohmann::json>> parameters;
+        std::optional<std::string> source;
 
         public:
         /**
          * Name of this method
+         *
+         * Discriminator selecting the open-registry branch. Always the literal string 'custom'.
          */
-        const MassCoreLossesMethodType & get_method() const { return method; }
-        MassCoreLossesMethodType & get_mutable_method() { return method; }
-        void set_method(const MassCoreLossesMethodType & value) { this->method = value; }
+        const CoreLossesMethodType & get_method() const { return method; }
+        CoreLossesMethodType & get_mutable_method() { return method; }
+        void set_method(const CoreLossesMethodType & value) { this->method = value; }
+
+        /**
+         * Identifier for the actual loss model carried in this entry. Convention: lowercase vendor
+         * or first-author name (e.g. 'newVendor', 'mySimulator'). The reserved values 'steinmetz',
+         * 'roshen', 'micrometals', 'magnetics', 'poco', 'tdg', 'magnetec', 'lossFactor' must use
+         * the corresponding named branches instead.
+         */
+        std::optional<std::string> get_method_name() const { return method_name; }
+        void set_method_name(std::optional<std::string> value) { if (value) CheckConstraint("method_name", method_name_constraint, *value); this->method_name = value; }
+
+        /**
+         * Method-specific parameters. Shape and meaning are defined by the methodName.
+         */
+        std::optional<std::map<std::string, nlohmann::json>> get_parameters() const { return parameters; }
+        void set_parameters(std::optional<std::map<std::string, nlohmann::json>> value) { this->parameters = value; }
+
+        /**
+         * Free-form citation: DOI, datasheet revision, vendor app-note, or other primary reference
+         * for the model.
+         */
+        std::optional<std::string> get_source() const { return source; }
+        void set_source(std::optional<std::string> value) { this->source = value; }
     };
 
-    using MassLossesMethod = std::variant<std::vector<MassLossesPoint>, MagnetecCoreLossesMethodData>;
+    using MassLossesMethod = std::variant<std::vector<MassLossesPoint>, MagnetecCoreLossesMethodDataClass>;
 
     /**
      * The composition of a magnetic material
@@ -5234,7 +5315,7 @@ namespace MAS {
         void set_value(const double & value) { this->value = value; }
     };
 
-    enum class VolumetricCoreLossesMethodType : int { LOSS_FACTOR, MAGNETICS, MICROMETALS, POCO, ROSHEN, STEINMETZ, TDG };
+    enum class VolumetricCoreLossesMethodType : int { CUSTOM, LOSS_FACTOR, MAGNETICS, MICROMETALS, POCO, ROSHEN, STEINMETZ, TDG };
 
     class SteinmetzCoreLossesMethodRangeDatum {
         public:
@@ -5322,11 +5403,19 @@ namespace MAS {
      * TDG method for estimating volumetric losses
      *
      * Loss factor method for estimating volumetric losses
+     *
+     * Open-registry escape hatch for loss methods that are not represented by any of the named
+     * branches above. The `method` discriminator is the literal 'custom'; `methodName` carries
+     * the actual model identifier; `parameters` carries arbitrary method-specific data;
+     * `source` is a free-form citation. New vendor models can be carried in MAS without a
+     * schema change.
      */
-    class CoreLossesMethodData {
+    class SteinmetzCoreLossesMethodDataClass {
         public:
-        CoreLossesMethodData() = default;
-        virtual ~CoreLossesMethodData() = default;
+        SteinmetzCoreLossesMethodDataClass() :
+            method_name_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt)
+        {}
+        virtual ~SteinmetzCoreLossesMethodDataClass() = default;
 
         private:
         VolumetricCoreLossesMethodType method;
@@ -5338,10 +5427,16 @@ namespace MAS {
         std::optional<double> c;
         std::optional<double> d;
         std::optional<std::vector<LossFactorPoint>> factors;
+        std::optional<std::string> method_name;
+        ClassMemberConstraints method_name_constraint;
+        std::optional<std::map<std::string, nlohmann::json>> parameters;
+        std::optional<std::string> source;
 
         public:
         /**
          * Name of this method
+         *
+         * Discriminator selecting the open-registry branch. Always the literal string 'custom'.
          */
         const VolumetricCoreLossesMethodType & get_method() const { return method; }
         VolumetricCoreLossesMethodType & get_mutable_method() { return method; }
@@ -5377,9 +5472,31 @@ namespace MAS {
 
         std::optional<std::vector<LossFactorPoint>> get_factors() const { return factors; }
         void set_factors(std::optional<std::vector<LossFactorPoint>> value) { this->factors = value; }
+
+        /**
+         * Identifier for the actual loss model carried in this entry. Convention: lowercase vendor
+         * or first-author name (e.g. 'newVendor', 'mySimulator'). The reserved values 'steinmetz',
+         * 'roshen', 'micrometals', 'magnetics', 'poco', 'tdg', 'magnetec', 'lossFactor' must use
+         * the corresponding named branches instead.
+         */
+        std::optional<std::string> get_method_name() const { return method_name; }
+        void set_method_name(std::optional<std::string> value) { if (value) CheckConstraint("method_name", method_name_constraint, *value); this->method_name = value; }
+
+        /**
+         * Method-specific parameters. Shape and meaning are defined by the methodName.
+         */
+        std::optional<std::map<std::string, nlohmann::json>> get_parameters() const { return parameters; }
+        void set_parameters(std::optional<std::map<std::string, nlohmann::json>> value) { this->parameters = value; }
+
+        /**
+         * Free-form citation: DOI, datasheet revision, vendor app-note, or other primary reference
+         * for the model.
+         */
+        std::optional<std::string> get_source() const { return source; }
+        void set_source(std::optional<std::string> value) { this->source = value; }
     };
 
-    using VolumetricLossesMethod = std::variant<std::vector<VolumetricLossesPoint>, CoreLossesMethodData>;
+    using VolumetricLossesMethod = std::variant<std::vector<VolumetricLossesPoint>, SteinmetzCoreLossesMethodDataClass>;
 
     /**
      * A material for the magnetic cores
@@ -6396,12 +6513,6 @@ namespace MAS {
     };
 
     /**
-     * Insulation grade classification as stated in the datasheet (e.g. 'reinforced', 'basic').
-     * Aligns with IEC insulationType vocabulary.
-     */
-    enum class InsulationGrade : int { BASIC, DOUBLE, FUNCTIONAL, REINFORCED, SUPPLEMENTARY };
-
-    /**
      * Basic part identification from the datasheet.
      *
      * Basic part identification.
@@ -6416,7 +6527,7 @@ namespace MAS {
         std::optional<std::string> case_code;
         std::optional<std::string> description;
         std::optional<std::string> family;
-        std::optional<InsulationGrade> insulation_grade;
+        std::optional<InsulationType> insulation_grade;
         std::optional<std::string> match_code;
         std::optional<std::string> material;
         std::optional<int64_t> number_of_windings;
@@ -6453,8 +6564,8 @@ namespace MAS {
          * Insulation grade classification as stated in the datasheet (e.g. 'reinforced', 'basic').
          * Aligns with IEC insulationType vocabulary.
          */
-        std::optional<InsulationGrade> get_insulation_grade() const { return insulation_grade; }
-        void set_insulation_grade(std::optional<InsulationGrade> value) { this->insulation_grade = value; }
+        std::optional<InsulationType> get_insulation_grade() const { return insulation_grade; }
+        void set_insulation_grade(std::optional<InsulationType> value) { this->insulation_grade = value; }
 
         /**
          * Internal match / order code used by the manufacturer.
@@ -7702,7 +7813,7 @@ namespace MAS {
 
         private:
         std::optional<std::vector<double>> current_divider_per_turn;
-        std::optional<CurrentPerWindingElement> current_per_winding;
+        std::optional<OperatingPoint> current_per_winding;
         std::optional<std::vector<double>> dc_resistance_per_turn;
         std::optional<std::vector<double>> dc_resistance_per_winding;
         std::string method_used;
@@ -7723,10 +7834,10 @@ namespace MAS {
         void set_current_divider_per_turn(std::optional<std::vector<double>> value) { this->current_divider_per_turn = value; }
 
         /**
-         * Excitation of the current per winding that produced the winding losses
+         * Excitation of the current per winding that produced the winding losses.
          */
-        std::optional<CurrentPerWindingElement> get_current_per_winding() const { return current_per_winding; }
-        void set_current_per_winding(std::optional<CurrentPerWindingElement> value) { this->current_per_winding = value; }
+        std::optional<OperatingPoint> get_current_per_winding() const { return current_per_winding; }
+        void set_current_per_winding(std::optional<OperatingPoint> value) { this->current_per_winding = value; }
 
         /**
          * List of DC resistance per turn
@@ -8203,8 +8314,8 @@ namespace MAS {
 void from_json(const json & j, DimensionWithTolerance & x);
 void to_json(json & j, const DimensionWithTolerance & x);
 
-void from_json(const json & j, OperatingPoint & x);
-void to_json(json & j, const OperatingPoint & x);
+void from_json(const json & j, BaseOperatingPoint & x);
+void to_json(json & j, const BaseOperatingPoint & x);
 
 void from_json(const json & j, Boost & x);
 void to_json(json & j, const Boost & x);
@@ -8296,8 +8407,8 @@ void to_json(json & j, const SignalDescriptor & x);
 void from_json(const json & j, OperatingPointExcitation & x);
 void to_json(json & j, const OperatingPointExcitation & x);
 
-void from_json(const json & j, CurrentPerWindingElement & x);
-void to_json(json & j, const CurrentPerWindingElement & x);
+void from_json(const json & j, OperatingPoint & x);
+void to_json(json & j, const OperatingPoint & x);
 
 void from_json(const json & j, Inputs & x);
 void to_json(json & j, const Inputs & x);
@@ -8395,8 +8506,8 @@ void to_json(json & j, const BhCycleElement & x);
 void from_json(const json & j, MassLossesPoint & x);
 void to_json(json & j, const MassLossesPoint & x);
 
-void from_json(const json & j, MagnetecCoreLossesMethodData & x);
-void to_json(json & j, const MagnetecCoreLossesMethodData & x);
+void from_json(const json & j, MagnetecCoreLossesMethodDataClass & x);
+void to_json(json & j, const MagnetecCoreLossesMethodDataClass & x);
 
 void from_json(const json & j, FrequencyFactor & x);
 void to_json(json & j, const FrequencyFactor & x);
@@ -8437,8 +8548,8 @@ void to_json(json & j, const LossFactorPoint & x);
 void from_json(const json & j, SteinmetzCoreLossesMethodRangeDatum & x);
 void to_json(json & j, const SteinmetzCoreLossesMethodRangeDatum & x);
 
-void from_json(const json & j, CoreLossesMethodData & x);
-void to_json(json & j, const CoreLossesMethodData & x);
+void from_json(const json & j, SteinmetzCoreLossesMethodDataClass & x);
+void to_json(json & j, const SteinmetzCoreLossesMethodDataClass & x);
 
 void from_json(const json & j, CoreMaterial & x);
 void to_json(json & j, const CoreMaterial & x);
@@ -8710,8 +8821,8 @@ void to_json(json & j, const Coating & x);
 void from_json(const json & j, GapType & x);
 void to_json(json & j, const GapType & x);
 
-void from_json(const json & j, MassCoreLossesMethodType & x);
-void to_json(json & j, const MassCoreLossesMethodType & x);
+void from_json(const json & j, CoreLossesMethodType & x);
+void to_json(json & j, const CoreLossesMethodType & x);
 
 void from_json(const json & j, MaterialType & x);
 void to_json(json & j, const MaterialType & x);
@@ -8743,9 +8854,6 @@ void to_json(json & j, const CoreGeometricalDescriptionElementType & x);
 void from_json(const json & j, ColumnType & x);
 void to_json(json & j, const ColumnType & x);
 
-void from_json(const json & j, InsulationGrade & x);
-void to_json(json & j, const InsulationGrade & x);
-
 void from_json(const json & j, MasConformance & x);
 void to_json(json & j, const MasConformance & x);
 
@@ -8756,6 +8864,12 @@ void from_json(const json & j, VoltageType & x);
 void to_json(json & j, const VoltageType & x);
 }
 namespace nlohmann {
+template <>
+struct adl_serializer<std::variant<MAS::ImpedancePoint, double>> {
+    static void from_json(const json & j, std::variant<MAS::ImpedancePoint, double> & x);
+    static void to_json(json & j, const std::variant<MAS::ImpedancePoint, double> & x);
+};
+
 template <>
 struct adl_serializer<std::variant<MAS::DimensionWithTolerance, double>> {
     static void from_json(const json & j, std::variant<MAS::DimensionWithTolerance, double> & x);
@@ -8817,9 +8931,9 @@ struct adl_serializer<std::variant<std::vector<double>, MAS::MarginInfo>> {
 };
 
 template <>
-struct adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData>> {
-    static void from_json(const json & j, std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData> & x);
-    static void to_json(json & j, const std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData> & x);
+struct adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass>> {
+    static void from_json(const json & j, std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass> & x);
+    static void to_json(json & j, const std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass> & x);
 };
 
 template <>
@@ -8829,9 +8943,9 @@ struct adl_serializer<std::variant<std::vector<MAS::PermeabilityPoint>, MAS::Per
 };
 
 template <>
-struct adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData>> {
-    static void from_json(const json & j, std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData> & x);
-    static void to_json(json & j, const std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData> & x);
+struct adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass>> {
+    static void from_json(const json & j, std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass> & x);
+    static void to_json(json & j, const std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass> & x);
 };
 
 template <>
@@ -8866,7 +8980,7 @@ namespace MAS {
         j["unit"] = x.get_unit();
     }
 
-    inline void from_json(const json & j, OperatingPoint& x) {
+    inline void from_json(const json & j, BaseOperatingPoint& x) {
         x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
         x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
         x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
@@ -8875,7 +8989,7 @@ namespace MAS {
         x.set_switching_frequency(j.at("switchingFrequency").get<double>());
     }
 
-    inline void to_json(json & j, const OperatingPoint & x) {
+    inline void to_json(json & j, const BaseOperatingPoint & x) {
         j = json::object();
         j["ambientTemperature"] = x.get_ambient_temperature();
         j["outputCurrents"] = x.get_output_currents();
@@ -8891,7 +9005,7 @@ namespace MAS {
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
     }
 
     inline void to_json(json & j, const Boost & x) {
@@ -8910,7 +9024,7 @@ namespace MAS {
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
     }
 
     inline void to_json(json & j, const Buck & x) {
@@ -9083,7 +9197,7 @@ namespace MAS {
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
     }
 
     inline void to_json(json & j, const Forward & x) {
@@ -9103,7 +9217,7 @@ namespace MAS {
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
     }
 
     inline void to_json(json & j, const IsolatedBuck & x) {
@@ -9122,7 +9236,7 @@ namespace MAS {
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
     }
 
     inline void to_json(json & j, const IsolatedBuckBoost & x) {
@@ -9143,7 +9257,7 @@ namespace MAS {
         x.set_integrated_resonant_inductor(get_stack_optional<bool>(j, "integratedResonantInductor"));
         x.set_max_switching_frequency(j.at("maxSwitchingFrequency").get<double>());
         x.set_min_switching_frequency(j.at("minSwitchingFrequency").get<double>());
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
         x.set_quality_factor(get_stack_optional<double>(j, "qualityFactor"));
         x.set_resonant_capacitance(get_stack_optional<double>(j, "resonantCapacitance"));
         x.set_resonant_frequency(get_stack_optional<double>(j, "resonantFrequency"));
@@ -9218,7 +9332,7 @@ namespace MAS {
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_drain_source_voltage(get_stack_optional<double>(j, "maximumDrainSourceVoltage"));
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
     }
 
     inline void to_json(json & j, const PushPull & x) {
@@ -9324,7 +9438,7 @@ namespace MAS {
 
     inline void from_json(const json & j, ImpedanceAtFrequency& x) {
         x.set_frequency(j.at("frequency").get<double>());
-        x.set_impedance(j.at("impedance").get<ImpedancePoint>());
+        x.set_impedance(j.at("impedance").get<Impedance>());
     }
 
     inline void to_json(json & j, const ImpedanceAtFrequency & x) {
@@ -9509,13 +9623,13 @@ namespace MAS {
         j["voltage"] = x.get_voltage();
     }
 
-    inline void from_json(const json & j, CurrentPerWindingElement& x) {
+    inline void from_json(const json & j, OperatingPoint& x) {
         x.set_conditions(j.at("conditions").get<OperatingConditions>());
         x.set_excitations_per_winding(j.at("excitationsPerWinding").get<std::vector<OperatingPointExcitation>>());
         x.set_name(get_stack_optional<std::string>(j, "name"));
     }
 
-    inline void to_json(json & j, const CurrentPerWindingElement & x) {
+    inline void to_json(json & j, const OperatingPoint & x) {
         j = json::object();
         j["conditions"] = x.get_conditions();
         j["excitationsPerWinding"] = x.get_excitations_per_winding();
@@ -9525,7 +9639,7 @@ namespace MAS {
     inline void from_json(const json & j, Inputs& x) {
         x.set_converter_information(get_stack_optional<ConverterInformation>(j, "converterInformation"));
         x.set_design_requirements(j.at("designRequirements").get<DesignRequirements>());
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<CurrentPerWindingElement>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
     }
 
     inline void to_json(json & j, const Inputs & x) {
@@ -9919,7 +10033,9 @@ namespace MAS {
         x.set_outer_height(get_stack_optional<DimensionWithTolerance>(j, "outerHeight"));
         x.set_outer_width(get_stack_optional<DimensionWithTolerance>(j, "outerWidth"));
         x.set_edge_radius(get_stack_optional<DimensionWithTolerance>(j, "edgeRadius"));
+        x.set_number_strands(get_stack_optional<int64_t>(j, "numberStrands"));
         x.set_strand(get_stack_optional<std::variant<WireRound, std::string>>(j, "strand"));
+        x.set_twist_pitch(get_stack_optional<DimensionWithTolerance>(j, "twistPitch"));
     }
 
     inline void to_json(json & j, const Wire & x) {
@@ -9940,7 +10056,9 @@ namespace MAS {
         j["outerHeight"] = x.get_outer_height();
         j["outerWidth"] = x.get_outer_width();
         j["edgeRadius"] = x.get_edge_radius();
+        j["numberStrands"] = x.get_number_strands();
         j["strand"] = x.get_strand();
+        j["twistPitch"] = x.get_twist_pitch();
     }
 
     inline void from_json(const json & j, CoilFunctionalDescription& x) {
@@ -10186,13 +10304,19 @@ namespace MAS {
         j["value"] = x.get_value();
     }
 
-    inline void from_json(const json & j, MagnetecCoreLossesMethodData& x) {
-        x.set_method(j.at("method").get<MassCoreLossesMethodType>());
+    inline void from_json(const json & j, MagnetecCoreLossesMethodDataClass& x) {
+        x.set_method(j.at("method").get<CoreLossesMethodType>());
+        x.set_method_name(get_stack_optional<std::string>(j, "methodName"));
+        x.set_parameters(get_stack_optional<std::map<std::string, nlohmann::json>>(j, "parameters"));
+        x.set_source(get_stack_optional<std::string>(j, "source"));
     }
 
-    inline void to_json(json & j, const MagnetecCoreLossesMethodData & x) {
+    inline void to_json(json & j, const MagnetecCoreLossesMethodDataClass & x) {
         j = json::object();
         j["method"] = x.get_method();
+        j["methodName"] = x.get_method_name();
+        j["parameters"] = x.get_parameters();
+        j["source"] = x.get_source();
     }
 
     inline void from_json(const json & j, FrequencyFactor& x) {
@@ -10416,7 +10540,7 @@ namespace MAS {
         j["minimumFrequency"] = x.get_minimum_frequency();
     }
 
-    inline void from_json(const json & j, CoreLossesMethodData& x) {
+    inline void from_json(const json & j, SteinmetzCoreLossesMethodDataClass& x) {
         x.set_method(j.at("method").get<VolumetricCoreLossesMethodType>());
         x.set_ranges(get_stack_optional<std::vector<SteinmetzCoreLossesMethodRangeDatum>>(j, "ranges"));
         x.set_coefficients(get_stack_optional<RoshenAdditionalCoefficients>(j, "coefficients"));
@@ -10426,9 +10550,12 @@ namespace MAS {
         x.set_c(get_stack_optional<double>(j, "c"));
         x.set_d(get_stack_optional<double>(j, "d"));
         x.set_factors(get_stack_optional<std::vector<LossFactorPoint>>(j, "factors"));
+        x.set_method_name(get_stack_optional<std::string>(j, "methodName"));
+        x.set_parameters(get_stack_optional<std::map<std::string, nlohmann::json>>(j, "parameters"));
+        x.set_source(get_stack_optional<std::string>(j, "source"));
     }
 
-    inline void to_json(json & j, const CoreLossesMethodData & x) {
+    inline void to_json(json & j, const SteinmetzCoreLossesMethodDataClass & x) {
         j = json::object();
         j["method"] = x.get_method();
         j["ranges"] = x.get_ranges();
@@ -10439,6 +10566,9 @@ namespace MAS {
         j["c"] = x.get_c();
         j["d"] = x.get_d();
         j["factors"] = x.get_factors();
+        j["methodName"] = x.get_method_name();
+        j["parameters"] = x.get_parameters();
+        j["source"] = x.get_source();
     }
 
     inline void from_json(const json & j, CoreMaterial& x) {
@@ -10768,7 +10898,7 @@ namespace MAS {
         x.set_case_code(get_stack_optional<std::string>(j, "caseCode"));
         x.set_description(get_stack_optional<std::string>(j, "description"));
         x.set_family(get_stack_optional<std::string>(j, "family"));
-        x.set_insulation_grade(get_stack_optional<InsulationGrade>(j, "insulationGrade"));
+        x.set_insulation_grade(get_stack_optional<InsulationType>(j, "insulationGrade"));
         x.set_match_code(get_stack_optional<std::string>(j, "matchCode"));
         x.set_material(get_stack_optional<std::string>(j, "material"));
         x.set_number_of_windings(get_stack_optional<int64_t>(j, "numberOfWindings"));
@@ -11201,7 +11331,7 @@ namespace MAS {
 
     inline void from_json(const json & j, WindingLossesOutput& x) {
         x.set_current_divider_per_turn(get_stack_optional<std::vector<double>>(j, "currentDividerPerTurn"));
-        x.set_current_per_winding(get_stack_optional<CurrentPerWindingElement>(j, "currentPerWinding"));
+        x.set_current_per_winding(get_stack_optional<OperatingPoint>(j, "currentPerWinding"));
         x.set_dc_resistance_per_turn(get_stack_optional<std::vector<double>>(j, "dcResistancePerTurn"));
         x.set_dc_resistance_per_winding(get_stack_optional<std::vector<double>>(j, "dcResistancePerWinding"));
         x.set_method_used(j.at("methodUsed").get<std::string>());
@@ -11400,37 +11530,37 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, CllcPowerFlow & x) {
-        if (j == "Forward") x = CllcPowerFlow::FORWARD;
-        else if (j == "Reverse") x = CllcPowerFlow::REVERSE;
+        if (j == "forward") x = CllcPowerFlow::FORWARD;
+        else if (j == "reverse") x = CllcPowerFlow::REVERSE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const CllcPowerFlow & x) {
         switch (x) {
-            case CllcPowerFlow::FORWARD: j = "Forward"; break;
-            case CllcPowerFlow::REVERSE: j = "Reverse"; break;
+            case CllcPowerFlow::FORWARD: j = "forward"; break;
+            case CllcPowerFlow::REVERSE: j = "reverse"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, WaveformLabel & x) {
         static std::unordered_map<std::string, WaveformLabel> enumValues {
-            {"Bipolar Rectangular", WaveformLabel::BIPOLAR_RECTANGULAR},
-            {"Bipolar Triangular", WaveformLabel::BIPOLAR_TRIANGULAR},
-            {"Custom", WaveformLabel::CUSTOM},
-            {"Flyback Primary", WaveformLabel::FLYBACK_PRIMARY},
-            {"Flyback Secondary", WaveformLabel::FLYBACK_SECONDARY},
-            {"Flyback Secondary With Deadtime", WaveformLabel::FLYBACK_SECONDARY_WITH_DEADTIME},
-            {"Rectangular", WaveformLabel::RECTANGULAR},
-            {"Rectangular DCM", WaveformLabel::RECTANGULAR_DCM},
-            {"Rectangular With Deadtime", WaveformLabel::RECTANGULAR_WITH_DEADTIME},
-            {"Secondary Rectangular", WaveformLabel::SECONDARY_RECTANGULAR},
-            {"Secondary Rectangular With Deadtime", WaveformLabel::SECONDARY_RECTANGULAR_WITH_DEADTIME},
-            {"Sinusoidal", WaveformLabel::SINUSOIDAL},
-            {"Triangular", WaveformLabel::TRIANGULAR},
-            {"Triangular With Deadtime", WaveformLabel::TRIANGULAR_WITH_DEADTIME},
-            {"Unipolar Rectangular", WaveformLabel::UNIPOLAR_RECTANGULAR},
-            {"Unipolar Triangular", WaveformLabel::UNIPOLAR_TRIANGULAR},
+            {"bipolarRectangular", WaveformLabel::BIPOLAR_RECTANGULAR},
+            {"bipolarTriangular", WaveformLabel::BIPOLAR_TRIANGULAR},
+            {"custom", WaveformLabel::CUSTOM},
+            {"flybackPrimary", WaveformLabel::FLYBACK_PRIMARY},
+            {"flybackSecondary", WaveformLabel::FLYBACK_SECONDARY},
+            {"flybackSecondaryWithDeadtime", WaveformLabel::FLYBACK_SECONDARY_WITH_DEADTIME},
+            {"rectangular", WaveformLabel::RECTANGULAR},
+            {"rectangularDCM", WaveformLabel::RECTANGULAR_DCM},
+            {"rectangularWithDeadtime", WaveformLabel::RECTANGULAR_WITH_DEADTIME},
+            {"secondaryRectangular", WaveformLabel::SECONDARY_RECTANGULAR},
+            {"secondaryRectangularWithDeadtime", WaveformLabel::SECONDARY_RECTANGULAR_WITH_DEADTIME},
+            {"sinusoidal", WaveformLabel::SINUSOIDAL},
+            {"triangular", WaveformLabel::TRIANGULAR},
+            {"triangularWithDeadtime", WaveformLabel::TRIANGULAR_WITH_DEADTIME},
+            {"unipolarRectangular", WaveformLabel::UNIPOLAR_RECTANGULAR},
+            {"unipolarTriangular", WaveformLabel::UNIPOLAR_TRIANGULAR},
         };
         auto iter = enumValues.find(j.get<std::string>());
         if (iter != enumValues.end()) {
@@ -11440,22 +11570,22 @@ namespace MAS {
 
     inline void to_json(json & j, const WaveformLabel & x) {
         switch (x) {
-            case WaveformLabel::BIPOLAR_RECTANGULAR: j = "Bipolar Rectangular"; break;
-            case WaveformLabel::BIPOLAR_TRIANGULAR: j = "Bipolar Triangular"; break;
-            case WaveformLabel::CUSTOM: j = "Custom"; break;
-            case WaveformLabel::FLYBACK_PRIMARY: j = "Flyback Primary"; break;
-            case WaveformLabel::FLYBACK_SECONDARY: j = "Flyback Secondary"; break;
-            case WaveformLabel::FLYBACK_SECONDARY_WITH_DEADTIME: j = "Flyback Secondary With Deadtime"; break;
-            case WaveformLabel::RECTANGULAR: j = "Rectangular"; break;
-            case WaveformLabel::RECTANGULAR_DCM: j = "Rectangular DCM"; break;
-            case WaveformLabel::RECTANGULAR_WITH_DEADTIME: j = "Rectangular With Deadtime"; break;
-            case WaveformLabel::SECONDARY_RECTANGULAR: j = "Secondary Rectangular"; break;
-            case WaveformLabel::SECONDARY_RECTANGULAR_WITH_DEADTIME: j = "Secondary Rectangular With Deadtime"; break;
-            case WaveformLabel::SINUSOIDAL: j = "Sinusoidal"; break;
-            case WaveformLabel::TRIANGULAR: j = "Triangular"; break;
-            case WaveformLabel::TRIANGULAR_WITH_DEADTIME: j = "Triangular With Deadtime"; break;
-            case WaveformLabel::UNIPOLAR_RECTANGULAR: j = "Unipolar Rectangular"; break;
-            case WaveformLabel::UNIPOLAR_TRIANGULAR: j = "Unipolar Triangular"; break;
+            case WaveformLabel::BIPOLAR_RECTANGULAR: j = "bipolarRectangular"; break;
+            case WaveformLabel::BIPOLAR_TRIANGULAR: j = "bipolarTriangular"; break;
+            case WaveformLabel::CUSTOM: j = "custom"; break;
+            case WaveformLabel::FLYBACK_PRIMARY: j = "flybackPrimary"; break;
+            case WaveformLabel::FLYBACK_SECONDARY: j = "flybackSecondary"; break;
+            case WaveformLabel::FLYBACK_SECONDARY_WITH_DEADTIME: j = "flybackSecondaryWithDeadtime"; break;
+            case WaveformLabel::RECTANGULAR: j = "rectangular"; break;
+            case WaveformLabel::RECTANGULAR_DCM: j = "rectangularDCM"; break;
+            case WaveformLabel::RECTANGULAR_WITH_DEADTIME: j = "rectangularWithDeadtime"; break;
+            case WaveformLabel::SECONDARY_RECTANGULAR: j = "secondaryRectangular"; break;
+            case WaveformLabel::SECONDARY_RECTANGULAR_WITH_DEADTIME: j = "secondaryRectangularWithDeadtime"; break;
+            case WaveformLabel::SINUSOIDAL: j = "sinusoidal"; break;
+            case WaveformLabel::TRIANGULAR: j = "triangular"; break;
+            case WaveformLabel::TRIANGULAR_WITH_DEADTIME: j = "triangularWithDeadtime"; break;
+            case WaveformLabel::UNIPOLAR_RECTANGULAR: j = "unipolarRectangular"; break;
+            case WaveformLabel::UNIPOLAR_TRIANGULAR: j = "unipolarTriangular"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -11479,137 +11609,139 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, FlybackModes & x) {
-        if (j == "Boundary Mode Operation") x = FlybackModes::BOUNDARY_MODE_OPERATION;
-        else if (j == "Continuous Conduction Mode") x = FlybackModes::CONTINUOUS_CONDUCTION_MODE;
-        else if (j == "Discontinuous Conduction Mode") x = FlybackModes::DISCONTINUOUS_CONDUCTION_MODE;
-        else if (j == "Quasi Resonant Mode") x = FlybackModes::QUASI_RESONANT_MODE;
+        if (j == "boundaryModeOperation") x = FlybackModes::BOUNDARY_MODE_OPERATION;
+        else if (j == "continuousConductionMode") x = FlybackModes::CONTINUOUS_CONDUCTION_MODE;
+        else if (j == "discontinuousConductionMode") x = FlybackModes::DISCONTINUOUS_CONDUCTION_MODE;
+        else if (j == "quasiResonantMode") x = FlybackModes::QUASI_RESONANT_MODE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const FlybackModes & x) {
         switch (x) {
-            case FlybackModes::BOUNDARY_MODE_OPERATION: j = "Boundary Mode Operation"; break;
-            case FlybackModes::CONTINUOUS_CONDUCTION_MODE: j = "Continuous Conduction Mode"; break;
-            case FlybackModes::DISCONTINUOUS_CONDUCTION_MODE: j = "Discontinuous Conduction Mode"; break;
-            case FlybackModes::QUASI_RESONANT_MODE: j = "Quasi Resonant Mode"; break;
+            case FlybackModes::BOUNDARY_MODE_OPERATION: j = "boundaryModeOperation"; break;
+            case FlybackModes::CONTINUOUS_CONDUCTION_MODE: j = "continuousConductionMode"; break;
+            case FlybackModes::DISCONTINUOUS_CONDUCTION_MODE: j = "discontinuousConductionMode"; break;
+            case FlybackModes::QUASI_RESONANT_MODE: j = "quasiResonantMode"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, LlcBridgeType & x) {
-        if (j == "Full Bridge") x = LlcBridgeType::FULL_BRIDGE;
-        else if (j == "Half Bridge") x = LlcBridgeType::HALF_BRIDGE;
+        if (j == "fullBridge") x = LlcBridgeType::FULL_BRIDGE;
+        else if (j == "halfBridge") x = LlcBridgeType::HALF_BRIDGE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const LlcBridgeType & x) {
         switch (x) {
-            case LlcBridgeType::FULL_BRIDGE: j = "Full Bridge"; break;
-            case LlcBridgeType::HALF_BRIDGE: j = "Half Bridge"; break;
+            case LlcBridgeType::FULL_BRIDGE: j = "fullBridge"; break;
+            case LlcBridgeType::HALF_BRIDGE: j = "halfBridge"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, PsfbRectifierType & x) {
-        if (j == "Center Tapped") x = PsfbRectifierType::CENTER_TAPPED;
-        else if (j == "Current Doubler") x = PsfbRectifierType::CURRENT_DOUBLER;
-        else if (j == "Full Bridge") x = PsfbRectifierType::FULL_BRIDGE;
+        if (j == "centerTapped") x = PsfbRectifierType::CENTER_TAPPED;
+        else if (j == "currentDoubler") x = PsfbRectifierType::CURRENT_DOUBLER;
+        else if (j == "fullBridge") x = PsfbRectifierType::FULL_BRIDGE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const PsfbRectifierType & x) {
         switch (x) {
-            case PsfbRectifierType::CENTER_TAPPED: j = "Center Tapped"; break;
-            case PsfbRectifierType::CURRENT_DOUBLER: j = "Current Doubler"; break;
-            case PsfbRectifierType::FULL_BRIDGE: j = "Full Bridge"; break;
+            case PsfbRectifierType::CENTER_TAPPED: j = "centerTapped"; break;
+            case PsfbRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
+            case PsfbRectifierType::FULL_BRIDGE: j = "fullBridge"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, Application & x) {
-        if (j == "Interference Suppression") x = Application::INTERFERENCE_SUPPRESSION;
-        else if (j == "Power") x = Application::POWER;
-        else if (j == "Signal Processing") x = Application::SIGNAL_PROCESSING;
+        if (j == "interferenceSuppression") x = Application::INTERFERENCE_SUPPRESSION;
+        else if (j == "power") x = Application::POWER;
+        else if (j == "signalProcessing") x = Application::SIGNAL_PROCESSING;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const Application & x) {
         switch (x) {
-            case Application::INTERFERENCE_SUPPRESSION: j = "Interference Suppression"; break;
-            case Application::POWER: j = "Power"; break;
-            case Application::SIGNAL_PROCESSING: j = "Signal Processing"; break;
+            case Application::INTERFERENCE_SUPPRESSION: j = "interferenceSuppression"; break;
+            case Application::POWER: j = "power"; break;
+            case Application::SIGNAL_PROCESSING: j = "signalProcessing"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, Cti & x) {
-        if (j == "Group I") x = Cti::GROUP_I;
-        else if (j == "Group II") x = Cti::GROUP_II;
-        else if (j == "Group IIIA") x = Cti::GROUP_IIIA;
-        else if (j == "Group IIIB") x = Cti::GROUP_IIIB;
+        if (j == "groupI") x = Cti::GROUP_I;
+        else if (j == "groupII") x = Cti::GROUP_II;
+        else if (j == "groupIIIA") x = Cti::GROUP_IIIA;
+        else if (j == "groupIIIB") x = Cti::GROUP_IIIB;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const Cti & x) {
         switch (x) {
-            case Cti::GROUP_I: j = "Group I"; break;
-            case Cti::GROUP_II: j = "Group II"; break;
-            case Cti::GROUP_IIIA: j = "Group IIIA"; break;
-            case Cti::GROUP_IIIB: j = "Group IIIB"; break;
+            case Cti::GROUP_I: j = "groupI"; break;
+            case Cti::GROUP_II: j = "groupII"; break;
+            case Cti::GROUP_IIIA: j = "groupIIIA"; break;
+            case Cti::GROUP_IIIB: j = "groupIIIB"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, InsulationType & x) {
-        if (j == "Basic") x = InsulationType::BASIC;
-        else if (j == "Double") x = InsulationType::DOUBLE;
-        else if (j == "Functional") x = InsulationType::FUNCTIONAL;
-        else if (j == "Reinforced") x = InsulationType::REINFORCED;
-        else if (j == "Supplementary") x = InsulationType::SUPPLEMENTARY;
+        if (j == "basic") x = InsulationType::BASIC;
+        else if (j == "double") x = InsulationType::DOUBLE;
+        else if (j == "functional") x = InsulationType::FUNCTIONAL;
+        else if (j == "reinforced") x = InsulationType::REINFORCED;
+        else if (j == "supplementary") x = InsulationType::SUPPLEMENTARY;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const InsulationType & x) {
         switch (x) {
-            case InsulationType::BASIC: j = "Basic"; break;
-            case InsulationType::DOUBLE: j = "Double"; break;
-            case InsulationType::FUNCTIONAL: j = "Functional"; break;
-            case InsulationType::REINFORCED: j = "Reinforced"; break;
-            case InsulationType::SUPPLEMENTARY: j = "Supplementary"; break;
+            case InsulationType::BASIC: j = "basic"; break;
+            case InsulationType::DOUBLE: j = "double"; break;
+            case InsulationType::FUNCTIONAL: j = "functional"; break;
+            case InsulationType::REINFORCED: j = "reinforced"; break;
+            case InsulationType::SUPPLEMENTARY: j = "supplementary"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, OvervoltageCategory & x) {
-        if (j == "OVC-I") x = OvervoltageCategory::OVC_I;
-        else if (j == "OVC-II") x = OvervoltageCategory::OVC_II;
-        else if (j == "OVC-III") x = OvervoltageCategory::OVC_III;
-        else if (j == "OVC-IV") x = OvervoltageCategory::OVC_IV;
+        if (j == "I") x = OvervoltageCategory::I;
+        else if (j == "II") x = OvervoltageCategory::II;
+        else if (j == "III") x = OvervoltageCategory::III;
+        else if (j == "IV") x = OvervoltageCategory::IV;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const OvervoltageCategory & x) {
         switch (x) {
-            case OvervoltageCategory::OVC_I: j = "OVC-I"; break;
-            case OvervoltageCategory::OVC_II: j = "OVC-II"; break;
-            case OvervoltageCategory::OVC_III: j = "OVC-III"; break;
-            case OvervoltageCategory::OVC_IV: j = "OVC-IV"; break;
+            case OvervoltageCategory::I: j = "I"; break;
+            case OvervoltageCategory::II: j = "II"; break;
+            case OvervoltageCategory::III: j = "III"; break;
+            case OvervoltageCategory::IV: j = "IV"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, PollutionDegree & x) {
-        if (j == "P1") x = PollutionDegree::P1;
-        else if (j == "P2") x = PollutionDegree::P2;
-        else if (j == "P3") x = PollutionDegree::P3;
+        if (j == "PD1") x = PollutionDegree::PD1;
+        else if (j == "PD2") x = PollutionDegree::PD2;
+        else if (j == "PD3") x = PollutionDegree::PD3;
+        else if (j == "PD4") x = PollutionDegree::PD4;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const PollutionDegree & x) {
         switch (x) {
-            case PollutionDegree::P1: j = "P1"; break;
-            case PollutionDegree::P2: j = "P2"; break;
-            case PollutionDegree::P3: j = "P3"; break;
+            case PollutionDegree::PD1: j = "PD1"; break;
+            case PollutionDegree::PD2: j = "PD2"; break;
+            case PollutionDegree::PD3: j = "PD3"; break;
+            case PollutionDegree::PD4: j = "PD4"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -11667,94 +11799,94 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, Market & x) {
-        if (j == "Commercial") x = Market::COMMERCIAL;
-        else if (j == "Industrial") x = Market::INDUSTRIAL;
-        else if (j == "Medical") x = Market::MEDICAL;
-        else if (j == "Military") x = Market::MILITARY;
-        else if (j == "Space") x = Market::SPACE;
+        if (j == "commercial") x = Market::COMMERCIAL;
+        else if (j == "industrial") x = Market::INDUSTRIAL;
+        else if (j == "medical") x = Market::MEDICAL;
+        else if (j == "military") x = Market::MILITARY;
+        else if (j == "space") x = Market::SPACE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const Market & x) {
         switch (x) {
-            case Market::COMMERCIAL: j = "Commercial"; break;
-            case Market::INDUSTRIAL: j = "Industrial"; break;
-            case Market::MEDICAL: j = "Medical"; break;
-            case Market::MILITARY: j = "Military"; break;
-            case Market::SPACE: j = "Space"; break;
+            case Market::COMMERCIAL: j = "commercial"; break;
+            case Market::INDUSTRIAL: j = "industrial"; break;
+            case Market::MEDICAL: j = "medical"; break;
+            case Market::MILITARY: j = "military"; break;
+            case Market::SPACE: j = "space"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, SubApplication & x) {
-        if (j == "Common Mode Noise Filtering") x = SubApplication::COMMON_MODE_NOISE_FILTERING;
-        else if (j == "Differential Mode Noise Filtering") x = SubApplication::DIFFERENTIAL_MODE_NOISE_FILTERING;
-        else if (j == "Isolation") x = SubApplication::ISOLATION;
-        else if (j == "Power Filtering") x = SubApplication::POWER_FILTERING;
-        else if (j == "Transforming") x = SubApplication::TRANSFORMING;
+        if (j == "commonModeNoiseFiltering") x = SubApplication::COMMON_MODE_NOISE_FILTERING;
+        else if (j == "differentialModeNoiseFiltering") x = SubApplication::DIFFERENTIAL_MODE_NOISE_FILTERING;
+        else if (j == "isolation") x = SubApplication::ISOLATION;
+        else if (j == "powerFiltering") x = SubApplication::POWER_FILTERING;
+        else if (j == "transforming") x = SubApplication::TRANSFORMING;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const SubApplication & x) {
         switch (x) {
-            case SubApplication::COMMON_MODE_NOISE_FILTERING: j = "Common Mode Noise Filtering"; break;
-            case SubApplication::DIFFERENTIAL_MODE_NOISE_FILTERING: j = "Differential Mode Noise Filtering"; break;
-            case SubApplication::ISOLATION: j = "Isolation"; break;
-            case SubApplication::POWER_FILTERING: j = "Power Filtering"; break;
-            case SubApplication::TRANSFORMING: j = "Transforming"; break;
+            case SubApplication::COMMON_MODE_NOISE_FILTERING: j = "commonModeNoiseFiltering"; break;
+            case SubApplication::DIFFERENTIAL_MODE_NOISE_FILTERING: j = "differentialModeNoiseFiltering"; break;
+            case SubApplication::ISOLATION: j = "isolation"; break;
+            case SubApplication::POWER_FILTERING: j = "powerFiltering"; break;
+            case SubApplication::TRANSFORMING: j = "transforming"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, ConnectionType & x) {
-        if (j == "Flying Lead") x = ConnectionType::FLYING_LEAD;
-        else if (j == "PCB Pad") x = ConnectionType::PCB_PAD;
-        else if (j == "Pin") x = ConnectionType::PIN;
-        else if (j == "Screw") x = ConnectionType::SCREW;
-        else if (j == "SMT") x = ConnectionType::SMT;
-        else if (j == "THT") x = ConnectionType::THT;
+        if (j == "flyingLead") x = ConnectionType::FLYING_LEAD;
+        else if (j == "pcbPad") x = ConnectionType::PCB_PAD;
+        else if (j == "pin") x = ConnectionType::PIN;
+        else if (j == "screw") x = ConnectionType::SCREW;
+        else if (j == "smt") x = ConnectionType::SMT;
+        else if (j == "tht") x = ConnectionType::THT;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const ConnectionType & x) {
         switch (x) {
-            case ConnectionType::FLYING_LEAD: j = "Flying Lead"; break;
-            case ConnectionType::PCB_PAD: j = "PCB Pad"; break;
-            case ConnectionType::PIN: j = "Pin"; break;
-            case ConnectionType::SCREW: j = "Screw"; break;
-            case ConnectionType::SMT: j = "SMT"; break;
-            case ConnectionType::THT: j = "THT"; break;
+            case ConnectionType::FLYING_LEAD: j = "flyingLead"; break;
+            case ConnectionType::PCB_PAD: j = "pcbPad"; break;
+            case ConnectionType::PIN: j = "pin"; break;
+            case ConnectionType::SCREW: j = "screw"; break;
+            case ConnectionType::SMT: j = "smt"; break;
+            case ConnectionType::THT: j = "tht"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, Topologies & x) {
         static std::unordered_map<std::string, Topologies> enumValues {
-            {"Active Clamp Forward Converter", Topologies::ACTIVE_CLAMP_FORWARD_CONVERTER},
-            {"Boost Converter", Topologies::BOOST_CONVERTER},
-            {"Buck Converter", Topologies::BUCK_CONVERTER},
-            {"CLLC Resonant Converter", Topologies::CLLC_RESONANT_CONVERTER},
-            {"Common Mode Choke", Topologies::COMMON_MODE_CHOKE},
-            {"Cuk Converter", Topologies::CUK_CONVERTER},
-            {"Current Transformer", Topologies::CURRENT_TRANSFORMER},
-            {"Differential Mode Choke", Topologies::DIFFERENTIAL_MODE_CHOKE},
-            {"Dual Active Bridge Converter", Topologies::DUAL_ACTIVE_BRIDGE_CONVERTER},
-            {"Flyback Converter", Topologies::FLYBACK_CONVERTER},
-            {"Full-Bridge Converter", Topologies::FULL_BRIDGE_CONVERTER},
-            {"Half-Bridge Converter", Topologies::HALF_BRIDGE_CONVERTER},
-            {"Inverting Buck-Boost Converter", Topologies::INVERTING_BUCK_BOOST_CONVERTER},
-            {"Isolated Buck-Boost Converter", Topologies::ISOLATED_BUCK_BOOST_CONVERTER},
-            {"Isolated Buck Converter", Topologies::ISOLATED_BUCK_CONVERTER},
-            {"LLC Resonant Converter", Topologies::LLC_RESONANT_CONVERTER},
-            {"Phase-Shifted Full-Bridge Converter", Topologies::PHASE_SHIFTED_FULL_BRIDGE_CONVERTER},
-            {"Phase-Shifted Half-Bridge Converter", Topologies::PHASE_SHIFTED_HALF_BRIDGE_CONVERTER},
-            {"Power Factor Correction", Topologies::POWER_FACTOR_CORRECTION},
-            {"Push-Pull Converter", Topologies::PUSH_PULL_CONVERTER},
+            {"activeClampForwardConverter", Topologies::ACTIVE_CLAMP_FORWARD_CONVERTER},
+            {"boostConverter", Topologies::BOOST_CONVERTER},
+            {"buckConverter", Topologies::BUCK_CONVERTER},
+            {"cllcResonantConverter", Topologies::CLLC_RESONANT_CONVERTER},
+            {"commonModeChoke", Topologies::COMMON_MODE_CHOKE},
+            {"cukConverter", Topologies::CUK_CONVERTER},
+            {"currentTransformer", Topologies::CURRENT_TRANSFORMER},
+            {"differentialModeChoke", Topologies::DIFFERENTIAL_MODE_CHOKE},
+            {"dualActiveBridgeConverter", Topologies::DUAL_ACTIVE_BRIDGE_CONVERTER},
+            {"flybackConverter", Topologies::FLYBACK_CONVERTER},
+            {"fullBridgeConverter", Topologies::FULL_BRIDGE_CONVERTER},
+            {"halfBridgeConverter", Topologies::HALF_BRIDGE_CONVERTER},
+            {"invertingBuckBoostConverter", Topologies::INVERTING_BUCK_BOOST_CONVERTER},
+            {"isolatedBuckBoostConverter", Topologies::ISOLATED_BUCK_BOOST_CONVERTER},
+            {"isolatedBuckConverter", Topologies::ISOLATED_BUCK_CONVERTER},
+            {"llcResonantConverter", Topologies::LLC_RESONANT_CONVERTER},
+            {"phaseShiftedFullBridgeConverter", Topologies::PHASE_SHIFTED_FULL_BRIDGE_CONVERTER},
+            {"phaseShiftedHalfBridgeConverter", Topologies::PHASE_SHIFTED_HALF_BRIDGE_CONVERTER},
+            {"powerFactorCorrection", Topologies::POWER_FACTOR_CORRECTION},
+            {"pushPullConverter", Topologies::PUSH_PULL_CONVERTER},
             {"SEPIC", Topologies::SEPIC},
-            {"Single Switch Forward Converter", Topologies::SINGLE_SWITCH_FORWARD_CONVERTER},
-            {"Two Switch Forward Converter", Topologies::TWO_SWITCH_FORWARD_CONVERTER},
-            {"Weinberg Converter", Topologies::WEINBERG_CONVERTER},
-            {"Zeta Converter", Topologies::ZETA_CONVERTER},
+            {"singleSwitchForwardConverter", Topologies::SINGLE_SWITCH_FORWARD_CONVERTER},
+            {"twoSwitchForwardConverter", Topologies::TWO_SWITCH_FORWARD_CONVERTER},
+            {"weinbergConverter", Topologies::WEINBERG_CONVERTER},
+            {"zetaConverter", Topologies::ZETA_CONVERTER},
         };
         auto iter = enumValues.find(j.get<std::string>());
         if (iter != enumValues.end()) {
@@ -11764,49 +11896,49 @@ namespace MAS {
 
     inline void to_json(json & j, const Topologies & x) {
         switch (x) {
-            case Topologies::ACTIVE_CLAMP_FORWARD_CONVERTER: j = "Active Clamp Forward Converter"; break;
-            case Topologies::BOOST_CONVERTER: j = "Boost Converter"; break;
-            case Topologies::BUCK_CONVERTER: j = "Buck Converter"; break;
-            case Topologies::CLLC_RESONANT_CONVERTER: j = "CLLC Resonant Converter"; break;
-            case Topologies::COMMON_MODE_CHOKE: j = "Common Mode Choke"; break;
-            case Topologies::CUK_CONVERTER: j = "Cuk Converter"; break;
-            case Topologies::CURRENT_TRANSFORMER: j = "Current Transformer"; break;
-            case Topologies::DIFFERENTIAL_MODE_CHOKE: j = "Differential Mode Choke"; break;
-            case Topologies::DUAL_ACTIVE_BRIDGE_CONVERTER: j = "Dual Active Bridge Converter"; break;
-            case Topologies::FLYBACK_CONVERTER: j = "Flyback Converter"; break;
-            case Topologies::FULL_BRIDGE_CONVERTER: j = "Full-Bridge Converter"; break;
-            case Topologies::HALF_BRIDGE_CONVERTER: j = "Half-Bridge Converter"; break;
-            case Topologies::INVERTING_BUCK_BOOST_CONVERTER: j = "Inverting Buck-Boost Converter"; break;
-            case Topologies::ISOLATED_BUCK_BOOST_CONVERTER: j = "Isolated Buck-Boost Converter"; break;
-            case Topologies::ISOLATED_BUCK_CONVERTER: j = "Isolated Buck Converter"; break;
-            case Topologies::LLC_RESONANT_CONVERTER: j = "LLC Resonant Converter"; break;
-            case Topologies::PHASE_SHIFTED_FULL_BRIDGE_CONVERTER: j = "Phase-Shifted Full-Bridge Converter"; break;
-            case Topologies::PHASE_SHIFTED_HALF_BRIDGE_CONVERTER: j = "Phase-Shifted Half-Bridge Converter"; break;
-            case Topologies::POWER_FACTOR_CORRECTION: j = "Power Factor Correction"; break;
-            case Topologies::PUSH_PULL_CONVERTER: j = "Push-Pull Converter"; break;
+            case Topologies::ACTIVE_CLAMP_FORWARD_CONVERTER: j = "activeClampForwardConverter"; break;
+            case Topologies::BOOST_CONVERTER: j = "boostConverter"; break;
+            case Topologies::BUCK_CONVERTER: j = "buckConverter"; break;
+            case Topologies::CLLC_RESONANT_CONVERTER: j = "cllcResonantConverter"; break;
+            case Topologies::COMMON_MODE_CHOKE: j = "commonModeChoke"; break;
+            case Topologies::CUK_CONVERTER: j = "cukConverter"; break;
+            case Topologies::CURRENT_TRANSFORMER: j = "currentTransformer"; break;
+            case Topologies::DIFFERENTIAL_MODE_CHOKE: j = "differentialModeChoke"; break;
+            case Topologies::DUAL_ACTIVE_BRIDGE_CONVERTER: j = "dualActiveBridgeConverter"; break;
+            case Topologies::FLYBACK_CONVERTER: j = "flybackConverter"; break;
+            case Topologies::FULL_BRIDGE_CONVERTER: j = "fullBridgeConverter"; break;
+            case Topologies::HALF_BRIDGE_CONVERTER: j = "halfBridgeConverter"; break;
+            case Topologies::INVERTING_BUCK_BOOST_CONVERTER: j = "invertingBuckBoostConverter"; break;
+            case Topologies::ISOLATED_BUCK_BOOST_CONVERTER: j = "isolatedBuckBoostConverter"; break;
+            case Topologies::ISOLATED_BUCK_CONVERTER: j = "isolatedBuckConverter"; break;
+            case Topologies::LLC_RESONANT_CONVERTER: j = "llcResonantConverter"; break;
+            case Topologies::PHASE_SHIFTED_FULL_BRIDGE_CONVERTER: j = "phaseShiftedFullBridgeConverter"; break;
+            case Topologies::PHASE_SHIFTED_HALF_BRIDGE_CONVERTER: j = "phaseShiftedHalfBridgeConverter"; break;
+            case Topologies::POWER_FACTOR_CORRECTION: j = "powerFactorCorrection"; break;
+            case Topologies::PUSH_PULL_CONVERTER: j = "pushPullConverter"; break;
             case Topologies::SEPIC: j = "SEPIC"; break;
-            case Topologies::SINGLE_SWITCH_FORWARD_CONVERTER: j = "Single Switch Forward Converter"; break;
-            case Topologies::TWO_SWITCH_FORWARD_CONVERTER: j = "Two Switch Forward Converter"; break;
-            case Topologies::WEINBERG_CONVERTER: j = "Weinberg Converter"; break;
-            case Topologies::ZETA_CONVERTER: j = "Zeta Converter"; break;
+            case Topologies::SINGLE_SWITCH_FORWARD_CONVERTER: j = "singleSwitchForwardConverter"; break;
+            case Topologies::TWO_SWITCH_FORWARD_CONVERTER: j = "twoSwitchForwardConverter"; break;
+            case Topologies::WEINBERG_CONVERTER: j = "weinbergConverter"; break;
+            case Topologies::ZETA_CONVERTER: j = "zetaConverter"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, WiringTechnology & x) {
-        if (j == "Deposition") x = WiringTechnology::DEPOSITION;
-        else if (j == "Printed") x = WiringTechnology::PRINTED;
-        else if (j == "Stamped") x = WiringTechnology::STAMPED;
-        else if (j == "Wound") x = WiringTechnology::WOUND;
+        if (j == "deposition") x = WiringTechnology::DEPOSITION;
+        else if (j == "printed") x = WiringTechnology::PRINTED;
+        else if (j == "stamped") x = WiringTechnology::STAMPED;
+        else if (j == "wound") x = WiringTechnology::WOUND;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const WiringTechnology & x) {
         switch (x) {
-            case WiringTechnology::DEPOSITION: j = "Deposition"; break;
-            case WiringTechnology::PRINTED: j = "Printed"; break;
-            case WiringTechnology::STAMPED: j = "Stamped"; break;
-            case WiringTechnology::WOUND: j = "Wound"; break;
+            case WiringTechnology::DEPOSITION: j = "deposition"; break;
+            case WiringTechnology::PRINTED: j = "printed"; break;
+            case WiringTechnology::STAMPED: j = "stamped"; break;
+            case WiringTechnology::WOUND: j = "wound"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -11959,8 +12091,8 @@ namespace MAS {
 
     inline void from_json(const json & j, CoilAlignment & x) {
         if (j == "centered") x = CoilAlignment::CENTERED;
-        else if (j == "inner or top") x = CoilAlignment::INNER_OR_TOP;
-        else if (j == "outer or bottom") x = CoilAlignment::OUTER_OR_BOTTOM;
+        else if (j == "innerOrTop") x = CoilAlignment::INNER_OR_TOP;
+        else if (j == "outerOrBottom") x = CoilAlignment::OUTER_OR_BOTTOM;
         else if (j == "spread") x = CoilAlignment::SPREAD;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
@@ -11968,8 +12100,8 @@ namespace MAS {
     inline void to_json(json & j, const CoilAlignment & x) {
         switch (x) {
             case CoilAlignment::CENTERED: j = "centered"; break;
-            case CoilAlignment::INNER_OR_TOP: j = "inner or top"; break;
-            case CoilAlignment::OUTER_OR_BOTTOM: j = "outer or bottom"; break;
+            case CoilAlignment::INNER_OR_TOP: j = "innerOrTop"; break;
+            case CoilAlignment::OUTER_OR_BOTTOM: j = "outerOrBottom"; break;
             case CoilAlignment::SPREAD: j = "spread"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
@@ -12181,14 +12313,16 @@ namespace MAS {
         }
     }
 
-    inline void from_json(const json & j, MassCoreLossesMethodType & x) {
-        if (j == "magnetec") x = MassCoreLossesMethodType::MAGNETEC;
+    inline void from_json(const json & j, CoreLossesMethodType & x) {
+        if (j == "custom") x = CoreLossesMethodType::CUSTOM;
+        else if (j == "magnetec") x = CoreLossesMethodType::MAGNETEC;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
-    inline void to_json(json & j, const MassCoreLossesMethodType & x) {
+    inline void to_json(json & j, const CoreLossesMethodType & x) {
         switch (x) {
-            case MassCoreLossesMethodType::MAGNETEC: j = "magnetec"; break;
+            case CoreLossesMethodType::CUSTOM: j = "custom"; break;
+            case CoreLossesMethodType::MAGNETEC: j = "magnetec"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -12214,33 +12348,33 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, MaterialComposition & x) {
-        if (j == "Carbonyl Iron") x = MaterialComposition::CARBONYL_IRON;
+        if (j == "carbonylIron") x = MaterialComposition::CARBONYL_IRON;
         else if (j == "FeMo") x = MaterialComposition::FE_MO;
         else if (j == "FeNi") x = MaterialComposition::FE_NI;
         else if (j == "FeNiMo") x = MaterialComposition::FE_NI_MO;
         else if (j == "FeSi") x = MaterialComposition::FE_SI;
         else if (j == "FeSiAl") x = MaterialComposition::FE_SI_AL;
-        else if (j == "Iron") x = MaterialComposition::IRON;
+        else if (j == "iron") x = MaterialComposition::IRON;
         else if (j == "MgZn") x = MaterialComposition::MG_ZN;
         else if (j == "MnZn") x = MaterialComposition::MN_ZN;
         else if (j == "NiZn") x = MaterialComposition::NI_ZN;
-        else if (j == "Proprietary") x = MaterialComposition::PROPRIETARY;
+        else if (j == "proprietary") x = MaterialComposition::PROPRIETARY;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const MaterialComposition & x) {
         switch (x) {
-            case MaterialComposition::CARBONYL_IRON: j = "Carbonyl Iron"; break;
+            case MaterialComposition::CARBONYL_IRON: j = "carbonylIron"; break;
             case MaterialComposition::FE_MO: j = "FeMo"; break;
             case MaterialComposition::FE_NI: j = "FeNi"; break;
             case MaterialComposition::FE_NI_MO: j = "FeNiMo"; break;
             case MaterialComposition::FE_SI: j = "FeSi"; break;
             case MaterialComposition::FE_SI_AL: j = "FeSiAl"; break;
-            case MaterialComposition::IRON: j = "Iron"; break;
+            case MaterialComposition::IRON: j = "iron"; break;
             case MaterialComposition::MG_ZN: j = "MgZn"; break;
             case MaterialComposition::MN_ZN: j = "MnZn"; break;
             case MaterialComposition::NI_ZN: j = "NiZn"; break;
-            case MaterialComposition::PROPRIETARY: j = "Proprietary"; break;
+            case MaterialComposition::PROPRIETARY: j = "proprietary"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -12280,7 +12414,8 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, VolumetricCoreLossesMethodType & x) {
-        if (j == "lossFactor") x = VolumetricCoreLossesMethodType::LOSS_FACTOR;
+        if (j == "custom") x = VolumetricCoreLossesMethodType::CUSTOM;
+        else if (j == "lossFactor") x = VolumetricCoreLossesMethodType::LOSS_FACTOR;
         else if (j == "magnetics") x = VolumetricCoreLossesMethodType::MAGNETICS;
         else if (j == "micrometals") x = VolumetricCoreLossesMethodType::MICROMETALS;
         else if (j == "poco") x = VolumetricCoreLossesMethodType::POCO;
@@ -12292,6 +12427,7 @@ namespace MAS {
 
     inline void to_json(json & j, const VolumetricCoreLossesMethodType & x) {
         switch (x) {
+            case VolumetricCoreLossesMethodType::CUSTOM: j = "custom"; break;
             case VolumetricCoreLossesMethodType::LOSS_FACTOR: j = "lossFactor"; break;
             case VolumetricCoreLossesMethodType::MAGNETICS: j = "magnetics"; break;
             case VolumetricCoreLossesMethodType::MICROMETALS: j = "micrometals"; break;
@@ -12321,9 +12457,9 @@ namespace MAS {
             {"h", CoreShapeFamily::H},
             {"lp", CoreShapeFamily::LP},
             {"p", CoreShapeFamily::P},
-            {"planar e", CoreShapeFamily::PLANAR_E},
-            {"planar el", CoreShapeFamily::PLANAR_EL},
-            {"planar er", CoreShapeFamily::PLANAR_ER},
+            {"planarE", CoreShapeFamily::PLANAR_E},
+            {"planarEL", CoreShapeFamily::PLANAR_EL},
+            {"planarER", CoreShapeFamily::PLANAR_ER},
             {"pm", CoreShapeFamily::PM},
             {"pq", CoreShapeFamily::PQ},
             {"pqi", CoreShapeFamily::PQI},
@@ -12359,9 +12495,9 @@ namespace MAS {
             case CoreShapeFamily::H: j = "h"; break;
             case CoreShapeFamily::LP: j = "lp"; break;
             case CoreShapeFamily::P: j = "p"; break;
-            case CoreShapeFamily::PLANAR_E: j = "planar e"; break;
-            case CoreShapeFamily::PLANAR_EL: j = "planar el"; break;
-            case CoreShapeFamily::PLANAR_ER: j = "planar er"; break;
+            case CoreShapeFamily::PLANAR_E: j = "planarE"; break;
+            case CoreShapeFamily::PLANAR_EL: j = "planarEL"; break;
+            case CoreShapeFamily::PLANAR_ER: j = "planarER"; break;
             case CoreShapeFamily::PM: j = "pm"; break;
             case CoreShapeFamily::PQ: j = "pq"; break;
             case CoreShapeFamily::PQI: j = "pqi"; break;
@@ -12391,26 +12527,26 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, CoreType & x) {
-        if (j == "closed shape") x = CoreType::CLOSED_SHAPE;
-        else if (j == "piece and plate") x = CoreType::PIECE_AND_PLATE;
+        if (j == "closedShape") x = CoreType::CLOSED_SHAPE;
+        else if (j == "pieceAndPlate") x = CoreType::PIECE_AND_PLATE;
         else if (j == "toroidal") x = CoreType::TOROIDAL;
-        else if (j == "two-piece set") x = CoreType::TWO_PIECE_SET;
+        else if (j == "twoPieceSet") x = CoreType::TWO_PIECE_SET;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const CoreType & x) {
         switch (x) {
-            case CoreType::CLOSED_SHAPE: j = "closed shape"; break;
-            case CoreType::PIECE_AND_PLATE: j = "piece and plate"; break;
+            case CoreType::CLOSED_SHAPE: j = "closedShape"; break;
+            case CoreType::PIECE_AND_PLATE: j = "pieceAndPlate"; break;
             case CoreType::TOROIDAL: j = "toroidal"; break;
-            case CoreType::TWO_PIECE_SET: j = "two-piece set"; break;
+            case CoreType::TWO_PIECE_SET: j = "twoPieceSet"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, CoreGeometricalDescriptionElementType & x) {
         if (j == "closed") x = CoreGeometricalDescriptionElementType::CLOSED;
-        else if (j == "half set") x = CoreGeometricalDescriptionElementType::HALF_SET;
+        else if (j == "halfSet") x = CoreGeometricalDescriptionElementType::HALF_SET;
         else if (j == "plate") x = CoreGeometricalDescriptionElementType::PLATE;
         else if (j == "sheet") x = CoreGeometricalDescriptionElementType::SHEET;
         else if (j == "spacer") x = CoreGeometricalDescriptionElementType::SPACER;
@@ -12421,7 +12557,7 @@ namespace MAS {
     inline void to_json(json & j, const CoreGeometricalDescriptionElementType & x) {
         switch (x) {
             case CoreGeometricalDescriptionElementType::CLOSED: j = "closed"; break;
-            case CoreGeometricalDescriptionElementType::HALF_SET: j = "half set"; break;
+            case CoreGeometricalDescriptionElementType::HALF_SET: j = "halfSet"; break;
             case CoreGeometricalDescriptionElementType::PLATE: j = "plate"; break;
             case CoreGeometricalDescriptionElementType::SHEET: j = "sheet"; break;
             case CoreGeometricalDescriptionElementType::SPACER: j = "spacer"; break;
@@ -12440,26 +12576,6 @@ namespace MAS {
         switch (x) {
             case ColumnType::CENTRAL: j = "central"; break;
             case ColumnType::LATERAL: j = "lateral"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
-        }
-    }
-
-    inline void from_json(const json & j, InsulationGrade & x) {
-        if (j == "basic") x = InsulationGrade::BASIC;
-        else if (j == "double") x = InsulationGrade::DOUBLE;
-        else if (j == "functional") x = InsulationGrade::FUNCTIONAL;
-        else if (j == "reinforced") x = InsulationGrade::REINFORCED;
-        else if (j == "supplementary") x = InsulationGrade::SUPPLEMENTARY;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
-    }
-
-    inline void to_json(json & j, const InsulationGrade & x) {
-        switch (x) {
-            case InsulationGrade::BASIC: j = "basic"; break;
-            case InsulationGrade::DOUBLE: j = "double"; break;
-            case InsulationGrade::FUNCTIONAL: j = "functional"; break;
-            case InsulationGrade::REINFORCED: j = "reinforced"; break;
-            case InsulationGrade::SUPPLEMENTARY: j = "supplementary"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -12511,6 +12627,26 @@ namespace MAS {
     }
 }
 namespace nlohmann {
+    inline void adl_serializer<std::variant<MAS::ImpedancePoint, double>>::from_json(const json & j, std::variant<MAS::ImpedancePoint, double> & x) {
+        if (j.is_number())
+            x = j.get<double>();
+        else if (j.is_object())
+            x = j.get<MAS::ImpedancePoint>();
+        else throw std::runtime_error("Could not deserialise!");
+    }
+
+    inline void adl_serializer<std::variant<MAS::ImpedancePoint, double>>::to_json(json & j, const std::variant<MAS::ImpedancePoint, double> & x) {
+        switch (x.index()) {
+            case 0:
+                j = std::get<MAS::ImpedancePoint>(x);
+                break;
+            case 1:
+                j = std::get<double>(x);
+                break;
+            default: throw std::runtime_error("Input JSON does not conform to schema!");
+        }
+    }
+
     inline void adl_serializer<std::variant<MAS::DimensionWithTolerance, double>>::from_json(const json & j, std::variant<MAS::DimensionWithTolerance, double> & x) {
         if (j.is_number())
             x = j.get<double>();
@@ -12711,21 +12847,21 @@ namespace nlohmann {
         }
     }
 
-    inline void adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData>>::from_json(const json & j, std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData> & x) {
+    inline void adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass>>::from_json(const json & j, std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass> & x) {
         if (j.is_object())
-            x = j.get<MAS::MagnetecCoreLossesMethodData>();
+            x = j.get<MAS::MagnetecCoreLossesMethodDataClass>();
         else if (j.is_array())
             x = j.get<std::vector<MAS::MassLossesPoint>>();
         else throw std::runtime_error("Could not deserialise!");
     }
 
-    inline void adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData>>::to_json(json & j, const std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodData> & x) {
+    inline void adl_serializer<std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass>>::to_json(json & j, const std::variant<std::vector<MAS::MassLossesPoint>, MAS::MagnetecCoreLossesMethodDataClass> & x) {
         switch (x.index()) {
             case 0:
                 j = std::get<std::vector<MAS::MassLossesPoint>>(x);
                 break;
             case 1:
-                j = std::get<MAS::MagnetecCoreLossesMethodData>(x);
+                j = std::get<MAS::MagnetecCoreLossesMethodDataClass>(x);
                 break;
             default: throw std::runtime_error("Input JSON does not conform to schema!");
         }
@@ -12751,21 +12887,21 @@ namespace nlohmann {
         }
     }
 
-    inline void adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData>>::from_json(const json & j, std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData> & x) {
+    inline void adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass>>::from_json(const json & j, std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass> & x) {
         if (j.is_object())
-            x = j.get<MAS::CoreLossesMethodData>();
+            x = j.get<MAS::SteinmetzCoreLossesMethodDataClass>();
         else if (j.is_array())
             x = j.get<std::vector<MAS::VolumetricLossesPoint>>();
         else throw std::runtime_error("Could not deserialise!");
     }
 
-    inline void adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData>>::to_json(json & j, const std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::CoreLossesMethodData> & x) {
+    inline void adl_serializer<std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass>>::to_json(json & j, const std::variant<std::vector<MAS::VolumetricLossesPoint>, MAS::SteinmetzCoreLossesMethodDataClass> & x) {
         switch (x.index()) {
             case 0:
                 j = std::get<std::vector<MAS::VolumetricLossesPoint>>(x);
                 break;
             case 1:
-                j = std::get<MAS::CoreLossesMethodData>(x);
+                j = std::get<MAS::SteinmetzCoreLossesMethodDataClass>(x);
                 break;
             default: throw std::runtime_error("Input JSON does not conform to schema!");
         }
