@@ -53,67 +53,51 @@
             "title": "flybackModes",
             "type": "string",
             "enum": [
-                "Continuous Conduction Mode",
-                "Discontinuous Conduction Mode",
-                "Quasi Resonant Mode",
-                "Boundary Mode Operation"
+                "continuousConductionMode",
+                "discontinuousConductionMode",
+                "quasiResonantMode",
+                "boundaryModeOperation"
             ]
         },
         "flybackOperatingPoint": {
-            "description": "The description of one flyback operating point",
+            "description": "The description of one flyback operating point. Flyback does not require switchingFrequency at the schema level: when omitted, it is inferred from the conduction mode, see docs/inputs.md.",
             "title": "flybackOperatingPoint",
             "type": "object",
             "properties": {
                 "outputVoltages": {
-                    "description": "A list of output voltages, one per output",
+                    "description": "List of output voltages, one per output. Interpreted per outputVoltagesType (default: dc).",
                     "type": "array",
-                    "items": {
-                        "type": "number"
-                    },
+                    "items": { "type": "number" },
                     "minItems": 1
                 },
                 "outputVoltagesType": {
-                    "description": "Type of value carried in outputVoltages: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02.",
+                    "description": "Type of value carried in outputVoltages. Defaults to dc.",
                     "type": "string",
-                    "enum": [
-                        "dc",
-                        "rms",
-                        "peak",
-                        "peakToPeak",
-                        "average"
-                    ],
+                    "enum": ["dc", "rms", "peak", "peakToPeak", "average"],
                     "default": "dc"
                 },
                 "outputCurrents": {
-                    "description": "A list of output currents, one per output",
+                    "description": "List of output currents, one per output. Interpreted per outputCurrentsType (default: dc).",
                     "type": "array",
-                    "items": {
-                        "type": "number"
-                    },
+                    "items": { "type": "number" },
                     "minItems": 1
                 },
                 "outputCurrentsType": {
-                    "description": "Type of value carried in outputCurrents: which aggregate of the periodic waveform the number represents. Defaults to dc. See IEV 103-02.",
+                    "description": "Type of value carried in outputCurrents. Defaults to dc.",
                     "type": "string",
-                    "enum": [
-                        "dc",
-                        "rms",
-                        "peak",
-                        "peakToPeak",
-                        "average"
-                    ],
+                    "enum": ["dc", "rms", "peak", "peakToPeak", "average"],
                     "default": "dc"
                 },
                 "switchingFrequency": {
-                    "description": "The switching frequency of the operating point",
+                    "description": "Switching frequency of the operating point. Unit: Hz. Optional for flyback when mode is supplied.",
                     "type": "number"
                 },
                 "mode": {
-                    "description": "The mode of the operating point",
+                    "description": "The conduction mode of the operating point.",
                     "$ref": "#/$defs/flybackModes"
                 },
                 "ambientTemperature": {
-                    "description": "The ambient temperature of the operating point",
+                    "description": "Ambient temperature of the operating point. Unit: Celsius.",
                     "type": "number"
                 }
             },

@@ -8,7 +8,7 @@
     "$defs": {
         "baseOperatingPoint": {
             "description": "Base fields common to all topology operating points",
-            "title": "baseOperatingPoint",
+            "title": "topologyExcitation",
             "type": "object",
             "properties": {
                 "outputVoltages": {
