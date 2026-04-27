@@ -1,10 +1,13 @@
 # MAS Schema Documentation
 
+> **Informative.** This document is a structural guide to the MAS JSON
+> Schema; it does not add normative requirements. For the normative
+> units table see [`units.md`](units.md); for the mapping of MAS to
+> existing standards (IEC, ASTM, MPIF, JIS, NEMA, IEV vocabulary) see
+> [`normative-references.md`](normative-references.md).
+
 This document describes the JSON Schema structure for MAS (Magnetic
-Agnostic Structure). For unit conventions see [`units.md`](units.md);
-for the mapping of MAS to existing IEC / ASTM / MPIF / JIS / NEMA
-standards and IEV vocabulary see
-[`normative-references.md`](normative-references.md).
+Agnostic Structure).
 
 ## Schema Hierarchy
 
@@ -124,39 +127,49 @@ MAS.json (root)
 - `"distributed"` - Air gap distributed in magnetic path
 
 ### Waveform Labels
-- `"Triangular"` - Standard triangular wave
-- `"Rectangular"` - Square/rectangular wave
-- `"Sinusoidal"` - Sine wave
-- `"Flyback Primary"` - Flyback primary current shape
-- `"Flyback Secondary"` - Flyback secondary current shape
-- `"Custom"` - User-defined with data points
+- `"triangular"` - Triangular wave (inductor current)
+- `"rectangular"` - Rectangular/square wave
+- `"sinusoidal"` - Sine wave
+- `"flybackPrimary"` - Flyback primary current shape
+- `"flybackSecondary"` - Flyback secondary current shape
+- `"custom"` - User-defined with data points
 
-### Insulation Types
-- `"Functional"` - Basic operation only
-- `"Basic"` - Single level of protection
-- `"Supplementary"` - Additional protection
-- `"Double"` - Basic + Supplementary
-- `"Reinforced"` - Single system equivalent to double
+### Insulation Types (IEC 60664-1 §4.1)
+- `"functional"` - Basic operation only, no protection against shock
+- `"basic"` - Single level of protection against electric shock
+- `"supplementary"` - Independent insulation additional to basic
+- `"double"` - Basic insulation plus supplementary insulation
+- `"reinforced"` - Single insulation system equivalent to double
 
-### Overvoltage Categories
-- `"OVC-I"` - Low transient overvoltage
-- `"OVC-II"` - Household appliances
-- `"OVC-III"` - Fixed installation equipment
-- `"OVC-IV"` - Equipment at origin of installation
+### Overvoltage Categories (IEC 60664-1 §4.3)
+- `"I"` - Low transient overvoltage (protected equipment)
+- `"II"` - Household appliances connected to fixed installation
+- `"III"` - Fixed installation equipment
+- `"IV"` - Equipment at the origin of the installation
+
+### Pollution Degrees (IEC 60664-1 §4.2)
+- `"PD1"` - No pollution or only dry, non-conductive pollution
+- `"PD2"` - Non-conductive pollution; temporary conductivity possible
+- `"PD3"` - Conductive pollution, or dry non-conductive that becomes conductive due to condensation
+- `"PD4"` - Persistent conductive pollution (e.g. conductive dust or rain)
+
+### CTI Groups (IEC 60112)
+- `"groupI"` - CTI ≥ 600
+- `"groupII"` - 400 ≤ CTI < 600
+- `"groupIIIA"` - 175 ≤ CTI < 400
+- `"groupIIIB"` - 100 ≤ CTI < 175
 
 ### Markets
-- `"Commercial"`
-- `"Industrial"`
-- `"Medical"`
-- `"Military"`
-- `"Space"`
+- `"commercial"`, `"industrial"`, `"medical"`, `"military"`, `"space"`
 
 ### Topologies
-- `"Buck"`, `"Boost"`, `"BuckBoost"`
-- `"Flyback"`, `"Forward"`
-- `"PushPull"`, `"HalfBridge"`, `"FullBridge"`
-- `"LLC"`, `"DAB"`
-- `"CurrentTransformer"`, `"CommonModeChoke"`
+- `"buckConverter"`, `"boostConverter"`, `"invertingBuckBoostConverter"`
+- `"flybackConverter"`, `"activeClampForwardConverter"`, `"singleSwitchForwardConverter"`, `"twoSwitchForwardConverter"`
+- `"pushPullConverter"`, `"halfBridgeConverter"`, `"fullBridgeConverter"`
+- `"phaseShiftedFullBridgeConverter"`, `"phaseShiftedHalfBridgeConverter"`
+- `"llcResonantConverter"`, `"cllcResonantConverter"`, `"dualActiveBridgeConverter"`
+- `"currentTransformer"`, `"commonModeChoke"`, `"differentialModeChoke"`
+- `"isolatedBuckConverter"`, `"isolatedBuckBoostConverter"`, `"powerFactorCorrection"`
 
 ## DimensionWithTolerance Pattern
 

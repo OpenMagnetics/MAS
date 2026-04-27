@@ -74,40 +74,34 @@ class Coil {
 }
 
 class MagneticManufacturerInfo {
-    -String cost
-    -String datasheet_url
     -String name
     -String reference
     -String status
-    -MagneticManufacturerRecommendations recommendations;
+    -Cost cost
+    -MagneticDatasheetInfo datasheetInfo
 
     +get_*()
     +set_*()
+}
+class Cost {
+    -Double value
+    -String currency
 }
 class DistributorInfo {
-    -Double cost;
-    -String country;
-    -String distributed_area;
-    -String email;
-    -String link;
-    -String name;
-    -String phone;
-    -Double quantity;
-    -String reference;
-    -String updated_at;
+    -Cost cost
+    -String country
+    -String distributed_area
+    -String email
+    -String link
+    -String name
+    -String phone
+    -Double quantity
+    -String reference
+    -String updated_at
 
     +get_*()
     +set_*()
 }
-MagneticManufacturerInfo ..> MagneticManufacturerRecommendations : Dependency
-
-class MagneticManufacturerRecommendations {
-    -Double rated_current;
-    -Double rated_current_temperature_rise;
-    -Double rated_magnetic_flux;
-
-    +get_*()
-    +set_*()
-}
+MagneticManufacturerInfo ..> Cost : Dependency
 
 ```

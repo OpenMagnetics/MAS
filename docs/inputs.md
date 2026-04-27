@@ -83,39 +83,42 @@ This object must have the following fields:
 * Operating Temperature (optional): Numeric requirement representing the temperature that the magnetic can reach under operating.
 * Insulation requirements (optional): Field needed to calculate the insulation requirements.
     * Altitude (optional): Numeric requirement representing the altitude at which the magnetic will work, in order to calculate insulation requirements.
-    * CTI (optional): Required CTI the magnetic must comply with. It can be one of the following:
-        * Group I
-        * Group II
-        * Group IIIa
-        * Group IIIb
-    * Insulation Type (optional): Required type of insulation. It can be one of the following:
-        * Functional
-        * Basic
-        * Supplementary
-        * Double
-        * Reinforced
-    * Overvoltage Category (optional): Required overvoltage category. It can be one of the following:
-        * OVC-I
-        * OVC-II
-        * OVC-III
-        * OVC-IV
-    * Pollution Degree (optional): Required pollution for the magnetic to work under. It can be one of the following:
-        * P1
-        * P2
-        * P3
+    * CTI (optional): Required Comparative Tracking Index group per IEC 60112. It can be one of the following:
+        * `groupI` — CTI ≥ 600
+        * `groupII` — 400 ≤ CTI < 600
+        * `groupIIIA` — 175 ≤ CTI < 400
+        * `groupIIIB` — 100 ≤ CTI < 175
+    * Insulation Type (optional): Required type of insulation per IEC 60664-1 §4.1. It can be one of the following:
+        * `functional` — Basic operation only
+        * `basic` — Single level of protection against electric shock
+        * `supplementary` — Additional independent insulation
+        * `double` — Basic plus supplementary insulation
+        * `reinforced` — Single insulation system equivalent to double
+    * Overvoltage Category (optional): Required overvoltage category per IEC 60664-1 §4.3. It can be one of the following:
+        * `I` — Protected equipment, low transient overvoltage
+        * `II` — Household appliances connected to fixed installation
+        * `III` — Fixed installation equipment
+        * `IV` — Equipment at origin of installation
+    * Pollution Degree (optional): Required pollution degree per IEC 60664-1 §4.2. It can be one of the following:
+        * `PD1` — No pollution or only dry non-conductive pollution
+        * `PD2` — Non-conductive pollution; occasional condensation
+        * `PD3` — Conductive pollution or dry pollution that becomes conductive
+        * `PD4` — Persistent conductive pollution
 * Market (optional): Market where the magnetic will end up being used. It can be one of the following:
-    *Medical
-    *Commercial
-    *Industrial
-    *Military
-    *Space
-* Maximum Dimension (optional)s: Maximum dimensions, width, height, and depth, for the designed magnetic, in m.
-* Maximum Weight (optional): Maximum weight for the designed magnetic, in Kg.
+    * `medical`
+    * `commercial`
+    * `industrial`
+    * `military`
+    * `space`
+* Maximum Dimensions (optional): Maximum dimensions, width, height, and depth, for the designed magnetic, in m.
+* Maximum Weight (optional): Maximum weight for the designed magnetic, in kg.
 * Terminal Type (optional): Type of the terminal that must be used, per winding. It can be one of the following:
-    *Pin
-    *Screw
-    *SMT
-    *Flyind Lead
+    * `pin`
+    * `screw`
+    * `smt`
+    * `flyingLead`
+    * `tht`
+    * `pcbPad`
 * Topology: Topology that will use the magnetic.
 
 
@@ -349,14 +352,15 @@ The first level of definition is the direct waveform, and contains the following
 * Time (optional): List of numeric values that define the time of each of the data points inside the period.
 
 The second level of definition is the processed data about the waveform, from which the waveform itself can be built back. Additionally, they are designed to quickly provide for the values necessary in most analytical models. It contains the following fields:
-* Label: Label of the waveform, if applicable. Used for common waveforms. If custom, the proper waveform must be defined. It can be one of the following:
-    * Custom 
-    * Triangular 
-    * Square 
-    * Sinusoidal 
-    * Rectangular
-    * Flyback 
-    * Phase-shifted full bridge
+* Label: Label of the waveform, if applicable. Used for common waveforms. If `custom`, the proper waveform must be defined. It can be one of the following:
+    * `custom`
+    * `triangular`
+    * `sinusoidal`
+    * `rectangular`
+    * `unipolarRectangular`, `unipolarTriangular`
+    * `bipolarRectangular`, `bipolarTriangular`
+    * `flybackPrimary`, `flybackSecondary`
+    * `rectangularWithDeadtime`, `rectangularDCM`
 * Duty Cycle: The duty cycle of the waveform, if applicable.
 * Peak To Peak: The peak to peak value of the waveform.
 * Peak: The maximum positive value of the waveform.

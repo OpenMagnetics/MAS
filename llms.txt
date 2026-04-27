@@ -133,11 +133,11 @@ At least one numeric value is required. Use `nominal` for typical values, `minim
 ```json
 {
   "insulation": {
-    "insulationType": "Reinforced",
-    "overvoltageCategory": "OVC-II",
-    "pollutionDegree": "P2",
+    "insulationType": "reinforced",
+    "overvoltageCategory": "II",
+    "pollutionDegree": "PD2",
     "altitude": { "maximum": 2000 },
-    "cti": "Group IIIA"
+    "cti": "groupIIIA"
   }
 }
 ```

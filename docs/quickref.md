@@ -1,8 +1,9 @@
 # MAS Quick Reference
 
-> Companion to the README. For the normative units table see
-> [`units.md`](units.md); for the mapping of MAS to existing standards
-> (IEC, ASTM, MPIF, JIS, NEMA, IEV vocabulary) see
+> **Informative.** This document is a usage guide; it does not add
+> normative requirements to the specification. For the normative units
+> table see [`units.md`](units.md); for the mapping of MAS to existing
+> standards (IEC, ASTM, MPIF, JIS, NEMA, IEV vocabulary) see
 > [`normative-references.md`](normative-references.md).
 
 
