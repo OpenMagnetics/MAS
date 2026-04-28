@@ -102,15 +102,13 @@ build steps, zero source changes required in MKF).
 
 ### Project / governance
 
-- Apache-2.0 license (replaces BSD-4-Clause). Required for the planned
-  PSMA → IEC PAS transposition path.
+- Apache-2.0 license (replaces BSD-4-Clause).
 - New top-level docs: `CHANGELOG.md`, `GOVERNANCE.md`, `CONTRIBUTING.md`,
   `MAINTAINERS.md`, `SECURITY.md`.
-- `README.md` rewritten as a candidate-standard pitch with a status
-  table, scope, normative references, governance trail and history.
-- Stewardship roadmap documented: OpenMagnetics → PSMA Magnetics
-  Committee Working Group → JTC 1 PAS submitter → IEC International
-  Standard.
+- `README.md` rewritten with a status table, scope, normative
+  references, governance trail and history.
+- Stewardship roadmap documented: OpenMagnetics → proposed PSMA
+  Magnetics Committee Working Group.
 
 ### Specification framing
 

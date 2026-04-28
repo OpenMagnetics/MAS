@@ -2,10 +2,9 @@
 
 A vendor-neutral data model for describing magnetic components used in
 power electronics: their design requirements, physical construction, and
-computed performance. MAS is a candidate international standard, on the
-path from incubation at OpenMagnetics through stewardship by the
-[PSMA](https://www.psma.com/) Magnetics Committee toward transposition
-to an [IEC](https://www.iec.ch/) International Standard via JTC 1 PAS.
+computed performance. MAS is incubated at OpenMagnetics and is being
+prepared for transfer to the [PSMA](https://www.psma.com/) Magnetics
+Committee for further stewardship.
 
 ## Status
 
@@ -14,7 +13,7 @@ to an [IEC](https://www.iec.ch/) International Standard via JTC 1 PAS.
 | Specification version | pre-1.0, see [`CHANGELOG.md`](CHANGELOG.md) |
 | Schema dialect | JSON Schema [draft 2020-12](https://json-schema.org/draft/2020-12/release-notes) |
 | Stewardship | OpenMagnetics maintainers (incubation phase) |
-| Roadmap | OpenMagnetics → PSMA Magnetics Committee Working Group → JTC 1 PAS submitter → IEC International Standard. See [`GOVERNANCE.md`](GOVERNANCE.md). |
+| Roadmap | OpenMagnetics → proposed PSMA Magnetics Committee Working Group. See [`GOVERNANCE.md`](GOVERNANCE.md). |
 | License | Apache-2.0 (see [`LICENSE.md`](LICENSE.md)) |
 | Open work items | numbered RFCs under [`proposals/`](proposals/) |
 
@@ -141,8 +140,5 @@ specification through the IPR review that any IEC submission requires.
 MAS began at OpenMagnetics as a working data model for an
 inductor-design tool. As coverage grew it became useful as a
 standalone specification, independent of any one tool. Transfer to the
-PSMA Magnetics Committee is the next step; the eventual destination is
-an IEC International Standard, reached via JTC 1 PAS transposition (the
-same path used by glTF → ISO/IEC 12113 and OpenUSD). Throughout that
-journey the schema lives openly on GitHub under Apache-2.0; the IS
-status is layered on top, not in place of it.
+PSMA Magnetics Committee is the next step. The schema lives openly on
+GitHub under Apache-2.0.

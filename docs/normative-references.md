@@ -181,8 +181,7 @@ electropedia.org for the on-line edition.
 
 - **bobbin** — the insulating former on which one or more windings are
   arranged. Universally used in industry but not currently defined in
-  IEV 151 or 221. PSMA's queue of items to submit to IEC TC 51 / TC 1
-  for inclusion in IEV 221.
+  IEV 151 or 221.
 
 ### 6c. Construction families (MAS-defined)
 

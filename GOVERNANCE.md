@@ -25,12 +25,6 @@ Out of scope: any specific implementation of a magnetic-design tool.
 |------|---------|--------|
 | Incubation | OpenMagnetics maintainers | current |
 | Industry adoption | PSMA Magnetics Committee Working Group on MAS | proposed |
-| International standard | IEC (via JTC 1 PAS submitter, candidate hosts: PSMA or Linux Foundation JDF) | proposed |
-
-The roadmap deliberately routes through **JTC 1 PAS transposition** rather
-than a direct IEC TC 51 New Work Item Proposal. This preserves open
-GitHub-based development while granting International Standard status,
-following the precedent set by glTF (ISO/IEC 12113), ODF and OpenUSD.
 
 ## 3. Roles
 
@@ -57,8 +51,8 @@ following the precedent set by glTF (ISO/IEC 12113), ODF and OpenUSD.
 - All contributions are licensed under **Apache-2.0**, including the explicit
   patent grant in §3 of that license.
 - Contributors must agree to the project DCO (`Signed-off-by:` trailer) on
-  every commit. A formal CLA may be introduced if required by the chosen
-  IEC PAS submitter organisation.
+  every commit. A formal CLA may be introduced if required by a future
+  steward organisation.
 - Schema files carry SPDX headers (`SPDX-License-Identifier: Apache-2.0`).
 - The bundled component database (`data/*.ndjson`) contains catalogue data
   derived from publicly available manufacturer datasheets. Each record
