@@ -1,9 +1,7 @@
 # MAS Governance
 
 This document describes how the **Magnetic Agnostic Structure (MAS)** is
-maintained and how decisions are made. It is a working draft intended to
-support transition of the project to the **PSMA Magnetics Committee** and,
-subsequently, formal international standardisation.
+maintained and how decisions are made. It is a working draft.
 
 ## 1. Scope
 
@@ -33,8 +31,7 @@ Out of scope: any specific implementation of a magnetic-design tool.
 - **Working Group** — open meeting body with representatives from
   manufacturers, tool vendors and end-users; reviews proposals for MAJOR
   changes and conformance profiles.
-- **Editor** — single named individual responsible for spec text consistency
-  and for the IEC submission package, when applicable.
+- **Editor** — single named individual responsible for spec text consistency.
 
 ## 4. Decision making
 
@@ -79,6 +76,6 @@ governed as MAJOR changes.
 ## 8. Communication
 
 - Issue tracker: GitHub issues on the canonical repository.
-- Working Group meetings: cadence and venue to be set by the PSMA
-  Magnetics Committee chair upon adoption.
+- Working Group meetings: cadence and venue to be set if and when a
+  Working Group is formed.
 - Security / IPR concerns: see `SECURITY.md` (to be added).

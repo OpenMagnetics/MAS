@@ -66,9 +66,8 @@ master mapping. Highlights:
 
 Where no standard exists — power-electronics ferrite grade nomenclature
 (N87, 3C95, …), powder-core alloy families (MPP, High Flux, Kool Mµ),
-litz wire construction — MAS encodes the data pragmatically and is the
-candidate registry for future IEC work. See `docs/normative-references.md`
-"Standardisation gaps".
+litz wire construction — MAS encodes the data pragmatically. See
+`docs/normative-references.md` "Standardisation gaps".
 
 ## Units and vocabulary
 
@@ -132,8 +131,8 @@ migration path.
 ## License
 
 Apache-2.0. See [`LICENSE.md`](LICENSE.md). Each schema file carries an
-SPDX header. The patent grant in §3 of the licence is what carries the
-specification through the IPR review that any IEC submission requires.
+SPDX header. The patent grant in §3 of the licence is intended to keep
+the specification clear of IPR encumbrance for downstream users.
 
 ## History
 

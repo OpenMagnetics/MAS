@@ -91,9 +91,9 @@ The breaking-changes release. Verified end-to-end against MKF
 
 ## [0.2.0] - 2026-04-26
 
-The IEC-readiness release. Five RFCs implemented; license, governance and
-normative references in place; project re-framed as a candidate
-international standard with an open reference implementation.
+Standards-alignment release. Five RFCs implemented; license, governance
+and normative references in place; project documentation reframed
+around an open specification with a reference implementation.
 
 All changes in 0.2.0 are **non-breaking**: every document that validated
 against 0.1.0 continues to validate against 0.2.0. MKF rebuilds clean
