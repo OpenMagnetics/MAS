@@ -101,6 +101,7 @@ implementation are in [`BUILD.md`](BUILD.md).
 - [`docs/inputs.md`](docs/inputs.md) — detailed walk-through of the inputs section.
 - [`docs/magnetic.md`](docs/magnetic.md) — detailed walk-through of the magnetic section.
 - [`docs/units.md`](docs/units.md) — normative units table.
+- [`docs/glossary.md`](docs/glossary.md) — definitions of every term used in MAS, with IEC/IEV citations.
 - [`docs/normative-references.md`](docs/normative-references.md) — mapping of every MAS area to the standards it defers to.
 
 ## Examples
