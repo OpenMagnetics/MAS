@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://schemas.psma.com/mas/magnetic/wire/material.json",
+    "$id": "https://psma.com/mas/magnetic/wire/material.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "wire/material",
     "description": "A material for wire",

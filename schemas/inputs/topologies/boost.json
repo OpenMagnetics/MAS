@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://schemas.psma.com/mas/inputs/topologies/boost.json",
+    "$id": "https://psma.com/mas/inputs/topologies/boost.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "boost",
     "description": "The description of a Boost converter excitation",

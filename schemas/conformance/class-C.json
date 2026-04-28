@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://schemas.psma.com/mas/conformance/class-C.json",
+    "$id": "https://psma.com/mas/conformance/class-C.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "MAS conformance Class C \u2014 Full",
     "description": "Conformance bundle for Class C. A document conforms to Class C iff (1) it validates against the base MAS schema and (2) it declares masConformance=\"C\". Class C implementations are expected to support every schema field, every topology and every output type defined by MAS. This is the level a fully-featured magnetics-design tool targets. See docs/conformance.md.",

@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://schemas.psma.com/mas/magnetic/bobbin.json",
+    "$id": "https://psma.com/mas/magnetic/bobbin.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "bobbin",
     "description": "Description of a bobbin (the insulating former on which one or more windings are arranged). The term is industry-conventional; an IEV entry is being proposed by PSMA. See docs/normative-references.md.",

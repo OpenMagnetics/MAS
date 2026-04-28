@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://schemas.psma.com/mas/magnetic/wire/planar.json",
+    "$id": "https://psma.com/mas/magnetic/wire/planar.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "$ref": "./basicWire.json",
     "title": "wire/planar",

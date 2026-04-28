@@ -165,7 +165,7 @@ build steps, zero source changes required in MKF).
 ### Changed (schema)
 
 - `$id` swept from `http://openmagnetics.com/schemas/...` to
-  `https://schemas.psma.com/mas/...` across all 44 schema files.
+  `https://psma.com/mas/...` across all 44 schema files.
   Cross-`$ref` links unaffected (all relative).
 - SPDX header `"$comment": "SPDX-License-Identifier: Apache-2.0"` added
   to every schema file.

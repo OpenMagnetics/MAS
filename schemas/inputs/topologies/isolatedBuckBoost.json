@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://schemas.psma.com/mas/inputs/topologies/isolatedBuckBoost.json",
+    "$id": "https://psma.com/mas/inputs/topologies/isolatedBuckBoost.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "isolatedBuckBoost",
     "description": "The description of a Isolated BuckBoost / FlyBuck - Boost converter excitation",

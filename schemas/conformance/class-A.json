@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://schemas.psma.com/mas/conformance/class-A.json",
+    "$id": "https://psma.com/mas/conformance/class-A.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "MAS conformance Class A \u2014 Inductor Basic",
     "description": "Conformance bundle for Class A. A document conforms to Class A iff (1) it validates against the base MAS schema, (2) it declares masConformance=\"A\", (3) the magnetic has at least one winding, and (4) the inputs declare the magnetizingInductance design requirement. The narrow purpose of Class A is to describe simple inductors (single winding) intended for non-isolated converter topologies. See docs/conformance.md.",

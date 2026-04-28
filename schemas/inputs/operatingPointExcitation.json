@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://schemas.psma.com/mas/inputs/operatingPointExcitation.json",
+    "$id": "https://psma.com/mas/inputs/operatingPointExcitation.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "operatingPointExcitation",
     "description": "The description of a magnetic operating point",
