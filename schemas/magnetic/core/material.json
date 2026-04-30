@@ -45,7 +45,7 @@
             ]
         },
         "application": {
-            "$ref": "../../utils.json#/$defs/application"
+            "$ref": "../../utils.json#/$defs/applications"
         },
         "alternatives": {
             "description": "A list of alternative materials that could replace this one",

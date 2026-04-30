@@ -98,6 +98,16 @@
                 "interferenceSuppression"
             ]
         },
+        "applications": {
+            "description": "List of applications a magnetic material can serve",
+            "title": "applications",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/application"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
         "subApplication": {
             "description": "Sub application of the magnetic, can be Power Filtering, Transforming, Isolation, Common Mode Noise Filtering, Differential Mode Noise Filtering",
             "title": "subApplication",
