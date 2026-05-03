@@ -1699,7 +1699,10 @@ namespace MAS {
     };
 
     /**
-     * Application of the magnetic, can be Power, Signal Processing, or Interference Suppression
+     * Application of the magnetic, can be Power, Signal Processing, or Interference
+     * Suppression
+     *
+     * List of applications a magnetic material can serve
      */
     enum class Application : int { INTERFERENCE_SUPPRESSION, POWER, SIGNAL_PROCESSING };
 
@@ -3364,7 +3367,9 @@ namespace MAS {
         void set_processed_description(std::optional<CoreBobbinProcessedDescription> value) { this->processed_description = value; }
     };
 
-    using BobbinDataOrNameUnion = std::variant<Bobbin, std::string>;
+    using BobbinDataOrNameUnionElement = std::variant<Bobbin, std::string>;
+
+    using BobbinDataOrNameUnion = std::variant<std::vector<BobbinDataOrNameUnionElement>, Bobbin, std::string>;
 
     /**
      * Direction of the current in the connection.
@@ -4436,6 +4441,12 @@ namespace MAS {
         std::optional<std::vector<Turn>> turns_description;
 
         public:
+        /**
+         * Bobbin(s) for this coil. Scalar (single Bobbin object or name) describes a single bobbin
+         * (typically around the centre column). Array describes per-column bobbins for multi-column
+         * magnetics (e.g. 3-phase transformers). Convention A: bobbins[i] is mounted on
+         * core.columns[i] (index 0 = centre/main column).
+         */
         const BobbinDataOrNameUnion & get_bobbin() const { return bobbin; }
         BobbinDataOrNameUnion & get_mutable_bobbin() { return bobbin; }
         void set_bobbin(const BobbinDataOrNameUnion & value) { this->bobbin = value; }
@@ -5399,7 +5410,7 @@ namespace MAS {
 
         private:
         std::optional<std::vector<std::string>> alternatives;
-        std::optional<Application> application;
+        std::optional<std::vector<Application>> application;
         std::optional<std::vector<BhCycleElement>> bh_cycle;
         std::optional<std::vector<BhCycleElement>> coercive_force;
         std::optional<std::string> commercial_name;
@@ -5428,8 +5439,8 @@ namespace MAS {
         std::optional<std::vector<std::string>> get_alternatives() const { return alternatives; }
         void set_alternatives(std::optional<std::vector<std::string>> value) { this->alternatives = value; }
 
-        std::optional<Application> get_application() const { return application; }
-        void set_application(std::optional<Application> value) { this->application = value; }
+        std::optional<std::vector<Application>> get_application() const { return application; }
+        void set_application(std::optional<std::vector<Application>> value) { this->application = value; }
 
         std::optional<std::vector<BhCycleElement>> get_bh_cycle() const { return bh_cycle; }
         void set_bh_cycle(std::optional<std::vector<BhCycleElement>> value) { this->bh_cycle = value; }
@@ -8786,6 +8797,12 @@ struct adl_serializer<std::variant<MAS::Bobbin, std::string>> {
 };
 
 template <>
+struct adl_serializer<std::variant<std::vector<MAS::BobbinDataOrNameUnionElement>, MAS::Bobbin, std::string>> {
+    static void from_json(const json & j, std::variant<std::vector<MAS::BobbinDataOrNameUnionElement>, MAS::Bobbin, std::string> & x);
+    static void to_json(json & j, const std::variant<std::vector<MAS::BobbinDataOrNameUnionElement>, MAS::Bobbin, std::string> & x);
+};
+
+template <>
 struct adl_serializer<std::variant<MAS::InsulationWireCoating, std::string>> {
     static void from_json(const json & j, std::variant<MAS::InsulationWireCoating, std::string> & x);
     static void to_json(json & j, const std::variant<MAS::InsulationWireCoating, std::string> & x);
@@ -10444,7 +10461,7 @@ namespace MAS {
 
     inline void from_json(const json & j, CoreMaterial& x) {
         x.set_alternatives(get_stack_optional<std::vector<std::string>>(j, "alternatives"));
-        x.set_application(get_stack_optional<Application>(j, "application"));
+        x.set_application(get_stack_optional<std::vector<Application>>(j, "application"));
         x.set_bh_cycle(get_stack_optional<std::vector<BhCycleElement>>(j, "bhCycle"));
         x.set_coercive_force(get_stack_optional<std::vector<BhCycleElement>>(j, "coerciveForce"));
         x.set_commercial_name(get_stack_optional<std::string>(j, "commercialName"));
@@ -12588,6 +12605,31 @@ namespace nlohmann {
                 j = std::get<MAS::Bobbin>(x);
                 break;
             case 1:
+                j = std::get<std::string>(x);
+                break;
+            default: throw std::runtime_error("Input JSON does not conform to schema!");
+        }
+    }
+
+    inline void adl_serializer<std::variant<std::vector<MAS::BobbinDataOrNameUnionElement>, MAS::Bobbin, std::string>>::from_json(const json & j, std::variant<std::vector<MAS::BobbinDataOrNameUnionElement>, MAS::Bobbin, std::string> & x) {
+        if (j.is_string())
+            x = j.get<std::string>();
+        else if (j.is_object())
+            x = j.get<MAS::Bobbin>();
+        else if (j.is_array())
+            x = j.get<std::vector<MAS::BobbinDataOrNameUnionElement>>();
+        else throw std::runtime_error("Could not deserialise!");
+    }
+
+    inline void adl_serializer<std::variant<std::vector<MAS::BobbinDataOrNameUnionElement>, MAS::Bobbin, std::string>>::to_json(json & j, const std::variant<std::vector<MAS::BobbinDataOrNameUnionElement>, MAS::Bobbin, std::string> & x) {
+        switch (x.index()) {
+            case 0:
+                j = std::get<std::vector<MAS::BobbinDataOrNameUnionElement>>(x);
+                break;
+            case 1:
+                j = std::get<MAS::Bobbin>(x);
+                break;
+            case 2:
                 j = std::get<std::string>(x);
                 break;
             default: throw std::runtime_error("Input JSON does not conform to schema!");
