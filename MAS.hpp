@@ -224,6 +224,8 @@ namespace MAS {
      *
      * The input voltage of the PSFB converter
      *
+     * The input voltage of the PSHB converter
+     *
      * The input voltage of the pushPull
      *
      * Required values for the altitude
@@ -1483,7 +1485,7 @@ namespace MAS {
     /**
      * The type of secondary rectifier
      */
-    enum class PsfbRectifierType : int { CENTER_TAPPED, CURRENT_DOUBLER, FULL_BRIDGE };
+    enum class BRectifierType : int { CENTER_TAPPED, CURRENT_DOUBLER, FULL_BRIDGE };
 
     /**
      * The description of a Phase Shift Full Bridge (PSFB) converter excitation
@@ -1499,7 +1501,7 @@ namespace MAS {
         std::optional<double> maximum_phase_shift;
         std::vector<PsfbOperatingPoint> operating_points;
         std::optional<double> output_inductance;
-        std::optional<PsfbRectifierType> rectifier_type;
+        std::optional<BRectifierType> rectifier_type;
         std::optional<double> series_inductance;
         std::optional<bool> use_leakage_inductance;
 
@@ -1539,8 +1541,173 @@ namespace MAS {
         /**
          * The type of secondary rectifier
          */
-        std::optional<PsfbRectifierType> get_rectifier_type() const { return rectifier_type; }
-        void set_rectifier_type(std::optional<PsfbRectifierType> value) { this->rectifier_type = value; }
+        std::optional<BRectifierType> get_rectifier_type() const { return rectifier_type; }
+        void set_rectifier_type(std::optional<BRectifierType> value) { this->rectifier_type = value; }
+
+        /**
+         * The series inductance for ZVS and duty cycle control. If 0, uses transformer leakage
+         * inductance
+         */
+        std::optional<double> get_series_inductance() const { return series_inductance; }
+        void set_series_inductance(std::optional<double> value) { this->series_inductance = value; }
+
+        /**
+         * Whether to use transformer leakage inductance as the series inductor
+         */
+        std::optional<bool> get_use_leakage_inductance() const { return use_leakage_inductance; }
+        void set_use_leakage_inductance(std::optional<bool> value) { this->use_leakage_inductance = value; }
+    };
+
+    /**
+     * The description of one PSHB operating point. The phaseShift field is mapped internally to
+     * an effective duty cycle Deff = phaseShift/180 for the single-leg 3-level NPC
+     * implementation.
+     *
+     * The description of one boost operating point
+     *
+     * Base fields common to all topology operating points
+     *
+     * The description of one buck operating point
+     *
+     * The description of one forward operating point
+     *
+     * The description of one isolatedBuck operating point
+     *
+     * The description of one isolatedBuckBoost operating point
+     *
+     * The description of one LLC operating point
+     *
+     * The description of one pushPull operating point
+     */
+    class PshbOperatingPoint {
+        public:
+        PshbOperatingPoint() = default;
+        virtual ~PshbOperatingPoint() = default;
+
+        private:
+        double ambient_temperature;
+        std::vector<double> output_currents;
+        std::optional<OutputSType> output_currents_type;
+        std::vector<double> output_voltages;
+        std::optional<OutputSType> output_voltages_type;
+        double switching_frequency;
+        double phase_shift;
+
+        public:
+        /**
+         * Ambient temperature of the operating point. Unit: Celsius. See docs/units.md.
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * List of output currents, one per output. Interpreted per outputCurrentsType (default:
+         * dc). See docs/normative-references.md.
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * List of output voltages, one per output. Interpreted per outputVoltagesType (default:
+         * dc). See docs/normative-references.md.
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * Switching frequency of the operating point. Unit: Hz. See docs/units.md.
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+
+        /**
+         * Phase shift in degrees
+         */
+        const double & get_phase_shift() const { return phase_shift; }
+        double & get_mutable_phase_shift() { return phase_shift; }
+        void set_phase_shift(const double & value) { this->phase_shift = value; }
+    };
+
+    /**
+     * The description of a Phase Shifted Half Bridge (PSHB) converter excitation. PSHB uses a
+     * single 3-level Neutral-Point-Clamped (NPC) leg with split-capacitor input bus, producing
+     * a 3-level primary voltage waveform (±Vin/2 / 0). The configuration fields mirror those of
+     * phaseShiftFullBridge for now, but the topology, switch count, and primary-voltage
+     * amplitude differ — see the corresponding C++ class documentation for details.
+     */
+    class PhaseShiftedHalfBridge {
+        public:
+        PhaseShiftedHalfBridge() = default;
+        virtual ~PhaseShiftedHalfBridge() = default;
+
+        private:
+        std::optional<double> efficiency;
+        DimensionWithTolerance input_voltage;
+        std::optional<double> maximum_phase_shift;
+        std::vector<PshbOperatingPoint> operating_points;
+        std::optional<double> output_inductance;
+        std::optional<BRectifierType> rectifier_type;
+        std::optional<double> series_inductance;
+        std::optional<bool> use_leakage_inductance;
+
+        public:
+        /**
+         * The target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The input voltage of the PSHB converter
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * The maximum phase shift as ratio of half period (0-1). For the single-leg NPC
+         * implementation this is interpreted as the maximum effective duty cycle of the active
+         * sub-interval.
+         */
+        std::optional<double> get_maximum_phase_shift() const { return maximum_phase_shift; }
+        void set_maximum_phase_shift(std::optional<double> value) { this->maximum_phase_shift = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<PshbOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<PshbOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<PshbOperatingPoint> & value) { this->operating_points = value; }
+
+        /**
+         * The output filter inductance
+         */
+        std::optional<double> get_output_inductance() const { return output_inductance; }
+        void set_output_inductance(std::optional<double> value) { this->output_inductance = value; }
+
+        /**
+         * The type of secondary rectifier
+         */
+        std::optional<BRectifierType> get_rectifier_type() const { return rectifier_type; }
+        void set_rectifier_type(std::optional<BRectifierType> value) { this->rectifier_type = value; }
 
         /**
          * The series inductance for ZVS and duty cycle control. If 0, uses transformer leakage
@@ -1644,6 +1811,7 @@ namespace MAS {
         std::optional<IsolatedBuck> isolated_buck;
         std::optional<IsolatedBuckBoost> isolated_buck_boost;
         std::optional<LlcResonant> llc_resonant;
+        std::optional<PhaseShiftedHalfBridge> phase_shifted_half_bridge;
         std::optional<PhaseShiftFullBridge> phase_shift_full_bridge;
         std::optional<PushPull> push_pull;
 
@@ -1677,6 +1845,9 @@ namespace MAS {
 
         std::optional<LlcResonant> get_llc_resonant() const { return llc_resonant; }
         void set_llc_resonant(std::optional<LlcResonant> value) { this->llc_resonant = value; }
+
+        std::optional<PhaseShiftedHalfBridge> get_phase_shifted_half_bridge() const { return phase_shifted_half_bridge; }
+        void set_phase_shifted_half_bridge(std::optional<PhaseShiftedHalfBridge> value) { this->phase_shifted_half_bridge = value; }
 
         std::optional<PhaseShiftFullBridge> get_phase_shift_full_bridge() const { return phase_shift_full_bridge; }
         void set_phase_shift_full_bridge(std::optional<PhaseShiftFullBridge> value) { this->phase_shift_full_bridge = value; }
@@ -2458,10 +2629,10 @@ namespace MAS {
      *
      * Excitation of the current per winding that produced the winding losses.
      */
-    class OperatingPoint {
+    class BaseOperatingPoint {
         public:
-        OperatingPoint() = default;
-        virtual ~OperatingPoint() = default;
+        BaseOperatingPoint() = default;
+        virtual ~BaseOperatingPoint() = default;
 
         private:
         OperatingConditions conditions;
@@ -2495,7 +2666,7 @@ namespace MAS {
         private:
         std::optional<ConverterInformation> converter_information;
         DesignRequirements design_requirements;
-        std::vector<OperatingPoint> operating_points;
+        std::vector<BaseOperatingPoint> operating_points;
 
         public:
         std::optional<ConverterInformation> get_converter_information() const { return converter_information; }
@@ -2511,9 +2682,9 @@ namespace MAS {
         /**
          * Data describing the operating points
          */
-        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
     };
 
     /**
@@ -7715,7 +7886,7 @@ namespace MAS {
 
         private:
         std::optional<std::vector<double>> current_divider_per_turn;
-        std::optional<OperatingPoint> current_per_winding;
+        std::optional<BaseOperatingPoint> current_per_winding;
         std::optional<std::vector<double>> dc_resistance_per_turn;
         std::optional<std::vector<double>> dc_resistance_per_winding;
         std::string method_used;
@@ -7738,8 +7909,8 @@ namespace MAS {
         /**
          * Excitation of the current per winding that produced the winding losses.
          */
-        std::optional<OperatingPoint> get_current_per_winding() const { return current_per_winding; }
-        void set_current_per_winding(std::optional<OperatingPoint> value) { this->current_per_winding = value; }
+        std::optional<BaseOperatingPoint> get_current_per_winding() const { return current_per_winding; }
+        void set_current_per_winding(std::optional<BaseOperatingPoint> value) { this->current_per_winding = value; }
 
         /**
          * List of DC resistance per turn
@@ -8264,6 +8435,12 @@ void to_json(json & j, const PsfbOperatingPoint & x);
 void from_json(const json & j, PhaseShiftFullBridge & x);
 void to_json(json & j, const PhaseShiftFullBridge & x);
 
+void from_json(const json & j, PshbOperatingPoint & x);
+void to_json(json & j, const PshbOperatingPoint & x);
+
+void from_json(const json & j, PhaseShiftedHalfBridge & x);
+void to_json(json & j, const PhaseShiftedHalfBridge & x);
+
 void from_json(const json & j, PushPull & x);
 void to_json(json & j, const PushPull & x);
 
@@ -8309,8 +8486,8 @@ void to_json(json & j, const SignalDescriptor & x);
 void from_json(const json & j, OperatingPointExcitation & x);
 void to_json(json & j, const OperatingPointExcitation & x);
 
-void from_json(const json & j, OperatingPoint & x);
-void to_json(json & j, const OperatingPoint & x);
+void from_json(const json & j, BaseOperatingPoint & x);
+void to_json(json & j, const BaseOperatingPoint & x);
 
 void from_json(const json & j, Inputs & x);
 void to_json(json & j, const Inputs & x);
@@ -8621,8 +8798,8 @@ void to_json(json & j, const FlybackModes & x);
 void from_json(const json & j, LlcBridgeType & x);
 void to_json(json & j, const LlcBridgeType & x);
 
-void from_json(const json & j, PsfbRectifierType & x);
-void to_json(json & j, const PsfbRectifierType & x);
+void from_json(const json & j, BRectifierType & x);
+void to_json(json & j, const BRectifierType & x);
 
 void from_json(const json & j, Application & x);
 void to_json(json & j, const Application & x);
@@ -9209,12 +9386,56 @@ namespace MAS {
         x.set_maximum_phase_shift(get_stack_optional<double>(j, "maximumPhaseShift"));
         x.set_operating_points(j.at("operatingPoints").get<std::vector<PsfbOperatingPoint>>());
         x.set_output_inductance(get_stack_optional<double>(j, "outputInductance"));
-        x.set_rectifier_type(get_stack_optional<PsfbRectifierType>(j, "rectifierType"));
+        x.set_rectifier_type(get_stack_optional<BRectifierType>(j, "rectifierType"));
         x.set_series_inductance(get_stack_optional<double>(j, "seriesInductance"));
         x.set_use_leakage_inductance(get_stack_optional<bool>(j, "useLeakageInductance"));
     }
 
     inline void to_json(json & j, const PhaseShiftFullBridge & x) {
+        j = json::object();
+        j["efficiency"] = x.get_efficiency();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["maximumPhaseShift"] = x.get_maximum_phase_shift();
+        j["operatingPoints"] = x.get_operating_points();
+        j["outputInductance"] = x.get_output_inductance();
+        j["rectifierType"] = x.get_rectifier_type();
+        j["seriesInductance"] = x.get_series_inductance();
+        j["useLeakageInductance"] = x.get_use_leakage_inductance();
+    }
+
+    inline void from_json(const json & j, PshbOperatingPoint& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
+        x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
+        x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
+        x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+        x.set_phase_shift(j.at("phaseShift").get<double>());
+    }
+
+    inline void to_json(json & j, const PshbOperatingPoint & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["outputCurrents"] = x.get_output_currents();
+        j["outputCurrentsType"] = x.get_output_currents_type();
+        j["outputVoltages"] = x.get_output_voltages();
+        j["outputVoltagesType"] = x.get_output_voltages_type();
+        j["switchingFrequency"] = x.get_switching_frequency();
+        j["phaseShift"] = x.get_phase_shift();
+    }
+
+    inline void from_json(const json & j, PhaseShiftedHalfBridge& x) {
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_maximum_phase_shift(get_stack_optional<double>(j, "maximumPhaseShift"));
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<PshbOperatingPoint>>());
+        x.set_output_inductance(get_stack_optional<double>(j, "outputInductance"));
+        x.set_rectifier_type(get_stack_optional<BRectifierType>(j, "rectifierType"));
+        x.set_series_inductance(get_stack_optional<double>(j, "seriesInductance"));
+        x.set_use_leakage_inductance(get_stack_optional<bool>(j, "useLeakageInductance"));
+    }
+
+    inline void to_json(json & j, const PhaseShiftedHalfBridge & x) {
         j = json::object();
         j["efficiency"] = x.get_efficiency();
         j["inputVoltage"] = x.get_input_voltage();
@@ -9260,6 +9481,7 @@ namespace MAS {
         x.set_isolated_buck(get_stack_optional<IsolatedBuck>(j, "isolatedBuck"));
         x.set_isolated_buck_boost(get_stack_optional<IsolatedBuckBoost>(j, "isolatedBuckBoost"));
         x.set_llc_resonant(get_stack_optional<LlcResonant>(j, "llcResonant"));
+        x.set_phase_shifted_half_bridge(get_stack_optional<PhaseShiftedHalfBridge>(j, "phaseShiftedHalfBridge"));
         x.set_phase_shift_full_bridge(get_stack_optional<PhaseShiftFullBridge>(j, "phaseShiftFullBridge"));
         x.set_push_pull(get_stack_optional<PushPull>(j, "pushPull"));
     }
@@ -9276,6 +9498,7 @@ namespace MAS {
         j["isolatedBuck"] = x.get_isolated_buck();
         j["isolatedBuckBoost"] = x.get_isolated_buck_boost();
         j["llcResonant"] = x.get_llc_resonant();
+        j["phaseShiftedHalfBridge"] = x.get_phase_shifted_half_bridge();
         j["phaseShiftFullBridge"] = x.get_phase_shift_full_bridge();
         j["pushPull"] = x.get_push_pull();
     }
@@ -9525,13 +9748,13 @@ namespace MAS {
         j["voltage"] = x.get_voltage();
     }
 
-    inline void from_json(const json & j, OperatingPoint& x) {
+    inline void from_json(const json & j, BaseOperatingPoint& x) {
         x.set_conditions(j.at("conditions").get<OperatingConditions>());
         x.set_excitations_per_winding(j.at("excitationsPerWinding").get<std::vector<OperatingPointExcitation>>());
         x.set_name(get_stack_optional<std::string>(j, "name"));
     }
 
-    inline void to_json(json & j, const OperatingPoint & x) {
+    inline void to_json(json & j, const BaseOperatingPoint & x) {
         j = json::object();
         j["conditions"] = x.get_conditions();
         j["excitationsPerWinding"] = x.get_excitations_per_winding();
@@ -9541,7 +9764,7 @@ namespace MAS {
     inline void from_json(const json & j, Inputs& x) {
         x.set_converter_information(get_stack_optional<ConverterInformation>(j, "converterInformation"));
         x.set_design_requirements(j.at("designRequirements").get<DesignRequirements>());
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
     }
 
     inline void to_json(json & j, const Inputs & x) {
@@ -11219,7 +11442,7 @@ namespace MAS {
 
     inline void from_json(const json & j, WindingLossesOutput& x) {
         x.set_current_divider_per_turn(get_stack_optional<std::vector<double>>(j, "currentDividerPerTurn"));
-        x.set_current_per_winding(get_stack_optional<OperatingPoint>(j, "currentPerWinding"));
+        x.set_current_per_winding(get_stack_optional<BaseOperatingPoint>(j, "currentPerWinding"));
         x.set_dc_resistance_per_turn(get_stack_optional<std::vector<double>>(j, "dcResistancePerTurn"));
         x.set_dc_resistance_per_winding(get_stack_optional<std::vector<double>>(j, "dcResistancePerWinding"));
         x.set_method_used(j.at("methodUsed").get<std::string>());
@@ -11528,18 +11751,18 @@ namespace MAS {
         }
     }
 
-    inline void from_json(const json & j, PsfbRectifierType & x) {
-        if (j == "centerTapped") x = PsfbRectifierType::CENTER_TAPPED;
-        else if (j == "currentDoubler") x = PsfbRectifierType::CURRENT_DOUBLER;
-        else if (j == "fullBridge") x = PsfbRectifierType::FULL_BRIDGE;
+    inline void from_json(const json & j, BRectifierType & x) {
+        if (j == "centerTapped") x = BRectifierType::CENTER_TAPPED;
+        else if (j == "currentDoubler") x = BRectifierType::CURRENT_DOUBLER;
+        else if (j == "fullBridge") x = BRectifierType::FULL_BRIDGE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
-    inline void to_json(json & j, const PsfbRectifierType & x) {
+    inline void to_json(json & j, const BRectifierType & x) {
         switch (x) {
-            case PsfbRectifierType::CENTER_TAPPED: j = "centerTapped"; break;
-            case PsfbRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
-            case PsfbRectifierType::FULL_BRIDGE: j = "fullBridge"; break;
+            case BRectifierType::CENTER_TAPPED: j = "centerTapped"; break;
+            case BRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
+            case BRectifierType::FULL_BRIDGE: j = "fullBridge"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }

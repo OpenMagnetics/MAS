@@ -1,0 +1,88 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://psma.com/mas/inputs/topologies/phaseShiftedHalfBridge.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
+    "title": "phaseShiftedHalfBridge",
+    "description": "The description of a Phase Shifted Half Bridge (PSHB) converter excitation. PSHB uses a single 3-level Neutral-Point-Clamped (NPC) leg with split-capacitor input bus, producing a 3-level primary voltage waveform (\u00b1Vin/2 / 0). The configuration fields mirror those of phaseShiftFullBridge for now, but the topology, switch count, and primary-voltage amplitude differ \u2014 see the corresponding C++ class documentation for details.",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the PSHB converter",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 0.97
+        },
+        "seriesInductance": {
+            "description": "The series inductance for ZVS and duty cycle control. If 0, uses transformer leakage inductance",
+            "type": "number",
+            "default": 0
+        },
+        "useLeakageInductance": {
+            "description": "Whether to use transformer leakage inductance as the series inductor",
+            "type": "boolean",
+            "default": true
+        },
+        "outputInductance": {
+            "description": "The output filter inductance",
+            "type": "number",
+            "default": 0
+        },
+        "rectifierType": {
+            "description": "The type of secondary rectifier",
+            "$ref": "#/$defs/pshbRectifierType"
+        },
+        "maximumPhaseShift": {
+            "description": "The maximum phase shift as ratio of half period (0-1). For the single-leg NPC implementation this is interpreted as the maximum effective duty cycle of the active sub-interval.",
+            "type": "number",
+            "default": 0.8
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/pshbOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "inputVoltage",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "pshbRectifierType": {
+            "description": "The type of secondary rectifier",
+            "title": "pshbRectifierType",
+            "type": "string",
+            "enum": [
+                "fullBridge",
+                "centerTapped",
+                "currentDoubler"
+            ]
+        },
+        "pshbOperatingPoint": {
+            "description": "The description of one PSHB operating point. The phaseShift field is mapped internally to an effective duty cycle Deff = phaseShift/180 for the single-leg 3-level NPC implementation.",
+            "title": "pshbOperatingPoint",
+            "allOf": [
+                {
+                    "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "phaseShift": {
+                            "description": "Phase shift in degrees",
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "phaseShift"
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -62,6 +62,9 @@
                         },
                         "phaseShiftFullBridge": {
                             "$ref": "./inputs/topologies/phaseShiftFullBridge.json"
+                        },
+                        "phaseShiftedHalfBridge": {
+                            "$ref": "./inputs/topologies/phaseShiftedHalfBridge.json"
                         }
                     }
                 }
