@@ -8,6 +8,7 @@
     "properties": {
         "bobbin": {
             "title": "BobbinDataOrNameUnion",
+            "description": "Bobbin(s) for this coil. Scalar (single Bobbin object or name) describes a single bobbin (typically around the centre column). Array describes per-column bobbins for multi-column magnetics (e.g. 3-phase transformers). Convention A: bobbins[i] is mounted on core.columns[i] (index 0 = centre/main column).",
             "oneOf": [
                 {
                     "$ref": "./bobbin.json"
@@ -15,6 +16,22 @@
                 {
                     "description": "The name of the bobbin used in the core",
                     "type": "string"
+                },
+                {
+                    "description": "Array of bobbins, one per core column (Convention A). Element i is the bobbin on core.columns[i]; element 0 is the centre/main column.",
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "$ref": "./bobbin.json"
+                            },
+                            {
+                                "description": "The name of the bobbin used in this column",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "minItems": 1
                 }
             ]
         },
