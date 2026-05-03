@@ -1,0 +1,105 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://psma.com/mas/inputs/topologies/asymmetricHalfBridge.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
+    "title": "asymmetricHalfBridge",
+    "description": "The description of an Asymmetric Half-Bridge (AHB) converter excitation. AHB is a single-leg, two-switch isolated PWM topology with complementary duty cycles D / (1-D) and a DC-blocking capacitor in series with the primary, producing an asymmetric 2-level primary voltage [+(1-D)*Vin, -D*Vin]. The conversion ratio Vo = 2*D*(1-D)*Vin/n is non-monotonic, peaking at D=0.5 (Vo,max = Vin/(2*n)). Reference: Imbertson & Mohan, IEEE Trans. Industry Applications 29(1):121-125, 1993.",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the AHB converter",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 0.94
+        },
+        "dcBlockingCapacitance": {
+            "description": "The DC-blocking capacitance Cb in series with the primary winding. If 0, sized automatically from operating points such that DeltaV_Cb <= 5% of V_Cb. Required to keep transformer flux balance in steady state and to support ZVS via the primary current.",
+            "type": "number",
+            "default": 0
+        },
+        "magnetizingInductance": {
+            "description": "Primary magnetizing inductance Lm. If 0, sized automatically to provide the required ZVS assist current at minimum load.",
+            "type": "number",
+            "default": 0
+        },
+        "leakageInductance": {
+            "description": "Primary leakage inductance Llk used as the ZVS resonant element together with MOSFET Coss. If 0, taken from the transformer model.",
+            "type": "number",
+            "default": 0
+        },
+        "useLeakageInductance": {
+            "description": "Whether to use transformer leakage inductance as the ZVS resonant element (true) or use leakageInductance directly (false).",
+            "type": "boolean",
+            "default": true
+        },
+        "outputInductance": {
+            "description": "The output filter inductance Lo (forward-class CT/FB secondaries). For current-doubler (CD) secondaries, this is the per-inductor value (each carries Iout/2). For ahbFlyback variants, this field is ignored (Lm is the energy-storage element).",
+            "type": "number",
+            "default": 0
+        },
+        "rectifierType": {
+            "description": "The type of secondary rectifier",
+            "$ref": "#/$defs/ahbRectifierType"
+        },
+        "maximumDutyCycle": {
+            "description": "The maximum duty cycle of the high-side switch Q1 (Q2 runs at 1-D). The non-monotonic gain curve peaks at D=0.5; conventional control operates on the [0, 0.5] branch. Default 0.45 leaves margin for transient response.",
+            "type": "number",
+            "default": 0.45
+        },
+        "inputVoltageStepRange": {
+            "description": "Optional. Maximum step size of input voltage (V) to consider for the transient flux-excursion check. When supplied, the model computes the worst-case transient B excursion during a Vin step (V_Cb cannot follow instantaneously, so volt-second balance is temporarily violated). Surface as lastTransientFluxExcursionEstimate.",
+            "type": "number"
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/ahbOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "inputVoltage",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "ahbRectifierType": {
+            "description": "The type of secondary rectifier used by the AHB converter. centerTapped uses two secondary windings with one diode/SR each (forward-class). fullBridge uses one secondary winding and four diodes. currentDoubler uses one secondary winding feeding two output inductors L1 + L2 sharing Iout/2 (preferred for high-current low-voltage outputs). ahbFlyback collapses Lo and uses Lm as the energy-storage element (single-stage AC/DC adapters).",
+            "title": "ahbRectifierType",
+            "type": "string",
+            "enum": [
+                "fullBridge",
+                "centerTapped",
+                "currentDoubler",
+                "ahbFlyback"
+            ]
+        },
+        "ahbOperatingPoint": {
+            "description": "The description of one AHB operating point. The dutyCycle field is the on-time fraction of the high-side switch Q1; the low-side switch Q2 runs at 1 - dutyCycle complementary with dead-time. Conventional operation uses dutyCycle in [0, 0.5] (the gain curve is non-monotonic with peak at 0.5).",
+            "title": "ahbOperatingPoint",
+            "allOf": [
+                {
+                    "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "dutyCycle": {
+                            "description": "Duty cycle of the high-side switch Q1 (fraction of switching period). Q2 runs at 1 - dutyCycle.",
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                        }
+                    },
+                    "required": [
+                        "dutyCycle"
+                    ]
+                }
+            ]
+        }
+    }
+}

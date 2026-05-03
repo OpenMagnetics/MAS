@@ -152,6 +152,7 @@
                 "fullBridgeConverter",
                 "phaseShiftedFullBridgeConverter",
                 "phaseShiftedHalfBridgeConverter",
+                "asymmetricHalfBridgeConverter",
                 "currentTransformer",
                 "isolatedBuckConverter",
                 "isolatedBuckBoostConverter",

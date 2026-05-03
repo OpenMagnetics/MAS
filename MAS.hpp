@@ -204,6 +204,8 @@ namespace MAS {
     #endif
 
     /**
+     * The input voltage of the AHB converter
+     *
      * The input voltage of the boost
      *
      * The input voltage of the buck
@@ -358,9 +360,222 @@ namespace MAS {
     enum class OutputSType : int { AVERAGE, DC, PEAK, PEAK_TO_PEAK, RMS };
 
     /**
-     * The description of one boost operating point
+     * The description of one AHB operating point. The dutyCycle field is the on-time fraction
+     * of the high-side switch Q1; the low-side switch Q2 runs at 1 - dutyCycle complementary
+     * with dead-time. Conventional operation uses dutyCycle in [0, 0.5] (the gain curve is
+     * non-monotonic with peak at 0.5).
      *
      * Base fields common to all topology operating points
+     *
+     * The description of one boost operating point
+     *
+     * The description of one buck operating point
+     *
+     * The description of one forward operating point
+     *
+     * The description of one isolatedBuck operating point
+     *
+     * The description of one isolatedBuckBoost operating point
+     *
+     * The description of one LLC operating point
+     *
+     * The description of one pushPull operating point
+     */
+    class AhbOperatingPoint {
+        public:
+        AhbOperatingPoint() :
+            duty_cycle_constraint(std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt, std::nullopt)
+        {}
+        virtual ~AhbOperatingPoint() = default;
+
+        private:
+        double ambient_temperature;
+        std::vector<double> output_currents;
+        std::optional<OutputSType> output_currents_type;
+        std::vector<double> output_voltages;
+        std::optional<OutputSType> output_voltages_type;
+        double switching_frequency;
+        double duty_cycle;
+        ClassMemberConstraints duty_cycle_constraint;
+
+        public:
+        /**
+         * Ambient temperature of the operating point. Unit: Celsius. See docs/units.md.
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * List of output currents, one per output. Interpreted per outputCurrentsType (default:
+         * dc). See docs/normative-references.md.
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * List of output voltages, one per output. Interpreted per outputVoltagesType (default:
+         * dc). See docs/normative-references.md.
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * Switching frequency of the operating point. Unit: Hz. See docs/units.md.
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+
+        /**
+         * Duty cycle of the high-side switch Q1 (fraction of switching period). Q2 runs at 1 -
+         * dutyCycle.
+         */
+        const double & get_duty_cycle() const { return duty_cycle; }
+        double & get_mutable_duty_cycle() { return duty_cycle; }
+        void set_duty_cycle(const double & value) { CheckConstraint("duty_cycle", duty_cycle_constraint, value); this->duty_cycle = value; }
+    };
+
+    /**
+     * The type of secondary rectifier
+     *
+     * The type of secondary rectifier used by the AHB converter. centerTapped uses two
+     * secondary windings with one diode/SR each (forward-class). fullBridge uses one secondary
+     * winding and four diodes. currentDoubler uses one secondary winding feeding two output
+     * inductors L1 + L2 sharing Iout/2 (preferred for high-current low-voltage outputs).
+     * ahbFlyback collapses Lo and uses Lm as the energy-storage element (single-stage AC/DC
+     * adapters).
+     */
+    enum class AhbRectifierType : int { AHB_FLYBACK, CENTER_TAPPED, CURRENT_DOUBLER, FULL_BRIDGE };
+
+    /**
+     * The description of an Asymmetric Half-Bridge (AHB) converter excitation. AHB is a
+     * single-leg, two-switch isolated PWM topology with complementary duty cycles D / (1-D) and
+     * a DC-blocking capacitor in series with the primary, producing an asymmetric 2-level
+     * primary voltage [+(1-D)*Vin, -D*Vin]. The conversion ratio Vo = 2*D*(1-D)*Vin/n is
+     * non-monotonic, peaking at D=0.5 (Vo,max = Vin/(2*n)). Reference: Imbertson & Mohan, IEEE
+     * Trans. Industry Applications 29(1):121-125, 1993.
+     */
+    class AsymmetricHalfBridge {
+        public:
+        AsymmetricHalfBridge() = default;
+        virtual ~AsymmetricHalfBridge() = default;
+
+        private:
+        std::optional<double> dc_blocking_capacitance;
+        std::optional<double> efficiency;
+        DimensionWithTolerance input_voltage;
+        std::optional<double> input_voltage_step_range;
+        std::optional<double> leakage_inductance;
+        std::optional<double> magnetizing_inductance;
+        std::optional<double> maximum_duty_cycle;
+        std::vector<AhbOperatingPoint> operating_points;
+        std::optional<double> output_inductance;
+        std::optional<AhbRectifierType> rectifier_type;
+        std::optional<bool> use_leakage_inductance;
+
+        public:
+        /**
+         * The DC-blocking capacitance Cb in series with the primary winding. If 0, sized
+         * automatically from operating points such that DeltaV_Cb <= 5% of V_Cb. Required to keep
+         * transformer flux balance in steady state and to support ZVS via the primary current.
+         */
+        std::optional<double> get_dc_blocking_capacitance() const { return dc_blocking_capacitance; }
+        void set_dc_blocking_capacitance(std::optional<double> value) { this->dc_blocking_capacitance = value; }
+
+        /**
+         * The target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The input voltage of the AHB converter
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * Optional. Maximum step size of input voltage (V) to consider for the transient
+         * flux-excursion check. When supplied, the model computes the worst-case transient B
+         * excursion during a Vin step (V_Cb cannot follow instantaneously, so volt-second balance
+         * is temporarily violated). Surface as lastTransientFluxExcursionEstimate.
+         */
+        std::optional<double> get_input_voltage_step_range() const { return input_voltage_step_range; }
+        void set_input_voltage_step_range(std::optional<double> value) { this->input_voltage_step_range = value; }
+
+        /**
+         * Primary leakage inductance Llk used as the ZVS resonant element together with MOSFET
+         * Coss. If 0, taken from the transformer model.
+         */
+        std::optional<double> get_leakage_inductance() const { return leakage_inductance; }
+        void set_leakage_inductance(std::optional<double> value) { this->leakage_inductance = value; }
+
+        /**
+         * Primary magnetizing inductance Lm. If 0, sized automatically to provide the required ZVS
+         * assist current at minimum load.
+         */
+        std::optional<double> get_magnetizing_inductance() const { return magnetizing_inductance; }
+        void set_magnetizing_inductance(std::optional<double> value) { this->magnetizing_inductance = value; }
+
+        /**
+         * The maximum duty cycle of the high-side switch Q1 (Q2 runs at 1-D). The non-monotonic
+         * gain curve peaks at D=0.5; conventional control operates on the [0, 0.5] branch. Default
+         * 0.45 leaves margin for transient response.
+         */
+        std::optional<double> get_maximum_duty_cycle() const { return maximum_duty_cycle; }
+        void set_maximum_duty_cycle(std::optional<double> value) { this->maximum_duty_cycle = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<AhbOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<AhbOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<AhbOperatingPoint> & value) { this->operating_points = value; }
+
+        /**
+         * The output filter inductance Lo (forward-class CT/FB secondaries). For current-doubler
+         * (CD) secondaries, this is the per-inductor value (each carries Iout/2). For ahbFlyback
+         * variants, this field is ignored (Lm is the energy-storage element).
+         */
+        std::optional<double> get_output_inductance() const { return output_inductance; }
+        void set_output_inductance(std::optional<double> value) { this->output_inductance = value; }
+
+        /**
+         * The type of secondary rectifier
+         */
+        std::optional<AhbRectifierType> get_rectifier_type() const { return rectifier_type; }
+        void set_rectifier_type(std::optional<AhbRectifierType> value) { this->rectifier_type = value; }
+
+        /**
+         * Whether to use transformer leakage inductance as the ZVS resonant element (true) or use
+         * leakageInductance directly (false).
+         */
+        std::optional<bool> get_use_leakage_inductance() const { return use_leakage_inductance; }
+        void set_use_leakage_inductance(std::optional<bool> value) { this->use_leakage_inductance = value; }
+    };
+
+    /**
+     * Base fields common to all topology operating points
+     *
+     * The description of one boost operating point
      *
      * The description of one buck operating point
      *
@@ -557,9 +772,9 @@ namespace MAS {
     /**
      * The description of one CLLC operating point
      *
-     * The description of one boost operating point
-     *
      * Base fields common to all topology operating points
+     *
+     * The description of one boost operating point
      *
      * The description of one buck operating point
      *
@@ -801,9 +1016,9 @@ namespace MAS {
      * (D1, with D2=0). DPS uses D3 + one symmetric inner shift (D1=D2). TPS uses all three
      * independently.
      *
-     * The description of one boost operating point
-     *
      * Base fields common to all topology operating points
+     *
+     * The description of one boost operating point
      *
      * The description of one buck operating point
      *
@@ -1399,9 +1614,9 @@ namespace MAS {
     /**
      * The description of one PSFB operating point
      *
-     * The description of one boost operating point
-     *
      * Base fields common to all topology operating points
+     *
+     * The description of one boost operating point
      *
      * The description of one buck operating point
      *
@@ -1563,9 +1778,9 @@ namespace MAS {
      * an effective duty cycle Deff = phaseShift/180 for the single-leg 3-level NPC
      * implementation.
      *
-     * The description of one boost operating point
-     *
      * Base fields common to all topology operating points
+     *
+     * The description of one boost operating point
      *
      * The description of one buck operating point
      *
@@ -1801,6 +2016,7 @@ namespace MAS {
         virtual ~SupportedTopologies() = default;
 
         private:
+        std::optional<AsymmetricHalfBridge> asymmetric_half_bridge;
         std::optional<Boost> boost;
         std::optional<Buck> buck;
         std::optional<CllcResonant> cllc_resonant;
@@ -1816,6 +2032,9 @@ namespace MAS {
         std::optional<PushPull> push_pull;
 
         public:
+        std::optional<AsymmetricHalfBridge> get_asymmetric_half_bridge() const { return asymmetric_half_bridge; }
+        void set_asymmetric_half_bridge(std::optional<AsymmetricHalfBridge> value) { this->asymmetric_half_bridge = value; }
+
         std::optional<Boost> get_boost() const { return boost; }
         void set_boost(std::optional<Boost> value) { this->boost = value; }
 
@@ -2074,7 +2293,7 @@ namespace MAS {
     /**
      * Topology that will use the magnetic
      */
-    enum class Topologies : int { ACTIVE_CLAMP_FORWARD_CONVERTER, BOOST_CONVERTER, BUCK_CONVERTER, CLLC_RESONANT_CONVERTER, COMMON_MODE_CHOKE, CUK_CONVERTER, CURRENT_TRANSFORMER, DIFFERENTIAL_MODE_CHOKE, DUAL_ACTIVE_BRIDGE_CONVERTER, FLYBACK_CONVERTER, FULL_BRIDGE_CONVERTER, HALF_BRIDGE_CONVERTER, INVERTING_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_CONVERTER, LLC_RESONANT_CONVERTER, PHASE_SHIFTED_FULL_BRIDGE_CONVERTER, PHASE_SHIFTED_HALF_BRIDGE_CONVERTER, POWER_FACTOR_CORRECTION, PUSH_PULL_CONVERTER, SEPIC, SINGLE_SWITCH_FORWARD_CONVERTER, TWO_SWITCH_FORWARD_CONVERTER, WEINBERG_CONVERTER, ZETA_CONVERTER };
+    enum class Topologies : int { ACTIVE_CLAMP_FORWARD_CONVERTER, ASYMMETRIC_HALF_BRIDGE_CONVERTER, BOOST_CONVERTER, BUCK_CONVERTER, CLLC_RESONANT_CONVERTER, COMMON_MODE_CHOKE, CUK_CONVERTER, CURRENT_TRANSFORMER, DIFFERENTIAL_MODE_CHOKE, DUAL_ACTIVE_BRIDGE_CONVERTER, FLYBACK_CONVERTER, FULL_BRIDGE_CONVERTER, HALF_BRIDGE_CONVERTER, INVERTING_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_CONVERTER, LLC_RESONANT_CONVERTER, PHASE_SHIFTED_FULL_BRIDGE_CONVERTER, PHASE_SHIFTED_HALF_BRIDGE_CONVERTER, POWER_FACTOR_CORRECTION, PUSH_PULL_CONVERTER, SEPIC, SINGLE_SWITCH_FORWARD_CONVERTER, TWO_SWITCH_FORWARD_CONVERTER, WEINBERG_CONVERTER, ZETA_CONVERTER };
 
     /**
      * Technology that must be used to create the wiring
@@ -2629,10 +2848,10 @@ namespace MAS {
      *
      * Excitation of the current per winding that produced the winding losses.
      */
-    class BaseOperatingPoint {
+    class OperatingPoint {
         public:
-        BaseOperatingPoint() = default;
-        virtual ~BaseOperatingPoint() = default;
+        OperatingPoint() = default;
+        virtual ~OperatingPoint() = default;
 
         private:
         OperatingConditions conditions;
@@ -2666,7 +2885,7 @@ namespace MAS {
         private:
         std::optional<ConverterInformation> converter_information;
         DesignRequirements design_requirements;
-        std::vector<BaseOperatingPoint> operating_points;
+        std::vector<OperatingPoint> operating_points;
 
         public:
         std::optional<ConverterInformation> get_converter_information() const { return converter_information; }
@@ -2682,9 +2901,9 @@ namespace MAS {
         /**
          * Data describing the operating points
          */
-        const std::vector<BaseOperatingPoint> & get_operating_points() const { return operating_points; }
-        std::vector<BaseOperatingPoint> & get_mutable_operating_points() { return operating_points; }
-        void set_operating_points(const std::vector<BaseOperatingPoint> & value) { this->operating_points = value; }
+        const std::vector<OperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<OperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<OperatingPoint> & value) { this->operating_points = value; }
     };
 
     /**
@@ -7886,7 +8105,7 @@ namespace MAS {
 
         private:
         std::optional<std::vector<double>> current_divider_per_turn;
-        std::optional<BaseOperatingPoint> current_per_winding;
+        std::optional<OperatingPoint> current_per_winding;
         std::optional<std::vector<double>> dc_resistance_per_turn;
         std::optional<std::vector<double>> dc_resistance_per_winding;
         std::string method_used;
@@ -7909,8 +8128,8 @@ namespace MAS {
         /**
          * Excitation of the current per winding that produced the winding losses.
          */
-        std::optional<BaseOperatingPoint> get_current_per_winding() const { return current_per_winding; }
-        void set_current_per_winding(std::optional<BaseOperatingPoint> value) { this->current_per_winding = value; }
+        std::optional<OperatingPoint> get_current_per_winding() const { return current_per_winding; }
+        void set_current_per_winding(std::optional<OperatingPoint> value) { this->current_per_winding = value; }
 
         /**
          * List of DC resistance per turn
@@ -8387,6 +8606,12 @@ namespace MAS {
 void from_json(const json & j, DimensionWithTolerance & x);
 void to_json(json & j, const DimensionWithTolerance & x);
 
+void from_json(const json & j, AhbOperatingPoint & x);
+void to_json(json & j, const AhbOperatingPoint & x);
+
+void from_json(const json & j, AsymmetricHalfBridge & x);
+void to_json(json & j, const AsymmetricHalfBridge & x);
+
 void from_json(const json & j, TopologyExcitation & x);
 void to_json(json & j, const TopologyExcitation & x);
 
@@ -8486,8 +8711,8 @@ void to_json(json & j, const SignalDescriptor & x);
 void from_json(const json & j, OperatingPointExcitation & x);
 void to_json(json & j, const OperatingPointExcitation & x);
 
-void from_json(const json & j, BaseOperatingPoint & x);
-void to_json(json & j, const BaseOperatingPoint & x);
+void from_json(const json & j, OperatingPoint & x);
+void to_json(json & j, const OperatingPoint & x);
 
 void from_json(const json & j, Inputs & x);
 void to_json(json & j, const Inputs & x);
@@ -8783,6 +9008,9 @@ void to_json(json & j, const Mas & x);
 void from_json(const json & j, OutputSType & x);
 void to_json(json & j, const OutputSType & x);
 
+void from_json(const json & j, AhbRectifierType & x);
+void to_json(json & j, const AhbRectifierType & x);
+
 void from_json(const json & j, CllcPowerFlow & x);
 void to_json(json & j, const CllcPowerFlow & x);
 
@@ -9057,6 +9285,56 @@ namespace MAS {
         j["minimum"] = x.get_minimum();
         j["nominal"] = x.get_nominal();
         j["unit"] = x.get_unit();
+    }
+
+    inline void from_json(const json & j, AhbOperatingPoint& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
+        x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
+        x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
+        x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+        x.set_duty_cycle(j.at("dutyCycle").get<double>());
+    }
+
+    inline void to_json(json & j, const AhbOperatingPoint & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["outputCurrents"] = x.get_output_currents();
+        j["outputCurrentsType"] = x.get_output_currents_type();
+        j["outputVoltages"] = x.get_output_voltages();
+        j["outputVoltagesType"] = x.get_output_voltages_type();
+        j["switchingFrequency"] = x.get_switching_frequency();
+        j["dutyCycle"] = x.get_duty_cycle();
+    }
+
+    inline void from_json(const json & j, AsymmetricHalfBridge& x) {
+        x.set_dc_blocking_capacitance(get_stack_optional<double>(j, "dcBlockingCapacitance"));
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_input_voltage_step_range(get_stack_optional<double>(j, "inputVoltageStepRange"));
+        x.set_leakage_inductance(get_stack_optional<double>(j, "leakageInductance"));
+        x.set_magnetizing_inductance(get_stack_optional<double>(j, "magnetizingInductance"));
+        x.set_maximum_duty_cycle(get_stack_optional<double>(j, "maximumDutyCycle"));
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<AhbOperatingPoint>>());
+        x.set_output_inductance(get_stack_optional<double>(j, "outputInductance"));
+        x.set_rectifier_type(get_stack_optional<AhbRectifierType>(j, "rectifierType"));
+        x.set_use_leakage_inductance(get_stack_optional<bool>(j, "useLeakageInductance"));
+    }
+
+    inline void to_json(json & j, const AsymmetricHalfBridge & x) {
+        j = json::object();
+        j["dcBlockingCapacitance"] = x.get_dc_blocking_capacitance();
+        j["efficiency"] = x.get_efficiency();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["inputVoltageStepRange"] = x.get_input_voltage_step_range();
+        j["leakageInductance"] = x.get_leakage_inductance();
+        j["magnetizingInductance"] = x.get_magnetizing_inductance();
+        j["maximumDutyCycle"] = x.get_maximum_duty_cycle();
+        j["operatingPoints"] = x.get_operating_points();
+        j["outputInductance"] = x.get_output_inductance();
+        j["rectifierType"] = x.get_rectifier_type();
+        j["useLeakageInductance"] = x.get_use_leakage_inductance();
     }
 
     inline void from_json(const json & j, TopologyExcitation& x) {
@@ -9471,6 +9749,7 @@ namespace MAS {
     }
 
     inline void from_json(const json & j, SupportedTopologies& x) {
+        x.set_asymmetric_half_bridge(get_stack_optional<AsymmetricHalfBridge>(j, "asymmetricHalfBridge"));
         x.set_boost(get_stack_optional<Boost>(j, "boost"));
         x.set_buck(get_stack_optional<Buck>(j, "buck"));
         x.set_cllc_resonant(get_stack_optional<CllcResonant>(j, "cllcResonant"));
@@ -9488,6 +9767,7 @@ namespace MAS {
 
     inline void to_json(json & j, const SupportedTopologies & x) {
         j = json::object();
+        j["asymmetricHalfBridge"] = x.get_asymmetric_half_bridge();
         j["boost"] = x.get_boost();
         j["buck"] = x.get_buck();
         j["cllcResonant"] = x.get_cllc_resonant();
@@ -9748,13 +10028,13 @@ namespace MAS {
         j["voltage"] = x.get_voltage();
     }
 
-    inline void from_json(const json & j, BaseOperatingPoint& x) {
+    inline void from_json(const json & j, OperatingPoint& x) {
         x.set_conditions(j.at("conditions").get<OperatingConditions>());
         x.set_excitations_per_winding(j.at("excitationsPerWinding").get<std::vector<OperatingPointExcitation>>());
         x.set_name(get_stack_optional<std::string>(j, "name"));
     }
 
-    inline void to_json(json & j, const BaseOperatingPoint & x) {
+    inline void to_json(json & j, const OperatingPoint & x) {
         j = json::object();
         j["conditions"] = x.get_conditions();
         j["excitationsPerWinding"] = x.get_excitations_per_winding();
@@ -9764,7 +10044,7 @@ namespace MAS {
     inline void from_json(const json & j, Inputs& x) {
         x.set_converter_information(get_stack_optional<ConverterInformation>(j, "converterInformation"));
         x.set_design_requirements(j.at("designRequirements").get<DesignRequirements>());
-        x.set_operating_points(j.at("operatingPoints").get<std::vector<BaseOperatingPoint>>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<OperatingPoint>>());
     }
 
     inline void to_json(json & j, const Inputs & x) {
@@ -11442,7 +11722,7 @@ namespace MAS {
 
     inline void from_json(const json & j, WindingLossesOutput& x) {
         x.set_current_divider_per_turn(get_stack_optional<std::vector<double>>(j, "currentDividerPerTurn"));
-        x.set_current_per_winding(get_stack_optional<BaseOperatingPoint>(j, "currentPerWinding"));
+        x.set_current_per_winding(get_stack_optional<OperatingPoint>(j, "currentPerWinding"));
         x.set_dc_resistance_per_turn(get_stack_optional<std::vector<double>>(j, "dcResistancePerTurn"));
         x.set_dc_resistance_per_winding(get_stack_optional<std::vector<double>>(j, "dcResistancePerWinding"));
         x.set_method_used(j.at("methodUsed").get<std::string>());
@@ -11636,6 +11916,24 @@ namespace MAS {
             case OutputSType::PEAK: j = "peak"; break;
             case OutputSType::PEAK_TO_PEAK: j = "peakToPeak"; break;
             case OutputSType::RMS: j = "rms"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, AhbRectifierType & x) {
+        if (j == "ahbFlyback") x = AhbRectifierType::AHB_FLYBACK;
+        else if (j == "centerTapped") x = AhbRectifierType::CENTER_TAPPED;
+        else if (j == "currentDoubler") x = AhbRectifierType::CURRENT_DOUBLER;
+        else if (j == "fullBridge") x = AhbRectifierType::FULL_BRIDGE;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const AhbRectifierType & x) {
+        switch (x) {
+            case AhbRectifierType::AHB_FLYBACK: j = "ahbFlyback"; break;
+            case AhbRectifierType::CENTER_TAPPED: j = "centerTapped"; break;
+            case AhbRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
+            case AhbRectifierType::FULL_BRIDGE: j = "fullBridge"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -11974,6 +12272,7 @@ namespace MAS {
     inline void from_json(const json & j, Topologies & x) {
         static std::unordered_map<std::string, Topologies> enumValues {
             {"activeClampForwardConverter", Topologies::ACTIVE_CLAMP_FORWARD_CONVERTER},
+            {"asymmetricHalfBridgeConverter", Topologies::ASYMMETRIC_HALF_BRIDGE_CONVERTER},
             {"boostConverter", Topologies::BOOST_CONVERTER},
             {"buckConverter", Topologies::BUCK_CONVERTER},
             {"cllcResonantConverter", Topologies::CLLC_RESONANT_CONVERTER},
@@ -12008,6 +12307,7 @@ namespace MAS {
     inline void to_json(json & j, const Topologies & x) {
         switch (x) {
             case Topologies::ACTIVE_CLAMP_FORWARD_CONVERTER: j = "activeClampForwardConverter"; break;
+            case Topologies::ASYMMETRIC_HALF_BRIDGE_CONVERTER: j = "asymmetricHalfBridgeConverter"; break;
             case Topologies::BOOST_CONVERTER: j = "boostConverter"; break;
             case Topologies::BUCK_CONVERTER: j = "buckConverter"; break;
             case Topologies::CLLC_RESONANT_CONVERTER: j = "cllcResonantConverter"; break;
