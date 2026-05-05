@@ -212,6 +212,10 @@ namespace MAS {
      *
      * The input voltage (HV side) of the CLLC converter
      *
+     * The operating voltage across the choke (line-to-line or line-to-neutral)
+     *
+     * The input voltage of the filter stage
+     *
      * The input voltage of the DAB converter
      *
      * The input voltage of the flyback
@@ -227,6 +231,8 @@ namespace MAS {
      * The input voltage of the PSFB converter
      *
      * The input voltage of the PSHB converter
+     *
+     * The AC input voltage (RMS) with tolerance range (e.g., 85-265V universal input)
      *
      * The input voltage of the pushPull
      *
@@ -360,10 +366,7 @@ namespace MAS {
     enum class OutputSType : int { AVERAGE, DC, PEAK, PEAK_TO_PEAK, RMS };
 
     /**
-     * The description of one AHB operating point. The dutyCycle field is the on-time fraction
-     * of the high-side switch Q1; the low-side switch Q2 runs at 1 - dutyCycle complementary
-     * with dead-time. Conventional operation uses dutyCycle in [0, 0.5] (the gain curve is
-     * non-monotonic with peak at 0.5).
+     * The description of one AHB operating point
      *
      * Base fields common to all topology operating points
      *
@@ -383,9 +386,7 @@ namespace MAS {
      */
     class AhbOperatingPoint {
         public:
-        AhbOperatingPoint() :
-            duty_cycle_constraint(std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt, std::nullopt)
-        {}
+        AhbOperatingPoint() = default;
         virtual ~AhbOperatingPoint() = default;
 
         private:
@@ -396,7 +397,6 @@ namespace MAS {
         std::optional<OutputSType> output_voltages_type;
         double switching_frequency;
         double duty_cycle;
-        ClassMemberConstraints duty_cycle_constraint;
 
         public:
         /**
@@ -444,33 +444,25 @@ namespace MAS {
         void set_switching_frequency(const double & value) { this->switching_frequency = value; }
 
         /**
-         * Duty cycle of the high-side switch Q1 (fraction of switching period). Q2 runs at 1 -
-         * dutyCycle.
+         * Commanded duty cycle of Q1 for this operating point (0 < D <= 0.5 for the conventional
+         * non-monotonic gain branch)
          */
         const double & get_duty_cycle() const { return duty_cycle; }
         double & get_mutable_duty_cycle() { return duty_cycle; }
-        void set_duty_cycle(const double & value) { CheckConstraint("duty_cycle", duty_cycle_constraint, value); this->duty_cycle = value; }
+        void set_duty_cycle(const double & value) { this->duty_cycle = value; }
     };
 
     /**
      * The type of secondary rectifier
      *
-     * The type of secondary rectifier used by the AHB converter. centerTapped uses two
-     * secondary windings with one diode/SR each (forward-class). fullBridge uses one secondary
-     * winding and four diodes. currentDoubler uses one secondary winding feeding two output
-     * inductors L1 + L2 sharing Iout/2 (preferred for high-current low-voltage outputs).
-     * ahbFlyback collapses Lo and uses Lm as the energy-storage element (single-stage AC/DC
-     * adapters).
+     * The type of secondary rectifier for the AHB
      */
     enum class AhbRectifierType : int { AHB_FLYBACK, CENTER_TAPPED, CURRENT_DOUBLER, FULL_BRIDGE };
 
     /**
-     * The description of an Asymmetric Half-Bridge (AHB) converter excitation. AHB is a
-     * single-leg, two-switch isolated PWM topology with complementary duty cycles D / (1-D) and
-     * a DC-blocking capacitor in series with the primary, producing an asymmetric 2-level
-     * primary voltage [+(1-D)*Vin, -D*Vin]. The conversion ratio Vo = 2*D*(1-D)*Vin/n is
-     * non-monotonic, peaking at D=0.5 (Vo,max = Vin/(2*n)). Reference: Imbertson & Mohan, IEEE
-     * Trans. Industry Applications 29(1):121-125, 1993.
+     * The description of an Asymmetric Half-Bridge (AHB) converter (Imbertson-Mohan 1993):
+     * single-leg, two-switch isolated PWM converter with DC-blocking capacitor and
+     * complementary D/(1-D) drive.
      */
     class AsymmetricHalfBridge {
         public:
@@ -479,6 +471,7 @@ namespace MAS {
 
         private:
         std::optional<double> dc_blocking_capacitance;
+        std::optional<double> diode_voltage_drop;
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> input_voltage_step_range;
@@ -492,12 +485,16 @@ namespace MAS {
 
         public:
         /**
-         * The DC-blocking capacitance Cb in series with the primary winding. If 0, sized
-         * automatically from operating points such that DeltaV_Cb <= 5% of V_Cb. Required to keep
-         * transformer flux balance in steady state and to support ZVS via the primary current.
+         * Optional explicit DC-blocking capacitance in farads
          */
         std::optional<double> get_dc_blocking_capacitance() const { return dc_blocking_capacitance; }
         void set_dc_blocking_capacitance(std::optional<double> value) { this->dc_blocking_capacitance = value; }
+
+        /**
+         * The voltage drop of the rectifier diode (or SR FET drain-source drop)
+         */
+        std::optional<double> get_diode_voltage_drop() const { return diode_voltage_drop; }
+        void set_diode_voltage_drop(std::optional<double> value) { this->diode_voltage_drop = value; }
 
         /**
          * The target efficiency
@@ -513,32 +510,26 @@ namespace MAS {
         void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
 
         /**
-         * Optional. Maximum step size of input voltage (V) to consider for the transient
-         * flux-excursion check. When supplied, the model computes the worst-case transient B
-         * excursion during a Vin step (V_Cb cannot follow instantaneously, so volt-second balance
-         * is temporarily violated). Surface as lastTransientFluxExcursionEstimate.
+         * Optional Vin step magnitude (in volts) used to compute worst-case transient flux excursion
          */
         std::optional<double> get_input_voltage_step_range() const { return input_voltage_step_range; }
         void set_input_voltage_step_range(std::optional<double> value) { this->input_voltage_step_range = value; }
 
         /**
-         * Primary leakage inductance Llk used as the ZVS resonant element together with MOSFET
-         * Coss. If 0, taken from the transformer model.
+         * Optional explicit primary leakage inductance in henries
          */
         std::optional<double> get_leakage_inductance() const { return leakage_inductance; }
         void set_leakage_inductance(std::optional<double> value) { this->leakage_inductance = value; }
 
         /**
-         * Primary magnetizing inductance Lm. If 0, sized automatically to provide the required ZVS
-         * assist current at minimum load.
+         * Optional explicit primary magnetizing inductance in henries
          */
         std::optional<double> get_magnetizing_inductance() const { return magnetizing_inductance; }
         void set_magnetizing_inductance(std::optional<double> value) { this->magnetizing_inductance = value; }
 
         /**
-         * The maximum duty cycle of the high-side switch Q1 (Q2 runs at 1-D). The non-monotonic
-         * gain curve peaks at D=0.5; conventional control operates on the [0, 0.5] branch. Default
-         * 0.45 leaves margin for transient response.
+         * Maximum duty cycle of Q1 (chosen branch of non-monotonic gain curve, conventionally <=
+         * 0.5)
          */
         std::optional<double> get_maximum_duty_cycle() const { return maximum_duty_cycle; }
         void set_maximum_duty_cycle(std::optional<double> value) { this->maximum_duty_cycle = value; }
@@ -551,9 +542,7 @@ namespace MAS {
         void set_operating_points(const std::vector<AhbOperatingPoint> & value) { this->operating_points = value; }
 
         /**
-         * The output filter inductance Lo (forward-class CT/FB secondaries). For current-doubler
-         * (CD) secondaries, this is the per-inductor value (each carries Iout/2). For ahbFlyback
-         * variants, this field is ignored (Lm is the energy-storage element).
+         * Optional explicit output filter inductance in henries
          */
         std::optional<double> get_output_inductance() const { return output_inductance; }
         void set_output_inductance(std::optional<double> value) { this->output_inductance = value; }
@@ -565,8 +554,7 @@ namespace MAS {
         void set_rectifier_type(std::optional<AhbRectifierType> value) { this->rectifier_type = value; }
 
         /**
-         * Whether to use transformer leakage inductance as the ZVS resonant element (true) or use
-         * leakageInductance directly (false).
+         * Whether to use transformer leakage inductance for ZVS
          */
         std::optional<bool> get_use_leakage_inductance() const { return use_leakage_inductance; }
         void set_use_leakage_inductance(std::optional<bool> value) { this->use_leakage_inductance = value; }
@@ -928,6 +916,186 @@ namespace MAS {
     };
 
     /**
+     * Data describing one impendance value
+     *
+     * Impedance value. Uses the same impedancePoint structure as designRequirements.
+     */
+    class ImpedancePoint {
+        public:
+        ImpedancePoint() :
+            magnitude_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
+        {}
+        virtual ~ImpedancePoint() = default;
+
+        private:
+        std::optional<double> imaginary_part;
+        double magnitude;
+        ClassMemberConstraints magnitude_constraint;
+        std::optional<double> phase;
+        std::optional<double> real_part;
+
+        public:
+        std::optional<double> get_imaginary_part() const { return imaginary_part; }
+        void set_imaginary_part(std::optional<double> value) { this->imaginary_part = value; }
+
+        /**
+         * Magnitude of the impedance, in Ohm
+         */
+        const double & get_magnitude() const { return magnitude; }
+        double & get_mutable_magnitude() { return magnitude; }
+        void set_magnitude(const double & value) { CheckConstraint("magnitude", magnitude_constraint, value); this->magnitude = value; }
+
+        std::optional<double> get_phase() const { return phase; }
+        void set_phase(std::optional<double> value) { this->phase = value; }
+
+        std::optional<double> get_real_part() const { return real_part; }
+        void set_real_part(std::optional<double> value) { this->real_part = value; }
+    };
+
+    /**
+     * An impedance value pinned to a specific frequency. The impedance is a structured
+     * impedancePoint with magnitude, phase and real/imaginary parts. Bare-magnitude callers
+     * populate magnitude only and leave phase / real / imaginary unset.
+     */
+    class ImpedanceAtFrequency {
+        public:
+        ImpedanceAtFrequency() :
+            frequency_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
+        {}
+        virtual ~ImpedanceAtFrequency() = default;
+
+        private:
+        double frequency;
+        ClassMemberConstraints frequency_constraint;
+        ImpedancePoint impedance;
+
+        public:
+        /**
+         * Frequency at which the impedance applies. Unit: Hz.
+         */
+        const double & get_frequency() const { return frequency; }
+        double & get_mutable_frequency() { return frequency; }
+        void set_frequency(const double & value) { CheckConstraint("frequency", frequency_constraint, value); this->frequency = value; }
+
+        const ImpedancePoint & get_impedance() const { return impedance; }
+        ImpedancePoint & get_mutable_impedance() { return impedance; }
+        void set_impedance(const ImpedancePoint & value) { this->impedance = value; }
+    };
+
+    /**
+     * Insertion loss requirement at a specific frequency
+     */
+    class InsertionLossAtFrequency {
+        public:
+        InsertionLossAtFrequency() = default;
+        virtual ~InsertionLossAtFrequency() = default;
+
+        private:
+        double frequency;
+        double insertion_loss;
+
+        public:
+        /**
+         * The frequency in Hz
+         */
+        const double & get_frequency() const { return frequency; }
+        double & get_mutable_frequency() { return frequency; }
+        void set_frequency(const double & value) { this->frequency = value; }
+
+        /**
+         * The target insertion loss in dB at this frequency
+         */
+        const double & get_insertion_loss() const { return insertion_loss; }
+        double & get_mutable_insertion_loss() { return insertion_loss; }
+        void set_insertion_loss(const double & value) { this->insertion_loss = value; }
+    };
+
+    /**
+     * The description of a Common Mode Choke (CMC) for EMI filtering. Common mode chokes use
+     * coupled inductors wound on a toroidal core to suppress common mode noise while passing
+     * differential signals. The choke presents high impedance to common mode currents (both
+     * lines with same phase) and low impedance to differential mode currents (opposite phase).
+     */
+    class CommonModeChoke {
+        public:
+        CommonModeChoke() = default;
+        virtual ~CommonModeChoke() = default;
+
+        private:
+        double ambient_temperature;
+        double line_frequency;
+        std::optional<double> line_impedance;
+        std::optional<double> maximum_dc_resistance;
+        std::optional<double> maximum_leakage_inductance;
+        std::vector<ImpedanceAtFrequency> minimum_impedance;
+        double operating_current;
+        DimensionWithTolerance operating_voltage;
+        std::optional<std::vector<InsertionLossAtFrequency>> target_insertion_loss;
+
+        public:
+        /**
+         * The ambient temperature for the application
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * The mains/line frequency in Hz (50 or 60 Hz typically). This is the frequency of the
+         * differential mode current that causes magnetic excitation.
+         */
+        const double & get_line_frequency() const { return line_frequency; }
+        double & get_mutable_line_frequency() { return line_frequency; }
+        void set_line_frequency(const double & value) { this->line_frequency = value; }
+
+        /**
+         * The characteristic line impedance (typically 50 ohms for LISN measurements)
+         */
+        std::optional<double> get_line_impedance() const { return line_impedance; }
+        void set_line_impedance(std::optional<double> value) { this->line_impedance = value; }
+
+        /**
+         * Maximum allowable DC resistance per winding in ohms
+         */
+        std::optional<double> get_maximum_dc_resistance() const { return maximum_dc_resistance; }
+        void set_maximum_dc_resistance(std::optional<double> value) { this->maximum_dc_resistance = value; }
+
+        /**
+         * Maximum allowable leakage inductance in henries (for tight coupling)
+         */
+        std::optional<double> get_maximum_leakage_inductance() const { return maximum_leakage_inductance; }
+        void set_maximum_leakage_inductance(std::optional<double> value) { this->maximum_leakage_inductance = value; }
+
+        /**
+         * The minimum impedance requirements at specified frequencies
+         */
+        const std::vector<ImpedanceAtFrequency> & get_minimum_impedance() const { return minimum_impedance; }
+        std::vector<ImpedanceAtFrequency> & get_mutable_minimum_impedance() { return minimum_impedance; }
+        void set_minimum_impedance(const std::vector<ImpedanceAtFrequency> & value) { this->minimum_impedance = value; }
+
+        /**
+         * The nominal operating current through each winding (differential mode current)
+         */
+        const double & get_operating_current() const { return operating_current; }
+        double & get_mutable_operating_current() { return operating_current; }
+        void set_operating_current(const double & value) { this->operating_current = value; }
+
+        /**
+         * The operating voltage across the choke (line-to-line or line-to-neutral)
+         */
+        const DimensionWithTolerance & get_operating_voltage() const { return operating_voltage; }
+        DimensionWithTolerance & get_mutable_operating_voltage() { return operating_voltage; }
+        void set_operating_voltage(const DimensionWithTolerance & value) { this->operating_voltage = value; }
+
+        /**
+         * Target insertion loss in dB at specified frequencies (optional, alternative to impedance
+         * specification)
+         */
+        std::optional<std::vector<InsertionLossAtFrequency>> get_target_insertion_loss() const { return target_insertion_loss; }
+        void set_target_insertion_loss(std::optional<std::vector<InsertionLossAtFrequency>> value) { this->target_insertion_loss = value; }
+    };
+
+    /**
      * Waveform of the signal to measure
      *
      * Label of the waveform, if applicable. Used for common waveforms
@@ -1000,6 +1168,150 @@ namespace MAS {
         const WaveformLabel & get_waveform_label() const { return waveform_label; }
         WaveformLabel & get_mutable_waveform_label() { return waveform_label; }
         void set_waveform_label(const WaveformLabel & value) { this->waveform_label = value; }
+    };
+
+    /**
+     * The DMC configuration type
+     */
+    enum class Configuration : int { SINGLE_PHASE, SINGLE_PHASE_BALANCED, THREE_PHASE, THREE_PHASE_WITH_NEUTRAL };
+
+    /**
+     * Attenuation requirement at a specific frequency
+     */
+    class AttenuationAtFrequency {
+        public:
+        AttenuationAtFrequency() = default;
+        virtual ~AttenuationAtFrequency() = default;
+
+        private:
+        double attenuation;
+        double frequency;
+
+        public:
+        /**
+         * The target attenuation in dB at this frequency
+         */
+        const double & get_attenuation() const { return attenuation; }
+        double & get_mutable_attenuation() { return attenuation; }
+        void set_attenuation(const double & value) { this->attenuation = value; }
+
+        /**
+         * The frequency in Hz
+         */
+        const double & get_frequency() const { return frequency; }
+        double & get_mutable_frequency() { return frequency; }
+        void set_frequency(const double & value) { this->frequency = value; }
+    };
+
+    /**
+     * The description of a Differential Mode Choke (DMC) for EMI filtering. Differential mode
+     * chokes use an inductor to attenuate differential mode noise (noise between line and
+     * neutral or between lines). Unlike CMCs, DMCs present impedance to differential signals
+     * and are typically used in combination with capacitors to form LC filters.
+     */
+    class DifferentialModeChoke {
+        public:
+        DifferentialModeChoke() = default;
+        virtual ~DifferentialModeChoke() = default;
+
+        private:
+        double ambient_temperature;
+        std::optional<Configuration> configuration;
+        std::optional<double> filter_capacitance;
+        DimensionWithTolerance input_voltage;
+        double line_frequency;
+        std::optional<double> maximum_core_temperature_rise;
+        std::optional<double> maximum_dc_resistance;
+        std::optional<std::vector<ImpedanceAtFrequency>> minimum_impedance;
+        std::optional<double> minimum_inductance;
+        double operating_current;
+        std::optional<double> peak_current;
+        std::optional<double> switching_frequency;
+        std::optional<std::vector<AttenuationAtFrequency>> target_attenuation;
+
+        public:
+        /**
+         * The ambient temperature for the application
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * The DMC configuration type
+         */
+        std::optional<Configuration> get_configuration() const { return configuration; }
+        void set_configuration(std::optional<Configuration> value) { this->configuration = value; }
+
+        /**
+         * The filter capacitance in Farads (for LC filter design)
+         */
+        std::optional<double> get_filter_capacitance() const { return filter_capacitance; }
+        void set_filter_capacitance(std::optional<double> value) { this->filter_capacitance = value; }
+
+        /**
+         * The input voltage of the filter stage
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * The mains/line frequency in Hz (50 or 60 Hz typically). This is the frequency of the load
+         * current that causes magnetic excitation.
+         */
+        const double & get_line_frequency() const { return line_frequency; }
+        double & get_mutable_line_frequency() { return line_frequency; }
+        void set_line_frequency(const double & value) { this->line_frequency = value; }
+
+        /**
+         * Maximum allowable temperature rise due to core and winding losses
+         */
+        std::optional<double> get_maximum_core_temperature_rise() const { return maximum_core_temperature_rise; }
+        void set_maximum_core_temperature_rise(std::optional<double> value) { this->maximum_core_temperature_rise = value; }
+
+        /**
+         * Maximum allowable DC resistance in ohms
+         */
+        std::optional<double> get_maximum_dc_resistance() const { return maximum_dc_resistance; }
+        void set_maximum_dc_resistance(std::optional<double> value) { this->maximum_dc_resistance = value; }
+
+        /**
+         * The minimum impedance requirements at specified frequencies
+         */
+        std::optional<std::vector<ImpedanceAtFrequency>> get_minimum_impedance() const { return minimum_impedance; }
+        void set_minimum_impedance(std::optional<std::vector<ImpedanceAtFrequency>> value) { this->minimum_impedance = value; }
+
+        /**
+         * The minimum required inductance in henries for the filter cutoff frequency
+         */
+        std::optional<double> get_minimum_inductance() const { return minimum_inductance; }
+        void set_minimum_inductance(std::optional<double> value) { this->minimum_inductance = value; }
+
+        /**
+         * The nominal operating current through the choke
+         */
+        const double & get_operating_current() const { return operating_current; }
+        double & get_mutable_operating_current() { return operating_current; }
+        void set_operating_current(const double & value) { this->operating_current = value; }
+
+        /**
+         * The peak current including ripple
+         */
+        std::optional<double> get_peak_current() const { return peak_current; }
+        void set_peak_current(std::optional<double> value) { this->peak_current = value; }
+
+        /**
+         * The switching frequency of the converter being filtered
+         */
+        std::optional<double> get_switching_frequency() const { return switching_frequency; }
+        void set_switching_frequency(std::optional<double> value) { this->switching_frequency = value; }
+
+        /**
+         * Target attenuation in dB at specified frequencies
+         */
+        std::optional<std::vector<AttenuationAtFrequency>> get_target_attenuation() const { return target_attenuation; }
+        void set_target_attenuation(std::optional<std::vector<AttenuationAtFrequency>> value) { this->target_attenuation = value; }
     };
 
     /**
@@ -1705,10 +2017,10 @@ namespace MAS {
     /**
      * The description of a Phase Shift Full Bridge (PSFB) converter excitation
      */
-    class PhaseShiftFullBridge {
+    class PhaseShiftedFullBridge {
         public:
-        PhaseShiftFullBridge() = default;
-        virtual ~PhaseShiftFullBridge() = default;
+        PhaseShiftedFullBridge() = default;
+        virtual ~PhaseShiftedFullBridge() = default;
 
         private:
         std::optional<double> efficiency;
@@ -1939,6 +2251,117 @@ namespace MAS {
     };
 
     /**
+     * The conduction mode of the PFC
+     */
+    enum class PfcModes : int { CONTINUOUS_CONDUCTION_MODE, CRITICAL_CONDUCTION_MODE, DISCONTINUOUS_CONDUCTION_MODE, TRANSITION_MODE };
+
+    /**
+     * The description of a Power Factor Correction (PFC) boost inductor. PFC converters shape
+     * the input current to follow the input voltage waveform, achieving near-unity power
+     * factor. The inductor operates with a triangular current ripple superimposed on a
+     * half-sinusoidal envelope. This topology covers both continuous (CCM) and discontinuous
+     * (DCM) conduction modes.
+     */
+    class PowerFactorCorrection {
+        public:
+        PowerFactorCorrection() = default;
+        virtual ~PowerFactorCorrection() = default;
+
+        private:
+        double ambient_temperature;
+        std::optional<double> current_ripple_ratio;
+        std::optional<double> diode_voltage_drop;
+        std::optional<double> efficiency;
+        DimensionWithTolerance input_voltage;
+        std::optional<double> line_frequency;
+        std::optional<double> maximum_core_temperature_rise;
+        std::optional<double> maximum_switch_current;
+        std::optional<PfcModes> mode;
+        double output_power;
+        double output_voltage;
+        double switching_frequency;
+
+        public:
+        /**
+         * The ambient temperature for the application
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * The peak-to-peak current ripple as a ratio of the average current (typically 0.2-0.4 for
+         * CCM)
+         */
+        std::optional<double> get_current_ripple_ratio() const { return current_ripple_ratio; }
+        void set_current_ripple_ratio(std::optional<double> value) { this->current_ripple_ratio = value; }
+
+        /**
+         * The voltage drop on the boost diode
+         */
+        std::optional<double> get_diode_voltage_drop() const { return diode_voltage_drop; }
+        void set_diode_voltage_drop(std::optional<double> value) { this->diode_voltage_drop = value; }
+
+        /**
+         * The target efficiency of the PFC stage
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The AC input voltage (RMS) with tolerance range (e.g., 85-265V universal input)
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * The AC line frequency (50 or 60 Hz)
+         */
+        std::optional<double> get_line_frequency() const { return line_frequency; }
+        void set_line_frequency(std::optional<double> value) { this->line_frequency = value; }
+
+        /**
+         * Maximum allowable temperature rise
+         */
+        std::optional<double> get_maximum_core_temperature_rise() const { return maximum_core_temperature_rise; }
+        void set_maximum_core_temperature_rise(std::optional<double> value) { this->maximum_core_temperature_rise = value; }
+
+        /**
+         * The maximum current rating of the switch (optional constraint)
+         */
+        std::optional<double> get_maximum_switch_current() const { return maximum_switch_current; }
+        void set_maximum_switch_current(std::optional<double> value) { this->maximum_switch_current = value; }
+
+        /**
+         * The conduction mode of the PFC
+         */
+        std::optional<PfcModes> get_mode() const { return mode; }
+        void set_mode(std::optional<PfcModes> value) { this->mode = value; }
+
+        /**
+         * The output power in watts
+         */
+        const double & get_output_power() const { return output_power; }
+        double & get_mutable_output_power() { return output_power; }
+        void set_output_power(const double & value) { this->output_power = value; }
+
+        /**
+         * The DC output voltage (typically 385-400V for universal input)
+         */
+        const double & get_output_voltage() const { return output_voltage; }
+        double & get_mutable_output_voltage() { return output_voltage; }
+        void set_output_voltage(const double & value) { this->output_voltage = value; }
+
+        /**
+         * The switching frequency of the PFC stage
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+    };
+
+    /**
      * The description of a Push-Pull excitation
      */
     class PushPull {
@@ -2020,15 +2443,18 @@ namespace MAS {
         std::optional<Boost> boost;
         std::optional<Buck> buck;
         std::optional<CllcResonant> cllc_resonant;
+        std::optional<CommonModeChoke> common_mode_choke;
         std::optional<CurrentTransformer> current_transformer;
+        std::optional<DifferentialModeChoke> differential_mode_choke;
         std::optional<DualActiveBridge> dual_active_bridge;
         std::optional<Flyback> flyback;
         std::optional<Forward> forward;
         std::optional<IsolatedBuck> isolated_buck;
         std::optional<IsolatedBuckBoost> isolated_buck_boost;
         std::optional<LlcResonant> llc_resonant;
+        std::optional<PhaseShiftedFullBridge> phase_shifted_full_bridge;
         std::optional<PhaseShiftedHalfBridge> phase_shifted_half_bridge;
-        std::optional<PhaseShiftFullBridge> phase_shift_full_bridge;
+        std::optional<PowerFactorCorrection> power_factor_correction;
         std::optional<PushPull> push_pull;
 
         public:
@@ -2044,8 +2470,14 @@ namespace MAS {
         std::optional<CllcResonant> get_cllc_resonant() const { return cllc_resonant; }
         void set_cllc_resonant(std::optional<CllcResonant> value) { this->cllc_resonant = value; }
 
+        std::optional<CommonModeChoke> get_common_mode_choke() const { return common_mode_choke; }
+        void set_common_mode_choke(std::optional<CommonModeChoke> value) { this->common_mode_choke = value; }
+
         std::optional<CurrentTransformer> get_current_transformer() const { return current_transformer; }
         void set_current_transformer(std::optional<CurrentTransformer> value) { this->current_transformer = value; }
+
+        std::optional<DifferentialModeChoke> get_differential_mode_choke() const { return differential_mode_choke; }
+        void set_differential_mode_choke(std::optional<DifferentialModeChoke> value) { this->differential_mode_choke = value; }
 
         std::optional<DualActiveBridge> get_dual_active_bridge() const { return dual_active_bridge; }
         void set_dual_active_bridge(std::optional<DualActiveBridge> value) { this->dual_active_bridge = value; }
@@ -2065,11 +2497,14 @@ namespace MAS {
         std::optional<LlcResonant> get_llc_resonant() const { return llc_resonant; }
         void set_llc_resonant(std::optional<LlcResonant> value) { this->llc_resonant = value; }
 
+        std::optional<PhaseShiftedFullBridge> get_phase_shifted_full_bridge() const { return phase_shifted_full_bridge; }
+        void set_phase_shifted_full_bridge(std::optional<PhaseShiftedFullBridge> value) { this->phase_shifted_full_bridge = value; }
+
         std::optional<PhaseShiftedHalfBridge> get_phase_shifted_half_bridge() const { return phase_shifted_half_bridge; }
         void set_phase_shifted_half_bridge(std::optional<PhaseShiftedHalfBridge> value) { this->phase_shifted_half_bridge = value; }
 
-        std::optional<PhaseShiftFullBridge> get_phase_shift_full_bridge() const { return phase_shift_full_bridge; }
-        void set_phase_shift_full_bridge(std::optional<PhaseShiftFullBridge> value) { this->phase_shift_full_bridge = value; }
+        std::optional<PowerFactorCorrection> get_power_factor_correction() const { return power_factor_correction; }
+        void set_power_factor_correction(std::optional<PowerFactorCorrection> value) { this->power_factor_correction = value; }
 
         std::optional<PushPull> get_push_pull() const { return push_pull; }
         void set_push_pull(std::optional<PushPull> value) { this->push_pull = value; }
@@ -2211,73 +2646,6 @@ namespace MAS {
     };
 
     /**
-     * Data describing one impendance value
-     *
-     * Impedance value. Uses the same impedancePoint structure as designRequirements.
-     */
-    class ImpedancePoint {
-        public:
-        ImpedancePoint() :
-            magnitude_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
-        {}
-        virtual ~ImpedancePoint() = default;
-
-        private:
-        std::optional<double> imaginary_part;
-        double magnitude;
-        ClassMemberConstraints magnitude_constraint;
-        std::optional<double> phase;
-        std::optional<double> real_part;
-
-        public:
-        std::optional<double> get_imaginary_part() const { return imaginary_part; }
-        void set_imaginary_part(std::optional<double> value) { this->imaginary_part = value; }
-
-        /**
-         * Magnitude of the impedance, in Ohm
-         */
-        const double & get_magnitude() const { return magnitude; }
-        double & get_mutable_magnitude() { return magnitude; }
-        void set_magnitude(const double & value) { CheckConstraint("magnitude", magnitude_constraint, value); this->magnitude = value; }
-
-        std::optional<double> get_phase() const { return phase; }
-        void set_phase(std::optional<double> value) { this->phase = value; }
-
-        std::optional<double> get_real_part() const { return real_part; }
-        void set_real_part(std::optional<double> value) { this->real_part = value; }
-    };
-
-    /**
-     * An impedance value pinned to a specific frequency. The impedance is a structured
-     * impedancePoint with magnitude, phase and real/imaginary parts. Bare-magnitude callers
-     * populate magnitude only and leave phase / real / imaginary unset.
-     */
-    class ImpedanceAtFrequency {
-        public:
-        ImpedanceAtFrequency() :
-            frequency_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
-        {}
-        virtual ~ImpedanceAtFrequency() = default;
-
-        private:
-        double frequency;
-        ClassMemberConstraints frequency_constraint;
-        ImpedancePoint impedance;
-
-        public:
-        /**
-         * Frequency at which the impedance applies. Unit: Hz.
-         */
-        const double & get_frequency() const { return frequency; }
-        double & get_mutable_frequency() { return frequency; }
-        void set_frequency(const double & value) { CheckConstraint("frequency", frequency_constraint, value); this->frequency = value; }
-
-        const ImpedancePoint & get_impedance() const { return impedance; }
-        ImpedancePoint & get_mutable_impedance() { return impedance; }
-        void set_impedance(const ImpedancePoint & value) { this->impedance = value; }
-    };
-
-    /**
      * Sub application of the magnetic, can be Power Filtering, Transforming, Isolation, Common
      * Mode Noise Filtering, Differential Mode Noise Filtering
      */
@@ -2293,7 +2661,7 @@ namespace MAS {
     /**
      * Topology that will use the magnetic
      */
-    enum class Topologies : int { ACTIVE_CLAMP_FORWARD_CONVERTER, ASYMMETRIC_HALF_BRIDGE_CONVERTER, BOOST_CONVERTER, BUCK_CONVERTER, CLLC_RESONANT_CONVERTER, COMMON_MODE_CHOKE, CUK_CONVERTER, CURRENT_TRANSFORMER, DIFFERENTIAL_MODE_CHOKE, DUAL_ACTIVE_BRIDGE_CONVERTER, FLYBACK_CONVERTER, FULL_BRIDGE_CONVERTER, HALF_BRIDGE_CONVERTER, INVERTING_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_CONVERTER, LLC_RESONANT_CONVERTER, PHASE_SHIFTED_FULL_BRIDGE_CONVERTER, PHASE_SHIFTED_HALF_BRIDGE_CONVERTER, POWER_FACTOR_CORRECTION, PUSH_PULL_CONVERTER, SEPIC, SINGLE_SWITCH_FORWARD_CONVERTER, TWO_SWITCH_FORWARD_CONVERTER, WEINBERG_CONVERTER, ZETA_CONVERTER };
+    enum class Topologies : int { ACTIVE_CLAMP_FORWARD_CONVERTER, ASYMMETRIC_HALF_BRIDGE_CONVERTER, BOOST_CONVERTER, BUCK_CONVERTER, CLLC_RESONANT_CONVERTER, COMMON_MODE_CHOKE, CURRENT_TRANSFORMER, DIFFERENTIAL_MODE_CHOKE, DUAL_ACTIVE_BRIDGE_CONVERTER, FLYBACK_CONVERTER, ISOLATED_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_CONVERTER, LLC_RESONANT_CONVERTER, PHASE_SHIFTED_FULL_BRIDGE_CONVERTER, PHASE_SHIFTED_HALF_BRIDGE_CONVERTER, POWER_FACTOR_CORRECTION, PUSH_PULL_CONVERTER, SINGLE_SWITCH_FORWARD_CONVERTER, TWO_SWITCH_FORWARD_CONVERTER };
 
     /**
      * Technology that must be used to create the wiring
@@ -8627,8 +8995,26 @@ void to_json(json & j, const CllcOperatingPoint & x);
 void from_json(const json & j, CllcResonant & x);
 void to_json(json & j, const CllcResonant & x);
 
+void from_json(const json & j, ImpedancePoint & x);
+void to_json(json & j, const ImpedancePoint & x);
+
+void from_json(const json & j, ImpedanceAtFrequency & x);
+void to_json(json & j, const ImpedanceAtFrequency & x);
+
+void from_json(const json & j, InsertionLossAtFrequency & x);
+void to_json(json & j, const InsertionLossAtFrequency & x);
+
+void from_json(const json & j, CommonModeChoke & x);
+void to_json(json & j, const CommonModeChoke & x);
+
 void from_json(const json & j, CurrentTransformer & x);
 void to_json(json & j, const CurrentTransformer & x);
+
+void from_json(const json & j, AttenuationAtFrequency & x);
+void to_json(json & j, const AttenuationAtFrequency & x);
+
+void from_json(const json & j, DifferentialModeChoke & x);
+void to_json(json & j, const DifferentialModeChoke & x);
 
 void from_json(const json & j, DabOperatingPoint & x);
 void to_json(json & j, const DabOperatingPoint & x);
@@ -8657,14 +9043,17 @@ void to_json(json & j, const LlcResonant & x);
 void from_json(const json & j, PsfbOperatingPoint & x);
 void to_json(json & j, const PsfbOperatingPoint & x);
 
-void from_json(const json & j, PhaseShiftFullBridge & x);
-void to_json(json & j, const PhaseShiftFullBridge & x);
+void from_json(const json & j, PhaseShiftedFullBridge & x);
+void to_json(json & j, const PhaseShiftedFullBridge & x);
 
 void from_json(const json & j, PshbOperatingPoint & x);
 void to_json(json & j, const PshbOperatingPoint & x);
 
 void from_json(const json & j, PhaseShiftedHalfBridge & x);
 void to_json(json & j, const PhaseShiftedHalfBridge & x);
+
+void from_json(const json & j, PowerFactorCorrection & x);
+void to_json(json & j, const PowerFactorCorrection & x);
 
 void from_json(const json & j, PushPull & x);
 void to_json(json & j, const PushPull & x);
@@ -8680,12 +9069,6 @@ void to_json(json & j, const InsulationRequirements & x);
 
 void from_json(const json & j, MaximumDimensions & x);
 void to_json(json & j, const MaximumDimensions & x);
-
-void from_json(const json & j, ImpedancePoint & x);
-void to_json(json & j, const ImpedancePoint & x);
-
-void from_json(const json & j, ImpedanceAtFrequency & x);
-void to_json(json & j, const ImpedanceAtFrequency & x);
 
 void from_json(const json & j, DesignRequirements & x);
 void to_json(json & j, const DesignRequirements & x);
@@ -9017,6 +9400,9 @@ void to_json(json & j, const CllcPowerFlow & x);
 void from_json(const json & j, WaveformLabel & x);
 void to_json(json & j, const WaveformLabel & x);
 
+void from_json(const json & j, Configuration & x);
+void to_json(json & j, const Configuration & x);
+
 void from_json(const json & j, ModulationType & x);
 void to_json(json & j, const ModulationType & x);
 
@@ -9028,6 +9414,9 @@ void to_json(json & j, const LlcBridgeType & x);
 
 void from_json(const json & j, BRectifierType & x);
 void to_json(json & j, const BRectifierType & x);
+
+void from_json(const json & j, PfcModes & x);
+void to_json(json & j, const PfcModes & x);
 
 void from_json(const json & j, Application & x);
 void to_json(json & j, const Application & x);
@@ -9310,6 +9699,7 @@ namespace MAS {
 
     inline void from_json(const json & j, AsymmetricHalfBridge& x) {
         x.set_dc_blocking_capacitance(get_stack_optional<double>(j, "dcBlockingCapacitance"));
+        x.set_diode_voltage_drop(get_stack_optional<double>(j, "diodeVoltageDrop"));
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_input_voltage_step_range(get_stack_optional<double>(j, "inputVoltageStepRange"));
@@ -9325,6 +9715,7 @@ namespace MAS {
     inline void to_json(json & j, const AsymmetricHalfBridge & x) {
         j = json::object();
         j["dcBlockingCapacitance"] = x.get_dc_blocking_capacitance();
+        j["diodeVoltageDrop"] = x.get_diode_voltage_drop();
         j["efficiency"] = x.get_efficiency();
         j["inputVoltage"] = x.get_input_voltage();
         j["inputVoltageStepRange"] = x.get_input_voltage_step_range();
@@ -9438,6 +9829,68 @@ namespace MAS {
         j["symmetricDesign"] = x.get_symmetric_design();
     }
 
+    inline void from_json(const json & j, ImpedancePoint& x) {
+        x.set_imaginary_part(get_stack_optional<double>(j, "imaginaryPart"));
+        x.set_magnitude(j.at("magnitude").get<double>());
+        x.set_phase(get_stack_optional<double>(j, "phase"));
+        x.set_real_part(get_stack_optional<double>(j, "realPart"));
+    }
+
+    inline void to_json(json & j, const ImpedancePoint & x) {
+        j = json::object();
+        j["imaginaryPart"] = x.get_imaginary_part();
+        j["magnitude"] = x.get_magnitude();
+        j["phase"] = x.get_phase();
+        j["realPart"] = x.get_real_part();
+    }
+
+    inline void from_json(const json & j, ImpedanceAtFrequency& x) {
+        x.set_frequency(j.at("frequency").get<double>());
+        x.set_impedance(j.at("impedance").get<ImpedancePoint>());
+    }
+
+    inline void to_json(json & j, const ImpedanceAtFrequency & x) {
+        j = json::object();
+        j["frequency"] = x.get_frequency();
+        j["impedance"] = x.get_impedance();
+    }
+
+    inline void from_json(const json & j, InsertionLossAtFrequency& x) {
+        x.set_frequency(j.at("frequency").get<double>());
+        x.set_insertion_loss(j.at("insertionLoss").get<double>());
+    }
+
+    inline void to_json(json & j, const InsertionLossAtFrequency & x) {
+        j = json::object();
+        j["frequency"] = x.get_frequency();
+        j["insertionLoss"] = x.get_insertion_loss();
+    }
+
+    inline void from_json(const json & j, CommonModeChoke& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_line_frequency(j.at("lineFrequency").get<double>());
+        x.set_line_impedance(get_stack_optional<double>(j, "lineImpedance"));
+        x.set_maximum_dc_resistance(get_stack_optional<double>(j, "maximumDcResistance"));
+        x.set_maximum_leakage_inductance(get_stack_optional<double>(j, "maximumLeakageInductance"));
+        x.set_minimum_impedance(j.at("minimumImpedance").get<std::vector<ImpedanceAtFrequency>>());
+        x.set_operating_current(j.at("operatingCurrent").get<double>());
+        x.set_operating_voltage(j.at("operatingVoltage").get<DimensionWithTolerance>());
+        x.set_target_insertion_loss(get_stack_optional<std::vector<InsertionLossAtFrequency>>(j, "targetInsertionLoss"));
+    }
+
+    inline void to_json(json & j, const CommonModeChoke & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["lineFrequency"] = x.get_line_frequency();
+        j["lineImpedance"] = x.get_line_impedance();
+        j["maximumDcResistance"] = x.get_maximum_dc_resistance();
+        j["maximumLeakageInductance"] = x.get_maximum_leakage_inductance();
+        j["minimumImpedance"] = x.get_minimum_impedance();
+        j["operatingCurrent"] = x.get_operating_current();
+        j["operatingVoltage"] = x.get_operating_voltage();
+        j["targetInsertionLoss"] = x.get_target_insertion_loss();
+    }
+
     inline void from_json(const json & j, CurrentTransformer& x) {
         x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
         x.set_burden_resistor(j.at("burdenResistor").get<double>());
@@ -9457,6 +9910,50 @@ namespace MAS {
         j["maximumDutyCycle"] = x.get_maximum_duty_cycle();
         j["maximumPrimaryCurrentPeak"] = x.get_maximum_primary_current_peak();
         j["waveformLabel"] = x.get_waveform_label();
+    }
+
+    inline void from_json(const json & j, AttenuationAtFrequency& x) {
+        x.set_attenuation(j.at("attenuation").get<double>());
+        x.set_frequency(j.at("frequency").get<double>());
+    }
+
+    inline void to_json(json & j, const AttenuationAtFrequency & x) {
+        j = json::object();
+        j["attenuation"] = x.get_attenuation();
+        j["frequency"] = x.get_frequency();
+    }
+
+    inline void from_json(const json & j, DifferentialModeChoke& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_configuration(get_stack_optional<Configuration>(j, "configuration"));
+        x.set_filter_capacitance(get_stack_optional<double>(j, "filterCapacitance"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_line_frequency(j.at("lineFrequency").get<double>());
+        x.set_maximum_core_temperature_rise(get_stack_optional<double>(j, "maximumCoreTemperatureRise"));
+        x.set_maximum_dc_resistance(get_stack_optional<double>(j, "maximumDcResistance"));
+        x.set_minimum_impedance(get_stack_optional<std::vector<ImpedanceAtFrequency>>(j, "minimumImpedance"));
+        x.set_minimum_inductance(get_stack_optional<double>(j, "minimumInductance"));
+        x.set_operating_current(j.at("operatingCurrent").get<double>());
+        x.set_peak_current(get_stack_optional<double>(j, "peakCurrent"));
+        x.set_switching_frequency(get_stack_optional<double>(j, "switchingFrequency"));
+        x.set_target_attenuation(get_stack_optional<std::vector<AttenuationAtFrequency>>(j, "targetAttenuation"));
+    }
+
+    inline void to_json(json & j, const DifferentialModeChoke & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["configuration"] = x.get_configuration();
+        j["filterCapacitance"] = x.get_filter_capacitance();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["lineFrequency"] = x.get_line_frequency();
+        j["maximumCoreTemperatureRise"] = x.get_maximum_core_temperature_rise();
+        j["maximumDcResistance"] = x.get_maximum_dc_resistance();
+        j["minimumImpedance"] = x.get_minimum_impedance();
+        j["minimumInductance"] = x.get_minimum_inductance();
+        j["operatingCurrent"] = x.get_operating_current();
+        j["peakCurrent"] = x.get_peak_current();
+        j["switchingFrequency"] = x.get_switching_frequency();
+        j["targetAttenuation"] = x.get_target_attenuation();
     }
 
     inline void from_json(const json & j, DabOperatingPoint& x) {
@@ -9658,7 +10155,7 @@ namespace MAS {
         j["phaseShift"] = x.get_phase_shift();
     }
 
-    inline void from_json(const json & j, PhaseShiftFullBridge& x) {
+    inline void from_json(const json & j, PhaseShiftedFullBridge& x) {
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
         x.set_maximum_phase_shift(get_stack_optional<double>(j, "maximumPhaseShift"));
@@ -9669,7 +10166,7 @@ namespace MAS {
         x.set_use_leakage_inductance(get_stack_optional<bool>(j, "useLeakageInductance"));
     }
 
-    inline void to_json(json & j, const PhaseShiftFullBridge & x) {
+    inline void to_json(json & j, const PhaseShiftedFullBridge & x) {
         j = json::object();
         j["efficiency"] = x.get_efficiency();
         j["inputVoltage"] = x.get_input_voltage();
@@ -9725,6 +10222,37 @@ namespace MAS {
         j["useLeakageInductance"] = x.get_use_leakage_inductance();
     }
 
+    inline void from_json(const json & j, PowerFactorCorrection& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
+        x.set_diode_voltage_drop(get_stack_optional<double>(j, "diodeVoltageDrop"));
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_line_frequency(get_stack_optional<double>(j, "lineFrequency"));
+        x.set_maximum_core_temperature_rise(get_stack_optional<double>(j, "maximumCoreTemperatureRise"));
+        x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
+        x.set_mode(get_stack_optional<PfcModes>(j, "mode"));
+        x.set_output_power(j.at("outputPower").get<double>());
+        x.set_output_voltage(j.at("outputVoltage").get<double>());
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+    }
+
+    inline void to_json(json & j, const PowerFactorCorrection & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["currentRippleRatio"] = x.get_current_ripple_ratio();
+        j["diodeVoltageDrop"] = x.get_diode_voltage_drop();
+        j["efficiency"] = x.get_efficiency();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["lineFrequency"] = x.get_line_frequency();
+        j["maximumCoreTemperatureRise"] = x.get_maximum_core_temperature_rise();
+        j["maximumSwitchCurrent"] = x.get_maximum_switch_current();
+        j["mode"] = x.get_mode();
+        j["outputPower"] = x.get_output_power();
+        j["outputVoltage"] = x.get_output_voltage();
+        j["switchingFrequency"] = x.get_switching_frequency();
+    }
+
     inline void from_json(const json & j, PushPull& x) {
         x.set_current_ripple_ratio(j.at("currentRippleRatio").get<double>());
         x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
@@ -9753,15 +10281,18 @@ namespace MAS {
         x.set_boost(get_stack_optional<Boost>(j, "boost"));
         x.set_buck(get_stack_optional<Buck>(j, "buck"));
         x.set_cllc_resonant(get_stack_optional<CllcResonant>(j, "cllcResonant"));
+        x.set_common_mode_choke(get_stack_optional<CommonModeChoke>(j, "commonModeChoke"));
         x.set_current_transformer(get_stack_optional<CurrentTransformer>(j, "currentTransformer"));
+        x.set_differential_mode_choke(get_stack_optional<DifferentialModeChoke>(j, "differentialModeChoke"));
         x.set_dual_active_bridge(get_stack_optional<DualActiveBridge>(j, "dualActiveBridge"));
         x.set_flyback(get_stack_optional<Flyback>(j, "flyback"));
         x.set_forward(get_stack_optional<Forward>(j, "forward"));
         x.set_isolated_buck(get_stack_optional<IsolatedBuck>(j, "isolatedBuck"));
         x.set_isolated_buck_boost(get_stack_optional<IsolatedBuckBoost>(j, "isolatedBuckBoost"));
         x.set_llc_resonant(get_stack_optional<LlcResonant>(j, "llcResonant"));
+        x.set_phase_shifted_full_bridge(get_stack_optional<PhaseShiftedFullBridge>(j, "phaseShiftedFullBridge"));
         x.set_phase_shifted_half_bridge(get_stack_optional<PhaseShiftedHalfBridge>(j, "phaseShiftedHalfBridge"));
-        x.set_phase_shift_full_bridge(get_stack_optional<PhaseShiftFullBridge>(j, "phaseShiftFullBridge"));
+        x.set_power_factor_correction(get_stack_optional<PowerFactorCorrection>(j, "powerFactorCorrection"));
         x.set_push_pull(get_stack_optional<PushPull>(j, "pushPull"));
     }
 
@@ -9771,15 +10302,18 @@ namespace MAS {
         j["boost"] = x.get_boost();
         j["buck"] = x.get_buck();
         j["cllcResonant"] = x.get_cllc_resonant();
+        j["commonModeChoke"] = x.get_common_mode_choke();
         j["currentTransformer"] = x.get_current_transformer();
+        j["differentialModeChoke"] = x.get_differential_mode_choke();
         j["dualActiveBridge"] = x.get_dual_active_bridge();
         j["flyback"] = x.get_flyback();
         j["forward"] = x.get_forward();
         j["isolatedBuck"] = x.get_isolated_buck();
         j["isolatedBuckBoost"] = x.get_isolated_buck_boost();
         j["llcResonant"] = x.get_llc_resonant();
+        j["phaseShiftedFullBridge"] = x.get_phase_shifted_full_bridge();
         j["phaseShiftedHalfBridge"] = x.get_phase_shifted_half_bridge();
-        j["phaseShiftFullBridge"] = x.get_phase_shift_full_bridge();
+        j["powerFactorCorrection"] = x.get_power_factor_correction();
         j["pushPull"] = x.get_push_pull();
     }
 
@@ -9824,32 +10358,6 @@ namespace MAS {
         j["depth"] = x.get_depth();
         j["height"] = x.get_height();
         j["width"] = x.get_width();
-    }
-
-    inline void from_json(const json & j, ImpedancePoint& x) {
-        x.set_imaginary_part(get_stack_optional<double>(j, "imaginaryPart"));
-        x.set_magnitude(j.at("magnitude").get<double>());
-        x.set_phase(get_stack_optional<double>(j, "phase"));
-        x.set_real_part(get_stack_optional<double>(j, "realPart"));
-    }
-
-    inline void to_json(json & j, const ImpedancePoint & x) {
-        j = json::object();
-        j["imaginaryPart"] = x.get_imaginary_part();
-        j["magnitude"] = x.get_magnitude();
-        j["phase"] = x.get_phase();
-        j["realPart"] = x.get_real_part();
-    }
-
-    inline void from_json(const json & j, ImpedanceAtFrequency& x) {
-        x.set_frequency(j.at("frequency").get<double>());
-        x.set_impedance(j.at("impedance").get<ImpedancePoint>());
-    }
-
-    inline void to_json(json & j, const ImpedanceAtFrequency & x) {
-        j = json::object();
-        j["frequency"] = x.get_frequency();
-        j["impedance"] = x.get_impedance();
     }
 
     inline void from_json(const json & j, DesignRequirements& x) {
@@ -11999,6 +12507,24 @@ namespace MAS {
         }
     }
 
+    inline void from_json(const json & j, Configuration & x) {
+        if (j == "singlePhase") x = Configuration::SINGLE_PHASE;
+        else if (j == "singlePhaseBalanced") x = Configuration::SINGLE_PHASE_BALANCED;
+        else if (j == "threePhase") x = Configuration::THREE_PHASE;
+        else if (j == "threePhaseWithNeutral") x = Configuration::THREE_PHASE_WITH_NEUTRAL;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const Configuration & x) {
+        switch (x) {
+            case Configuration::SINGLE_PHASE: j = "singlePhase"; break;
+            case Configuration::SINGLE_PHASE_BALANCED: j = "singlePhaseBalanced"; break;
+            case Configuration::THREE_PHASE: j = "threePhase"; break;
+            case Configuration::THREE_PHASE_WITH_NEUTRAL: j = "threePhaseWithNeutral"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
     inline void from_json(const json & j, ModulationType & x) {
         if (j == "DPS") x = ModulationType::DPS;
         else if (j == "EPS") x = ModulationType::EPS;
@@ -12061,6 +12587,24 @@ namespace MAS {
             case BRectifierType::CENTER_TAPPED: j = "centerTapped"; break;
             case BRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
             case BRectifierType::FULL_BRIDGE: j = "fullBridge"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, PfcModes & x) {
+        if (j == "continuousConductionMode") x = PfcModes::CONTINUOUS_CONDUCTION_MODE;
+        else if (j == "criticalConductionMode") x = PfcModes::CRITICAL_CONDUCTION_MODE;
+        else if (j == "discontinuousConductionMode") x = PfcModes::DISCONTINUOUS_CONDUCTION_MODE;
+        else if (j == "transitionMode") x = PfcModes::TRANSITION_MODE;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const PfcModes & x) {
+        switch (x) {
+            case PfcModes::CONTINUOUS_CONDUCTION_MODE: j = "continuousConductionMode"; break;
+            case PfcModes::CRITICAL_CONDUCTION_MODE: j = "criticalConductionMode"; break;
+            case PfcModes::DISCONTINUOUS_CONDUCTION_MODE: j = "discontinuousConductionMode"; break;
+            case PfcModes::TRANSITION_MODE: j = "transitionMode"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
@@ -12277,14 +12821,10 @@ namespace MAS {
             {"buckConverter", Topologies::BUCK_CONVERTER},
             {"cllcResonantConverter", Topologies::CLLC_RESONANT_CONVERTER},
             {"commonModeChoke", Topologies::COMMON_MODE_CHOKE},
-            {"cukConverter", Topologies::CUK_CONVERTER},
             {"currentTransformer", Topologies::CURRENT_TRANSFORMER},
             {"differentialModeChoke", Topologies::DIFFERENTIAL_MODE_CHOKE},
             {"dualActiveBridgeConverter", Topologies::DUAL_ACTIVE_BRIDGE_CONVERTER},
             {"flybackConverter", Topologies::FLYBACK_CONVERTER},
-            {"fullBridgeConverter", Topologies::FULL_BRIDGE_CONVERTER},
-            {"halfBridgeConverter", Topologies::HALF_BRIDGE_CONVERTER},
-            {"invertingBuckBoostConverter", Topologies::INVERTING_BUCK_BOOST_CONVERTER},
             {"isolatedBuckBoostConverter", Topologies::ISOLATED_BUCK_BOOST_CONVERTER},
             {"isolatedBuckConverter", Topologies::ISOLATED_BUCK_CONVERTER},
             {"llcResonantConverter", Topologies::LLC_RESONANT_CONVERTER},
@@ -12292,11 +12832,8 @@ namespace MAS {
             {"phaseShiftedHalfBridgeConverter", Topologies::PHASE_SHIFTED_HALF_BRIDGE_CONVERTER},
             {"powerFactorCorrection", Topologies::POWER_FACTOR_CORRECTION},
             {"pushPullConverter", Topologies::PUSH_PULL_CONVERTER},
-            {"SEPIC", Topologies::SEPIC},
             {"singleSwitchForwardConverter", Topologies::SINGLE_SWITCH_FORWARD_CONVERTER},
             {"twoSwitchForwardConverter", Topologies::TWO_SWITCH_FORWARD_CONVERTER},
-            {"weinbergConverter", Topologies::WEINBERG_CONVERTER},
-            {"zetaConverter", Topologies::ZETA_CONVERTER},
         };
         auto iter = enumValues.find(j.get<std::string>());
         if (iter != enumValues.end()) {
@@ -12312,14 +12849,10 @@ namespace MAS {
             case Topologies::BUCK_CONVERTER: j = "buckConverter"; break;
             case Topologies::CLLC_RESONANT_CONVERTER: j = "cllcResonantConverter"; break;
             case Topologies::COMMON_MODE_CHOKE: j = "commonModeChoke"; break;
-            case Topologies::CUK_CONVERTER: j = "cukConverter"; break;
             case Topologies::CURRENT_TRANSFORMER: j = "currentTransformer"; break;
             case Topologies::DIFFERENTIAL_MODE_CHOKE: j = "differentialModeChoke"; break;
             case Topologies::DUAL_ACTIVE_BRIDGE_CONVERTER: j = "dualActiveBridgeConverter"; break;
             case Topologies::FLYBACK_CONVERTER: j = "flybackConverter"; break;
-            case Topologies::FULL_BRIDGE_CONVERTER: j = "fullBridgeConverter"; break;
-            case Topologies::HALF_BRIDGE_CONVERTER: j = "halfBridgeConverter"; break;
-            case Topologies::INVERTING_BUCK_BOOST_CONVERTER: j = "invertingBuckBoostConverter"; break;
             case Topologies::ISOLATED_BUCK_BOOST_CONVERTER: j = "isolatedBuckBoostConverter"; break;
             case Topologies::ISOLATED_BUCK_CONVERTER: j = "isolatedBuckConverter"; break;
             case Topologies::LLC_RESONANT_CONVERTER: j = "llcResonantConverter"; break;
@@ -12327,11 +12860,8 @@ namespace MAS {
             case Topologies::PHASE_SHIFTED_HALF_BRIDGE_CONVERTER: j = "phaseShiftedHalfBridgeConverter"; break;
             case Topologies::POWER_FACTOR_CORRECTION: j = "powerFactorCorrection"; break;
             case Topologies::PUSH_PULL_CONVERTER: j = "pushPullConverter"; break;
-            case Topologies::SEPIC: j = "SEPIC"; break;
             case Topologies::SINGLE_SWITCH_FORWARD_CONVERTER: j = "singleSwitchForwardConverter"; break;
             case Topologies::TWO_SWITCH_FORWARD_CONVERTER: j = "twoSwitchForwardConverter"; break;
-            case Topologies::WEINBERG_CONVERTER: j = "weinbergConverter"; break;
-            case Topologies::ZETA_CONVERTER: j = "zetaConverter"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }

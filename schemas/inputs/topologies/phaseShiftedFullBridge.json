@@ -1,8 +1,8 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://psma.com/mas/inputs/topologies/phaseShiftFullBridge.json",
+    "$id": "https://psma.com/mas/inputs/topologies/phaseShiftedFullBridge.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
-    "title": "phaseShiftFullBridge",
+    "title": "phaseShiftedFullBridge",
     "description": "The description of a Phase Shift Full Bridge (PSFB) converter excitation",
     "type": "object",
     "properties": {

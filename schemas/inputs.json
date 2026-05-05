@@ -60,11 +60,20 @@
                         "cllcResonant": {
                             "$ref": "./inputs/topologies/cllcResonant.json"
                         },
-                        "phaseShiftFullBridge": {
-                            "$ref": "./inputs/topologies/phaseShiftFullBridge.json"
+                        "phaseShiftedFullBridge": {
+                            "$ref": "./inputs/topologies/phaseShiftedFullBridge.json"
                         },
                         "phaseShiftedHalfBridge": {
                             "$ref": "./inputs/topologies/phaseShiftedHalfBridge.json"
+                        },
+                        "powerFactorCorrection": {
+                            "$ref": "./inputs/topologies/powerFactorCorrection.json"
+                        },
+                        "commonModeChoke": {
+                            "$ref": "./inputs/topologies/commonModeChoke.json"
+                        },
+                        "differentialModeChoke": {
+                            "$ref": "./inputs/topologies/differentialModeChoke.json"
                         },
                         "asymmetricHalfBridge": {
                             "$ref": "./inputs/topologies/asymmetricHalfBridge.json"
