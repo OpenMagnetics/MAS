@@ -20,7 +20,9 @@
         },
         "dutyCycle": {
             "description": "Duty cycle for the converter, maximum 50%",
-            "type": "number"
+            "type": "number",
+            "minimum": 0,
+            "maximum": 0.5
         },
         "maximumSwitchCurrent": {
             "description": "The maximum current that can go through the selected switch",

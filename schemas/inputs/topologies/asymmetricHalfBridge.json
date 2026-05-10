@@ -90,8 +90,10 @@
                     "type": "object",
                     "properties": {
                         "dutyCycle": {
-                            "description": "Commanded duty cycle of Q1 for this operating point (0 < D <= 0.5 for the conventional non-monotonic gain branch)",
-                            "type": "number"
+                            "description": "Commanded duty cycle of Q1 for this operating point (0 < D <= 0.5 for the conventional non-monotonic gain branch). Schema bounds 0 <= D <= 1 to permit the upper-branch research configuration.",
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
                         }
                     },
                     "required": [

@@ -386,7 +386,9 @@ namespace MAS {
      */
     class AhbOperatingPoint {
         public:
-        AhbOperatingPoint() = default;
+        AhbOperatingPoint() :
+            duty_cycle_constraint(std::nullopt, std::nullopt, std::nullopt, 1, std::nullopt, std::nullopt, std::nullopt)
+        {}
         virtual ~AhbOperatingPoint() = default;
 
         private:
@@ -397,6 +399,7 @@ namespace MAS {
         std::optional<OutputSType> output_voltages_type;
         double switching_frequency;
         double duty_cycle;
+        ClassMemberConstraints duty_cycle_constraint;
 
         public:
         /**
@@ -445,11 +448,12 @@ namespace MAS {
 
         /**
          * Commanded duty cycle of Q1 for this operating point (0 < D <= 0.5 for the conventional
-         * non-monotonic gain branch)
+         * non-monotonic gain branch). Schema bounds 0 <= D <= 1 to permit the upper-branch research
+         * configuration.
          */
         const double & get_duty_cycle() const { return duty_cycle; }
         double & get_mutable_duty_cycle() { return duty_cycle; }
-        void set_duty_cycle(const double & value) { this->duty_cycle = value; }
+        void set_duty_cycle(const double & value) { CheckConstraint("duty_cycle", duty_cycle_constraint, value); this->duty_cycle = value; }
     };
 
     /**
@@ -1640,13 +1644,16 @@ namespace MAS {
      */
     class Forward {
         public:
-        Forward() = default;
+        Forward() :
+            duty_cycle_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
+        {}
         virtual ~Forward() = default;
 
         private:
         double current_ripple_ratio;
         double diode_voltage_drop;
         std::optional<double> duty_cycle;
+        ClassMemberConstraints duty_cycle_constraint;
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_switch_current;
@@ -1671,7 +1678,7 @@ namespace MAS {
          * Duty cycle for the converter, maximum 50%
          */
         std::optional<double> get_duty_cycle() const { return duty_cycle; }
-        void set_duty_cycle(std::optional<double> value) { this->duty_cycle = value; }
+        void set_duty_cycle(std::optional<double> value) { if (value) CheckConstraint("duty_cycle", duty_cycle_constraint, *value); this->duty_cycle = value; }
 
         /**
          * The target efficiency
@@ -2366,13 +2373,16 @@ namespace MAS {
      */
     class PushPull {
         public:
-        PushPull() = default;
+        PushPull() :
+            duty_cycle_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
+        {}
         virtual ~PushPull() = default;
 
         private:
         double current_ripple_ratio;
         double diode_voltage_drop;
         std::optional<double> duty_cycle;
+        ClassMemberConstraints duty_cycle_constraint;
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
         std::optional<double> maximum_drain_source_voltage;
@@ -2398,7 +2408,7 @@ namespace MAS {
          * Duty cycle for the converter, maximum 50%
          */
         std::optional<double> get_duty_cycle() const { return duty_cycle; }
-        void set_duty_cycle(std::optional<double> value) { this->duty_cycle = value; }
+        void set_duty_cycle(std::optional<double> value) { if (value) CheckConstraint("duty_cycle", duty_cycle_constraint, *value); this->duty_cycle = value; }
 
         /**
          * The target efficiency
