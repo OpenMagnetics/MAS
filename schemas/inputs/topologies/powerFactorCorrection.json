@@ -3,7 +3,7 @@
     "$id": "https://psma.com/mas/inputs/topologies/powerFactorCorrection.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "powerFactorCorrection",
-    "description": "The description of a Power Factor Correction (PFC) boost inductor. PFC converters shape the input current to follow the input voltage waveform, achieving near-unity power factor. The inductor operates with a triangular current ripple superimposed on a half-sinusoidal envelope. This topology covers both continuous (CCM) and discontinuous (DCM) conduction modes.",
+    "description": "The description of a Power Factor Correction (PFC) stage. PFC converters shape the input current to follow the input voltage waveform, achieving near-unity power factor. The inductor operates with a triangular current ripple superimposed on a half-sinusoidal envelope. This topology covers both continuous (CCM) and discontinuous (DCM) conduction modes across the standard single-phase and three-phase variants (boost, bridgeless, totem-pole, interleaved boost, Vienna, etc.).",
     "type": "object",
     "properties": {
         "inputVoltage": {
@@ -41,6 +41,26 @@
             "description": "The conduction mode of the PFC",
             "$ref": "#/$defs/pfcModes"
         },
+        "topologyVariant": {
+            "description": "The PFC topology variant. 'boost' is the classical single-phase boost PFC (full-bridge rectifier + boost stage), the default. 'bridgeless' / 'semiBridgeless' / 'totemPole' eliminate the input rectifier bridge for higher efficiency. 'interleavedBoost' uses N>=2 parallel boost cells phase-shifted for ripple cancellation. 'vienna' is the 3-phase 3-level rectifier used in telecom and EV chargers. 'buck' / 'buckBoost' / 'sepic' / 'cuk' are step-down or buck-boost variants used in low-power LED drivers and isolated PFC stages.",
+            "$ref": "#/$defs/pfcTopologyVariants",
+            "default": "boost"
+        },
+        "numberOfPhases": {
+            "description": "Number of parallel phases / interleaved cells. 1 for boost/bridgeless/totemPole/buck variants; 2 or 3 for interleavedBoost; 3 for vienna.",
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+        },
+        "wideBandgapSwitch": {
+            "description": "Whether the active switches are wide-bandgap (GaN/SiC) devices. Required true for totem-pole CCM PFC (Si MOSFET body-diode reverse recovery makes CCM totem-pole infeasible).",
+            "type": "boolean",
+            "default": false
+        },
+        "bulkCapacitance": {
+            "description": "The DC bus bulk capacitance in farads. Used by the operating-point synthesis to compute the twice-line-frequency bus-voltage ripple: ΔVbus ≈ Pout / (2·π·f_line·Cbus·Vbus). Sized in practice from hold-up-time requirements (~1–4 µF/W of output power for 230 Vrms input, 400 V bus, 20 ms hold-up).",
+            "type": "number"
+        },
         "diodeVoltageDrop": {
             "description": "The voltage drop on the boost diode",
             "type": "number",
@@ -76,6 +96,23 @@
                 "discontinuousConductionMode",
                 "criticalConductionMode",
                 "transitionMode"
+            ]
+        },
+        "pfcTopologyVariants": {
+            "description": "The PFC topology variant. See `topologyVariant` field for descriptions.",
+            "title": "pfcTopologyVariants",
+            "type": "string",
+            "enum": [
+                "boost",
+                "bridgeless",
+                "semiBridgeless",
+                "totemPole",
+                "interleavedBoost",
+                "vienna",
+                "buck",
+                "buckBoost",
+                "sepic",
+                "cuk"
             ]
         }
     }

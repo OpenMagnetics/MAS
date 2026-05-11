@@ -2263,19 +2263,36 @@ namespace MAS {
     enum class PfcModes : int { CONTINUOUS_CONDUCTION_MODE, CRITICAL_CONDUCTION_MODE, DISCONTINUOUS_CONDUCTION_MODE, TRANSITION_MODE };
 
     /**
-     * The description of a Power Factor Correction (PFC) boost inductor. PFC converters shape
-     * the input current to follow the input voltage waveform, achieving near-unity power
-     * factor. The inductor operates with a triangular current ripple superimposed on a
-     * half-sinusoidal envelope. This topology covers both continuous (CCM) and discontinuous
-     * (DCM) conduction modes.
+     * The PFC topology variant. 'boost' is the classical single-phase boost PFC (full-bridge
+     * rectifier + boost stage), the default. 'bridgeless' / 'semiBridgeless' / 'totemPole'
+     * eliminate the input rectifier bridge for higher efficiency. 'interleavedBoost' uses N>=2
+     * parallel boost cells phase-shifted for ripple cancellation. 'vienna' is the 3-phase
+     * 3-level rectifier used in telecom and EV chargers. 'buck' / 'buckBoost' / 'sepic' / 'cuk'
+     * are step-down or buck-boost variants used in low-power LED drivers and isolated PFC
+     * stages.
+     *
+     * The PFC topology variant. See `topologyVariant` field for descriptions.
+     */
+    enum class PfcTopologyVariants : int { BOOST, BRIDGELESS, BUCK, BUCK_BOOST, CUK, INTERLEAVED_BOOST, SEMI_BRIDGELESS, SEPIC, TOTEM_POLE, VIENNA };
+
+    /**
+     * The description of a Power Factor Correction (PFC) stage. PFC converters shape the input
+     * current to follow the input voltage waveform, achieving near-unity power factor. The
+     * inductor operates with a triangular current ripple superimposed on a half-sinusoidal
+     * envelope. This topology covers both continuous (CCM) and discontinuous (DCM) conduction
+     * modes across the standard single-phase and three-phase variants (boost, bridgeless,
+     * totem-pole, interleaved boost, Vienna, etc.).
      */
     class PowerFactorCorrection {
         public:
-        PowerFactorCorrection() = default;
+        PowerFactorCorrection() :
+            number_of_phases_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
+        {}
         virtual ~PowerFactorCorrection() = default;
 
         private:
         double ambient_temperature;
+        std::optional<double> bulk_capacitance;
         std::optional<double> current_ripple_ratio;
         std::optional<double> diode_voltage_drop;
         std::optional<double> efficiency;
@@ -2284,9 +2301,13 @@ namespace MAS {
         std::optional<double> maximum_core_temperature_rise;
         std::optional<double> maximum_switch_current;
         std::optional<PfcModes> mode;
+        std::optional<int64_t> number_of_phases;
+        ClassMemberConstraints number_of_phases_constraint;
         double output_power;
         double output_voltage;
         double switching_frequency;
+        std::optional<PfcTopologyVariants> topology_variant;
+        std::optional<bool> wide_bandgap_switch;
 
         public:
         /**
@@ -2295,6 +2316,15 @@ namespace MAS {
         const double & get_ambient_temperature() const { return ambient_temperature; }
         double & get_mutable_ambient_temperature() { return ambient_temperature; }
         void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * The DC bus bulk capacitance in farads. Used by the operating-point synthesis to compute
+         * the twice-line-frequency bus-voltage ripple: ΔVbus ≈ Pout / (2·π·f_line·Cbus·Vbus). Sized
+         * in practice from hold-up-time requirements (~1–4 µF/W of output power for 230 Vrms input,
+         * 400 V bus, 20 ms hold-up).
+         */
+        std::optional<double> get_bulk_capacitance() const { return bulk_capacitance; }
+        void set_bulk_capacitance(std::optional<double> value) { this->bulk_capacitance = value; }
 
         /**
          * The peak-to-peak current ripple as a ratio of the average current (typically 0.2-0.4 for
@@ -2347,6 +2377,13 @@ namespace MAS {
         void set_mode(std::optional<PfcModes> value) { this->mode = value; }
 
         /**
+         * Number of parallel phases / interleaved cells. 1 for boost/bridgeless/totemPole/buck
+         * variants; 2 or 3 for interleavedBoost; 3 for vienna.
+         */
+        std::optional<int64_t> get_number_of_phases() const { return number_of_phases; }
+        void set_number_of_phases(std::optional<int64_t> value) { if (value) CheckConstraint("number_of_phases", number_of_phases_constraint, *value); this->number_of_phases = value; }
+
+        /**
          * The output power in watts
          */
         const double & get_output_power() const { return output_power; }
@@ -2366,6 +2403,26 @@ namespace MAS {
         const double & get_switching_frequency() const { return switching_frequency; }
         double & get_mutable_switching_frequency() { return switching_frequency; }
         void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+
+        /**
+         * The PFC topology variant. 'boost' is the classical single-phase boost PFC (full-bridge
+         * rectifier + boost stage), the default. 'bridgeless' / 'semiBridgeless' / 'totemPole'
+         * eliminate the input rectifier bridge for higher efficiency. 'interleavedBoost' uses N>=2
+         * parallel boost cells phase-shifted for ripple cancellation. 'vienna' is the 3-phase
+         * 3-level rectifier used in telecom and EV chargers. 'buck' / 'buckBoost' / 'sepic' / 'cuk'
+         * are step-down or buck-boost variants used in low-power LED drivers and isolated PFC
+         * stages.
+         */
+        std::optional<PfcTopologyVariants> get_topology_variant() const { return topology_variant; }
+        void set_topology_variant(std::optional<PfcTopologyVariants> value) { this->topology_variant = value; }
+
+        /**
+         * Whether the active switches are wide-bandgap (GaN/SiC) devices. Required true for
+         * totem-pole CCM PFC (Si MOSFET body-diode reverse recovery makes CCM totem-pole
+         * infeasible).
+         */
+        std::optional<bool> get_wide_bandgap_switch() const { return wide_bandgap_switch; }
+        void set_wide_bandgap_switch(std::optional<bool> value) { this->wide_bandgap_switch = value; }
     };
 
     /**
@@ -9428,6 +9485,9 @@ void to_json(json & j, const BRectifierType & x);
 void from_json(const json & j, PfcModes & x);
 void to_json(json & j, const PfcModes & x);
 
+void from_json(const json & j, PfcTopologyVariants & x);
+void to_json(json & j, const PfcTopologyVariants & x);
+
 void from_json(const json & j, Application & x);
 void to_json(json & j, const Application & x);
 
@@ -10234,6 +10294,7 @@ namespace MAS {
 
     inline void from_json(const json & j, PowerFactorCorrection& x) {
         x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_bulk_capacitance(get_stack_optional<double>(j, "bulkCapacitance"));
         x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
         x.set_diode_voltage_drop(get_stack_optional<double>(j, "diodeVoltageDrop"));
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
@@ -10242,14 +10303,18 @@ namespace MAS {
         x.set_maximum_core_temperature_rise(get_stack_optional<double>(j, "maximumCoreTemperatureRise"));
         x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
         x.set_mode(get_stack_optional<PfcModes>(j, "mode"));
+        x.set_number_of_phases(get_stack_optional<int64_t>(j, "numberOfPhases"));
         x.set_output_power(j.at("outputPower").get<double>());
         x.set_output_voltage(j.at("outputVoltage").get<double>());
         x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+        x.set_topology_variant(get_stack_optional<PfcTopologyVariants>(j, "topologyVariant"));
+        x.set_wide_bandgap_switch(get_stack_optional<bool>(j, "wideBandgapSwitch"));
     }
 
     inline void to_json(json & j, const PowerFactorCorrection & x) {
         j = json::object();
         j["ambientTemperature"] = x.get_ambient_temperature();
+        j["bulkCapacitance"] = x.get_bulk_capacitance();
         j["currentRippleRatio"] = x.get_current_ripple_ratio();
         j["diodeVoltageDrop"] = x.get_diode_voltage_drop();
         j["efficiency"] = x.get_efficiency();
@@ -10258,9 +10323,12 @@ namespace MAS {
         j["maximumCoreTemperatureRise"] = x.get_maximum_core_temperature_rise();
         j["maximumSwitchCurrent"] = x.get_maximum_switch_current();
         j["mode"] = x.get_mode();
+        j["numberOfPhases"] = x.get_number_of_phases();
         j["outputPower"] = x.get_output_power();
         j["outputVoltage"] = x.get_output_voltage();
         j["switchingFrequency"] = x.get_switching_frequency();
+        j["topologyVariant"] = x.get_topology_variant();
+        j["wideBandgapSwitch"] = x.get_wide_bandgap_switch();
     }
 
     inline void from_json(const json & j, PushPull& x) {
@@ -12615,6 +12683,36 @@ namespace MAS {
             case PfcModes::CRITICAL_CONDUCTION_MODE: j = "criticalConductionMode"; break;
             case PfcModes::DISCONTINUOUS_CONDUCTION_MODE: j = "discontinuousConductionMode"; break;
             case PfcModes::TRANSITION_MODE: j = "transitionMode"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, PfcTopologyVariants & x) {
+        if (j == "boost") x = PfcTopologyVariants::BOOST;
+        else if (j == "bridgeless") x = PfcTopologyVariants::BRIDGELESS;
+        else if (j == "buck") x = PfcTopologyVariants::BUCK;
+        else if (j == "buckBoost") x = PfcTopologyVariants::BUCK_BOOST;
+        else if (j == "cuk") x = PfcTopologyVariants::CUK;
+        else if (j == "interleavedBoost") x = PfcTopologyVariants::INTERLEAVED_BOOST;
+        else if (j == "semiBridgeless") x = PfcTopologyVariants::SEMI_BRIDGELESS;
+        else if (j == "sepic") x = PfcTopologyVariants::SEPIC;
+        else if (j == "totemPole") x = PfcTopologyVariants::TOTEM_POLE;
+        else if (j == "vienna") x = PfcTopologyVariants::VIENNA;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const PfcTopologyVariants & x) {
+        switch (x) {
+            case PfcTopologyVariants::BOOST: j = "boost"; break;
+            case PfcTopologyVariants::BRIDGELESS: j = "bridgeless"; break;
+            case PfcTopologyVariants::BUCK: j = "buck"; break;
+            case PfcTopologyVariants::BUCK_BOOST: j = "buckBoost"; break;
+            case PfcTopologyVariants::CUK: j = "cuk"; break;
+            case PfcTopologyVariants::INTERLEAVED_BOOST: j = "interleavedBoost"; break;
+            case PfcTopologyVariants::SEMI_BRIDGELESS: j = "semiBridgeless"; break;
+            case PfcTopologyVariants::SEPIC: j = "sepic"; break;
+            case PfcTopologyVariants::TOTEM_POLE: j = "totemPole"; break;
+            case PfcTopologyVariants::VIENNA: j = "vienna"; break;
             default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
