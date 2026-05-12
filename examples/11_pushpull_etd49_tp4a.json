@@ -140,7 +140,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "TP4A",
         "shape": "ETD 49/25/16",
         "gapping": [

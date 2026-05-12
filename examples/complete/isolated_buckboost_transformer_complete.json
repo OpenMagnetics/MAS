@@ -137,7 +137,7 @@
     "core": {
       "name": "ETD 29/16/10 N97 Gapped",
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "N97",
         "shape": "ETD 29/16/10",
         "gapping": [

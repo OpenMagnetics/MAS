@@ -134,7 +134,7 @@
     "core": {
       "name": "ETD 44/22/15 3C95",
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "3C95",
         "shape": "ETD 44/22/15",
         "gapping": [],

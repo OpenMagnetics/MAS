@@ -93,7 +93,7 @@
     "core": {
       "name": "RM 10 N97 Gapped",
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "N97",
         "shape": "RM 10",
         "gapping": [

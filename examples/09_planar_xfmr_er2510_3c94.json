@@ -2364,7 +2364,7 @@
                     "name": "ER 25/6/15",
                     "type": "standard"
                 },
-                "type": "two-piece set",
+                "type": "twoPieceSet",
                 "magneticCircuit": "open"
             },
             "geometricalDescription": [

@@ -82,7 +82,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "3C92A",
         "shape": "E 55/28/21",
         "gapping": [

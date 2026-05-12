@@ -51,7 +51,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "N27",
         "shape": "PQ 50/50",
         "gapping": [

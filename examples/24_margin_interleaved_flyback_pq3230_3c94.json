@@ -111,7 +111,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "3C94",
         "shape": "PQ 32/30",
         "gapping": [

@@ -43,7 +43,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "3F46",
         "shape": "EP 13",
         "gapping": [

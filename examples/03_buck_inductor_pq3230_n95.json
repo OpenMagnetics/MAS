@@ -67,7 +67,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "N95",
         "shape": "PQ 32/30",
         "gapping": [

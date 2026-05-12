@@ -94,7 +94,7 @@
     "core": {
       "name": "E 42/21/15 N97 Gapped",
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "N97",
         "shape": "E 42/21/15",
         "gapping": [

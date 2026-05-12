@@ -81,7 +81,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "N87",
         "shape": "ER 9.5/5",
         "gapping": [

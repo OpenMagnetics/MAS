@@ -118,7 +118,7 @@
     "core": {
       "name": "RM 12 N97",
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "N97",
         "shape": "RM 12",
         "gapping": [],

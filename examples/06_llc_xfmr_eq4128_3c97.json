@@ -82,7 +82,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "3C97",
         "shape": "EQ 41/28/10",
         "gapping": [

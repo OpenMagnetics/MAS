@@ -81,7 +81,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "DMR95",
         "shape": "E 25/13/7",
         "gapping": [

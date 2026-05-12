@@ -85,7 +85,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "N87",
         "shape": "ETD 39/20/13",
         "gapping": [

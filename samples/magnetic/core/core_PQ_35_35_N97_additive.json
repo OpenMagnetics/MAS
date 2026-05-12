@@ -1,7 +1,7 @@
 {
     "name": "core_PQ_35_35_N97_additive",
     "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "N97",
         "shape": "PQ 35/35",
         "gapping": [{

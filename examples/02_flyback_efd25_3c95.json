@@ -82,7 +82,7 @@
     },
     "core": {
       "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "3C95",
         "shape": "EFD 25/13/9",
         "gapping": [

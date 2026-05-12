@@ -1,7 +1,7 @@
 {
     "name": "core_E_55_28_21_3C95_additive",
     "functionalDescription": {
-        "type": "two-piece set",
+        "type": "twoPieceSet",
         "material": "3C95",
         "shape": "E 55/28/21",
         "gapping": [{
