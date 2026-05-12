@@ -1,4 +1,5 @@
 {
+    "masVersion": "1.0.0",
     "type": "rectangular",
     "material": "copper",
     "numberConductors": 1,
@@ -19,7 +20,7 @@
         "minimum": 0.00138,
         "maximum": 0.00161
     },
-    "coating":{
+    "coating": {
         "type": "enamelled",
         "thickness": {
             "maximum": 0.00016

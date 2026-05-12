@@ -1,4 +1,5 @@
 {
+    "masVersion": "1.0.0",
     "type": "commercial",
     "material": "ferrite",
     "name": "3C97",
@@ -6,9 +7,9 @@
         "name": "Ferroxcube"
     },
     "permeability": {
-        "initial":{
+        "initial": {
             "value": 3000,
-            "tolerance": 0.20,
+            "tolerance": 0.2,
             "temperature": 25,
             "magneticFluxDensityPeak": 0.00025
         }
@@ -63,5 +64,3 @@
         ]
     }
 }
-
-

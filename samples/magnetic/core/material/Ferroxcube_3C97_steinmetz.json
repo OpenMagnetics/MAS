@@ -1,4 +1,5 @@
 {
+    "masVersion": "1.0.0",
     "type": "commercial",
     "material": "ferrite",
     "name": "3C97",
@@ -7,7 +8,7 @@
     },
     "permeability": {
         "initial": {
-          "value": 3000
+            "value": 3000
         }
     },
     "saturation": [
@@ -34,7 +35,7 @@
                         "k": 42.36588301,
                         "alpha": 1.16,
                         "beta": 2.8,
-                        "ct0": 0.0000635519,
+                        "ct0": 6.35519e-05,
                         "ct1": 0.01100719,
                         "ct2": 1.465
                     }

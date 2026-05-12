@@ -1,4 +1,5 @@
 {
+    "masVersion": "1.0.0",
     "inputs": {
         "designRequirements": {
             "name": "Current Transformer 100A:1A",

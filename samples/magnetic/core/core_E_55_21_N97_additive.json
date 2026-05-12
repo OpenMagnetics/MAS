@@ -1,19 +1,24 @@
 {
+    "masVersion": "1.0.0",
     "name": "core_E_55_21_N97_additive",
     "functionalDescription": {
         "type": "twoPieceSet",
         "material": "N97",
         "shape": "E 55/21",
-        "gapping": [{
-            "type": "additive",
-            "length": 0.001
-        },{
-            "type": "residual",
-            "length": 0.00001
-        },{
-            "type": "residual",
-            "length": 0.00001
-        }],
+        "gapping": [
+            {
+                "type": "additive",
+                "length": 0.001
+            },
+            {
+                "type": "residual",
+                "length": 1e-05
+            },
+            {
+                "type": "residual",
+                "length": 1e-05
+            }
+        ],
         "numberStacks": 2
     }
 }

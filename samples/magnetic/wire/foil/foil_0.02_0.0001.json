@@ -1,4 +1,5 @@
 {
+    "masVersion": "1.0.0",
     "type": "foil",
     "material": "copper",
     "numberConductors": 1,
@@ -18,7 +19,7 @@
     "outerWidth": {
         "nominal": 0.0001
     },
-    "coating":{
+    "coating": {
         "type": "bare"
     }
 }

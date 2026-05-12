@@ -1,19 +1,24 @@
 {
+    "masVersion": "1.0.0",
     "name": "core_E_55_28_21_3C95_additive",
     "functionalDescription": {
         "type": "twoPieceSet",
         "material": "3C95",
         "shape": "E 55/28/21",
-        "gapping": [{
-            "type": "additive",
-            "length": 0.001
-        },{
-            "type": "residual",
-            "length": 0.00001
-        },{
-            "type": "residual",
-            "length": 0.00001
-        }],
+        "gapping": [
+            {
+                "type": "additive",
+                "length": 0.001
+            },
+            {
+                "type": "residual",
+                "length": 1e-05
+            },
+            {
+                "type": "residual",
+                "length": 1e-05
+            }
+        ],
         "numberStacks": 3
     }
 }

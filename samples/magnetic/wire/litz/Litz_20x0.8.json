@@ -1,29 +1,32 @@
 {
+    "masVersion": "1.0.0",
     "type": "litz",
     "numberConductors": 20,
-    "manufacturerInfo": {"name": "Elektrisola"},
+    "manufacturerInfo": {
+        "name": "Elektrisola"
+    },
     "strand": {
         "type": "round",
         "material": "copper",
         "numberConductors": 1,
         "conductingDiameter": {
-            "nominal": 0.00008
+            "nominal": 8e-05
         },
         "outerDiameter": {
-            "minimum": 0.000095,
+            "minimum": 9.5e-05,
             "maximum": 0.000101
         },
-        "coating":{
+        "coating": {
             "type": "enamelled",
             "thickness": {
-               "maximum": 0.0000105
+                "maximum": 1.05e-05
             },
             "grade": 2,
             "breakdownVoltage": 850
         }
     },
     "outerDiameter": {
-        "minimum": 0.540,
+        "minimum": 0.54,
         "maximum": 0.574
     },
     "coating": {

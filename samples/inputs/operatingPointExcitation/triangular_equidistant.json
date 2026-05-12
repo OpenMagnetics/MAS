@@ -1,11 +1,23 @@
 {
+    "masVersion": "1.0.0",
     "frequency": 100000,
     "current": {
         "waveform": {
-            "data": [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.4, 0.3, 0.2, 0.1]
+            "data": [
+                0,
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.4,
+                0.3,
+                0.2,
+                0.1
+            ]
         },
         "processed": {
-            "label": "Triangular",
+            "label": "triangular",
             "peakToPeak": 0.5,
             "offset": 0,
             "dutyCycle": 0.5
@@ -13,10 +25,21 @@
     },
     "voltage": {
         "waveform": {
-            "data": [-10, 10, 10, 10, 10, 10, -10, -10, -10, -10]
+            "data": [
+                -10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                -10,
+                -10,
+                -10,
+                -10
+            ]
         },
         "processed": {
-            "label": "Rectangular",
+            "label": "rectangular",
             "peakToPeak": 20,
             "offset": 0,
             "dutyCycle": 0.5

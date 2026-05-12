@@ -1,18 +1,19 @@
 {
+    "masVersion": "1.0.0",
     "type": "round",
     "material": "copper",
     "numberConductors": 1,
     "conductingDiameter": {
-        "nominal": 0.000140
+        "nominal": 0.00014
     },
     "outerDiameter": {
         "minimum": 0.000151,
-        "maximum": 0.000160
+        "maximum": 0.00016
     },
-    "coating":{
+    "coating": {
         "type": "enamelled",
         "thickness": {
-            "maximum": 0.00002
+            "maximum": 2e-05
         },
         "grade": 1,
         "breakdownVoltage": 1600

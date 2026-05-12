@@ -1,16 +1,23 @@
 {
+    "masVersion": "1.0.0",
     "name": "completeRequirements",
     "magnetizingInductance": {
-        "minimum": 42e-6
+        "minimum": 4.2e-05
     },
     "turnsRatios": [
-        {"nominal": 4}
+        {
+            "nominal": 4
+        }
     ],
     "leakageInductance": [
-        {"maximum": 2e-6}
+        {
+            "maximum": 2e-06
+        }
     ],
     "strayCapacitance": [
-        {"maximum": 100e-9}
+        {
+            "maximum": 1e-07
+        }
     ],
     "operatingTemperature": {
         "maximum": 123
@@ -20,15 +27,24 @@
             "maximum": 3000,
             "minimum": -50
         },
-        "cti": "Group II",
-        "pollutionDegree": "P3",
-        "overvoltageCategory": "OVC-III",
-        "insulationType": "Double",
-        "standards": ["IEC 60664-1"]
+        "cti": "groupII",
+        "pollutionDegree": "PD3",
+        "overvoltageCategory": "III",
+        "insulationType": "double",
+        "standards": [
+            "IEC 60664-1"
+        ]
     },
-    "market": "Military",
-    "topology": "Flyback Converter",
+    "market": "military",
+    "topology": "flybackConverter",
     "maximumWeight": 3,
-    "maximumDimensions": {"width": 0.1, "height": 0.05, "depth": 0.04},
-    "terminalType": ["SMT", "Flying Lead"]
+    "maximumDimensions": {
+        "width": 0.1,
+        "height": 0.05,
+        "depth": 0.04
+    },
+    "terminalType": [
+        "smt",
+        "flyingLead"
+    ]
 }

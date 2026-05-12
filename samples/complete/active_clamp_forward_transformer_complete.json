@@ -1,4 +1,5 @@
 {
+    "masVersion": "1.0.0",
     "inputs": {
         "designRequirements": {
             "name": "Active Clamp Forward Transformer 400V to 12V 5A",

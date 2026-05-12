@@ -1,20 +1,24 @@
 {
+    "masVersion": "1.0.0",
     "name": "core_E_19_8_5_N87_substractive",
     "functionalDescription": {
         "type": "twoPieceSet",
         "material": "N87",
         "shape": "E 19/8/5",
-        "gapping": [{
-            "type": "subtractive",
-            "length": 0.0005
-        },
-        {
-            "type": "residual",
-            "length": 0.00001
-        },{
-            "type": "residual",
-            "length": 0.00001
-        }],
+        "gapping": [
+            {
+                "type": "subtractive",
+                "length": 0.0005
+            },
+            {
+                "type": "residual",
+                "length": 1e-05
+            },
+            {
+                "type": "residual",
+                "length": 1e-05
+            }
+        ],
         "numberStacks": 1
     }
 }
