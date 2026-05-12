@@ -155,7 +155,8 @@
                 "commonModeChoke",
                 "differentialModeChoke",
                 "powerFactorCorrection",
-                "cukConverter"
+                "cukConverter",
+                "sepicConverter"
             ]
         },
         "application": {

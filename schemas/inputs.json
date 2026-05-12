@@ -80,6 +80,9 @@
                         },
                         "cuk": {
                             "$ref": "./inputs/topologies/cuk.json"
+                        },
+                        "sepic": {
+                            "$ref": "./inputs/topologies/sepic.json"
                         }
                     }
                 }
