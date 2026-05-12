@@ -3,7 +3,7 @@
     "$id": "https://psma.com/mas/inputs/topologies/cuk.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "cuk",
-    "description": "The description of a non-isolated Cuk converter excitation. Vo is negative; the magnetic returned by process_design_requirements is the input inductor L1 (single-winding, one isolation side). The output inductor L2, coupling cap C1, and output cap Co are sized internally from rules-of-thumb (ripple defaults) and emitted via get_extra_components_inputs in subsequent revisions.",
+    "description": "Cuk converter excitation. Five wiring variants are supported via the boolean flags below: V1 non-isolated (defaults), V2 coupled-inductor zero-ripple (coupledInductor=true), V3 transformer-isolated (isolated=true), V4 synchronous (synchronous=true), V5 bidirectional (bidirectional=true, V4 implied). For V1/V2/V4/V5 the magnetic returned by process_design_requirements is the input inductor L1 (V2: a 2-winding coupled inductor); for V3 it is a 2-winding transformer. The remaining reactive elements (L2, C1, Co, plus Ca/Cb in V3) are emitted via get_extra_components_inputs.",
     "type": "object",
     "properties": {
         "inputVoltage": {
@@ -11,7 +11,7 @@
             "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
         },
         "diodeVoltageDrop": {
-            "description": "The voltage drop on the diode",
+            "description": "The voltage drop on the diode (ignored when synchronous=true)",
             "type": "number"
         },
         "maximumSwitchCurrent": {
@@ -26,6 +26,38 @@
             "description": "The target efficiency",
             "type": "number",
             "default": 0.95
+        },
+        "synchronous": {
+            "description": "If true, the catch diode D1 is replaced by an actively-driven synchronous switch S2. Reduces conduction loss; mandatory for bidirectional=true.",
+            "type": "boolean",
+            "default": false
+        },
+        "bidirectional": {
+            "description": "If true, both switches are active and the converter can transfer power in either direction depending on operatingPoint.powerFlow. Implies synchronous=true.",
+            "type": "boolean",
+            "default": false
+        },
+        "isolated": {
+            "description": "If true, the coupling capacitor is split into Ca/Cb and an isolation transformer is inserted between them. The magnetic returned is the transformer (2 windings, isolation sides PRIMARY and SECONDARY); L1 and L2 become extra components.",
+            "type": "boolean",
+            "default": false
+        },
+        "coupledInductor": {
+            "description": "If true, L1 and L2 are wound on the same core with coupling coefficient couplingCoefficient (Cuk's zero-ripple trick when k = sqrt(L1/L2)). The magnetic returned is a 2-winding coupled inductor. Mutually exclusive with isolated=true.",
+            "type": "boolean",
+            "default": false
+        },
+        "turnsRatio": {
+            "description": "Transformer turns ratio Np:Ns for isolated=true (used as Vo/Vin step targeting). Ignored for non-isolated variants.",
+            "type": "number"
+        },
+        "couplingCoefficient": {
+            "description": "Magnetic coupling coefficient k between L1 and L2 (used only when coupledInductor=true). Zero-ripple condition: k * sqrt(L2/L1) = 1.",
+            "type": "number"
+        },
+        "couplingCapacitanceSecondary": {
+            "description": "Secondary-side coupling capacitance Cb in farads (used only when isolated=true). If absent, Cb defaults to Ca scaled by turnsRatio^2 to balance V*s on each side.",
+            "type": "number"
         },
         "operatingPoints": {
             "description": "A list of operating points",
@@ -42,10 +74,32 @@
         "operatingPoints"
     ],
     "$defs": {
+        "cukPowerFlow": {
+            "description": "Power-flow direction for one operating point of a bidirectional Cuk (ignored when bidirectional=false).",
+            "title": "cukPowerFlow",
+            "type": "string",
+            "enum": [
+                "forward",
+                "reverse"
+            ]
+        },
         "cukOperatingPoint": {
-            "description": "The description of one Cuk operating point. NOTE: outputVoltages magnitudes are passed positive here; Vo is signed negative internally per Cuk polarity convention.",
+            "description": "The description of one Cuk operating point. NOTE: outputVoltages magnitudes are passed positive here; Vo is signed negative internally per Cuk polarity convention. powerFlow is required only when the parent Cuk has bidirectional=true.",
             "title": "cukOperatingPoint",
-            "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+            "allOf": [
+                {
+                    "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "powerFlow": {
+                            "description": "Power-flow direction. Forward = source -> load via L1; reverse = load -> source via L2.",
+                            "$ref": "#/$defs/cukPowerFlow"
+                        }
+                    }
+                }
+            ]
         }
     }
 }
