@@ -1,0 +1,51 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://psma.com/mas/inputs/topologies/cuk.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
+    "title": "cuk",
+    "description": "The description of a non-isolated Cuk converter excitation. Vo is negative; the magnetic returned by process_design_requirements is the input inductor L1 (single-winding, one isolation side). The output inductor L2, coupling cap C1, and output cap Co are sized internally from rules-of-thumb (ripple defaults) and emitted via get_extra_components_inputs in subsequent revisions.",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the Cuk",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "diodeVoltageDrop": {
+            "description": "The voltage drop on the diode",
+            "type": "number"
+        },
+        "maximumSwitchCurrent": {
+            "description": "The maximum current that can go through the selected switch",
+            "type": "number"
+        },
+        "currentRippleRatio": {
+            "description": "The maximum input-inductor (L1) current ripple ratio (delta-IL1 / IL1_avg)",
+            "type": "number"
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 0.95
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/cukOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "inputVoltage",
+        "diodeVoltageDrop",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "cukOperatingPoint": {
+            "description": "The description of one Cuk operating point. NOTE: outputVoltages magnitudes are passed positive here; Vo is signed negative internally per Cuk polarity convention.",
+            "title": "cukOperatingPoint",
+            "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+        }
+    }
+}

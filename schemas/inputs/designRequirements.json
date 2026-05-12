@@ -154,7 +154,8 @@
                 "cllcResonantConverter",
                 "commonModeChoke",
                 "differentialModeChoke",
-                "powerFactorCorrection"
+                "powerFactorCorrection",
+                "cukConverter"
             ]
         },
         "application": {
