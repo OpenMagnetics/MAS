@@ -1,0 +1,76 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://psma.com/mas/inputs/topologies/weinberg.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
+    "title": "weinberg",
+    "description": "Weinberg DC-DC converter (current-fed push-pull-derivative, isolated, boost-capable). Spacecraft-heritage topology featuring a 1:1 input coupled inductor L1 with energy-recovery diode D3 to Vin, plus a center-tapped main transformer with center-tapped full-wave secondary rectifier. Intrinsically supports switch overlap above D=0.5 (boost regime) without needing a freewheel switch. Variants supported: V1 classic (push-pull primary, 2 switches) and V2 bridge (H-bridge primary, 4 switches) via the `variant` flag; optional synchronousRectifier replaces secondary diodes with active SR MOSFETs. The magnetic returned by process_design_requirements is the main 2-winding transformer (n = Np_total/Ns_total); the input coupled inductor L1 and output capacitor Co are emitted via get_extra_components_inputs.",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the Weinberg",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "diodeVoltageDrop": {
+            "description": "The voltage drop on the rectifier diode (ignored when synchronousRectifier=true)",
+            "type": "number"
+        },
+        "maximumSwitchCurrent": {
+            "description": "The maximum current that can go through the selected switch",
+            "type": "number"
+        },
+        "currentRippleRatio": {
+            "description": "The maximum input-coupled-inductor (L1) current ripple ratio (delta-IL1 / IL1_avg per winding)",
+            "type": "number"
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 0.95
+        },
+        "variant": {
+            "description": "Primary topology variant: 'classic' (V1 push-pull, 2 switches; switch V_DS = 2*Vin/(1-D)) or 'bridge' (V2 H-bridge, 4 switches; switch V_DS = Vin).",
+            "type": "string",
+            "enum": ["classic", "bridge"],
+            "default": "classic"
+        },
+        "synchronousRectifier": {
+            "description": "If true, the secondary CT-FW diodes (D_pos, D_neg) are replaced by actively-driven synchronous MOSFETs (S_pos, S_neg) gated complementary to the primary switches.",
+            "type": "boolean",
+            "default": false
+        },
+        "couplingCoefficientInput": {
+            "description": "Magnetic coupling coefficient k between the two L1 windings (1:1 input coupled inductor). Typical values 0.99-0.999.",
+            "type": "number",
+            "default": 0.999
+        },
+        "couplingCoefficientMain": {
+            "description": "Magnetic coupling coefficient k for the main transformer (4-way coupling among Lpri_a, Lpri_b, Lsec_a, Lsec_b). Typical values 0.95-0.99 (some leakage required for SPICE convergence and ZCS).",
+            "type": "number",
+            "default": 0.99
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/weinbergOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "inputVoltage",
+        "diodeVoltageDrop",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "weinbergOperatingPoint": {
+            "description": "The description of one Weinberg operating point. Weinberg outputs are non-inverting (Vo positive); positive Iout flows through the load to GND.",
+            "title": "weinbergOperatingPoint",
+            "allOf": [
+                {
+                    "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+                }
+            ]
+        }
+    }
+}

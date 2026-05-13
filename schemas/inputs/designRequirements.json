@@ -152,11 +152,15 @@
                 "dualActiveBridgeConverter",
                 "llcResonantConverter",
                 "cllcResonantConverter",
+                "cllllcResonantConverter",
                 "commonModeChoke",
                 "differentialModeChoke",
                 "powerFactorCorrection",
                 "cukConverter",
-                "sepicConverter"
+                "sepicConverter",
+                "zetaConverter",
+                "weinbergConverter",
+                "fourSwitchBuckBoostConverter"
             ]
         },
         "application": {

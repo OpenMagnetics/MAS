@@ -1,0 +1,146 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://psma.com/mas/inputs/topologies/cllllcResonant.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
+    "title": "cllllcResonant",
+    "description": "The description of a CLLLC bidirectional symmetric resonant converter excitation",
+    "type": "object",
+    "properties": {
+        "highVoltageBusVoltage": {
+            "description": "The HV-side bus voltage (typically 380-800 V for OBC)",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "lowVoltageBusVoltage": {
+            "description": "The LV-side bus voltage (typically 200-500 V for OBC)",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "minSwitchingFrequency": {
+            "description": "The minimum switching frequency for regulation",
+            "type": "number"
+        },
+        "maxSwitchingFrequency": {
+            "description": "The maximum switching frequency for regulation",
+            "type": "number"
+        },
+        "primaryResonantFrequency": {
+            "description": "f_r1 = 1/(2*pi*sqrt(Lr1*Cr1)). Optional; computed if absent.",
+            "type": "number"
+        },
+        "inductanceRatioK": {
+            "description": "K = Lm/Lr1, the magnetizing-to-series-inductance ratio",
+            "type": "number"
+        },
+        "qualityFactor": {
+            "description": "The quality factor of the resonant tank",
+            "type": "number",
+            "default": 0.4
+        },
+        "tankSymmetryRatio": {
+            "description": "(Lr2/(n^2*Lr1)) * (Cr2*n^2/Cr1). 1.0 = perfectly symmetric.",
+            "type": "number",
+            "default": 1.0
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 0.97
+        },
+        "bridgeTypePrimary": {
+            "description": "The HV-side bridge topology",
+            "$ref": "#/$defs/cllllcBridgeType",
+            "default": "fullBridge"
+        },
+        "bridgeTypeSecondary": {
+            "description": "The LV-side bridge topology",
+            "$ref": "#/$defs/cllllcBridgeType",
+            "default": "fullBridge"
+        },
+        "controlStrategy": {
+            "description": "How the controller modulates frequency vs phase-shift",
+            "$ref": "#/$defs/cllllcControlStrategy",
+            "default": "hybridPfmPsm"
+        },
+        "integratedResonantInductors": {
+            "description": "If true, Lr1 and Lr2 are integrated as transformer leakage on each side",
+            "type": "boolean",
+            "default": true
+        },
+        "primarySeriesInductance": {
+            "description": "Optional explicit primary-side resonant inductor (Lr1) in H. Overrides Q/K/fr derivation when set.",
+            "type": "number"
+        },
+        "primaryResonantCapacitance": {
+            "description": "Optional explicit primary-side resonant capacitor (Cr1) in F. Overrides Q/K/fr derivation when set.",
+            "type": "number"
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/cllllcOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "highVoltageBusVoltage",
+        "lowVoltageBusVoltage",
+        "minSwitchingFrequency",
+        "maxSwitchingFrequency",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "cllllcBridgeType": {
+            "description": "The type of bridge for CLLLC",
+            "title": "cllllcBridgeType",
+            "type": "string",
+            "enum": [
+                "halfBridge",
+                "fullBridge"
+            ]
+        },
+        "cllllcControlStrategy": {
+            "description": "The CLLLC control strategy",
+            "title": "cllllcControlStrategy",
+            "type": "string",
+            "enum": [
+                "pfm",
+                "psm",
+                "hybridPfmPsm",
+                "fixedFrequencyPhaseShift"
+            ]
+        },
+        "cllllcPowerFlowDirection": {
+            "description": "The power flow direction for one CLLLC operating point",
+            "title": "cllllcPowerFlowDirection",
+            "type": "string",
+            "enum": [
+                "forward",
+                "reverse"
+            ]
+        },
+        "cllllcOperatingPoint": {
+            "description": "The description of one CLLLC operating point",
+            "title": "cllllcOperatingPoint",
+            "allOf": [
+                {
+                    "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "powerFlowDirection": {
+                            "description": "The power flow direction.",
+                            "$ref": "#/$defs/cllllcPowerFlowDirection",
+                            "default": "forward"
+                        },
+                        "phaseShiftDegrees": {
+                            "description": "Inter-bridge phase shift; only used by psm or hybridPfmPsm",
+                            "type": "number"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

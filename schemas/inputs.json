@@ -60,6 +60,9 @@
                         "cllcResonant": {
                             "$ref": "./inputs/topologies/cllcResonant.json"
                         },
+                        "cllllcResonant": {
+                            "$ref": "./inputs/topologies/cllllcResonant.json"
+                        },
                         "phaseShiftedFullBridge": {
                             "$ref": "./inputs/topologies/phaseShiftedFullBridge.json"
                         },
@@ -83,6 +86,15 @@
                         },
                         "sepic": {
                             "$ref": "./inputs/topologies/sepic.json"
+                        },
+                        "zeta": {
+                            "$ref": "./inputs/topologies/zeta.json"
+                        },
+                        "weinberg": {
+                            "$ref": "./inputs/topologies/weinberg.json"
+                        },
+                        "fourSwitchBuckBoost": {
+                            "$ref": "./inputs/topologies/fourSwitchBuckBoost.json"
                         }
                     }
                 }

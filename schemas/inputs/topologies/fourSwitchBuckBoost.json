@@ -1,0 +1,84 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://psma.com/mas/inputs/topologies/fourSwitchBuckBoost.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
+    "title": "fourSwitchBuckBoost",
+    "description": "4-Switch Buck-Boost (also called non-inverting buck-boost, H-bridge buck-boost, FSBB) excitation. Single inductor with two half-bridges (Q1/Q2 buck leg, Q3/Q4 boost leg). The controller selects one of three operating regions per Vin value: BUCK (Vo/Vin < 1-hysteresis: Q3 always-on, Q1/Q2 PWM), BOOST (Vo/Vin > 1+hysteresis: Q1 always-on, Q3/Q4 PWM), or BUCK_BOOST (transition band: all four switches modulate). The magnetic returned by process_design_requirements is the single inductor sized for the worst-case region across the Vin sweep (max(L_buck@VinMax, L_boost@VinMin)). Cin and Co are emitted via get_extra_components_inputs. References: TI SLVA535B, TI LM5175/LM5176, ADI LT8390, Restrepo IEEE 8986423.",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the 4-switch buck-boost (must support a sweep range that crosses Vo)",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "maximumSwitchCurrent": {
+            "description": "The maximum current that can go through any of the four switches",
+            "type": "number"
+        },
+        "currentRippleRatio": {
+            "description": "The maximum inductor current ripple ratio (delta-IL / IL_avg)",
+            "type": "number",
+            "default": 0.4
+        },
+        "outputVoltageRippleRatio": {
+            "description": "The output voltage ripple ratio (delta-Vo / Vo)",
+            "type": "number",
+            "default": 0.01
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 0.94
+        },
+        "controlMode": {
+            "description": "Controller duty-assignment strategy in the buck-boost region (peakCurrent: TI LM5176, peakBuckPeakBoost: ADI LT8390, averageCurrent: USB-PD, voltageMode: legacy)",
+            "type": "string",
+            "enum": ["peakCurrent", "peakBuckPeakBoost", "averageCurrent", "voltageMode"],
+            "default": "peakCurrent"
+        },
+        "transitionMode": {
+            "description": "Buck-boost-region modulation: 'simultaneous' (Mode 1, Q1+Q3 ON together) or 'splitPwm' (Mode 2, sequential split-PWM, LM5176/LT8390 default)",
+            "type": "string",
+            "enum": ["simultaneous", "splitPwm"],
+            "default": "splitPwm"
+        },
+        "bidirectional": {
+            "description": "If true, controller allows reverse power flow (V2G / battery / 12V<->48V mild-hybrid)",
+            "type": "boolean",
+            "default": false
+        },
+        "phaseCount": {
+            "description": "Number of interleaved phases (default 1; >1 for automotive 12V<->48V)",
+            "type": "integer",
+            "default": 1,
+            "minimum": 1
+        },
+        "transitionHysteresisRatio": {
+            "description": "Width of the buck-boost band as |1 - Vo/Vin| (default 0.15 per LM5176)",
+            "type": "number",
+            "default": 0.15
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/fourSwitchBuckBoostOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "inputVoltage",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "fourSwitchBuckBoostOperatingPoint": {
+            "description": "The description of one 4-switch buck-boost operating point. Outputs are non-inverting (Vo positive).",
+            "title": "fourSwitchBuckBoostOperatingPoint",
+            "allOf": [
+                {
+                    "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+                }
+            ]
+        }
+    }
+}

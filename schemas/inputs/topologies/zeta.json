@@ -1,0 +1,69 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://psma.com/mas/inputs/topologies/zeta.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
+    "title": "zeta",
+    "description": "Zeta excitation. Non-inverting fourth-order DC-DC converter — the dual of SEPIC: same gain M = D/(1-D), but the LC filter is on the OUTPUT side (so output-voltage ripple is small and there is no right-half-plane zero in CCM). The switch is HIGH-SIDE (PFET by default in the SPICE model). Two wiring variants are supported via the boolean flags below: V1 uncoupled (defaults; L1 magnetizing and L2 output filter are independent inductors) and V2 coupled-inductor (coupledInductor=true; L1 and L2 share one core, ripple-steering per TI SLYT411 — same condition as coupled-SEPIC because both inductors see identical voltages during both subintervals). Optional synchronousRectifier replaces the catch diode with a low-side MOSFET. The magnetic returned by process_design_requirements is L1 (or, when coupledInductor=true, a 2-winding coupled inductor). The remaining reactive elements (L2, Cc, Co) are emitted via get_extra_components_inputs.",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the Zeta",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "diodeVoltageDrop": {
+            "description": "The voltage drop on the rectifier diode (ignored when synchronousRectifier=true)",
+            "type": "number"
+        },
+        "maximumSwitchCurrent": {
+            "description": "The maximum current that can go through the selected switch",
+            "type": "number"
+        },
+        "currentRippleRatio": {
+            "description": "The maximum magnetizing-inductor (L1) current ripple ratio (delta-IL1 / IL1_avg)",
+            "type": "number"
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 0.92
+        },
+        "synchronousRectifier": {
+            "description": "If true, the catch diode is replaced by an actively-driven low-side synchronous MOSFET. Reduces conduction loss; common at low Vout.",
+            "type": "boolean",
+            "default": false
+        },
+        "coupledInductor": {
+            "description": "If true, L1 and L2 are wound on the same core (1:1 coupled) with coupling coefficient couplingCoefficient. Ripple-steering per TI SLYT411 reduces input-current ripple. The magnetic returned is a 2-winding coupled inductor.",
+            "type": "boolean",
+            "default": false
+        },
+        "couplingCoefficient": {
+            "description": "Magnetic coupling coefficient k between L1 and L2 (used only when coupledInductor=true). Typical values 0.95-0.999.",
+            "type": "number"
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/zetaOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "inputVoltage",
+        "diodeVoltageDrop",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "zetaOperatingPoint": {
+            "description": "The description of one Zeta operating point. Zeta outputs are non-inverting (Vo positive).",
+            "title": "zetaOperatingPoint",
+            "allOf": [
+                {
+                    "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+                }
+            ]
+        }
+    }
+}
