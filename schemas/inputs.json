@@ -95,6 +95,9 @@
                         },
                         "fourSwitchBuckBoost": {
                             "$ref": "./inputs/topologies/fourSwitchBuckBoost.json"
+                        },
+                        "seriesResonant": {
+                            "$ref": "./inputs/topologies/seriesResonant.json"
                         }
                     }
                 }

@@ -1,0 +1,108 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://psma.com/mas/inputs/topologies/seriesResonant.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
+    "title": "seriesResonant",
+    "description": "The description of a Series Resonant Converter (SRC) excitation. Two-element series Lr+Cr tank with no Lm branch. Gain M <= 1 (step-down only). Steigerwald 1988; Kazimierczuk Ch. 4. See src/converter_models/SRC_PLAN.md for the full design rationale.",
+    "type": "object",
+    "properties": {
+        "inputVoltage": {
+            "description": "The input voltage of the SRC converter",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "minSwitchingFrequency": {
+            "description": "The minimum switching frequency for regulation",
+            "type": "number"
+        },
+        "maxSwitchingFrequency": {
+            "description": "The maximum switching frequency for regulation",
+            "type": "number"
+        },
+        "resonantFrequency": {
+            "description": "The resonant frequency fr = 1/(2*pi*sqrt(Lr*Cr)) of the tank (optional, will be calculated if not provided)",
+            "type": "number"
+        },
+        "qualityFactor": {
+            "description": "The quality factor Q = sqrt(Lr/Cr) / Rload of the resonant tank. Determines gain-curve sharpness and Cr peak voltage stress (Vcr_peak ~ Q*Vin/pi at resonance for half-bridge).",
+            "type": "number",
+            "default": 2.0
+        },
+        "efficiency": {
+            "description": "The target efficiency",
+            "type": "number",
+            "default": 0.95
+        },
+        "bridgeType": {
+            "description": "The type of primary bridge",
+            "$ref": "#/$defs/srcBridgeType"
+        },
+        "rectifierType": {
+            "description": "The secondary rectifier topology",
+            "$ref": "#/$defs/srcRectifierType",
+            "default": "fullBridgeDiode"
+        },
+        "isolated": {
+            "description": "Whether the converter has an isolation transformer between the resonant tank and the rectifier. When false, the tank drives the rectifier directly (non-isolated SRC).",
+            "type": "boolean",
+            "default": true
+        },
+        "useSynchronousRectifier": {
+            "description": "Whether the secondary rectifier uses synchronous MOSFETs instead of diodes",
+            "type": "boolean",
+            "default": false
+        },
+        "seriesInductance": {
+            "description": "Optional explicit resonant inductor (Lr) value in H. Overrides Q/fr derivation when set.",
+            "type": "number"
+        },
+        "resonantCapacitance": {
+            "description": "Optional explicit resonant capacitor (Cr) value in F. Overrides Q/fr derivation when set.",
+            "type": "number"
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/srcOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "inputVoltage",
+        "minSwitchingFrequency",
+        "maxSwitchingFrequency",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "srcBridgeType": {
+            "description": "The type of primary bridge for the SRC",
+            "title": "srcBridgeType",
+            "type": "string",
+            "enum": [
+                "halfBridge",
+                "fullBridge",
+                "fullBridgePhaseShift"
+            ]
+        },
+        "srcRectifierType": {
+            "description": "The secondary rectifier topology for the SRC",
+            "title": "srcRectifierType",
+            "type": "string",
+            "enum": [
+                "fullBridgeDiode",
+                "centerTappedDiode",
+                "currentDoubler"
+            ]
+        },
+        "srcOperatingPoint": {
+            "description": "The description of one SRC operating point",
+            "title": "srcOperatingPoint",
+            "allOf": [
+                {
+                    "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+                }
+            ]
+        }
+    }
+}
