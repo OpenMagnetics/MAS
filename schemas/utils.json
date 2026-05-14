@@ -198,8 +198,7 @@
             },
             "required": [
                 "name"
-            ],
-            "unevaluatedProperties": false
+            ]
         },
         "distributorInfo": {
             "description": "Data from the distributor for a given part",
