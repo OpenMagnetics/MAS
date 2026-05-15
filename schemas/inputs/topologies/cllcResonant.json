@@ -3,7 +3,7 @@
     "$id": "https://psma.com/mas/inputs/topologies/cllcResonant.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
     "title": "cllcResonant",
-    "description": "The description of a CLLC Bidirectional Resonant converter excitation",
+    "description": "CLLC Bidirectional Resonant converter excitation. Schema v2 adds asymmetric-tank ratios (a, b), bridge-type selection (full/half) and leakage-integration flags so that Lr1, Lr2 can be either discrete components or absorbed into transformer leakage. The pre-v2 boolean `symmetricDesign` is retained as a derived alias (true iff a==1 && b==1). See Infineon AN-2024-06 §2.3 for the canonical 11-step design procedure and the asymmetric design rationale of Min et al., IEEE TPE 36(6) 2021.",
     "type": "object",
     "properties": {
         "inputVoltage": {
@@ -19,7 +19,7 @@
             "type": "number"
         },
         "qualityFactor": {
-            "description": "The quality factor of the resonant tank",
+            "description": "Quality factor of the resonant tank, Infineon convention Q = sqrt(Lr/Cr) / Ro. Two other conventions exist in the literature (Steigerwald uses 1/Q, Erickson uses Ro/sqrt(Lr/Cr)); the Infineon convention is documented in the class header.",
             "type": "number",
             "default": 0.5
         },
@@ -29,14 +29,39 @@
             "default": 0.97
         },
         "symmetricDesign": {
-            "description": "Whether to use symmetric resonant tank design",
+            "description": "DEPRECATED - retained for v1 compatibility. True iff resonantInductorRatio==1 && resonantCapacitorRatio==1. New code should set the ratio fields directly.",
             "type": "boolean",
             "default": true
         },
         "bidirectional": {
-            "description": "Whether the converter operates in bidirectional mode",
+            "description": "Whether the converter operates in bidirectional mode (active synchronous rectifier on the secondary side, capable of reverse power flow). When false the secondary still uses SR for efficiency but reverse mode is not exercised.",
             "type": "boolean",
             "default": true
+        },
+        "bridgeType": {
+            "description": "Bridge topology of the primary inverter. Full-bridge gives bridge-voltage factor 1.0 (peak Vpri = Vin); half-bridge gives 0.5 (peak Vpri = Vin/2). Most CLLC > 1 kW use full bridge; sub-1 kW server / V2L designs use half-bridge.",
+            "$ref": "#/$defs/cllcBridgeType",
+            "default": "fullBridge"
+        },
+        "integratedResonantInductor1": {
+            "description": "If true, the primary resonant inductor Lr1 is realised as transformer primary leakage (no discrete inductor). When false, Lr1 is a discrete component placed in series with the primary winding.",
+            "type": "boolean",
+            "default": true
+        },
+        "integratedResonantInductor2": {
+            "description": "If true, the secondary resonant inductor Lr2 is realised as transformer secondary leakage. When false, Lr2 is a discrete component placed in series with the secondary winding (CLLLC layout).",
+            "type": "boolean",
+            "default": true
+        },
+        "resonantInductorRatio": {
+            "description": "Asymmetric-tank ratio a = n^2 * Lr2 / Lr1. Symmetric tank: a = 1. Typical asymmetric battery-charger design (Min IEEE TPE 2021): a ~= 0.95.",
+            "type": "number",
+            "default": 1.0
+        },
+        "resonantCapacitorRatio": {
+            "description": "Asymmetric-tank ratio b = Cr2 / (n^2 * Cr1). Symmetric tank: b = 1. Typical asymmetric battery-charger design: b ~= 1.052 so that fr1 = fr2 (a*b ~ 1).",
+            "type": "number",
+            "default": 1.0
         },
         "operatingPoints": {
             "description": "A list of operating points",
@@ -61,6 +86,15 @@
             "enum": [
                 "forward",
                 "reverse"
+            ]
+        },
+        "cllcBridgeType": {
+            "description": "CLLC primary bridge topology selector",
+            "title": "cllcBridgeType",
+            "type": "string",
+            "enum": [
+                "fullBridge",
+                "halfBridge"
             ]
         },
         "cllcOperatingPoint": {
