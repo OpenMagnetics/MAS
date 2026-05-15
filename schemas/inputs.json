@@ -60,8 +60,8 @@
                         "cllcResonant": {
                             "$ref": "./inputs/topologies/cllcResonant.json"
                         },
-                        "cllllcResonant": {
-                            "$ref": "./inputs/topologies/cllllcResonant.json"
+                        "clllcResonant": {
+                            "$ref": "./inputs/topologies/clllcResonant.json"
                         },
                         "phaseShiftedFullBridge": {
                             "$ref": "./inputs/topologies/phaseShiftedFullBridge.json"

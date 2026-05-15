@@ -152,7 +152,7 @@
                 "dualActiveBridgeConverter",
                 "llcResonantConverter",
                 "cllcResonantConverter",
-                "cllllcResonantConverter",
+                "clllcResonantConverter",
                 "commonModeChoke",
                 "differentialModeChoke",
                 "powerFactorCorrection",

@@ -1,8 +1,8 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://psma.com/mas/inputs/topologies/cllllcResonant.json",
+    "$id": "https://psma.com/mas/inputs/topologies/clllcResonant.json",
     "$comment": "SPDX-License-Identifier: Apache-2.0",
-    "title": "cllllcResonant",
+    "title": "clllcResonant",
     "description": "The description of a CLLLC bidirectional symmetric resonant converter excitation",
     "type": "object",
     "properties": {
@@ -47,17 +47,17 @@
         },
         "bridgeTypePrimary": {
             "description": "The HV-side bridge topology",
-            "$ref": "#/$defs/cllllcBridgeType",
+            "$ref": "#/$defs/clllcBridgeType",
             "default": "fullBridge"
         },
         "bridgeTypeSecondary": {
             "description": "The LV-side bridge topology",
-            "$ref": "#/$defs/cllllcBridgeType",
+            "$ref": "#/$defs/clllcBridgeType",
             "default": "fullBridge"
         },
         "controlStrategy": {
             "description": "How the controller modulates frequency vs phase-shift",
-            "$ref": "#/$defs/cllllcControlStrategy",
+            "$ref": "#/$defs/clllcControlStrategy",
             "default": "hybridPfmPsm"
         },
         "integratedResonantInductors": {
@@ -77,7 +77,7 @@
             "description": "A list of operating points",
             "type": "array",
             "items": {
-                "$ref": "#/$defs/cllllcOperatingPoint"
+                "$ref": "#/$defs/clllcOperatingPoint"
             },
             "minItems": 1
         }
@@ -90,18 +90,18 @@
         "operatingPoints"
     ],
     "$defs": {
-        "cllllcBridgeType": {
+        "clllcBridgeType": {
             "description": "The type of bridge for CLLLC",
-            "title": "cllllcBridgeType",
+            "title": "clllcBridgeType",
             "type": "string",
             "enum": [
                 "halfBridge",
                 "fullBridge"
             ]
         },
-        "cllllcControlStrategy": {
+        "clllcControlStrategy": {
             "description": "The CLLLC control strategy",
-            "title": "cllllcControlStrategy",
+            "title": "clllcControlStrategy",
             "type": "string",
             "enum": [
                 "pfm",
@@ -110,18 +110,18 @@
                 "fixedFrequencyPhaseShift"
             ]
         },
-        "cllllcPowerFlowDirection": {
+        "clllcPowerFlowDirection": {
             "description": "The power flow direction for one CLLLC operating point",
-            "title": "cllllcPowerFlowDirection",
+            "title": "clllcPowerFlowDirection",
             "type": "string",
             "enum": [
                 "forward",
                 "reverse"
             ]
         },
-        "cllllcOperatingPoint": {
+        "clllcOperatingPoint": {
             "description": "The description of one CLLLC operating point",
-            "title": "cllllcOperatingPoint",
+            "title": "clllcOperatingPoint",
             "allOf": [
                 {
                     "$ref": "../../utils.json#/$defs/baseOperatingPoint"
@@ -131,7 +131,7 @@
                     "properties": {
                         "powerFlowDirection": {
                             "description": "The power flow direction.",
-                            "$ref": "#/$defs/cllllcPowerFlowDirection",
+                            "$ref": "#/$defs/clllcPowerFlowDirection",
                             "default": "forward"
                         },
                         "phaseShiftDegrees": {
