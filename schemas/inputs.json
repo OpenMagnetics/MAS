@@ -98,6 +98,9 @@
                         },
                         "seriesResonant": {
                             "$ref": "./inputs/topologies/seriesResonant.json"
+                        },
+                        "viennaRectifier": {
+                            "$ref": "./inputs/topologies/vienna.json"
                         }
                     }
                 }

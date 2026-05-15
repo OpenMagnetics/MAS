@@ -1,0 +1,122 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://psma.com/mas/inputs/topologies/vienna.json",
+    "$comment": "SPDX-License-Identifier: Apache-2.0",
+    "title": "viennaRectifier",
+    "description": "The description of a Vienna rectifier (3-phase 3-level boost-type PFC, unidirectional). Three identical line-frequency boost inductors carry pure-AC line current. Switch blocking voltage = Vdc/2 (3-level advantage). Originally Kolar & Zach 1994; modern SiC industrial implementations: TI TIDA-010257, ST STDES-VIENNARECT, Microchip MSCSICPFC-REF5. See src/converter_models/VIENNA_PLAN.md for the full design rationale.",
+    "type": "object",
+    "properties": {
+        "lineToLineVoltage": {
+            "description": "AC line-to-line RMS voltage (e.g. 400 V for EU, 480 V for US)",
+            "$ref": "../../utils.json#/$defs/dimensionWithTolerance"
+        },
+        "lineFrequency": {
+            "description": "Line frequency in Hz (typically 50 or 60)",
+            "type": "number",
+            "default": 50
+        },
+        "outputDcVoltage": {
+            "description": "Total DC bus voltage Vdc = Vdc+ + |Vdc-| (typical 700-800 V)",
+            "type": "number"
+        },
+        "switchingFrequency": {
+            "description": "Per-leg switching frequency in Hz",
+            "type": "number"
+        },
+        "currentRippleRatio": {
+            "description": "DeltaI_L,pp / I_pk at peak-of-line (typical 0.2-0.3)",
+            "type": "number",
+            "default": 0.25
+        },
+        "powerFactor": {
+            "description": "Target input power factor (typically >= 0.99)",
+            "type": "number",
+            "default": 0.99
+        },
+        "efficiency": {
+            "description": "Target efficiency",
+            "type": "number",
+            "default": 0.97
+        },
+        "viennaVariant": {
+            "description": "Vienna switch arrangement: viennaI = single bidirectional switch per leg (3 switches total, classic Kolar 1994); viennaII = two switches per leg (reduced conduction loss at >30 kW)",
+            "$ref": "#/$defs/viennaVariant",
+            "default": "viennaI"
+        },
+        "switchType": {
+            "description": "How each per-leg bidirectional switch is realised: tType (modern SiC default, two anti-series MOSFETs to neutral); backToBackMosfet; singleMosfetIn4DiodeBridge (Kolar 1994 classic)",
+            "$ref": "#/$defs/viennaSwitchType",
+            "default": "tType"
+        },
+        "synchronousRectifier": {
+            "description": "If true, the 6 fast rectifier diodes are replaced with MOSFETs",
+            "type": "boolean",
+            "default": false
+        },
+        "phaseCount": {
+            "description": "Number of interleaved Vienna channels in parallel (1 = single Vienna, >1 = multi-channel for >50 kW)",
+            "type": "integer",
+            "default": 1,
+            "minimum": 1
+        },
+        "samplingStrategy": {
+            "description": "How the line-cycle envelope is sampled: peakOfLineOnly = single sample at omega*t = pi/2 (cheapest); peakOfLinePlusSectors = peak + 30/60-degree sector samples; fullLineCycle = 36 samples per cycle (THD validation only)",
+            "$ref": "#/$defs/viennaSamplingStrategy",
+            "default": "peakOfLineOnly"
+        },
+        "operatingPoints": {
+            "description": "A list of operating points",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/viennaRectifierOperatingPoint"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "lineToLineVoltage",
+        "outputDcVoltage",
+        "switchingFrequency",
+        "operatingPoints"
+    ],
+    "$defs": {
+        "viennaVariant": {
+            "description": "Vienna switch arrangement variant",
+            "title": "viennaVariant",
+            "type": "string",
+            "enum": [
+                "viennaI",
+                "viennaII"
+            ]
+        },
+        "viennaSwitchType": {
+            "description": "Per-leg bidirectional switch realisation",
+            "title": "viennaSwitchType",
+            "type": "string",
+            "enum": [
+                "tType",
+                "backToBackMosfet",
+                "singleMosfetIn4DiodeBridge"
+            ]
+        },
+        "viennaSamplingStrategy": {
+            "description": "Line-cycle envelope sampling strategy",
+            "title": "viennaSamplingStrategy",
+            "type": "string",
+            "enum": [
+                "peakOfLineOnly",
+                "peakOfLinePlusSectors",
+                "fullLineCycle"
+            ]
+        },
+        "viennaRectifierOperatingPoint": {
+            "description": "The description of one Vienna rectifier operating point",
+            "title": "viennaRectifierOperatingPoint",
+            "allOf": [
+                {
+                    "$ref": "../../utils.json#/$defs/baseOperatingPoint"
+                }
+            ]
+        }
+    }
+}

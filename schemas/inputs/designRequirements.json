@@ -161,7 +161,8 @@
                 "zetaConverter",
                 "weinbergConverter",
                 "fourSwitchBuckBoostConverter",
-                "seriesResonantConverter"
+                "seriesResonantConverter",
+                "viennaRectifierConverter"
             ]
         },
         "application": {
