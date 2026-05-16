@@ -212,7 +212,13 @@ namespace MAS {
      *
      * The input voltage (HV side) of the CLLC converter
      *
+     * The HV-side bus voltage (typically 380-800 V for OBC)
+     *
+     * The LV-side bus voltage (typically 200-500 V for OBC)
+     *
      * The operating voltage across the choke (line-to-line or line-to-neutral)
+     *
+     * The input voltage of the Cuk
      *
      * The input voltage of the filter stage
      *
@@ -221,6 +227,9 @@ namespace MAS {
      * The input voltage of the flyback
      *
      * The input voltage of the forward
+     *
+     * The input voltage of the 4-switch buck-boost (must support a sweep range that crosses
+     * Vo)
      *
      * The input voltage of the isolatedBuck
      *
@@ -235,6 +244,16 @@ namespace MAS {
      * The AC input voltage (RMS) with tolerance range (e.g., 85-265V universal input)
      *
      * The input voltage of the pushPull
+     *
+     * The input voltage of the SEPIC
+     *
+     * The input voltage of the SRC converter
+     *
+     * AC line-to-line RMS voltage (e.g. 400 V for EU, 480 V for US)
+     *
+     * The input voltage of the Weinberg
+     *
+     * The input voltage of the Zeta
      *
      * Required values for the altitude
      *
@@ -376,6 +395,9 @@ namespace MAS {
      *
      * The description of one forward operating point
      *
+     * The description of one 4-switch buck-boost operating point. Outputs are non-inverting (Vo
+     * positive).
+     *
      * The description of one isolatedBuck operating point
      *
      * The description of one isolatedBuckBoost operating point
@@ -383,6 +405,18 @@ namespace MAS {
      * The description of one LLC operating point
      *
      * The description of one pushPull operating point
+     *
+     * The description of one SEPIC operating point. SEPIC outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one SRC operating point
+     *
+     * The description of one Vienna rectifier operating point
+     *
+     * The description of one Weinberg operating point. Weinberg outputs are non-inverting (Vo
+     * positive); positive Iout flows through the load to GND.
+     *
+     * The description of one Zeta operating point. Zeta outputs are non-inverting (Vo positive).
      */
     class AhbOperatingPoint {
         public:
@@ -573,6 +607,9 @@ namespace MAS {
      *
      * The description of one forward operating point
      *
+     * The description of one 4-switch buck-boost operating point. Outputs are non-inverting (Vo
+     * positive).
+     *
      * The description of one isolatedBuck operating point
      *
      * The description of one isolatedBuckBoost operating point
@@ -580,6 +617,18 @@ namespace MAS {
      * The description of one LLC operating point
      *
      * The description of one pushPull operating point
+     *
+     * The description of one SEPIC operating point. SEPIC outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one SRC operating point
+     *
+     * The description of one Vienna rectifier operating point
+     *
+     * The description of one Weinberg operating point. Weinberg outputs are non-inverting (Vo
+     * positive); positive Iout flows through the load to GND.
+     *
+     * The description of one Zeta operating point. Zeta outputs are non-inverting (Vo positive).
      */
     class TopologyExcitation {
         public:
@@ -755,9 +804,35 @@ namespace MAS {
     };
 
     /**
+     * Bridge topology of the primary inverter. Full-bridge gives bridge-voltage factor 1.0
+     * (peak Vpri = Vin); half-bridge gives 0.5 (peak Vpri = Vin/2). Most CLLC > 1 kW use full
+     * bridge; sub-1 kW server / V2L designs use half-bridge.
+     *
+     * CLLC primary bridge topology selector
+     *
+     * The HV-side bridge topology
+     *
+     * The type of bridge for CLLLC
+     *
+     * The LV-side bridge topology
+     *
+     * The type of primary bridge
+     *
+     * The type of primary bridge for LLC
+     */
+    enum class LlcBridgeType : int { FULL_BRIDGE, HALF_BRIDGE };
+
+    /**
      * The power flow direction.
      *
      * The power flow direction
+     *
+     * The power flow direction for one CLLLC operating point
+     *
+     * Power-flow direction. Forward = source -> load via L1; reverse = load -> source via L2.
+     *
+     * Power-flow direction for one operating point of a bidirectional Cuk (ignored when
+     * bidirectional=false).
      */
     enum class CllcPowerFlow : int { FORWARD, REVERSE };
 
@@ -772,6 +847,9 @@ namespace MAS {
      *
      * The description of one forward operating point
      *
+     * The description of one 4-switch buck-boost operating point. Outputs are non-inverting (Vo
+     * positive).
+     *
      * The description of one isolatedBuck operating point
      *
      * The description of one isolatedBuckBoost operating point
@@ -779,6 +857,18 @@ namespace MAS {
      * The description of one LLC operating point
      *
      * The description of one pushPull operating point
+     *
+     * The description of one SEPIC operating point. SEPIC outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one SRC operating point
+     *
+     * The description of one Vienna rectifier operating point
+     *
+     * The description of one Weinberg operating point. Weinberg outputs are non-inverting (Vo
+     * positive); positive Iout flows through the load to GND.
+     *
+     * The description of one Zeta operating point. Zeta outputs are non-inverting (Vo positive).
      */
     class CllcOperatingPoint {
         public:
@@ -848,7 +938,12 @@ namespace MAS {
     };
 
     /**
-     * The description of a CLLC Bidirectional Resonant converter excitation
+     * CLLC Bidirectional Resonant converter excitation. Schema v2 adds asymmetric-tank ratios
+     * (a, b), bridge-type selection (full/half) and leakage-integration flags so that Lr1, Lr2
+     * can be either discrete components or absorbed into transformer leakage. The pre-v2
+     * boolean `symmetricDesign` is retained as a derived alias (true iff a==1 && b==1). See
+     * Infineon AN-2024-06 §2.3 for the canonical 11-step design procedure and the asymmetric
+     * design rationale of Min et al., IEEE TPE 36(6) 2021.
      */
     class CllcResonant {
         public:
@@ -857,20 +952,35 @@ namespace MAS {
 
         private:
         std::optional<bool> bidirectional;
+        std::optional<LlcBridgeType> bridge_type;
         std::optional<double> efficiency;
         DimensionWithTolerance input_voltage;
+        std::optional<bool> integrated_resonant_inductor1;
+        std::optional<bool> integrated_resonant_inductor2;
         double max_switching_frequency;
         double min_switching_frequency;
         std::vector<CllcOperatingPoint> operating_points;
         std::optional<double> quality_factor;
+        std::optional<double> resonant_capacitor_ratio;
+        std::optional<double> resonant_inductor_ratio;
         std::optional<bool> symmetric_design;
 
         public:
         /**
-         * Whether the converter operates in bidirectional mode
+         * Whether the converter operates in bidirectional mode (active synchronous rectifier on the
+         * secondary side, capable of reverse power flow). When false the secondary still uses SR
+         * for efficiency but reverse mode is not exercised.
          */
         std::optional<bool> get_bidirectional() const { return bidirectional; }
         void set_bidirectional(std::optional<bool> value) { this->bidirectional = value; }
+
+        /**
+         * Bridge topology of the primary inverter. Full-bridge gives bridge-voltage factor 1.0
+         * (peak Vpri = Vin); half-bridge gives 0.5 (peak Vpri = Vin/2). Most CLLC > 1 kW use full
+         * bridge; sub-1 kW server / V2L designs use half-bridge.
+         */
+        std::optional<LlcBridgeType> get_bridge_type() const { return bridge_type; }
+        void set_bridge_type(std::optional<LlcBridgeType> value) { this->bridge_type = value; }
 
         /**
          * The target efficiency
@@ -884,6 +994,22 @@ namespace MAS {
         const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
         DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
         void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * If true, the primary resonant inductor Lr1 is realised as transformer primary leakage (no
+         * discrete inductor). When false, Lr1 is a discrete component placed in series with the
+         * primary winding.
+         */
+        std::optional<bool> get_integrated_resonant_inductor1() const { return integrated_resonant_inductor1; }
+        void set_integrated_resonant_inductor1(std::optional<bool> value) { this->integrated_resonant_inductor1 = value; }
+
+        /**
+         * If true, the secondary resonant inductor Lr2 is realised as transformer secondary
+         * leakage. When false, Lr2 is a discrete component placed in series with the secondary
+         * winding (CLLLC layout).
+         */
+        std::optional<bool> get_integrated_resonant_inductor2() const { return integrated_resonant_inductor2; }
+        void set_integrated_resonant_inductor2(std::optional<bool> value) { this->integrated_resonant_inductor2 = value; }
 
         /**
          * The maximum switching frequency for regulation
@@ -907,16 +1033,278 @@ namespace MAS {
         void set_operating_points(const std::vector<CllcOperatingPoint> & value) { this->operating_points = value; }
 
         /**
+         * Quality factor of the resonant tank, Infineon convention Q = sqrt(Lr/Cr) / Ro. Two other
+         * conventions exist in the literature (Steigerwald uses 1/Q, Erickson uses Ro/sqrt(Lr/Cr));
+         * the Infineon convention is documented in the class header.
+         */
+        std::optional<double> get_quality_factor() const { return quality_factor; }
+        void set_quality_factor(std::optional<double> value) { this->quality_factor = value; }
+
+        /**
+         * Asymmetric-tank ratio b = Cr2 / (n^2 * Cr1). Symmetric tank: b = 1. Typical asymmetric
+         * battery-charger design: b ~= 1.052 so that fr1 = fr2 (a*b ~ 1).
+         */
+        std::optional<double> get_resonant_capacitor_ratio() const { return resonant_capacitor_ratio; }
+        void set_resonant_capacitor_ratio(std::optional<double> value) { this->resonant_capacitor_ratio = value; }
+
+        /**
+         * Asymmetric-tank ratio a = n^2 * Lr2 / Lr1. Symmetric tank: a = 1. Typical asymmetric
+         * battery-charger design (Min IEEE TPE 2021): a ~= 0.95.
+         */
+        std::optional<double> get_resonant_inductor_ratio() const { return resonant_inductor_ratio; }
+        void set_resonant_inductor_ratio(std::optional<double> value) { this->resonant_inductor_ratio = value; }
+
+        /**
+         * DEPRECATED - retained for v1 compatibility. True iff resonantInductorRatio==1 &&
+         * resonantCapacitorRatio==1. New code should set the ratio fields directly.
+         */
+        std::optional<bool> get_symmetric_design() const { return symmetric_design; }
+        void set_symmetric_design(std::optional<bool> value) { this->symmetric_design = value; }
+    };
+
+    /**
+     * How the controller modulates frequency vs phase-shift
+     *
+     * The CLLLC control strategy
+     */
+    enum class ClllcControlStrategy : int { FIXED_FREQUENCY_PHASE_SHIFT, HYBRID_PFM_PSM, PFM, PSM };
+
+    /**
+     * The description of one CLLLC operating point
+     *
+     * Base fields common to all topology operating points
+     *
+     * The description of one boost operating point
+     *
+     * The description of one buck operating point
+     *
+     * The description of one forward operating point
+     *
+     * The description of one 4-switch buck-boost operating point. Outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one isolatedBuck operating point
+     *
+     * The description of one isolatedBuckBoost operating point
+     *
+     * The description of one LLC operating point
+     *
+     * The description of one pushPull operating point
+     *
+     * The description of one SEPIC operating point. SEPIC outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one SRC operating point
+     *
+     * The description of one Vienna rectifier operating point
+     *
+     * The description of one Weinberg operating point. Weinberg outputs are non-inverting (Vo
+     * positive); positive Iout flows through the load to GND.
+     *
+     * The description of one Zeta operating point. Zeta outputs are non-inverting (Vo positive).
+     */
+    class ClllcOperatingPoint {
+        public:
+        ClllcOperatingPoint() = default;
+        virtual ~ClllcOperatingPoint() = default;
+
+        private:
+        double ambient_temperature;
+        std::vector<double> output_currents;
+        std::optional<OutputSType> output_currents_type;
+        std::vector<double> output_voltages;
+        std::optional<OutputSType> output_voltages_type;
+        double switching_frequency;
+        std::optional<double> phase_shift_degrees;
+        std::optional<CllcPowerFlow> power_flow_direction;
+
+        public:
+        /**
+         * Ambient temperature of the operating point. Unit: Celsius. See docs/units.md.
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * List of output currents, one per output. Interpreted per outputCurrentsType (default:
+         * dc). See docs/normative-references.md.
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * List of output voltages, one per output. Interpreted per outputVoltagesType (default:
+         * dc). See docs/normative-references.md.
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * Switching frequency of the operating point. Unit: Hz. See docs/units.md.
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+
+        /**
+         * Inter-bridge phase shift; only used by psm or hybridPfmPsm
+         */
+        std::optional<double> get_phase_shift_degrees() const { return phase_shift_degrees; }
+        void set_phase_shift_degrees(std::optional<double> value) { this->phase_shift_degrees = value; }
+
+        /**
+         * The power flow direction.
+         */
+        std::optional<CllcPowerFlow> get_power_flow_direction() const { return power_flow_direction; }
+        void set_power_flow_direction(std::optional<CllcPowerFlow> value) { this->power_flow_direction = value; }
+    };
+
+    /**
+     * The description of a CLLLC bidirectional symmetric resonant converter excitation
+     */
+    class ClllcResonant {
+        public:
+        ClllcResonant() = default;
+        virtual ~ClllcResonant() = default;
+
+        private:
+        std::optional<LlcBridgeType> bridge_type_primary;
+        std::optional<LlcBridgeType> bridge_type_secondary;
+        std::optional<ClllcControlStrategy> control_strategy;
+        std::optional<double> efficiency;
+        DimensionWithTolerance high_voltage_bus_voltage;
+        std::optional<double> inductance_ratio_k;
+        std::optional<bool> integrated_resonant_inductors;
+        DimensionWithTolerance low_voltage_bus_voltage;
+        double max_switching_frequency;
+        double min_switching_frequency;
+        std::vector<ClllcOperatingPoint> operating_points;
+        std::optional<double> primary_resonant_capacitance;
+        std::optional<double> primary_resonant_frequency;
+        std::optional<double> primary_series_inductance;
+        std::optional<double> quality_factor;
+        std::optional<double> tank_symmetry_ratio;
+
+        public:
+        /**
+         * The HV-side bridge topology
+         */
+        std::optional<LlcBridgeType> get_bridge_type_primary() const { return bridge_type_primary; }
+        void set_bridge_type_primary(std::optional<LlcBridgeType> value) { this->bridge_type_primary = value; }
+
+        /**
+         * The LV-side bridge topology
+         */
+        std::optional<LlcBridgeType> get_bridge_type_secondary() const { return bridge_type_secondary; }
+        void set_bridge_type_secondary(std::optional<LlcBridgeType> value) { this->bridge_type_secondary = value; }
+
+        /**
+         * How the controller modulates frequency vs phase-shift
+         */
+        std::optional<ClllcControlStrategy> get_control_strategy() const { return control_strategy; }
+        void set_control_strategy(std::optional<ClllcControlStrategy> value) { this->control_strategy = value; }
+
+        /**
+         * The target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The HV-side bus voltage (typically 380-800 V for OBC)
+         */
+        const DimensionWithTolerance & get_high_voltage_bus_voltage() const { return high_voltage_bus_voltage; }
+        DimensionWithTolerance & get_mutable_high_voltage_bus_voltage() { return high_voltage_bus_voltage; }
+        void set_high_voltage_bus_voltage(const DimensionWithTolerance & value) { this->high_voltage_bus_voltage = value; }
+
+        /**
+         * K = Lm/Lr1, the magnetizing-to-series-inductance ratio
+         */
+        std::optional<double> get_inductance_ratio_k() const { return inductance_ratio_k; }
+        void set_inductance_ratio_k(std::optional<double> value) { this->inductance_ratio_k = value; }
+
+        /**
+         * If true, Lr1 and Lr2 are integrated as transformer leakage on each side
+         */
+        std::optional<bool> get_integrated_resonant_inductors() const { return integrated_resonant_inductors; }
+        void set_integrated_resonant_inductors(std::optional<bool> value) { this->integrated_resonant_inductors = value; }
+
+        /**
+         * The LV-side bus voltage (typically 200-500 V for OBC)
+         */
+        const DimensionWithTolerance & get_low_voltage_bus_voltage() const { return low_voltage_bus_voltage; }
+        DimensionWithTolerance & get_mutable_low_voltage_bus_voltage() { return low_voltage_bus_voltage; }
+        void set_low_voltage_bus_voltage(const DimensionWithTolerance & value) { this->low_voltage_bus_voltage = value; }
+
+        /**
+         * The maximum switching frequency for regulation
+         */
+        const double & get_max_switching_frequency() const { return max_switching_frequency; }
+        double & get_mutable_max_switching_frequency() { return max_switching_frequency; }
+        void set_max_switching_frequency(const double & value) { this->max_switching_frequency = value; }
+
+        /**
+         * The minimum switching frequency for regulation
+         */
+        const double & get_min_switching_frequency() const { return min_switching_frequency; }
+        double & get_mutable_min_switching_frequency() { return min_switching_frequency; }
+        void set_min_switching_frequency(const double & value) { this->min_switching_frequency = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<ClllcOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<ClllcOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<ClllcOperatingPoint> & value) { this->operating_points = value; }
+
+        /**
+         * Optional explicit primary-side resonant capacitor (Cr1) in F. Overrides Q/K/fr derivation
+         * when set.
+         */
+        std::optional<double> get_primary_resonant_capacitance() const { return primary_resonant_capacitance; }
+        void set_primary_resonant_capacitance(std::optional<double> value) { this->primary_resonant_capacitance = value; }
+
+        /**
+         * f_r1 = 1/(2*pi*sqrt(Lr1*Cr1)). Optional; computed if absent.
+         */
+        std::optional<double> get_primary_resonant_frequency() const { return primary_resonant_frequency; }
+        void set_primary_resonant_frequency(std::optional<double> value) { this->primary_resonant_frequency = value; }
+
+        /**
+         * Optional explicit primary-side resonant inductor (Lr1) in H. Overrides Q/K/fr derivation
+         * when set.
+         */
+        std::optional<double> get_primary_series_inductance() const { return primary_series_inductance; }
+        void set_primary_series_inductance(std::optional<double> value) { this->primary_series_inductance = value; }
+
+        /**
          * The quality factor of the resonant tank
          */
         std::optional<double> get_quality_factor() const { return quality_factor; }
         void set_quality_factor(std::optional<double> value) { this->quality_factor = value; }
 
         /**
-         * Whether to use symmetric resonant tank design
+         * (Lr2/(n^2*Lr1)) * (Cr2*n^2/Cr1). 1.0 = perfectly symmetric.
          */
-        std::optional<bool> get_symmetric_design() const { return symmetric_design; }
-        void set_symmetric_design(std::optional<bool> value) { this->symmetric_design = value; }
+        std::optional<double> get_tank_symmetry_ratio() const { return tank_symmetry_ratio; }
+        void set_tank_symmetry_ratio(std::optional<double> value) { this->tank_symmetry_ratio = value; }
     };
 
     /**
@@ -1097,6 +1485,229 @@ namespace MAS {
          */
         std::optional<std::vector<InsertionLossAtFrequency>> get_target_insertion_loss() const { return target_insertion_loss; }
         void set_target_insertion_loss(std::optional<std::vector<InsertionLossAtFrequency>> value) { this->target_insertion_loss = value; }
+    };
+
+    /**
+     * The description of one Cuk operating point. NOTE: outputVoltages magnitudes are passed
+     * positive here; Vo is signed negative internally per Cuk polarity convention. powerFlow is
+     * required only when the parent Cuk has bidirectional=true.
+     *
+     * Base fields common to all topology operating points
+     *
+     * The description of one boost operating point
+     *
+     * The description of one buck operating point
+     *
+     * The description of one forward operating point
+     *
+     * The description of one 4-switch buck-boost operating point. Outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one isolatedBuck operating point
+     *
+     * The description of one isolatedBuckBoost operating point
+     *
+     * The description of one LLC operating point
+     *
+     * The description of one pushPull operating point
+     *
+     * The description of one SEPIC operating point. SEPIC outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one SRC operating point
+     *
+     * The description of one Vienna rectifier operating point
+     *
+     * The description of one Weinberg operating point. Weinberg outputs are non-inverting (Vo
+     * positive); positive Iout flows through the load to GND.
+     *
+     * The description of one Zeta operating point. Zeta outputs are non-inverting (Vo positive).
+     */
+    class CukOperatingPoint {
+        public:
+        CukOperatingPoint() = default;
+        virtual ~CukOperatingPoint() = default;
+
+        private:
+        double ambient_temperature;
+        std::vector<double> output_currents;
+        std::optional<OutputSType> output_currents_type;
+        std::vector<double> output_voltages;
+        std::optional<OutputSType> output_voltages_type;
+        double switching_frequency;
+        std::optional<CllcPowerFlow> power_flow;
+
+        public:
+        /**
+         * Ambient temperature of the operating point. Unit: Celsius. See docs/units.md.
+         */
+        const double & get_ambient_temperature() const { return ambient_temperature; }
+        double & get_mutable_ambient_temperature() { return ambient_temperature; }
+        void set_ambient_temperature(const double & value) { this->ambient_temperature = value; }
+
+        /**
+         * List of output currents, one per output. Interpreted per outputCurrentsType (default:
+         * dc). See docs/normative-references.md.
+         */
+        const std::vector<double> & get_output_currents() const { return output_currents; }
+        std::vector<double> & get_mutable_output_currents() { return output_currents; }
+        void set_output_currents(const std::vector<double> & value) { this->output_currents = value; }
+
+        /**
+         * Type of value carried in outputCurrents: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         */
+        std::optional<OutputSType> get_output_currents_type() const { return output_currents_type; }
+        void set_output_currents_type(std::optional<OutputSType> value) { this->output_currents_type = value; }
+
+        /**
+         * List of output voltages, one per output. Interpreted per outputVoltagesType (default:
+         * dc). See docs/normative-references.md.
+         */
+        const std::vector<double> & get_output_voltages() const { return output_voltages; }
+        std::vector<double> & get_mutable_output_voltages() { return output_voltages; }
+        void set_output_voltages(const std::vector<double> & value) { this->output_voltages = value; }
+
+        /**
+         * Type of value carried in outputVoltages: which aggregate of the periodic waveform the
+         * number represents. Defaults to dc. See IEV 103-02 (values of a periodic quantity).
+         */
+        std::optional<OutputSType> get_output_voltages_type() const { return output_voltages_type; }
+        void set_output_voltages_type(std::optional<OutputSType> value) { this->output_voltages_type = value; }
+
+        /**
+         * Switching frequency of the operating point. Unit: Hz. See docs/units.md.
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+
+        /**
+         * Power-flow direction. Forward = source -> load via L1; reverse = load -> source via L2.
+         */
+        std::optional<CllcPowerFlow> get_power_flow() const { return power_flow; }
+        void set_power_flow(std::optional<CllcPowerFlow> value) { this->power_flow = value; }
+    };
+
+    /**
+     * Cuk converter excitation. Five wiring variants are supported via the boolean flags below:
+     * V1 non-isolated (defaults), V2 coupled-inductor zero-ripple (coupledInductor=true), V3
+     * transformer-isolated (isolated=true), V4 synchronous (synchronous=true), V5 bidirectional
+     * (bidirectional=true, V4 implied). For V1/V2/V4/V5 the magnetic returned by
+     * process_design_requirements is the input inductor L1 (V2: a 2-winding coupled inductor);
+     * for V3 it is a 2-winding transformer. The remaining reactive elements (L2, C1, Co, plus
+     * Ca/Cb in V3) are emitted via get_extra_components_inputs.
+     */
+    class Cuk {
+        public:
+        Cuk() = default;
+        virtual ~Cuk() = default;
+
+        private:
+        std::optional<bool> bidirectional;
+        std::optional<bool> coupled_inductor;
+        std::optional<double> coupling_capacitance_secondary;
+        std::optional<double> coupling_coefficient;
+        std::optional<double> current_ripple_ratio;
+        double diode_voltage_drop;
+        std::optional<double> efficiency;
+        DimensionWithTolerance input_voltage;
+        std::optional<bool> isolated;
+        std::optional<double> maximum_switch_current;
+        std::vector<CukOperatingPoint> operating_points;
+        std::optional<bool> synchronous;
+        std::optional<double> turns_ratio;
+
+        public:
+        /**
+         * If true, both switches are active and the converter can transfer power in either
+         * direction depending on operatingPoint.powerFlow. Implies synchronous=true.
+         */
+        std::optional<bool> get_bidirectional() const { return bidirectional; }
+        void set_bidirectional(std::optional<bool> value) { this->bidirectional = value; }
+
+        /**
+         * If true, L1 and L2 are wound on the same core with coupling coefficient
+         * couplingCoefficient (Cuk's zero-ripple trick when k = sqrt(L1/L2)). The magnetic returned
+         * is a 2-winding coupled inductor. Mutually exclusive with isolated=true.
+         */
+        std::optional<bool> get_coupled_inductor() const { return coupled_inductor; }
+        void set_coupled_inductor(std::optional<bool> value) { this->coupled_inductor = value; }
+
+        /**
+         * Secondary-side coupling capacitance Cb in farads (used only when isolated=true). If
+         * absent, Cb defaults to Ca scaled by turnsRatio^2 to balance V*s on each side.
+         */
+        std::optional<double> get_coupling_capacitance_secondary() const { return coupling_capacitance_secondary; }
+        void set_coupling_capacitance_secondary(std::optional<double> value) { this->coupling_capacitance_secondary = value; }
+
+        /**
+         * Magnetic coupling coefficient k between L1 and L2 (used only when coupledInductor=true).
+         * Zero-ripple condition: k * sqrt(L2/L1) = 1.
+         */
+        std::optional<double> get_coupling_coefficient() const { return coupling_coefficient; }
+        void set_coupling_coefficient(std::optional<double> value) { this->coupling_coefficient = value; }
+
+        /**
+         * The maximum input-inductor (L1) current ripple ratio (delta-IL1 / IL1_avg)
+         */
+        std::optional<double> get_current_ripple_ratio() const { return current_ripple_ratio; }
+        void set_current_ripple_ratio(std::optional<double> value) { this->current_ripple_ratio = value; }
+
+        /**
+         * The voltage drop on the diode (ignored when synchronous=true)
+         */
+        const double & get_diode_voltage_drop() const { return diode_voltage_drop; }
+        double & get_mutable_diode_voltage_drop() { return diode_voltage_drop; }
+        void set_diode_voltage_drop(const double & value) { this->diode_voltage_drop = value; }
+
+        /**
+         * The target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The input voltage of the Cuk
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * If true, the coupling capacitor is split into Ca/Cb and an isolation transformer is
+         * inserted between them. The magnetic returned is the transformer (2 windings, isolation
+         * sides PRIMARY and SECONDARY); L1 and L2 become extra components.
+         */
+        std::optional<bool> get_isolated() const { return isolated; }
+        void set_isolated(std::optional<bool> value) { this->isolated = value; }
+
+        /**
+         * The maximum current that can go through the selected switch
+         */
+        std::optional<double> get_maximum_switch_current() const { return maximum_switch_current; }
+        void set_maximum_switch_current(std::optional<double> value) { this->maximum_switch_current = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<CukOperatingPoint> & get_operating_points() const { return operating_points; }
+        std::vector<CukOperatingPoint> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<CukOperatingPoint> & value) { this->operating_points = value; }
+
+        /**
+         * If true, the catch diode D1 is replaced by an actively-driven synchronous switch S2.
+         * Reduces conduction loss; mandatory for bidirectional=true.
+         */
+        std::optional<bool> get_synchronous() const { return synchronous; }
+        void set_synchronous(std::optional<bool> value) { this->synchronous = value; }
+
+        /**
+         * Transformer turns ratio Np:Ns for isolated=true (used as Vo/Vin step targeting). Ignored
+         * for non-isolated variants.
+         */
+        std::optional<double> get_turns_ratio() const { return turns_ratio; }
+        void set_turns_ratio(std::optional<double> value) { this->turns_ratio = value; }
     };
 
     /**
@@ -1340,6 +1951,9 @@ namespace MAS {
      *
      * The description of one forward operating point
      *
+     * The description of one 4-switch buck-boost operating point. Outputs are non-inverting (Vo
+     * positive).
+     *
      * The description of one isolatedBuck operating point
      *
      * The description of one isolatedBuckBoost operating point
@@ -1347,6 +1961,18 @@ namespace MAS {
      * The description of one LLC operating point
      *
      * The description of one pushPull operating point
+     *
+     * The description of one SEPIC operating point. SEPIC outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one SRC operating point
+     *
+     * The description of one Vienna rectifier operating point
+     *
+     * The description of one Weinberg operating point. Weinberg outputs are non-inverting (Vo
+     * positive); positive Iout flows through the load to GND.
+     *
+     * The description of one Zeta operating point. Zeta outputs are non-inverting (Vo positive).
      */
     class DabOperatingPoint {
         public:
@@ -1708,6 +2334,122 @@ namespace MAS {
     };
 
     /**
+     * Controller duty-assignment strategy in the buck-boost region (peakCurrent: TI LM5176,
+     * peakBuckPeakBoost: ADI LT8390, averageCurrent: USB-PD, voltageMode: legacy)
+     */
+    enum class ControlMode : int { AVERAGE_CURRENT, PEAK_BUCK_PEAK_BOOST, PEAK_CURRENT, VOLTAGE_MODE };
+
+    /**
+     * Buck-boost-region modulation: 'simultaneous' (Mode 1, Q1+Q3 ON together) or 'splitPwm'
+     * (Mode 2, sequential split-PWM, LM5176/LT8390 default)
+     */
+    enum class TransitionMode : int { SIMULTANEOUS, SPLIT_PWM };
+
+    /**
+     * 4-Switch Buck-Boost (also called non-inverting buck-boost, H-bridge buck-boost, FSBB)
+     * excitation. Single inductor with two half-bridges (Q1/Q2 buck leg, Q3/Q4 boost leg). The
+     * controller selects one of three operating regions per Vin value: BUCK (Vo/Vin <
+     * 1-hysteresis: Q3 always-on, Q1/Q2 PWM), BOOST (Vo/Vin > 1+hysteresis: Q1 always-on, Q3/Q4
+     * PWM), or BUCK_BOOST (transition band: all four switches modulate). The magnetic returned
+     * by process_design_requirements is the single inductor sized for the worst-case region
+     * across the Vin sweep (max(L_buck@VinMax, L_boost@VinMin)). Cin and Co are emitted via
+     * get_extra_components_inputs. References: TI SLVA535B, TI LM5175/LM5176, ADI LT8390,
+     * Restrepo IEEE 8986423.
+     */
+    class FourSwitchBuckBoost {
+        public:
+        FourSwitchBuckBoost() :
+            phase_count_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
+        {}
+        virtual ~FourSwitchBuckBoost() = default;
+
+        private:
+        std::optional<bool> bidirectional;
+        std::optional<ControlMode> control_mode;
+        std::optional<double> current_ripple_ratio;
+        std::optional<double> efficiency;
+        DimensionWithTolerance input_voltage;
+        std::optional<double> maximum_switch_current;
+        std::vector<TopologyExcitation> operating_points;
+        std::optional<double> output_voltage_ripple_ratio;
+        std::optional<int64_t> phase_count;
+        ClassMemberConstraints phase_count_constraint;
+        std::optional<double> transition_hysteresis_ratio;
+        std::optional<TransitionMode> transition_mode;
+
+        public:
+        /**
+         * If true, controller allows reverse power flow (V2G / battery / 12V<->48V mild-hybrid)
+         */
+        std::optional<bool> get_bidirectional() const { return bidirectional; }
+        void set_bidirectional(std::optional<bool> value) { this->bidirectional = value; }
+
+        /**
+         * Controller duty-assignment strategy in the buck-boost region (peakCurrent: TI LM5176,
+         * peakBuckPeakBoost: ADI LT8390, averageCurrent: USB-PD, voltageMode: legacy)
+         */
+        std::optional<ControlMode> get_control_mode() const { return control_mode; }
+        void set_control_mode(std::optional<ControlMode> value) { this->control_mode = value; }
+
+        /**
+         * The maximum inductor current ripple ratio (delta-IL / IL_avg)
+         */
+        std::optional<double> get_current_ripple_ratio() const { return current_ripple_ratio; }
+        void set_current_ripple_ratio(std::optional<double> value) { this->current_ripple_ratio = value; }
+
+        /**
+         * The target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The input voltage of the 4-switch buck-boost (must support a sweep range that crosses Vo)
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * The maximum current that can go through any of the four switches
+         */
+        std::optional<double> get_maximum_switch_current() const { return maximum_switch_current; }
+        void set_maximum_switch_current(std::optional<double> value) { this->maximum_switch_current = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<TopologyExcitation> & get_operating_points() const { return operating_points; }
+        std::vector<TopologyExcitation> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<TopologyExcitation> & value) { this->operating_points = value; }
+
+        /**
+         * The output voltage ripple ratio (delta-Vo / Vo)
+         */
+        std::optional<double> get_output_voltage_ripple_ratio() const { return output_voltage_ripple_ratio; }
+        void set_output_voltage_ripple_ratio(std::optional<double> value) { this->output_voltage_ripple_ratio = value; }
+
+        /**
+         * Number of interleaved phases (default 1; >1 for automotive 12V<->48V)
+         */
+        std::optional<int64_t> get_phase_count() const { return phase_count; }
+        void set_phase_count(std::optional<int64_t> value) { if (value) CheckConstraint("phase_count", phase_count_constraint, *value); this->phase_count = value; }
+
+        /**
+         * Width of the buck-boost band as |1 - Vo/Vin| (default 0.15 per LM5176)
+         */
+        std::optional<double> get_transition_hysteresis_ratio() const { return transition_hysteresis_ratio; }
+        void set_transition_hysteresis_ratio(std::optional<double> value) { this->transition_hysteresis_ratio = value; }
+
+        /**
+         * Buck-boost-region modulation: 'simultaneous' (Mode 1, Q1+Q3 ON together) or 'splitPwm'
+         * (Mode 2, sequential split-PWM, LM5176/LT8390 default)
+         */
+        std::optional<TransitionMode> get_transition_mode() const { return transition_mode; }
+        void set_transition_mode(std::optional<TransitionMode> value) { this->transition_mode = value; }
+    };
+
+    /**
      * The description of a Isolated Buck / Flybuck converter excitation
      */
     class IsolatedBuck {
@@ -1822,11 +2564,11 @@ namespace MAS {
     };
 
     /**
-     * The type of primary bridge
+     * The type of secondary rectifier
      *
-     * The type of primary bridge for LLC
+     * The type of secondary rectifier for LLC
      */
-    enum class LlcBridgeType : int { FULL_BRIDGE, HALF_BRIDGE };
+    enum class LlcRectifierType : int { CENTER_TAPPED, CURRENT_DOUBLER, FULL_BRIDGE, VOLTAGE_DOUBLER };
 
     /**
      * The description of an LLC Resonant converter excitation
@@ -1846,6 +2588,7 @@ namespace MAS {
         double min_switching_frequency;
         std::vector<TopologyExcitation> operating_points;
         std::optional<double> quality_factor;
+        std::optional<LlcRectifierType> rectifier_type;
         std::optional<double> resonant_capacitance;
         std::optional<double> resonant_frequency;
         std::optional<double> series_inductance;
@@ -1910,6 +2653,12 @@ namespace MAS {
         void set_quality_factor(std::optional<double> value) { this->quality_factor = value; }
 
         /**
+         * The type of secondary rectifier
+         */
+        std::optional<LlcRectifierType> get_rectifier_type() const { return rectifier_type; }
+        void set_rectifier_type(std::optional<LlcRectifierType> value) { this->rectifier_type = value; }
+
+        /**
          * Optional explicit resonant capacitor (Cr) value in F. Overrides the Q/Ln/fr derivation
          * when set.
          */
@@ -1941,6 +2690,9 @@ namespace MAS {
      *
      * The description of one forward operating point
      *
+     * The description of one 4-switch buck-boost operating point. Outputs are non-inverting (Vo
+     * positive).
+     *
      * The description of one isolatedBuck operating point
      *
      * The description of one isolatedBuckBoost operating point
@@ -1948,6 +2700,18 @@ namespace MAS {
      * The description of one LLC operating point
      *
      * The description of one pushPull operating point
+     *
+     * The description of one SEPIC operating point. SEPIC outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one SRC operating point
+     *
+     * The description of one Vienna rectifier operating point
+     *
+     * The description of one Weinberg operating point. Weinberg outputs are non-inverting (Vo
+     * positive); positive Iout flows through the load to GND.
+     *
+     * The description of one Zeta operating point. Zeta outputs are non-inverting (Vo positive).
      */
     class PsfbOperatingPoint {
         public:
@@ -2105,6 +2869,9 @@ namespace MAS {
      *
      * The description of one forward operating point
      *
+     * The description of one 4-switch buck-boost operating point. Outputs are non-inverting (Vo
+     * positive).
+     *
      * The description of one isolatedBuck operating point
      *
      * The description of one isolatedBuckBoost operating point
@@ -2112,6 +2879,18 @@ namespace MAS {
      * The description of one LLC operating point
      *
      * The description of one pushPull operating point
+     *
+     * The description of one SEPIC operating point. SEPIC outputs are non-inverting (Vo
+     * positive).
+     *
+     * The description of one SRC operating point
+     *
+     * The description of one Vienna rectifier operating point
+     *
+     * The description of one Weinberg operating point. Weinberg outputs are non-inverting (Vo
+     * positive); positive Iout flows through the load to GND.
+     *
+     * The description of one Zeta operating point. Zeta outputs are non-inverting (Vo positive).
      */
     class PshbOperatingPoint {
         public:
@@ -2500,6 +3279,569 @@ namespace MAS {
         void set_operating_points(const std::vector<TopologyExcitation> & value) { this->operating_points = value; }
     };
 
+    /**
+     * SEPIC (Single-Ended Primary-Inductor Converter) excitation. Non-inverting fourth-order
+     * DC-DC converter with capacitive energy transfer through the coupling capacitor Cs between
+     * L1 and L2. Two wiring variants are supported via the boolean flags below: V1 uncoupled
+     * (defaults; L1 and L2 are independent inductors) and V2 coupled-inductor
+     * (coupledInductor=true; L1 and L2 share one core, ripple-steering per TI SLYT411).
+     * Optional synchronousRectifier replaces the catch diode with a low-side MOSFET. The
+     * magnetic returned by process_design_requirements is the input inductor L1 (or, when
+     * coupledInductor=true, a 2-winding coupled inductor). The remaining reactive elements (L2,
+     * Cs, Co) are emitted via get_extra_components_inputs.
+     */
+    class Sepic {
+        public:
+        Sepic() = default;
+        virtual ~Sepic() = default;
+
+        private:
+        std::optional<bool> coupled_inductor;
+        std::optional<double> coupling_coefficient;
+        std::optional<double> current_ripple_ratio;
+        double diode_voltage_drop;
+        std::optional<double> efficiency;
+        DimensionWithTolerance input_voltage;
+        std::optional<double> maximum_switch_current;
+        std::vector<TopologyExcitation> operating_points;
+        std::optional<bool> synchronous_rectifier;
+
+        public:
+        /**
+         * If true, L1 and L2 are wound on the same core (1:1 coupled) with coupling coefficient
+         * couplingCoefficient. Ripple-steering per TI SLYT411 reduces input-current ripple. The
+         * magnetic returned is a 2-winding coupled inductor.
+         */
+        std::optional<bool> get_coupled_inductor() const { return coupled_inductor; }
+        void set_coupled_inductor(std::optional<bool> value) { this->coupled_inductor = value; }
+
+        /**
+         * Magnetic coupling coefficient k between L1 and L2 (used only when coupledInductor=true).
+         * Typical values 0.95-0.999.
+         */
+        std::optional<double> get_coupling_coefficient() const { return coupling_coefficient; }
+        void set_coupling_coefficient(std::optional<double> value) { this->coupling_coefficient = value; }
+
+        /**
+         * The maximum input-inductor (L1) current ripple ratio (delta-IL1 / IL1_avg)
+         */
+        std::optional<double> get_current_ripple_ratio() const { return current_ripple_ratio; }
+        void set_current_ripple_ratio(std::optional<double> value) { this->current_ripple_ratio = value; }
+
+        /**
+         * The voltage drop on the rectifier diode (ignored when synchronousRectifier=true)
+         */
+        const double & get_diode_voltage_drop() const { return diode_voltage_drop; }
+        double & get_mutable_diode_voltage_drop() { return diode_voltage_drop; }
+        void set_diode_voltage_drop(const double & value) { this->diode_voltage_drop = value; }
+
+        /**
+         * The target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The input voltage of the SEPIC
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * The maximum current that can go through the selected switch
+         */
+        std::optional<double> get_maximum_switch_current() const { return maximum_switch_current; }
+        void set_maximum_switch_current(std::optional<double> value) { this->maximum_switch_current = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<TopologyExcitation> & get_operating_points() const { return operating_points; }
+        std::vector<TopologyExcitation> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<TopologyExcitation> & value) { this->operating_points = value; }
+
+        /**
+         * If true, the catch diode is replaced by an actively-driven low-side synchronous MOSFET.
+         * Reduces conduction loss; common at low Vout.
+         */
+        std::optional<bool> get_synchronous_rectifier() const { return synchronous_rectifier; }
+        void set_synchronous_rectifier(std::optional<bool> value) { this->synchronous_rectifier = value; }
+    };
+
+    /**
+     * The type of primary bridge
+     *
+     * The type of primary bridge for the SRC
+     */
+    enum class SrcBridgeType : int { FULL_BRIDGE, FULL_BRIDGE_PHASE_SHIFT, HALF_BRIDGE };
+
+    /**
+     * The secondary rectifier topology
+     *
+     * The secondary rectifier topology for the SRC
+     */
+    enum class SrcRectifierType : int { CENTER_TAPPED_DIODE, CURRENT_DOUBLER, FULL_BRIDGE_DIODE };
+
+    /**
+     * The description of a Series Resonant Converter (SRC) excitation. Two-element series Lr+Cr
+     * tank with no Lm branch. Gain M <= 1 (step-down only). Steigerwald 1988; Kazimierczuk Ch.
+     * 4. See src/converter_models/SRC_PLAN.md for the full design rationale.
+     */
+    class SeriesResonant {
+        public:
+        SeriesResonant() = default;
+        virtual ~SeriesResonant() = default;
+
+        private:
+        std::optional<SrcBridgeType> bridge_type;
+        std::optional<double> efficiency;
+        DimensionWithTolerance input_voltage;
+        std::optional<bool> isolated;
+        double max_switching_frequency;
+        double min_switching_frequency;
+        std::vector<TopologyExcitation> operating_points;
+        std::optional<double> quality_factor;
+        std::optional<SrcRectifierType> rectifier_type;
+        std::optional<double> resonant_capacitance;
+        std::optional<double> resonant_frequency;
+        std::optional<double> series_inductance;
+        std::optional<bool> use_synchronous_rectifier;
+
+        public:
+        /**
+         * The type of primary bridge
+         */
+        std::optional<SrcBridgeType> get_bridge_type() const { return bridge_type; }
+        void set_bridge_type(std::optional<SrcBridgeType> value) { this->bridge_type = value; }
+
+        /**
+         * The target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The input voltage of the SRC converter
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * Whether the converter has an isolation transformer between the resonant tank and the
+         * rectifier. When false, the tank drives the rectifier directly (non-isolated SRC).
+         */
+        std::optional<bool> get_isolated() const { return isolated; }
+        void set_isolated(std::optional<bool> value) { this->isolated = value; }
+
+        /**
+         * The maximum switching frequency for regulation
+         */
+        const double & get_max_switching_frequency() const { return max_switching_frequency; }
+        double & get_mutable_max_switching_frequency() { return max_switching_frequency; }
+        void set_max_switching_frequency(const double & value) { this->max_switching_frequency = value; }
+
+        /**
+         * The minimum switching frequency for regulation
+         */
+        const double & get_min_switching_frequency() const { return min_switching_frequency; }
+        double & get_mutable_min_switching_frequency() { return min_switching_frequency; }
+        void set_min_switching_frequency(const double & value) { this->min_switching_frequency = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<TopologyExcitation> & get_operating_points() const { return operating_points; }
+        std::vector<TopologyExcitation> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<TopologyExcitation> & value) { this->operating_points = value; }
+
+        /**
+         * The quality factor Q = sqrt(Lr/Cr) / Rload of the resonant tank. Determines gain-curve
+         * sharpness and Cr peak voltage stress (Vcr_peak ~ Q*Vin/pi at resonance for half-bridge).
+         */
+        std::optional<double> get_quality_factor() const { return quality_factor; }
+        void set_quality_factor(std::optional<double> value) { this->quality_factor = value; }
+
+        /**
+         * The secondary rectifier topology
+         */
+        std::optional<SrcRectifierType> get_rectifier_type() const { return rectifier_type; }
+        void set_rectifier_type(std::optional<SrcRectifierType> value) { this->rectifier_type = value; }
+
+        /**
+         * Optional explicit resonant capacitor (Cr) value in F. Overrides Q/fr derivation when set.
+         */
+        std::optional<double> get_resonant_capacitance() const { return resonant_capacitance; }
+        void set_resonant_capacitance(std::optional<double> value) { this->resonant_capacitance = value; }
+
+        /**
+         * The resonant frequency fr = 1/(2*pi*sqrt(Lr*Cr)) of the tank (optional, will be
+         * calculated if not provided)
+         */
+        std::optional<double> get_resonant_frequency() const { return resonant_frequency; }
+        void set_resonant_frequency(std::optional<double> value) { this->resonant_frequency = value; }
+
+        /**
+         * Optional explicit resonant inductor (Lr) value in H. Overrides Q/fr derivation when set.
+         */
+        std::optional<double> get_series_inductance() const { return series_inductance; }
+        void set_series_inductance(std::optional<double> value) { this->series_inductance = value; }
+
+        /**
+         * Whether the secondary rectifier uses synchronous MOSFETs instead of diodes
+         */
+        std::optional<bool> get_use_synchronous_rectifier() const { return use_synchronous_rectifier; }
+        void set_use_synchronous_rectifier(std::optional<bool> value) { this->use_synchronous_rectifier = value; }
+    };
+
+    /**
+     * How the line-cycle envelope is sampled: peakOfLineOnly = single sample at omega*t = pi/2
+     * (cheapest); peakOfLinePlusSectors = peak + 30/60-degree sector samples; fullLineCycle =
+     * 36 samples per cycle (THD validation only)
+     *
+     * Line-cycle envelope sampling strategy
+     */
+    enum class ViennaSamplingStrategy : int { FULL_LINE_CYCLE, PEAK_OF_LINE_ONLY, PEAK_OF_LINE_PLUS_SECTORS };
+
+    /**
+     * How each per-leg bidirectional switch is realised: tType (modern SiC default, two
+     * anti-series MOSFETs to neutral); backToBackMosfet; singleMosfetIn4DiodeBridge (Kolar 1994
+     * classic)
+     *
+     * Per-leg bidirectional switch realisation
+     */
+    enum class ViennaSwitchType : int { BACK_TO_BACK_MOSFET, SINGLE_MOSFET_IN4_DIODE_BRIDGE, T_TYPE };
+
+    /**
+     * Vienna switch arrangement: viennaI = single bidirectional switch per leg (3 switches
+     * total, classic Kolar 1994); viennaII = two switches per leg (reduced conduction loss at
+     * >30 kW)
+     *
+     * Vienna switch arrangement variant
+     */
+    enum class ViennaVariant : int { VIENNA_I, VIENNA_II };
+
+    /**
+     * The description of a Vienna rectifier (3-phase 3-level boost-type PFC, unidirectional).
+     * Three identical line-frequency boost inductors carry pure-AC line current. Switch
+     * blocking voltage = Vdc/2 (3-level advantage). Originally Kolar & Zach 1994; modern SiC
+     * industrial implementations: TI TIDA-010257, ST STDES-VIENNARECT, Microchip
+     * MSCSICPFC-REF5. See src/converter_models/VIENNA_PLAN.md for the full design rationale.
+     */
+    class ViennaRectifier {
+        public:
+        ViennaRectifier() :
+            phase_count_constraint(std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt)
+        {}
+        virtual ~ViennaRectifier() = default;
+
+        private:
+        std::optional<double> current_ripple_ratio;
+        std::optional<double> efficiency;
+        std::optional<double> line_frequency;
+        DimensionWithTolerance line_to_line_voltage;
+        std::vector<TopologyExcitation> operating_points;
+        double output_dc_voltage;
+        std::optional<int64_t> phase_count;
+        ClassMemberConstraints phase_count_constraint;
+        std::optional<double> power_factor;
+        std::optional<ViennaSamplingStrategy> sampling_strategy;
+        double switching_frequency;
+        std::optional<ViennaSwitchType> switch_type;
+        std::optional<bool> synchronous_rectifier;
+        std::optional<ViennaVariant> vienna_variant;
+
+        public:
+        /**
+         * DeltaI_L,pp / I_pk at peak-of-line (typical 0.2-0.3)
+         */
+        std::optional<double> get_current_ripple_ratio() const { return current_ripple_ratio; }
+        void set_current_ripple_ratio(std::optional<double> value) { this->current_ripple_ratio = value; }
+
+        /**
+         * Target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * Line frequency in Hz (typically 50 or 60)
+         */
+        std::optional<double> get_line_frequency() const { return line_frequency; }
+        void set_line_frequency(std::optional<double> value) { this->line_frequency = value; }
+
+        /**
+         * AC line-to-line RMS voltage (e.g. 400 V for EU, 480 V for US)
+         */
+        const DimensionWithTolerance & get_line_to_line_voltage() const { return line_to_line_voltage; }
+        DimensionWithTolerance & get_mutable_line_to_line_voltage() { return line_to_line_voltage; }
+        void set_line_to_line_voltage(const DimensionWithTolerance & value) { this->line_to_line_voltage = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<TopologyExcitation> & get_operating_points() const { return operating_points; }
+        std::vector<TopologyExcitation> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<TopologyExcitation> & value) { this->operating_points = value; }
+
+        /**
+         * Total DC bus voltage Vdc = Vdc+ + |Vdc-| (typical 700-800 V)
+         */
+        const double & get_output_dc_voltage() const { return output_dc_voltage; }
+        double & get_mutable_output_dc_voltage() { return output_dc_voltage; }
+        void set_output_dc_voltage(const double & value) { this->output_dc_voltage = value; }
+
+        /**
+         * Number of interleaved Vienna channels in parallel (1 = single Vienna, >1 = multi-channel
+         * for >50 kW)
+         */
+        std::optional<int64_t> get_phase_count() const { return phase_count; }
+        void set_phase_count(std::optional<int64_t> value) { if (value) CheckConstraint("phase_count", phase_count_constraint, *value); this->phase_count = value; }
+
+        /**
+         * Target input power factor (typically >= 0.99)
+         */
+        std::optional<double> get_power_factor() const { return power_factor; }
+        void set_power_factor(std::optional<double> value) { this->power_factor = value; }
+
+        /**
+         * How the line-cycle envelope is sampled: peakOfLineOnly = single sample at omega*t = pi/2
+         * (cheapest); peakOfLinePlusSectors = peak + 30/60-degree sector samples; fullLineCycle =
+         * 36 samples per cycle (THD validation only)
+         */
+        std::optional<ViennaSamplingStrategy> get_sampling_strategy() const { return sampling_strategy; }
+        void set_sampling_strategy(std::optional<ViennaSamplingStrategy> value) { this->sampling_strategy = value; }
+
+        /**
+         * Per-leg switching frequency in Hz
+         */
+        const double & get_switching_frequency() const { return switching_frequency; }
+        double & get_mutable_switching_frequency() { return switching_frequency; }
+        void set_switching_frequency(const double & value) { this->switching_frequency = value; }
+
+        /**
+         * How each per-leg bidirectional switch is realised: tType (modern SiC default, two
+         * anti-series MOSFETs to neutral); backToBackMosfet; singleMosfetIn4DiodeBridge (Kolar 1994
+         * classic)
+         */
+        std::optional<ViennaSwitchType> get_switch_type() const { return switch_type; }
+        void set_switch_type(std::optional<ViennaSwitchType> value) { this->switch_type = value; }
+
+        /**
+         * If true, the 6 fast rectifier diodes are replaced with MOSFETs
+         */
+        std::optional<bool> get_synchronous_rectifier() const { return synchronous_rectifier; }
+        void set_synchronous_rectifier(std::optional<bool> value) { this->synchronous_rectifier = value; }
+
+        /**
+         * Vienna switch arrangement: viennaI = single bidirectional switch per leg (3 switches
+         * total, classic Kolar 1994); viennaII = two switches per leg (reduced conduction loss at
+         * >30 kW)
+         */
+        std::optional<ViennaVariant> get_vienna_variant() const { return vienna_variant; }
+        void set_vienna_variant(std::optional<ViennaVariant> value) { this->vienna_variant = value; }
+    };
+
+    /**
+     * Primary topology variant: 'classic' (V1 push-pull, 2 switches; switch V_DS = 2*Vin/(1-D))
+     * or 'bridge' (V2 H-bridge, 4 switches; switch V_DS = Vin).
+     */
+    enum class Variant : int { BRIDGE, CLASSIC };
+
+    /**
+     * Weinberg DC-DC converter (current-fed push-pull-derivative, isolated, boost-capable).
+     * Spacecraft-heritage topology featuring a 1:1 input coupled inductor L1 with
+     * energy-recovery diode D3 to Vin, plus a center-tapped main transformer with center-tapped
+     * full-wave secondary rectifier. Intrinsically supports switch overlap above D=0.5 (boost
+     * regime) without needing a freewheel switch. Variants supported: V1 classic (push-pull
+     * primary, 2 switches) and V2 bridge (H-bridge primary, 4 switches) via the `variant` flag;
+     * optional synchronousRectifier replaces secondary diodes with active SR MOSFETs. The
+     * magnetic returned by process_design_requirements is the main 2-winding transformer (n =
+     * Np_total/Ns_total); the input coupled inductor L1 and output capacitor Co are emitted via
+     * get_extra_components_inputs.
+     */
+    class Weinberg {
+        public:
+        Weinberg() = default;
+        virtual ~Weinberg() = default;
+
+        private:
+        std::optional<double> coupling_coefficient_input;
+        std::optional<double> coupling_coefficient_main;
+        std::optional<double> current_ripple_ratio;
+        double diode_voltage_drop;
+        std::optional<double> efficiency;
+        DimensionWithTolerance input_voltage;
+        std::optional<double> maximum_switch_current;
+        std::vector<TopologyExcitation> operating_points;
+        std::optional<bool> synchronous_rectifier;
+        std::optional<Variant> variant;
+
+        public:
+        /**
+         * Magnetic coupling coefficient k between the two L1 windings (1:1 input coupled inductor).
+         * Typical values 0.99-0.999.
+         */
+        std::optional<double> get_coupling_coefficient_input() const { return coupling_coefficient_input; }
+        void set_coupling_coefficient_input(std::optional<double> value) { this->coupling_coefficient_input = value; }
+
+        /**
+         * Magnetic coupling coefficient k for the main transformer (4-way coupling among Lpri_a,
+         * Lpri_b, Lsec_a, Lsec_b). Typical values 0.95-0.99 (some leakage required for SPICE
+         * convergence and ZCS).
+         */
+        std::optional<double> get_coupling_coefficient_main() const { return coupling_coefficient_main; }
+        void set_coupling_coefficient_main(std::optional<double> value) { this->coupling_coefficient_main = value; }
+
+        /**
+         * The maximum input-coupled-inductor (L1) current ripple ratio (delta-IL1 / IL1_avg per
+         * winding)
+         */
+        std::optional<double> get_current_ripple_ratio() const { return current_ripple_ratio; }
+        void set_current_ripple_ratio(std::optional<double> value) { this->current_ripple_ratio = value; }
+
+        /**
+         * The voltage drop on the rectifier diode (ignored when synchronousRectifier=true)
+         */
+        const double & get_diode_voltage_drop() const { return diode_voltage_drop; }
+        double & get_mutable_diode_voltage_drop() { return diode_voltage_drop; }
+        void set_diode_voltage_drop(const double & value) { this->diode_voltage_drop = value; }
+
+        /**
+         * The target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The input voltage of the Weinberg
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * The maximum current that can go through the selected switch
+         */
+        std::optional<double> get_maximum_switch_current() const { return maximum_switch_current; }
+        void set_maximum_switch_current(std::optional<double> value) { this->maximum_switch_current = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<TopologyExcitation> & get_operating_points() const { return operating_points; }
+        std::vector<TopologyExcitation> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<TopologyExcitation> & value) { this->operating_points = value; }
+
+        /**
+         * If true, the secondary CT-FW diodes (D_pos, D_neg) are replaced by actively-driven
+         * synchronous MOSFETs (S_pos, S_neg) gated complementary to the primary switches.
+         */
+        std::optional<bool> get_synchronous_rectifier() const { return synchronous_rectifier; }
+        void set_synchronous_rectifier(std::optional<bool> value) { this->synchronous_rectifier = value; }
+
+        /**
+         * Primary topology variant: 'classic' (V1 push-pull, 2 switches; switch V_DS = 2*Vin/(1-D))
+         * or 'bridge' (V2 H-bridge, 4 switches; switch V_DS = Vin).
+         */
+        std::optional<Variant> get_variant() const { return variant; }
+        void set_variant(std::optional<Variant> value) { this->variant = value; }
+    };
+
+    /**
+     * Zeta excitation. Non-inverting fourth-order DC-DC converter — the dual of SEPIC: same
+     * gain M = D/(1-D), but the LC filter is on the OUTPUT side (so output-voltage ripple is
+     * small and there is no right-half-plane zero in CCM). The switch is HIGH-SIDE (PFET by
+     * default in the SPICE model). Two wiring variants are supported via the boolean flags
+     * below: V1 uncoupled (defaults; L1 magnetizing and L2 output filter are independent
+     * inductors) and V2 coupled-inductor (coupledInductor=true; L1 and L2 share one core,
+     * ripple-steering per TI SLYT411 — same condition as coupled-SEPIC because both inductors
+     * see identical voltages during both subintervals). Optional synchronousRectifier replaces
+     * the catch diode with a low-side MOSFET. The magnetic returned by
+     * process_design_requirements is L1 (or, when coupledInductor=true, a 2-winding coupled
+     * inductor). The remaining reactive elements (L2, Cc, Co) are emitted via
+     * get_extra_components_inputs.
+     */
+    class Zeta {
+        public:
+        Zeta() = default;
+        virtual ~Zeta() = default;
+
+        private:
+        std::optional<bool> coupled_inductor;
+        std::optional<double> coupling_coefficient;
+        std::optional<double> current_ripple_ratio;
+        double diode_voltage_drop;
+        std::optional<double> efficiency;
+        DimensionWithTolerance input_voltage;
+        std::optional<double> maximum_switch_current;
+        std::vector<TopologyExcitation> operating_points;
+        std::optional<bool> synchronous_rectifier;
+
+        public:
+        /**
+         * If true, L1 and L2 are wound on the same core (1:1 coupled) with coupling coefficient
+         * couplingCoefficient. Ripple-steering per TI SLYT411 reduces input-current ripple. The
+         * magnetic returned is a 2-winding coupled inductor.
+         */
+        std::optional<bool> get_coupled_inductor() const { return coupled_inductor; }
+        void set_coupled_inductor(std::optional<bool> value) { this->coupled_inductor = value; }
+
+        /**
+         * Magnetic coupling coefficient k between L1 and L2 (used only when coupledInductor=true).
+         * Typical values 0.95-0.999.
+         */
+        std::optional<double> get_coupling_coefficient() const { return coupling_coefficient; }
+        void set_coupling_coefficient(std::optional<double> value) { this->coupling_coefficient = value; }
+
+        /**
+         * The maximum magnetizing-inductor (L1) current ripple ratio (delta-IL1 / IL1_avg)
+         */
+        std::optional<double> get_current_ripple_ratio() const { return current_ripple_ratio; }
+        void set_current_ripple_ratio(std::optional<double> value) { this->current_ripple_ratio = value; }
+
+        /**
+         * The voltage drop on the rectifier diode (ignored when synchronousRectifier=true)
+         */
+        const double & get_diode_voltage_drop() const { return diode_voltage_drop; }
+        double & get_mutable_diode_voltage_drop() { return diode_voltage_drop; }
+        void set_diode_voltage_drop(const double & value) { this->diode_voltage_drop = value; }
+
+        /**
+         * The target efficiency
+         */
+        std::optional<double> get_efficiency() const { return efficiency; }
+        void set_efficiency(std::optional<double> value) { this->efficiency = value; }
+
+        /**
+         * The input voltage of the Zeta
+         */
+        const DimensionWithTolerance & get_input_voltage() const { return input_voltage; }
+        DimensionWithTolerance & get_mutable_input_voltage() { return input_voltage; }
+        void set_input_voltage(const DimensionWithTolerance & value) { this->input_voltage = value; }
+
+        /**
+         * The maximum current that can go through the selected switch
+         */
+        std::optional<double> get_maximum_switch_current() const { return maximum_switch_current; }
+        void set_maximum_switch_current(std::optional<double> value) { this->maximum_switch_current = value; }
+
+        /**
+         * A list of operating points
+         */
+        const std::vector<TopologyExcitation> & get_operating_points() const { return operating_points; }
+        std::vector<TopologyExcitation> & get_mutable_operating_points() { return operating_points; }
+        void set_operating_points(const std::vector<TopologyExcitation> & value) { this->operating_points = value; }
+
+        /**
+         * If true, the catch diode is replaced by an actively-driven low-side synchronous MOSFET.
+         * Reduces conduction loss; common at low Vout.
+         */
+        std::optional<bool> get_synchronous_rectifier() const { return synchronous_rectifier; }
+        void set_synchronous_rectifier(std::optional<bool> value) { this->synchronous_rectifier = value; }
+    };
+
     class SupportedTopologies {
         public:
         SupportedTopologies() = default;
@@ -2510,12 +3852,15 @@ namespace MAS {
         std::optional<Boost> boost;
         std::optional<Buck> buck;
         std::optional<CllcResonant> cllc_resonant;
+        std::optional<ClllcResonant> clllc_resonant;
         std::optional<CommonModeChoke> common_mode_choke;
+        std::optional<Cuk> cuk;
         std::optional<CurrentTransformer> current_transformer;
         std::optional<DifferentialModeChoke> differential_mode_choke;
         std::optional<DualActiveBridge> dual_active_bridge;
         std::optional<Flyback> flyback;
         std::optional<Forward> forward;
+        std::optional<FourSwitchBuckBoost> four_switch_buck_boost;
         std::optional<IsolatedBuck> isolated_buck;
         std::optional<IsolatedBuckBoost> isolated_buck_boost;
         std::optional<LlcResonant> llc_resonant;
@@ -2523,6 +3868,11 @@ namespace MAS {
         std::optional<PhaseShiftedHalfBridge> phase_shifted_half_bridge;
         std::optional<PowerFactorCorrection> power_factor_correction;
         std::optional<PushPull> push_pull;
+        std::optional<Sepic> sepic;
+        std::optional<SeriesResonant> series_resonant;
+        std::optional<ViennaRectifier> vienna_rectifier;
+        std::optional<Weinberg> weinberg;
+        std::optional<Zeta> zeta;
 
         public:
         std::optional<AsymmetricHalfBridge> get_asymmetric_half_bridge() const { return asymmetric_half_bridge; }
@@ -2537,8 +3887,14 @@ namespace MAS {
         std::optional<CllcResonant> get_cllc_resonant() const { return cllc_resonant; }
         void set_cllc_resonant(std::optional<CllcResonant> value) { this->cllc_resonant = value; }
 
+        std::optional<ClllcResonant> get_clllc_resonant() const { return clllc_resonant; }
+        void set_clllc_resonant(std::optional<ClllcResonant> value) { this->clllc_resonant = value; }
+
         std::optional<CommonModeChoke> get_common_mode_choke() const { return common_mode_choke; }
         void set_common_mode_choke(std::optional<CommonModeChoke> value) { this->common_mode_choke = value; }
+
+        std::optional<Cuk> get_cuk() const { return cuk; }
+        void set_cuk(std::optional<Cuk> value) { this->cuk = value; }
 
         std::optional<CurrentTransformer> get_current_transformer() const { return current_transformer; }
         void set_current_transformer(std::optional<CurrentTransformer> value) { this->current_transformer = value; }
@@ -2554,6 +3910,9 @@ namespace MAS {
 
         std::optional<Forward> get_forward() const { return forward; }
         void set_forward(std::optional<Forward> value) { this->forward = value; }
+
+        std::optional<FourSwitchBuckBoost> get_four_switch_buck_boost() const { return four_switch_buck_boost; }
+        void set_four_switch_buck_boost(std::optional<FourSwitchBuckBoost> value) { this->four_switch_buck_boost = value; }
 
         std::optional<IsolatedBuck> get_isolated_buck() const { return isolated_buck; }
         void set_isolated_buck(std::optional<IsolatedBuck> value) { this->isolated_buck = value; }
@@ -2575,6 +3934,21 @@ namespace MAS {
 
         std::optional<PushPull> get_push_pull() const { return push_pull; }
         void set_push_pull(std::optional<PushPull> value) { this->push_pull = value; }
+
+        std::optional<Sepic> get_sepic() const { return sepic; }
+        void set_sepic(std::optional<Sepic> value) { this->sepic = value; }
+
+        std::optional<SeriesResonant> get_series_resonant() const { return series_resonant; }
+        void set_series_resonant(std::optional<SeriesResonant> value) { this->series_resonant = value; }
+
+        std::optional<ViennaRectifier> get_vienna_rectifier() const { return vienna_rectifier; }
+        void set_vienna_rectifier(std::optional<ViennaRectifier> value) { this->vienna_rectifier = value; }
+
+        std::optional<Weinberg> get_weinberg() const { return weinberg; }
+        void set_weinberg(std::optional<Weinberg> value) { this->weinberg = value; }
+
+        std::optional<Zeta> get_zeta() const { return zeta; }
+        void set_zeta(std::optional<Zeta> value) { this->zeta = value; }
     };
 
     class ConverterInformation {
@@ -2728,7 +4102,7 @@ namespace MAS {
     /**
      * Topology that will use the magnetic
      */
-    enum class Topologies : int { ACTIVE_CLAMP_FORWARD_CONVERTER, ASYMMETRIC_HALF_BRIDGE_CONVERTER, BOOST_CONVERTER, BUCK_CONVERTER, CLLC_RESONANT_CONVERTER, COMMON_MODE_CHOKE, CURRENT_TRANSFORMER, DIFFERENTIAL_MODE_CHOKE, DUAL_ACTIVE_BRIDGE_CONVERTER, FLYBACK_CONVERTER, ISOLATED_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_CONVERTER, LLC_RESONANT_CONVERTER, PHASE_SHIFTED_FULL_BRIDGE_CONVERTER, PHASE_SHIFTED_HALF_BRIDGE_CONVERTER, POWER_FACTOR_CORRECTION, PUSH_PULL_CONVERTER, SINGLE_SWITCH_FORWARD_CONVERTER, TWO_SWITCH_FORWARD_CONVERTER };
+    enum class Topologies : int { ACTIVE_CLAMP_FORWARD_CONVERTER, ASYMMETRIC_HALF_BRIDGE_CONVERTER, BOOST_CONVERTER, BUCK_CONVERTER, CLLC_RESONANT_CONVERTER, CLLLC_RESONANT_CONVERTER, COMMON_MODE_CHOKE, CUK_CONVERTER, CURRENT_TRANSFORMER, DIFFERENTIAL_MODE_CHOKE, DUAL_ACTIVE_BRIDGE_CONVERTER, FLYBACK_CONVERTER, FOUR_SWITCH_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_BOOST_CONVERTER, ISOLATED_BUCK_CONVERTER, LLC_RESONANT_CONVERTER, PHASE_SHIFTED_FULL_BRIDGE_CONVERTER, PHASE_SHIFTED_HALF_BRIDGE_CONVERTER, POWER_FACTOR_CORRECTION, PUSH_PULL_CONVERTER, SEPIC_CONVERTER, SERIES_RESONANT_CONVERTER, SINGLE_SWITCH_FORWARD_CONVERTER, TWO_SWITCH_FORWARD_CONVERTER, VIENNA_RECTIFIER_CONVERTER, WEINBERG_CONVERTER, ZETA_CONVERTER };
 
     /**
      * Technology that must be used to create the wiring
@@ -9062,6 +10436,12 @@ void to_json(json & j, const CllcOperatingPoint & x);
 void from_json(const json & j, CllcResonant & x);
 void to_json(json & j, const CllcResonant & x);
 
+void from_json(const json & j, ClllcOperatingPoint & x);
+void to_json(json & j, const ClllcOperatingPoint & x);
+
+void from_json(const json & j, ClllcResonant & x);
+void to_json(json & j, const ClllcResonant & x);
+
 void from_json(const json & j, ImpedancePoint & x);
 void to_json(json & j, const ImpedancePoint & x);
 
@@ -9073,6 +10453,12 @@ void to_json(json & j, const InsertionLossAtFrequency & x);
 
 void from_json(const json & j, CommonModeChoke & x);
 void to_json(json & j, const CommonModeChoke & x);
+
+void from_json(const json & j, CukOperatingPoint & x);
+void to_json(json & j, const CukOperatingPoint & x);
+
+void from_json(const json & j, Cuk & x);
+void to_json(json & j, const Cuk & x);
 
 void from_json(const json & j, CurrentTransformer & x);
 void to_json(json & j, const CurrentTransformer & x);
@@ -9097,6 +10483,9 @@ void to_json(json & j, const Flyback & x);
 
 void from_json(const json & j, Forward & x);
 void to_json(json & j, const Forward & x);
+
+void from_json(const json & j, FourSwitchBuckBoost & x);
+void to_json(json & j, const FourSwitchBuckBoost & x);
 
 void from_json(const json & j, IsolatedBuck & x);
 void to_json(json & j, const IsolatedBuck & x);
@@ -9124,6 +10513,21 @@ void to_json(json & j, const PowerFactorCorrection & x);
 
 void from_json(const json & j, PushPull & x);
 void to_json(json & j, const PushPull & x);
+
+void from_json(const json & j, Sepic & x);
+void to_json(json & j, const Sepic & x);
+
+void from_json(const json & j, SeriesResonant & x);
+void to_json(json & j, const SeriesResonant & x);
+
+void from_json(const json & j, ViennaRectifier & x);
+void to_json(json & j, const ViennaRectifier & x);
+
+void from_json(const json & j, Weinberg & x);
+void to_json(json & j, const Weinberg & x);
+
+void from_json(const json & j, Zeta & x);
+void to_json(json & j, const Zeta & x);
 
 void from_json(const json & j, SupportedTopologies & x);
 void to_json(json & j, const SupportedTopologies & x);
@@ -9461,8 +10865,14 @@ void to_json(json & j, const OutputSType & x);
 void from_json(const json & j, AhbRectifierType & x);
 void to_json(json & j, const AhbRectifierType & x);
 
+void from_json(const json & j, LlcBridgeType & x);
+void to_json(json & j, const LlcBridgeType & x);
+
 void from_json(const json & j, CllcPowerFlow & x);
 void to_json(json & j, const CllcPowerFlow & x);
+
+void from_json(const json & j, ClllcControlStrategy & x);
+void to_json(json & j, const ClllcControlStrategy & x);
 
 void from_json(const json & j, WaveformLabel & x);
 void to_json(json & j, const WaveformLabel & x);
@@ -9476,8 +10886,14 @@ void to_json(json & j, const ModulationType & x);
 void from_json(const json & j, FlybackModes & x);
 void to_json(json & j, const FlybackModes & x);
 
-void from_json(const json & j, LlcBridgeType & x);
-void to_json(json & j, const LlcBridgeType & x);
+void from_json(const json & j, ControlMode & x);
+void to_json(json & j, const ControlMode & x);
+
+void from_json(const json & j, TransitionMode & x);
+void to_json(json & j, const TransitionMode & x);
+
+void from_json(const json & j, LlcRectifierType & x);
+void to_json(json & j, const LlcRectifierType & x);
 
 void from_json(const json & j, BRectifierType & x);
 void to_json(json & j, const BRectifierType & x);
@@ -9487,6 +10903,24 @@ void to_json(json & j, const PfcModes & x);
 
 void from_json(const json & j, PfcTopologyVariants & x);
 void to_json(json & j, const PfcTopologyVariants & x);
+
+void from_json(const json & j, SrcBridgeType & x);
+void to_json(json & j, const SrcBridgeType & x);
+
+void from_json(const json & j, SrcRectifierType & x);
+void to_json(json & j, const SrcRectifierType & x);
+
+void from_json(const json & j, ViennaSamplingStrategy & x);
+void to_json(json & j, const ViennaSamplingStrategy & x);
+
+void from_json(const json & j, ViennaSwitchType & x);
+void to_json(json & j, const ViennaSwitchType & x);
+
+void from_json(const json & j, ViennaVariant & x);
+void to_json(json & j, const ViennaVariant & x);
+
+void from_json(const json & j, Variant & x);
+void to_json(json & j, const Variant & x);
 
 void from_json(const json & j, Application & x);
 void to_json(json & j, const Application & x);
@@ -9878,25 +11312,97 @@ namespace MAS {
 
     inline void from_json(const json & j, CllcResonant& x) {
         x.set_bidirectional(get_stack_optional<bool>(j, "bidirectional"));
+        x.set_bridge_type(get_stack_optional<LlcBridgeType>(j, "bridgeType"));
         x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
         x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_integrated_resonant_inductor1(get_stack_optional<bool>(j, "integratedResonantInductor1"));
+        x.set_integrated_resonant_inductor2(get_stack_optional<bool>(j, "integratedResonantInductor2"));
         x.set_max_switching_frequency(j.at("maxSwitchingFrequency").get<double>());
         x.set_min_switching_frequency(j.at("minSwitchingFrequency").get<double>());
         x.set_operating_points(j.at("operatingPoints").get<std::vector<CllcOperatingPoint>>());
         x.set_quality_factor(get_stack_optional<double>(j, "qualityFactor"));
+        x.set_resonant_capacitor_ratio(get_stack_optional<double>(j, "resonantCapacitorRatio"));
+        x.set_resonant_inductor_ratio(get_stack_optional<double>(j, "resonantInductorRatio"));
         x.set_symmetric_design(get_stack_optional<bool>(j, "symmetricDesign"));
     }
 
     inline void to_json(json & j, const CllcResonant & x) {
         j = json::object();
         j["bidirectional"] = x.get_bidirectional();
+        j["bridgeType"] = x.get_bridge_type();
         j["efficiency"] = x.get_efficiency();
         j["inputVoltage"] = x.get_input_voltage();
+        j["integratedResonantInductor1"] = x.get_integrated_resonant_inductor1();
+        j["integratedResonantInductor2"] = x.get_integrated_resonant_inductor2();
         j["maxSwitchingFrequency"] = x.get_max_switching_frequency();
         j["minSwitchingFrequency"] = x.get_min_switching_frequency();
         j["operatingPoints"] = x.get_operating_points();
         j["qualityFactor"] = x.get_quality_factor();
+        j["resonantCapacitorRatio"] = x.get_resonant_capacitor_ratio();
+        j["resonantInductorRatio"] = x.get_resonant_inductor_ratio();
         j["symmetricDesign"] = x.get_symmetric_design();
+    }
+
+    inline void from_json(const json & j, ClllcOperatingPoint& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
+        x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
+        x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
+        x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+        x.set_phase_shift_degrees(get_stack_optional<double>(j, "phaseShiftDegrees"));
+        x.set_power_flow_direction(get_stack_optional<CllcPowerFlow>(j, "powerFlowDirection"));
+    }
+
+    inline void to_json(json & j, const ClllcOperatingPoint & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["outputCurrents"] = x.get_output_currents();
+        j["outputCurrentsType"] = x.get_output_currents_type();
+        j["outputVoltages"] = x.get_output_voltages();
+        j["outputVoltagesType"] = x.get_output_voltages_type();
+        j["switchingFrequency"] = x.get_switching_frequency();
+        j["phaseShiftDegrees"] = x.get_phase_shift_degrees();
+        j["powerFlowDirection"] = x.get_power_flow_direction();
+    }
+
+    inline void from_json(const json & j, ClllcResonant& x) {
+        x.set_bridge_type_primary(get_stack_optional<LlcBridgeType>(j, "bridgeTypePrimary"));
+        x.set_bridge_type_secondary(get_stack_optional<LlcBridgeType>(j, "bridgeTypeSecondary"));
+        x.set_control_strategy(get_stack_optional<ClllcControlStrategy>(j, "controlStrategy"));
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_high_voltage_bus_voltage(j.at("highVoltageBusVoltage").get<DimensionWithTolerance>());
+        x.set_inductance_ratio_k(get_stack_optional<double>(j, "inductanceRatioK"));
+        x.set_integrated_resonant_inductors(get_stack_optional<bool>(j, "integratedResonantInductors"));
+        x.set_low_voltage_bus_voltage(j.at("lowVoltageBusVoltage").get<DimensionWithTolerance>());
+        x.set_max_switching_frequency(j.at("maxSwitchingFrequency").get<double>());
+        x.set_min_switching_frequency(j.at("minSwitchingFrequency").get<double>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<ClllcOperatingPoint>>());
+        x.set_primary_resonant_capacitance(get_stack_optional<double>(j, "primaryResonantCapacitance"));
+        x.set_primary_resonant_frequency(get_stack_optional<double>(j, "primaryResonantFrequency"));
+        x.set_primary_series_inductance(get_stack_optional<double>(j, "primarySeriesInductance"));
+        x.set_quality_factor(get_stack_optional<double>(j, "qualityFactor"));
+        x.set_tank_symmetry_ratio(get_stack_optional<double>(j, "tankSymmetryRatio"));
+    }
+
+    inline void to_json(json & j, const ClllcResonant & x) {
+        j = json::object();
+        j["bridgeTypePrimary"] = x.get_bridge_type_primary();
+        j["bridgeTypeSecondary"] = x.get_bridge_type_secondary();
+        j["controlStrategy"] = x.get_control_strategy();
+        j["efficiency"] = x.get_efficiency();
+        j["highVoltageBusVoltage"] = x.get_high_voltage_bus_voltage();
+        j["inductanceRatioK"] = x.get_inductance_ratio_k();
+        j["integratedResonantInductors"] = x.get_integrated_resonant_inductors();
+        j["lowVoltageBusVoltage"] = x.get_low_voltage_bus_voltage();
+        j["maxSwitchingFrequency"] = x.get_max_switching_frequency();
+        j["minSwitchingFrequency"] = x.get_min_switching_frequency();
+        j["operatingPoints"] = x.get_operating_points();
+        j["primaryResonantCapacitance"] = x.get_primary_resonant_capacitance();
+        j["primaryResonantFrequency"] = x.get_primary_resonant_frequency();
+        j["primarySeriesInductance"] = x.get_primary_series_inductance();
+        j["qualityFactor"] = x.get_quality_factor();
+        j["tankSymmetryRatio"] = x.get_tank_symmetry_ratio();
     }
 
     inline void from_json(const json & j, ImpedancePoint& x) {
@@ -9959,6 +11465,60 @@ namespace MAS {
         j["operatingCurrent"] = x.get_operating_current();
         j["operatingVoltage"] = x.get_operating_voltage();
         j["targetInsertionLoss"] = x.get_target_insertion_loss();
+    }
+
+    inline void from_json(const json & j, CukOperatingPoint& x) {
+        x.set_ambient_temperature(j.at("ambientTemperature").get<double>());
+        x.set_output_currents(j.at("outputCurrents").get<std::vector<double>>());
+        x.set_output_currents_type(get_stack_optional<OutputSType>(j, "outputCurrentsType"));
+        x.set_output_voltages(j.at("outputVoltages").get<std::vector<double>>());
+        x.set_output_voltages_type(get_stack_optional<OutputSType>(j, "outputVoltagesType"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+        x.set_power_flow(get_stack_optional<CllcPowerFlow>(j, "powerFlow"));
+    }
+
+    inline void to_json(json & j, const CukOperatingPoint & x) {
+        j = json::object();
+        j["ambientTemperature"] = x.get_ambient_temperature();
+        j["outputCurrents"] = x.get_output_currents();
+        j["outputCurrentsType"] = x.get_output_currents_type();
+        j["outputVoltages"] = x.get_output_voltages();
+        j["outputVoltagesType"] = x.get_output_voltages_type();
+        j["switchingFrequency"] = x.get_switching_frequency();
+        j["powerFlow"] = x.get_power_flow();
+    }
+
+    inline void from_json(const json & j, Cuk& x) {
+        x.set_bidirectional(get_stack_optional<bool>(j, "bidirectional"));
+        x.set_coupled_inductor(get_stack_optional<bool>(j, "coupledInductor"));
+        x.set_coupling_capacitance_secondary(get_stack_optional<double>(j, "couplingCapacitanceSecondary"));
+        x.set_coupling_coefficient(get_stack_optional<double>(j, "couplingCoefficient"));
+        x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
+        x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_isolated(get_stack_optional<bool>(j, "isolated"));
+        x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<CukOperatingPoint>>());
+        x.set_synchronous(get_stack_optional<bool>(j, "synchronous"));
+        x.set_turns_ratio(get_stack_optional<double>(j, "turnsRatio"));
+    }
+
+    inline void to_json(json & j, const Cuk & x) {
+        j = json::object();
+        j["bidirectional"] = x.get_bidirectional();
+        j["coupledInductor"] = x.get_coupled_inductor();
+        j["couplingCapacitanceSecondary"] = x.get_coupling_capacitance_secondary();
+        j["couplingCoefficient"] = x.get_coupling_coefficient();
+        j["currentRippleRatio"] = x.get_current_ripple_ratio();
+        j["diodeVoltageDrop"] = x.get_diode_voltage_drop();
+        j["efficiency"] = x.get_efficiency();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["isolated"] = x.get_isolated();
+        j["maximumSwitchCurrent"] = x.get_maximum_switch_current();
+        j["operatingPoints"] = x.get_operating_points();
+        j["synchronous"] = x.get_synchronous();
+        j["turnsRatio"] = x.get_turns_ratio();
     }
 
     inline void from_json(const json & j, CurrentTransformer& x) {
@@ -10135,6 +11695,35 @@ namespace MAS {
         j["operatingPoints"] = x.get_operating_points();
     }
 
+    inline void from_json(const json & j, FourSwitchBuckBoost& x) {
+        x.set_bidirectional(get_stack_optional<bool>(j, "bidirectional"));
+        x.set_control_mode(get_stack_optional<ControlMode>(j, "controlMode"));
+        x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<TopologyExcitation>>());
+        x.set_output_voltage_ripple_ratio(get_stack_optional<double>(j, "outputVoltageRippleRatio"));
+        x.set_phase_count(get_stack_optional<int64_t>(j, "phaseCount"));
+        x.set_transition_hysteresis_ratio(get_stack_optional<double>(j, "transitionHysteresisRatio"));
+        x.set_transition_mode(get_stack_optional<TransitionMode>(j, "transitionMode"));
+    }
+
+    inline void to_json(json & j, const FourSwitchBuckBoost & x) {
+        j = json::object();
+        j["bidirectional"] = x.get_bidirectional();
+        j["controlMode"] = x.get_control_mode();
+        j["currentRippleRatio"] = x.get_current_ripple_ratio();
+        j["efficiency"] = x.get_efficiency();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["maximumSwitchCurrent"] = x.get_maximum_switch_current();
+        j["operatingPoints"] = x.get_operating_points();
+        j["outputVoltageRippleRatio"] = x.get_output_voltage_ripple_ratio();
+        j["phaseCount"] = x.get_phase_count();
+        j["transitionHysteresisRatio"] = x.get_transition_hysteresis_ratio();
+        j["transitionMode"] = x.get_transition_mode();
+    }
+
     inline void from_json(const json & j, IsolatedBuck& x) {
         x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
         x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
@@ -10183,6 +11772,7 @@ namespace MAS {
         x.set_min_switching_frequency(j.at("minSwitchingFrequency").get<double>());
         x.set_operating_points(j.at("operatingPoints").get<std::vector<TopologyExcitation>>());
         x.set_quality_factor(get_stack_optional<double>(j, "qualityFactor"));
+        x.set_rectifier_type(get_stack_optional<LlcRectifierType>(j, "rectifierType"));
         x.set_resonant_capacitance(get_stack_optional<double>(j, "resonantCapacitance"));
         x.set_resonant_frequency(get_stack_optional<double>(j, "resonantFrequency"));
         x.set_series_inductance(get_stack_optional<double>(j, "seriesInductance"));
@@ -10199,6 +11789,7 @@ namespace MAS {
         j["minSwitchingFrequency"] = x.get_min_switching_frequency();
         j["operatingPoints"] = x.get_operating_points();
         j["qualityFactor"] = x.get_quality_factor();
+        j["rectifierType"] = x.get_rectifier_type();
         j["resonantCapacitance"] = x.get_resonant_capacitance();
         j["resonantFrequency"] = x.get_resonant_frequency();
         j["seriesInductance"] = x.get_series_inductance();
@@ -10354,17 +11945,163 @@ namespace MAS {
         j["operatingPoints"] = x.get_operating_points();
     }
 
+    inline void from_json(const json & j, Sepic& x) {
+        x.set_coupled_inductor(get_stack_optional<bool>(j, "coupledInductor"));
+        x.set_coupling_coefficient(get_stack_optional<double>(j, "couplingCoefficient"));
+        x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
+        x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<TopologyExcitation>>());
+        x.set_synchronous_rectifier(get_stack_optional<bool>(j, "synchronousRectifier"));
+    }
+
+    inline void to_json(json & j, const Sepic & x) {
+        j = json::object();
+        j["coupledInductor"] = x.get_coupled_inductor();
+        j["couplingCoefficient"] = x.get_coupling_coefficient();
+        j["currentRippleRatio"] = x.get_current_ripple_ratio();
+        j["diodeVoltageDrop"] = x.get_diode_voltage_drop();
+        j["efficiency"] = x.get_efficiency();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["maximumSwitchCurrent"] = x.get_maximum_switch_current();
+        j["operatingPoints"] = x.get_operating_points();
+        j["synchronousRectifier"] = x.get_synchronous_rectifier();
+    }
+
+    inline void from_json(const json & j, SeriesResonant& x) {
+        x.set_bridge_type(get_stack_optional<SrcBridgeType>(j, "bridgeType"));
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_isolated(get_stack_optional<bool>(j, "isolated"));
+        x.set_max_switching_frequency(j.at("maxSwitchingFrequency").get<double>());
+        x.set_min_switching_frequency(j.at("minSwitchingFrequency").get<double>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<TopologyExcitation>>());
+        x.set_quality_factor(get_stack_optional<double>(j, "qualityFactor"));
+        x.set_rectifier_type(get_stack_optional<SrcRectifierType>(j, "rectifierType"));
+        x.set_resonant_capacitance(get_stack_optional<double>(j, "resonantCapacitance"));
+        x.set_resonant_frequency(get_stack_optional<double>(j, "resonantFrequency"));
+        x.set_series_inductance(get_stack_optional<double>(j, "seriesInductance"));
+        x.set_use_synchronous_rectifier(get_stack_optional<bool>(j, "useSynchronousRectifier"));
+    }
+
+    inline void to_json(json & j, const SeriesResonant & x) {
+        j = json::object();
+        j["bridgeType"] = x.get_bridge_type();
+        j["efficiency"] = x.get_efficiency();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["isolated"] = x.get_isolated();
+        j["maxSwitchingFrequency"] = x.get_max_switching_frequency();
+        j["minSwitchingFrequency"] = x.get_min_switching_frequency();
+        j["operatingPoints"] = x.get_operating_points();
+        j["qualityFactor"] = x.get_quality_factor();
+        j["rectifierType"] = x.get_rectifier_type();
+        j["resonantCapacitance"] = x.get_resonant_capacitance();
+        j["resonantFrequency"] = x.get_resonant_frequency();
+        j["seriesInductance"] = x.get_series_inductance();
+        j["useSynchronousRectifier"] = x.get_use_synchronous_rectifier();
+    }
+
+    inline void from_json(const json & j, ViennaRectifier& x) {
+        x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_line_frequency(get_stack_optional<double>(j, "lineFrequency"));
+        x.set_line_to_line_voltage(j.at("lineToLineVoltage").get<DimensionWithTolerance>());
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<TopologyExcitation>>());
+        x.set_output_dc_voltage(j.at("outputDcVoltage").get<double>());
+        x.set_phase_count(get_stack_optional<int64_t>(j, "phaseCount"));
+        x.set_power_factor(get_stack_optional<double>(j, "powerFactor"));
+        x.set_sampling_strategy(get_stack_optional<ViennaSamplingStrategy>(j, "samplingStrategy"));
+        x.set_switching_frequency(j.at("switchingFrequency").get<double>());
+        x.set_switch_type(get_stack_optional<ViennaSwitchType>(j, "switchType"));
+        x.set_synchronous_rectifier(get_stack_optional<bool>(j, "synchronousRectifier"));
+        x.set_vienna_variant(get_stack_optional<ViennaVariant>(j, "viennaVariant"));
+    }
+
+    inline void to_json(json & j, const ViennaRectifier & x) {
+        j = json::object();
+        j["currentRippleRatio"] = x.get_current_ripple_ratio();
+        j["efficiency"] = x.get_efficiency();
+        j["lineFrequency"] = x.get_line_frequency();
+        j["lineToLineVoltage"] = x.get_line_to_line_voltage();
+        j["operatingPoints"] = x.get_operating_points();
+        j["outputDcVoltage"] = x.get_output_dc_voltage();
+        j["phaseCount"] = x.get_phase_count();
+        j["powerFactor"] = x.get_power_factor();
+        j["samplingStrategy"] = x.get_sampling_strategy();
+        j["switchingFrequency"] = x.get_switching_frequency();
+        j["switchType"] = x.get_switch_type();
+        j["synchronousRectifier"] = x.get_synchronous_rectifier();
+        j["viennaVariant"] = x.get_vienna_variant();
+    }
+
+    inline void from_json(const json & j, Weinberg& x) {
+        x.set_coupling_coefficient_input(get_stack_optional<double>(j, "couplingCoefficientInput"));
+        x.set_coupling_coefficient_main(get_stack_optional<double>(j, "couplingCoefficientMain"));
+        x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
+        x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<TopologyExcitation>>());
+        x.set_synchronous_rectifier(get_stack_optional<bool>(j, "synchronousRectifier"));
+        x.set_variant(get_stack_optional<Variant>(j, "variant"));
+    }
+
+    inline void to_json(json & j, const Weinberg & x) {
+        j = json::object();
+        j["couplingCoefficientInput"] = x.get_coupling_coefficient_input();
+        j["couplingCoefficientMain"] = x.get_coupling_coefficient_main();
+        j["currentRippleRatio"] = x.get_current_ripple_ratio();
+        j["diodeVoltageDrop"] = x.get_diode_voltage_drop();
+        j["efficiency"] = x.get_efficiency();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["maximumSwitchCurrent"] = x.get_maximum_switch_current();
+        j["operatingPoints"] = x.get_operating_points();
+        j["synchronousRectifier"] = x.get_synchronous_rectifier();
+        j["variant"] = x.get_variant();
+    }
+
+    inline void from_json(const json & j, Zeta& x) {
+        x.set_coupled_inductor(get_stack_optional<bool>(j, "coupledInductor"));
+        x.set_coupling_coefficient(get_stack_optional<double>(j, "couplingCoefficient"));
+        x.set_current_ripple_ratio(get_stack_optional<double>(j, "currentRippleRatio"));
+        x.set_diode_voltage_drop(j.at("diodeVoltageDrop").get<double>());
+        x.set_efficiency(get_stack_optional<double>(j, "efficiency"));
+        x.set_input_voltage(j.at("inputVoltage").get<DimensionWithTolerance>());
+        x.set_maximum_switch_current(get_stack_optional<double>(j, "maximumSwitchCurrent"));
+        x.set_operating_points(j.at("operatingPoints").get<std::vector<TopologyExcitation>>());
+        x.set_synchronous_rectifier(get_stack_optional<bool>(j, "synchronousRectifier"));
+    }
+
+    inline void to_json(json & j, const Zeta & x) {
+        j = json::object();
+        j["coupledInductor"] = x.get_coupled_inductor();
+        j["couplingCoefficient"] = x.get_coupling_coefficient();
+        j["currentRippleRatio"] = x.get_current_ripple_ratio();
+        j["diodeVoltageDrop"] = x.get_diode_voltage_drop();
+        j["efficiency"] = x.get_efficiency();
+        j["inputVoltage"] = x.get_input_voltage();
+        j["maximumSwitchCurrent"] = x.get_maximum_switch_current();
+        j["operatingPoints"] = x.get_operating_points();
+        j["synchronousRectifier"] = x.get_synchronous_rectifier();
+    }
+
     inline void from_json(const json & j, SupportedTopologies& x) {
         x.set_asymmetric_half_bridge(get_stack_optional<AsymmetricHalfBridge>(j, "asymmetricHalfBridge"));
         x.set_boost(get_stack_optional<Boost>(j, "boost"));
         x.set_buck(get_stack_optional<Buck>(j, "buck"));
         x.set_cllc_resonant(get_stack_optional<CllcResonant>(j, "cllcResonant"));
+        x.set_clllc_resonant(get_stack_optional<ClllcResonant>(j, "clllcResonant"));
         x.set_common_mode_choke(get_stack_optional<CommonModeChoke>(j, "commonModeChoke"));
+        x.set_cuk(get_stack_optional<Cuk>(j, "cuk"));
         x.set_current_transformer(get_stack_optional<CurrentTransformer>(j, "currentTransformer"));
         x.set_differential_mode_choke(get_stack_optional<DifferentialModeChoke>(j, "differentialModeChoke"));
         x.set_dual_active_bridge(get_stack_optional<DualActiveBridge>(j, "dualActiveBridge"));
         x.set_flyback(get_stack_optional<Flyback>(j, "flyback"));
         x.set_forward(get_stack_optional<Forward>(j, "forward"));
+        x.set_four_switch_buck_boost(get_stack_optional<FourSwitchBuckBoost>(j, "fourSwitchBuckBoost"));
         x.set_isolated_buck(get_stack_optional<IsolatedBuck>(j, "isolatedBuck"));
         x.set_isolated_buck_boost(get_stack_optional<IsolatedBuckBoost>(j, "isolatedBuckBoost"));
         x.set_llc_resonant(get_stack_optional<LlcResonant>(j, "llcResonant"));
@@ -10372,6 +12109,11 @@ namespace MAS {
         x.set_phase_shifted_half_bridge(get_stack_optional<PhaseShiftedHalfBridge>(j, "phaseShiftedHalfBridge"));
         x.set_power_factor_correction(get_stack_optional<PowerFactorCorrection>(j, "powerFactorCorrection"));
         x.set_push_pull(get_stack_optional<PushPull>(j, "pushPull"));
+        x.set_sepic(get_stack_optional<Sepic>(j, "sepic"));
+        x.set_series_resonant(get_stack_optional<SeriesResonant>(j, "seriesResonant"));
+        x.set_vienna_rectifier(get_stack_optional<ViennaRectifier>(j, "viennaRectifier"));
+        x.set_weinberg(get_stack_optional<Weinberg>(j, "weinberg"));
+        x.set_zeta(get_stack_optional<Zeta>(j, "zeta"));
     }
 
     inline void to_json(json & j, const SupportedTopologies & x) {
@@ -10380,12 +12122,15 @@ namespace MAS {
         j["boost"] = x.get_boost();
         j["buck"] = x.get_buck();
         j["cllcResonant"] = x.get_cllc_resonant();
+        j["clllcResonant"] = x.get_clllc_resonant();
         j["commonModeChoke"] = x.get_common_mode_choke();
+        j["cuk"] = x.get_cuk();
         j["currentTransformer"] = x.get_current_transformer();
         j["differentialModeChoke"] = x.get_differential_mode_choke();
         j["dualActiveBridge"] = x.get_dual_active_bridge();
         j["flyback"] = x.get_flyback();
         j["forward"] = x.get_forward();
+        j["fourSwitchBuckBoost"] = x.get_four_switch_buck_boost();
         j["isolatedBuck"] = x.get_isolated_buck();
         j["isolatedBuckBoost"] = x.get_isolated_buck_boost();
         j["llcResonant"] = x.get_llc_resonant();
@@ -10393,6 +12138,11 @@ namespace MAS {
         j["phaseShiftedHalfBridge"] = x.get_phase_shifted_half_bridge();
         j["powerFactorCorrection"] = x.get_power_factor_correction();
         j["pushPull"] = x.get_push_pull();
+        j["sepic"] = x.get_sepic();
+        j["seriesResonant"] = x.get_series_resonant();
+        j["viennaRectifier"] = x.get_vienna_rectifier();
+        j["weinberg"] = x.get_weinberg();
+        j["zeta"] = x.get_zeta();
     }
 
     inline void from_json(const json & j, ConverterInformation& x) {
@@ -12502,7 +14252,7 @@ namespace MAS {
             case OutputSType::PEAK: j = "peak"; break;
             case OutputSType::PEAK_TO_PEAK: j = "peakToPeak"; break;
             case OutputSType::RMS: j = "rms"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"OutputSType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12520,7 +14270,21 @@ namespace MAS {
             case AhbRectifierType::CENTER_TAPPED: j = "centerTapped"; break;
             case AhbRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
             case AhbRectifierType::FULL_BRIDGE: j = "fullBridge"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"AhbRectifierType\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, LlcBridgeType & x) {
+        if (j == "fullBridge") x = LlcBridgeType::FULL_BRIDGE;
+        else if (j == "halfBridge") x = LlcBridgeType::HALF_BRIDGE;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const LlcBridgeType & x) {
+        switch (x) {
+            case LlcBridgeType::FULL_BRIDGE: j = "fullBridge"; break;
+            case LlcBridgeType::HALF_BRIDGE: j = "halfBridge"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"LlcBridgeType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12534,7 +14298,25 @@ namespace MAS {
         switch (x) {
             case CllcPowerFlow::FORWARD: j = "forward"; break;
             case CllcPowerFlow::REVERSE: j = "reverse"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"CllcPowerFlow\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, ClllcControlStrategy & x) {
+        if (j == "fixedFrequencyPhaseShift") x = ClllcControlStrategy::FIXED_FREQUENCY_PHASE_SHIFT;
+        else if (j == "hybridPfmPsm") x = ClllcControlStrategy::HYBRID_PFM_PSM;
+        else if (j == "pfm") x = ClllcControlStrategy::PFM;
+        else if (j == "psm") x = ClllcControlStrategy::PSM;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const ClllcControlStrategy & x) {
+        switch (x) {
+            case ClllcControlStrategy::FIXED_FREQUENCY_PHASE_SHIFT: j = "fixedFrequencyPhaseShift"; break;
+            case ClllcControlStrategy::HYBRID_PFM_PSM: j = "hybridPfmPsm"; break;
+            case ClllcControlStrategy::PFM: j = "pfm"; break;
+            case ClllcControlStrategy::PSM: j = "psm"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"ClllcControlStrategy\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12581,7 +14363,7 @@ namespace MAS {
             case WaveformLabel::TRIANGULAR_WITH_DEADTIME: j = "triangularWithDeadtime"; break;
             case WaveformLabel::UNIPOLAR_RECTANGULAR: j = "unipolarRectangular"; break;
             case WaveformLabel::UNIPOLAR_TRIANGULAR: j = "unipolarTriangular"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"WaveformLabel\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12599,7 +14381,7 @@ namespace MAS {
             case Configuration::SINGLE_PHASE_BALANCED: j = "singlePhaseBalanced"; break;
             case Configuration::THREE_PHASE: j = "threePhase"; break;
             case Configuration::THREE_PHASE_WITH_NEUTRAL: j = "threePhaseWithNeutral"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Configuration\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12617,7 +14399,7 @@ namespace MAS {
             case ModulationType::EPS: j = "EPS"; break;
             case ModulationType::SPS: j = "SPS"; break;
             case ModulationType::TPS: j = "TPS"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"ModulationType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12635,21 +14417,57 @@ namespace MAS {
             case FlybackModes::CONTINUOUS_CONDUCTION_MODE: j = "continuousConductionMode"; break;
             case FlybackModes::DISCONTINUOUS_CONDUCTION_MODE: j = "discontinuousConductionMode"; break;
             case FlybackModes::QUASI_RESONANT_MODE: j = "quasiResonantMode"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"FlybackModes\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
-    inline void from_json(const json & j, LlcBridgeType & x) {
-        if (j == "fullBridge") x = LlcBridgeType::FULL_BRIDGE;
-        else if (j == "halfBridge") x = LlcBridgeType::HALF_BRIDGE;
+    inline void from_json(const json & j, ControlMode & x) {
+        if (j == "averageCurrent") x = ControlMode::AVERAGE_CURRENT;
+        else if (j == "peakBuckPeakBoost") x = ControlMode::PEAK_BUCK_PEAK_BOOST;
+        else if (j == "peakCurrent") x = ControlMode::PEAK_CURRENT;
+        else if (j == "voltageMode") x = ControlMode::VOLTAGE_MODE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
-    inline void to_json(json & j, const LlcBridgeType & x) {
+    inline void to_json(json & j, const ControlMode & x) {
         switch (x) {
-            case LlcBridgeType::FULL_BRIDGE: j = "fullBridge"; break;
-            case LlcBridgeType::HALF_BRIDGE: j = "halfBridge"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            case ControlMode::AVERAGE_CURRENT: j = "averageCurrent"; break;
+            case ControlMode::PEAK_BUCK_PEAK_BOOST: j = "peakBuckPeakBoost"; break;
+            case ControlMode::PEAK_CURRENT: j = "peakCurrent"; break;
+            case ControlMode::VOLTAGE_MODE: j = "voltageMode"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"ControlMode\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, TransitionMode & x) {
+        if (j == "simultaneous") x = TransitionMode::SIMULTANEOUS;
+        else if (j == "splitPwm") x = TransitionMode::SPLIT_PWM;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const TransitionMode & x) {
+        switch (x) {
+            case TransitionMode::SIMULTANEOUS: j = "simultaneous"; break;
+            case TransitionMode::SPLIT_PWM: j = "splitPwm"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"TransitionMode\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, LlcRectifierType & x) {
+        if (j == "centerTapped") x = LlcRectifierType::CENTER_TAPPED;
+        else if (j == "currentDoubler") x = LlcRectifierType::CURRENT_DOUBLER;
+        else if (j == "fullBridge") x = LlcRectifierType::FULL_BRIDGE;
+        else if (j == "voltageDoubler") x = LlcRectifierType::VOLTAGE_DOUBLER;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const LlcRectifierType & x) {
+        switch (x) {
+            case LlcRectifierType::CENTER_TAPPED: j = "centerTapped"; break;
+            case LlcRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
+            case LlcRectifierType::FULL_BRIDGE: j = "fullBridge"; break;
+            case LlcRectifierType::VOLTAGE_DOUBLER: j = "voltageDoubler"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"LlcRectifierType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12665,7 +14483,7 @@ namespace MAS {
             case BRectifierType::CENTER_TAPPED: j = "centerTapped"; break;
             case BRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
             case BRectifierType::FULL_BRIDGE: j = "fullBridge"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"BRectifierType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12683,7 +14501,7 @@ namespace MAS {
             case PfcModes::CRITICAL_CONDUCTION_MODE: j = "criticalConductionMode"; break;
             case PfcModes::DISCONTINUOUS_CONDUCTION_MODE: j = "discontinuousConductionMode"; break;
             case PfcModes::TRANSITION_MODE: j = "transitionMode"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"PfcModes\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12713,7 +14531,99 @@ namespace MAS {
             case PfcTopologyVariants::SEPIC: j = "sepic"; break;
             case PfcTopologyVariants::TOTEM_POLE: j = "totemPole"; break;
             case PfcTopologyVariants::VIENNA: j = "vienna"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"PfcTopologyVariants\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, SrcBridgeType & x) {
+        if (j == "fullBridge") x = SrcBridgeType::FULL_BRIDGE;
+        else if (j == "fullBridgePhaseShift") x = SrcBridgeType::FULL_BRIDGE_PHASE_SHIFT;
+        else if (j == "halfBridge") x = SrcBridgeType::HALF_BRIDGE;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const SrcBridgeType & x) {
+        switch (x) {
+            case SrcBridgeType::FULL_BRIDGE: j = "fullBridge"; break;
+            case SrcBridgeType::FULL_BRIDGE_PHASE_SHIFT: j = "fullBridgePhaseShift"; break;
+            case SrcBridgeType::HALF_BRIDGE: j = "halfBridge"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"SrcBridgeType\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, SrcRectifierType & x) {
+        if (j == "centerTappedDiode") x = SrcRectifierType::CENTER_TAPPED_DIODE;
+        else if (j == "currentDoubler") x = SrcRectifierType::CURRENT_DOUBLER;
+        else if (j == "fullBridgeDiode") x = SrcRectifierType::FULL_BRIDGE_DIODE;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const SrcRectifierType & x) {
+        switch (x) {
+            case SrcRectifierType::CENTER_TAPPED_DIODE: j = "centerTappedDiode"; break;
+            case SrcRectifierType::CURRENT_DOUBLER: j = "currentDoubler"; break;
+            case SrcRectifierType::FULL_BRIDGE_DIODE: j = "fullBridgeDiode"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"SrcRectifierType\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, ViennaSamplingStrategy & x) {
+        if (j == "fullLineCycle") x = ViennaSamplingStrategy::FULL_LINE_CYCLE;
+        else if (j == "peakOfLineOnly") x = ViennaSamplingStrategy::PEAK_OF_LINE_ONLY;
+        else if (j == "peakOfLinePlusSectors") x = ViennaSamplingStrategy::PEAK_OF_LINE_PLUS_SECTORS;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const ViennaSamplingStrategy & x) {
+        switch (x) {
+            case ViennaSamplingStrategy::FULL_LINE_CYCLE: j = "fullLineCycle"; break;
+            case ViennaSamplingStrategy::PEAK_OF_LINE_ONLY: j = "peakOfLineOnly"; break;
+            case ViennaSamplingStrategy::PEAK_OF_LINE_PLUS_SECTORS: j = "peakOfLinePlusSectors"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"ViennaSamplingStrategy\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, ViennaSwitchType & x) {
+        if (j == "backToBackMosfet") x = ViennaSwitchType::BACK_TO_BACK_MOSFET;
+        else if (j == "singleMosfetIn4DiodeBridge") x = ViennaSwitchType::SINGLE_MOSFET_IN4_DIODE_BRIDGE;
+        else if (j == "tType") x = ViennaSwitchType::T_TYPE;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const ViennaSwitchType & x) {
+        switch (x) {
+            case ViennaSwitchType::BACK_TO_BACK_MOSFET: j = "backToBackMosfet"; break;
+            case ViennaSwitchType::SINGLE_MOSFET_IN4_DIODE_BRIDGE: j = "singleMosfetIn4DiodeBridge"; break;
+            case ViennaSwitchType::T_TYPE: j = "tType"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"ViennaSwitchType\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, ViennaVariant & x) {
+        if (j == "viennaI") x = ViennaVariant::VIENNA_I;
+        else if (j == "viennaII") x = ViennaVariant::VIENNA_II;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const ViennaVariant & x) {
+        switch (x) {
+            case ViennaVariant::VIENNA_I: j = "viennaI"; break;
+            case ViennaVariant::VIENNA_II: j = "viennaII"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"ViennaVariant\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, Variant & x) {
+        if (j == "bridge") x = Variant::BRIDGE;
+        else if (j == "classic") x = Variant::CLASSIC;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const Variant & x) {
+        switch (x) {
+            case Variant::BRIDGE: j = "bridge"; break;
+            case Variant::CLASSIC: j = "classic"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"Variant\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12729,7 +14639,7 @@ namespace MAS {
             case Application::INTERFERENCE_SUPPRESSION: j = "interferenceSuppression"; break;
             case Application::POWER: j = "power"; break;
             case Application::SIGNAL_PROCESSING: j = "signalProcessing"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Application\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12747,7 +14657,7 @@ namespace MAS {
             case Cti::GROUP_II: j = "groupII"; break;
             case Cti::GROUP_IIIA: j = "groupIIIA"; break;
             case Cti::GROUP_IIIB: j = "groupIIIB"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Cti\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12767,7 +14677,7 @@ namespace MAS {
             case InsulationType::FUNCTIONAL: j = "functional"; break;
             case InsulationType::REINFORCED: j = "reinforced"; break;
             case InsulationType::SUPPLEMENTARY: j = "supplementary"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"InsulationType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12785,7 +14695,7 @@ namespace MAS {
             case OvervoltageCategory::II: j = "II"; break;
             case OvervoltageCategory::III: j = "III"; break;
             case OvervoltageCategory::IV: j = "IV"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"OvervoltageCategory\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12803,7 +14713,7 @@ namespace MAS {
             case PollutionDegree::PD2: j = "PD2"; break;
             case PollutionDegree::PD3: j = "PD3"; break;
             case PollutionDegree::PD4: j = "PD4"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"PollutionDegree\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12821,7 +14731,7 @@ namespace MAS {
             case InsulationStandards::IEC_606641: j = "IEC 60664-1"; break;
             case InsulationStandards::IEC_615581: j = "IEC 61558-1"; break;
             case InsulationStandards::IEC_623681: j = "IEC 62368-1"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"InsulationStandards\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12855,7 +14765,7 @@ namespace MAS {
             case IsolationSide::SEPTENARY: j = "septenary"; break;
             case IsolationSide::TERTIARY: j = "tertiary"; break;
             case IsolationSide::UNDENARY: j = "undenary"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"IsolationSide\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12875,7 +14785,7 @@ namespace MAS {
             case Market::MEDICAL: j = "medical"; break;
             case Market::MILITARY: j = "military"; break;
             case Market::SPACE: j = "space"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Market\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12895,7 +14805,7 @@ namespace MAS {
             case SubApplication::ISOLATION: j = "isolation"; break;
             case SubApplication::POWER_FILTERING: j = "powerFiltering"; break;
             case SubApplication::TRANSFORMING: j = "transforming"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"SubApplication\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12917,7 +14827,7 @@ namespace MAS {
             case ConnectionType::SCREW: j = "screw"; break;
             case ConnectionType::SMT: j = "smt"; break;
             case ConnectionType::THT: j = "tht"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"ConnectionType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12928,11 +14838,14 @@ namespace MAS {
             {"boostConverter", Topologies::BOOST_CONVERTER},
             {"buckConverter", Topologies::BUCK_CONVERTER},
             {"cllcResonantConverter", Topologies::CLLC_RESONANT_CONVERTER},
+            {"clllcResonantConverter", Topologies::CLLLC_RESONANT_CONVERTER},
             {"commonModeChoke", Topologies::COMMON_MODE_CHOKE},
+            {"cukConverter", Topologies::CUK_CONVERTER},
             {"currentTransformer", Topologies::CURRENT_TRANSFORMER},
             {"differentialModeChoke", Topologies::DIFFERENTIAL_MODE_CHOKE},
             {"dualActiveBridgeConverter", Topologies::DUAL_ACTIVE_BRIDGE_CONVERTER},
             {"flybackConverter", Topologies::FLYBACK_CONVERTER},
+            {"fourSwitchBuckBoostConverter", Topologies::FOUR_SWITCH_BUCK_BOOST_CONVERTER},
             {"isolatedBuckBoostConverter", Topologies::ISOLATED_BUCK_BOOST_CONVERTER},
             {"isolatedBuckConverter", Topologies::ISOLATED_BUCK_CONVERTER},
             {"llcResonantConverter", Topologies::LLC_RESONANT_CONVERTER},
@@ -12940,8 +14853,13 @@ namespace MAS {
             {"phaseShiftedHalfBridgeConverter", Topologies::PHASE_SHIFTED_HALF_BRIDGE_CONVERTER},
             {"powerFactorCorrection", Topologies::POWER_FACTOR_CORRECTION},
             {"pushPullConverter", Topologies::PUSH_PULL_CONVERTER},
+            {"sepicConverter", Topologies::SEPIC_CONVERTER},
+            {"seriesResonantConverter", Topologies::SERIES_RESONANT_CONVERTER},
             {"singleSwitchForwardConverter", Topologies::SINGLE_SWITCH_FORWARD_CONVERTER},
             {"twoSwitchForwardConverter", Topologies::TWO_SWITCH_FORWARD_CONVERTER},
+            {"viennaRectifierConverter", Topologies::VIENNA_RECTIFIER_CONVERTER},
+            {"weinbergConverter", Topologies::WEINBERG_CONVERTER},
+            {"zetaConverter", Topologies::ZETA_CONVERTER},
         };
         auto iter = enumValues.find(j.get<std::string>());
         if (iter != enumValues.end()) {
@@ -12956,11 +14874,14 @@ namespace MAS {
             case Topologies::BOOST_CONVERTER: j = "boostConverter"; break;
             case Topologies::BUCK_CONVERTER: j = "buckConverter"; break;
             case Topologies::CLLC_RESONANT_CONVERTER: j = "cllcResonantConverter"; break;
+            case Topologies::CLLLC_RESONANT_CONVERTER: j = "clllcResonantConverter"; break;
             case Topologies::COMMON_MODE_CHOKE: j = "commonModeChoke"; break;
+            case Topologies::CUK_CONVERTER: j = "cukConverter"; break;
             case Topologies::CURRENT_TRANSFORMER: j = "currentTransformer"; break;
             case Topologies::DIFFERENTIAL_MODE_CHOKE: j = "differentialModeChoke"; break;
             case Topologies::DUAL_ACTIVE_BRIDGE_CONVERTER: j = "dualActiveBridgeConverter"; break;
             case Topologies::FLYBACK_CONVERTER: j = "flybackConverter"; break;
+            case Topologies::FOUR_SWITCH_BUCK_BOOST_CONVERTER: j = "fourSwitchBuckBoostConverter"; break;
             case Topologies::ISOLATED_BUCK_BOOST_CONVERTER: j = "isolatedBuckBoostConverter"; break;
             case Topologies::ISOLATED_BUCK_CONVERTER: j = "isolatedBuckConverter"; break;
             case Topologies::LLC_RESONANT_CONVERTER: j = "llcResonantConverter"; break;
@@ -12968,9 +14889,14 @@ namespace MAS {
             case Topologies::PHASE_SHIFTED_HALF_BRIDGE_CONVERTER: j = "phaseShiftedHalfBridgeConverter"; break;
             case Topologies::POWER_FACTOR_CORRECTION: j = "powerFactorCorrection"; break;
             case Topologies::PUSH_PULL_CONVERTER: j = "pushPullConverter"; break;
+            case Topologies::SEPIC_CONVERTER: j = "sepicConverter"; break;
+            case Topologies::SERIES_RESONANT_CONVERTER: j = "seriesResonantConverter"; break;
             case Topologies::SINGLE_SWITCH_FORWARD_CONVERTER: j = "singleSwitchForwardConverter"; break;
             case Topologies::TWO_SWITCH_FORWARD_CONVERTER: j = "twoSwitchForwardConverter"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            case Topologies::VIENNA_RECTIFIER_CONVERTER: j = "viennaRectifierConverter"; break;
+            case Topologies::WEINBERG_CONVERTER: j = "weinbergConverter"; break;
+            case Topologies::ZETA_CONVERTER: j = "zetaConverter"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"Topologies\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -12988,7 +14914,7 @@ namespace MAS {
             case WiringTechnology::PRINTED: j = "printed"; break;
             case WiringTechnology::STAMPED: j = "stamped"; break;
             case WiringTechnology::WOUND: j = "wound"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"WiringTechnology\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13024,7 +14950,7 @@ namespace MAS {
             case BobbinFamily::RM: j = "rm"; break;
             case BobbinFamily::T: j = "t"; break;
             case BobbinFamily::U: j = "u"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"BobbinFamily\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13040,7 +14966,7 @@ namespace MAS {
             case Status::OBSOLETE: j = "obsolete"; break;
             case Status::PRODUCTION: j = "production"; break;
             case Status::PROTOTYPE: j = "prototype"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Status\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13072,7 +14998,7 @@ namespace MAS {
             case TemperatureClassEnum::THE_220: j = "220"; break;
             case TemperatureClassEnum::THE_250: j = "250"; break;
             case TemperatureClassEnum::Y: j = "Y"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"TemperatureClassEnum\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13088,7 +15014,7 @@ namespace MAS {
             case PinShape::IRREGULAR: j = "irregular"; break;
             case PinShape::RECTANGULAR: j = "rectangular"; break;
             case PinShape::ROUND: j = "round"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"PinShape\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13102,7 +15028,7 @@ namespace MAS {
         switch (x) {
             case PinDescriptionType::SMD: j = "smd"; break;
             case PinDescriptionType::THT: j = "tht"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"PinDescriptionType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13116,7 +15042,7 @@ namespace MAS {
         switch (x) {
             case FunctionalDescriptionType::CUSTOM: j = "custom"; break;
             case FunctionalDescriptionType::STANDARD: j = "standard"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"FunctionalDescriptionType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13134,7 +15060,7 @@ namespace MAS {
             case ColumnShape::OBLONG: j = "oblong"; break;
             case ColumnShape::RECTANGULAR: j = "rectangular"; break;
             case ColumnShape::ROUND: j = "round"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"ColumnShape\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13152,7 +15078,7 @@ namespace MAS {
             case CoilAlignment::INNER_OR_TOP: j = "innerOrTop"; break;
             case CoilAlignment::OUTER_OR_BOTTOM: j = "outerOrBottom"; break;
             case CoilAlignment::SPREAD: j = "spread"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"CoilAlignment\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13166,7 +15092,7 @@ namespace MAS {
         switch (x) {
             case WindingOrientation::CONTIGUOUS: j = "contiguous"; break;
             case WindingOrientation::OVERLAPPING: j = "overlapping"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"WindingOrientation\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13180,7 +15106,7 @@ namespace MAS {
         switch (x) {
             case WindingWindowShape::RECTANGULAR: j = "rectangular"; break;
             case WindingWindowShape::ROUND: j = "round"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"WindingWindowShape\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13194,7 +15120,7 @@ namespace MAS {
         switch (x) {
             case Direction::INPUT: j = "input"; break;
             case Direction::OUTPUT: j = "output"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Direction\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13216,7 +15142,7 @@ namespace MAS {
             case InsulationWireCoatingType::INSULATED: j = "insulated"; break;
             case InsulationWireCoatingType::SERVED: j = "served"; break;
             case InsulationWireCoatingType::TAPED: j = "taped"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"InsulationWireCoatingType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13232,7 +15158,7 @@ namespace MAS {
             case WireStandard::IEC_60317: j = "IEC 60317"; break;
             case WireStandard::IPC_6012: j = "IPC-6012"; break;
             case WireStandard::NEMA_MW_1000_C: j = "NEMA MW 1000 C"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"WireStandard\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13252,7 +15178,7 @@ namespace MAS {
             case WireType::PLANAR: j = "planar"; break;
             case WireType::RECTANGULAR: j = "rectangular"; break;
             case WireType::ROUND: j = "round"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"WireType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13268,7 +15194,7 @@ namespace MAS {
             case CoordinateSystem::CARTESIAN: j = "cartesian"; break;
             case CoordinateSystem::CYLINDRICAL: j = "cylindrical"; break;
             case CoordinateSystem::POLAR: j = "polar"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"CoordinateSystem\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13284,7 +15210,7 @@ namespace MAS {
             case ElectricalType::CONDUCTION: j = "conduction"; break;
             case ElectricalType::INSULATION: j = "insulation"; break;
             case ElectricalType::SHIELDING: j = "shielding"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"ElectricalType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13298,7 +15224,7 @@ namespace MAS {
         switch (x) {
             case WindingStyle::WIND_BY_CONSECUTIVE_PARALLELS: j = "windByConsecutiveParallels"; break;
             case WindingStyle::WIND_BY_CONSECUTIVE_TURNS: j = "windByConsecutiveTurns"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"WindingStyle\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13314,7 +15240,7 @@ namespace MAS {
             case TurnCrossSectionalShape::OVAL: j = "oval"; break;
             case TurnCrossSectionalShape::RECTANGULAR: j = "rectangular"; break;
             case TurnCrossSectionalShape::ROUND: j = "round"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"TurnCrossSectionalShape\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13328,7 +15254,7 @@ namespace MAS {
         switch (x) {
             case TurnOrientation::CLOCKWISE: j = "clockwise"; break;
             case TurnOrientation::COUNTER_CLOCKWISE: j = "counterClockwise"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"TurnOrientation\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13342,7 +15268,7 @@ namespace MAS {
         switch (x) {
             case Coating::EPOXY: j = "epoxy"; break;
             case Coating::PARYLENE: j = "parylene"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Coating\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13358,7 +15284,7 @@ namespace MAS {
             case GapType::ADDITIVE: j = "additive"; break;
             case GapType::RESIDUAL: j = "residual"; break;
             case GapType::SUBTRACTIVE: j = "subtractive"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"GapType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13370,7 +15296,7 @@ namespace MAS {
     inline void to_json(json & j, const MassCoreLossesMethodType & x) {
         switch (x) {
             case MassCoreLossesMethodType::MAGNETEC: j = "magnetec"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"MassCoreLossesMethodType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13390,7 +15316,7 @@ namespace MAS {
             case MaterialType::FERRITE: j = "ferrite"; break;
             case MaterialType::NANOCRYSTALLINE: j = "nanocrystalline"; break;
             case MaterialType::POWDER: j = "powder"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"MaterialType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13422,7 +15348,7 @@ namespace MAS {
             case MaterialComposition::MN_ZN: j = "MnZn"; break;
             case MaterialComposition::NI_ZN: j = "NiZn"; break;
             case MaterialComposition::PROPRIETARY: j = "proprietary"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"MaterialComposition\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13442,7 +15368,7 @@ namespace MAS {
             case InitialPermeabilitModifierMethod::MICROMETALS: j = "micrometals"; break;
             case InitialPermeabilitModifierMethod::POCO: j = "poco"; break;
             case InitialPermeabilitModifierMethod::TDG: j = "tdg"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"InitialPermeabilitModifierMethod\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13456,7 +15382,7 @@ namespace MAS {
         switch (x) {
             case CoreMaterialType::COMMERCIAL: j = "commercial"; break;
             case CoreMaterialType::CUSTOM: j = "custom"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"CoreMaterialType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13480,7 +15406,7 @@ namespace MAS {
             case VolumetricCoreLossesMethodType::ROSHEN: j = "roshen"; break;
             case VolumetricCoreLossesMethodType::STEINMETZ: j = "steinmetz"; break;
             case VolumetricCoreLossesMethodType::TDG: j = "tdg"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"VolumetricCoreLossesMethodType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13553,7 +15479,7 @@ namespace MAS {
             case CoreShapeFamily::UI: j = "ui"; break;
             case CoreShapeFamily::UR: j = "ur"; break;
             case CoreShapeFamily::UT: j = "ut"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"CoreShapeFamily\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13567,7 +15493,7 @@ namespace MAS {
         switch (x) {
             case MagneticCircuit::CLOSED: j = "closed"; break;
             case MagneticCircuit::OPEN: j = "open"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"MagneticCircuit\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13585,7 +15511,7 @@ namespace MAS {
             case CoreType::PIECE_AND_PLATE: j = "pieceAndPlate"; break;
             case CoreType::TOROIDAL: j = "toroidal"; break;
             case CoreType::TWO_PIECE_SET: j = "twoPieceSet"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"CoreType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13607,7 +15533,7 @@ namespace MAS {
             case CoreGeometricalDescriptionElementType::SHEET: j = "sheet"; break;
             case CoreGeometricalDescriptionElementType::SPACER: j = "spacer"; break;
             case CoreGeometricalDescriptionElementType::TOROIDAL: j = "toroidal"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"CoreGeometricalDescriptionElementType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13621,7 +15547,7 @@ namespace MAS {
         switch (x) {
             case ColumnType::CENTRAL: j = "central"; break;
             case ColumnType::LATERAL: j = "lateral"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"ColumnType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13637,7 +15563,7 @@ namespace MAS {
             case MasConformance::A: j = "A"; break;
             case MasConformance::B: j = "B"; break;
             case MasConformance::C: j = "C"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"MasConformance\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13653,7 +15579,7 @@ namespace MAS {
             case ResultOrigin::MANUFACTURER: j = "manufacturer"; break;
             case ResultOrigin::MEASUREMENT: j = "measurement"; break;
             case ResultOrigin::SIMULATION: j = "simulation"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"ResultOrigin\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -13667,7 +15593,7 @@ namespace MAS {
         switch (x) {
             case VoltageType::AC: j = "AC"; break;
             case VoltageType::DC: j = "DC"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"VoltageType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 }

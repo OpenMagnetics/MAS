@@ -40,6 +40,10 @@
             "description": "The type of primary bridge",
             "$ref": "#/$defs/llcBridgeType"
         },
+        "rectifierType": {
+            "description": "The type of secondary rectifier",
+            "$ref": "#/$defs/llcRectifierType"
+        },
         "integratedResonantInductor": {
             "description": "Whether the resonant inductor is integrated in the transformer (leakage)",
             "type": "boolean",
@@ -76,6 +80,17 @@
             "enum": [
                 "halfBridge",
                 "fullBridge"
+            ]
+        },
+        "llcRectifierType": {
+            "description": "The type of secondary rectifier for LLC",
+            "title": "llcRectifierType",
+            "type": "string",
+            "enum": [
+                "centerTapped",
+                "fullBridge",
+                "currentDoubler",
+                "voltageDoubler"
             ]
         },
         "llcOperatingPoint": {
