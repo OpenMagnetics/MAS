@@ -158,6 +158,8 @@ names that are not literal property keys are written in plain prose.
 | `surfaceResistivity` | Surface resistivity per IEC 60093, in Ω/sq. |
 | `form` | The form an insulation material is supplied in: `tape`, `film`, `sleeve` or `varnish`. It is what lets a coordinator pick sleeve stock rather than tape. |
 | `cti` (insulation material) | The measured comparative tracking index per IEC 60112, in V, from which the material group above follows per IEC 60664-1. |
+| `leadConductor` | Separate conductor that carries a winding end to its terminal (a wire soldered to a foil end, a strip welded across it); recorded on a coil `connection` as a wire record or a catalogue wire name. Absent: the winding's own conductor is the lead. |
+| `exit` | Path a lead leaves the winding by: `radial` (across the layers wound over that end) or `axial` (along the axis, out through the end face). Recorded on a coil `connection`; absent means radial. |
 | `sleeve` | Insulating tube slid over a lead, from its terminal back into the winding; recorded on a coil `connection` with its material, wall thickness, inner diameter, overlap into the winding and number of layers. |
 | `meltingPoint` | Temperature at which the insulation material melts, in degrees Celsius. |
 | `interlayerInsulation` | Insulation barrier placed between adjacent layers of a winding. |

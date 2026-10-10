@@ -19,7 +19,7 @@ MAJOR.
 
 ## [Unreleased]
 
-The next release is **2.5.0** (`VERSION`; 2.0.0 was never tagged, the additive `pcbDesignRules.layerToLayer` below raised it to 2.1.0, the additive bobbin family `ei` to 2.2.0, the additive material `density`/`provenance` to 2.3.0, the additive wire-material `specificHeat` to 2.4.0, and the relaxed core/winding loss bounds to 2.5.0), a MAJOR one relative to 1.0.0: the *Breaking* block below removes the
+The next release is **2.6.0** (`VERSION`; 2.0.0 was never tagged, the additive `pcbDesignRules.layerToLayer` below raised it to 2.1.0, the additive bobbin family `ei` to 2.2.0, the additive material `density`/`provenance` to 2.3.0, the additive wire-material `specificHeat` to 2.4.0, the relaxed core/winding loss bounds to 2.5.0, and the additive connection `leadConductor`/`exit` to 2.6.0), a MAJOR one relative to 1.0.0: the *Breaking* block below removes the
 top-level `masVersion` and `masConformance` fields, renames/replaces material records
 (`TMFD`, `Metglas`, `Finemet`) and turns the core coating thickness from a number into a
 `dimensionWithTolerance`, so a document that uses any of them becomes invalid or stops
@@ -27,6 +27,17 @@ resolving. Everything else below is additive (new optional fields and new record
 requirement relaxed.
 
 ### Added
+
+- **Connection `leadConductor` and `exit`.** `coil.json#/$defs/connection` gains an optional
+  `leadConductor` (a `wire.json` record or a catalogue wire name, like a winding's own `wire`: the separate conductor that carries this end to its
+  terminal, such as a round wire soldered to a foil end or a copper strip welded across its
+  width) and an optional `exit` (`radial` | `axial`: whether the lead leaves across the layers
+  wound over this end or along the axis through the end face). A foil or planar sheet is not
+  routed out across the outer windings as its own lead; until now a document could not say
+  what is, so a consumer had to invent a lead size. Absent `leadConductor` means the winding's
+  own conductor is the lead (round, litz, rectangular wire); absent `exit` means radial, the
+  path every existing layout was laid out with. Additive. Generated C++: `Connection` gains
+  `lead_conductor` (the existing `WireDataOrNameUnion`, `std::variant<Wire, std::string>`: the property has the winding wire's own form and title, so the generator reuses that type instead of emitting a duplicate class) and `exit` (`LeadExit`) with their json conversions.
 
 - **Wire material `specificHeat`.** `wire/material.json` gains an optional `specificHeat`
   (J/(kg K), > 0), the same shape insulation materials have, at the temperature its provenance

@@ -798,6 +798,28 @@
                         "innerDiameter"
                     ],
                     "additionalProperties": false
+                },
+                "leadConductor": {
+                    "description": "Conductor that carries this end from the winding to its terminal when it is a separate piece joined to the winding's own conductor, such as a round wire soldered to a foil end or a copper strip welded across the foil width. Its own cross-section is what the lead occupies where it crosses other turns. Absent means the winding's own conductor is the lead, which is what a round, litz or rectangular wire is; a foil or planar sheet is not routed out as its own lead.",
+                    "title": "WireDataOrNameUnion",
+                    "oneOf": [
+                        {
+                            "$ref": "./wire.json"
+                        },
+                        {
+                            "description": "The name of the wire",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "exit": {
+                    "description": "Path by which the lead leaves the winding: radial runs outwards across the layers wound over this end and leaves through the outer face of the winding; axial runs along the winding axis and leaves through the end face (the flange side of a bobbin), crossing no outer layer. Absent means radial.",
+                    "title": "leadExit",
+                    "type": "string",
+                    "enum": [
+                        "radial",
+                        "axial"
+                    ]
                 }
             },
             "additionalProperties": false
