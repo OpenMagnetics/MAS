@@ -24,6 +24,28 @@ FetchContent_MakeAvailable(json)
 find_program(QUICKTYPE quicktype REQUIRED)
 set(MAS_HPP "${CMAKE_CURRENT_BINARY_DIR}/MAS.hpp")
 set(PEAS_SCHEMAS "${MAS_ROOT}/../PEAS/schemas")
+# Every schema quicktype reads. The SAME list feeds the COMMAND (-S sources) and DEPENDS, so a change to
+# ANY input -- including the PEAS schemas the MAS schemas $ref (e.g. the PEAS topology enum) -- regenerates
+# MAS.hpp. Listing only the MAS root schemas in DEPENDS left a stale MAS.hpp in every reused build dir
+# after PEAS gained topology values, and the consumers then failed to compile against it.
+set(MAS_ROOT_SCHEMA "${MAS_ROOT}/schemas/inputs.json")
+set(MAS_SOURCE_SCHEMAS
+    "${MAS_ROOT}/schemas/inputs/designRequirements.json"
+    "${MAS_ROOT}/schemas/inputs/operatingPoint.json"
+    "${MAS_ROOT}/schemas/inputs/operatingConditions.json"
+    "${MAS_ROOT}/schemas/utils.json"
+    "${PEAS_SCHEMAS}/utils.json"
+    "${PEAS_SCHEMAS}/inputs/operatingPointExcitation.json")
+# Windows quicktype cannot resolve the relative $refs to the per-topology schemas that
+# inputs.json#/supportedTopologies pulls in (empty file-URI -> 'Could not fetch schema').
+# Feed every topology schema as a source so quicktype resolves them by $id on all platforms.
+foreach(_topology asymmetricHalfBridge boost buck cllcResonant clllcResonant commonModeChoke cuk currentTransformer differentialModeChoke dualActiveBridge flyback forward fourSwitchBuckBoost isolatedBuck isolatedBuckBoost llcResonant phaseShiftedFullBridge phaseShiftedHalfBridge powerFactorCorrection pushPull sepic seriesResonant vienna weinberg zeta)
+    list(APPEND MAS_SOURCE_SCHEMAS "${MAS_ROOT}/schemas/inputs/topologies/${_topology}.json")
+endforeach()
+set(MAS_QUICKTYPE_SOURCES "")
+foreach(_schema IN LISTS MAS_SOURCE_SCHEMAS)
+    list(APPEND MAS_QUICKTYPE_SOURCES -S "${_schema}")
+endforeach()
 add_custom_command(
     OUTPUT "${MAS_HPP}"
     # Root at inputs.json so MAS.hpp carries BOTH DesignRequirements and the full OperatingPoint graph
@@ -32,49 +54,13 @@ add_custom_command(
     # DesignRequirements when reached via inputs.json's $ref, vs MagneticDesignRequirements when rooted
     # directly — MasConverter.cpp uses the new name.)
     COMMAND "${QUICKTYPE}" -l c++ -s schema
-            "${MAS_ROOT}/schemas/inputs.json"
-            -S "${MAS_ROOT}/schemas/inputs/designRequirements.json"
-            -S "${MAS_ROOT}/schemas/inputs/operatingPoint.json"
-            -S "${MAS_ROOT}/schemas/inputs/operatingConditions.json"
-            -S "${MAS_ROOT}/schemas/utils.json"
-            -S "${PEAS_SCHEMAS}/utils.json"
-            -S "${PEAS_SCHEMAS}/inputs/operatingPointExcitation.json"
-            # Windows quicktype cannot resolve the relative $refs to the per-topology schemas that
-            # inputs.json#/supportedTopologies pulls in (empty file-URI -> 'Could not fetch schema').
-            # Feed every topology schema as a source so quicktype resolves them by $id on all platforms.
-            -S "${MAS_ROOT}/schemas/inputs/topologies/asymmetricHalfBridge.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/boost.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/buck.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/cllcResonant.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/clllcResonant.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/commonModeChoke.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/cuk.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/currentTransformer.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/differentialModeChoke.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/dualActiveBridge.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/flyback.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/forward.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/fourSwitchBuckBoost.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/isolatedBuck.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/isolatedBuckBoost.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/llcResonant.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/phaseShiftedFullBridge.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/phaseShiftedHalfBridge.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/powerFactorCorrection.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/pushPull.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/sepic.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/seriesResonant.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/vienna.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/weinberg.json"
-            -S "${MAS_ROOT}/schemas/inputs/topologies/zeta.json"
+            "${MAS_ROOT_SCHEMA}"
+            ${MAS_QUICKTYPE_SOURCES}
             -t Inputs
             -o "${MAS_HPP}"
             --namespace MAS --source-style single-source --type-style pascal-case
             --member-style underscore-case --enumerator-style upper-underscore-case --no-boost
-    DEPENDS "${MAS_ROOT}/schemas/inputs.json"
-            "${MAS_ROOT}/schemas/inputs/designRequirements.json"
-            "${MAS_ROOT}/schemas/inputs/operatingPoint.json"
-            "${MAS_ROOT}/schemas/utils.json"
+    DEPENDS "${MAS_ROOT_SCHEMA}" ${MAS_SOURCE_SCHEMAS}
     COMMENT "Generating MAS.hpp (designRequirements + operatingPoint graph) via quicktype"
     VERBATIM)
 add_custom_target(mas_generated_header DEPENDS "${MAS_HPP}")
