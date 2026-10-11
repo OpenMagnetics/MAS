@@ -19,7 +19,7 @@ MAJOR.
 
 ## [Unreleased]
 
-The next release is **2.4.0** (`VERSION`; 2.0.0 was never tagged, the additive `pcbDesignRules.layerToLayer` below raised it to 2.1.0, the additive bobbin family `ei` to 2.2.0, the additive material `density`/`provenance` to 2.3.0, and the additive wire-material `specificHeat` to 2.4.0), a MAJOR one relative to 1.0.0: the *Breaking* block below removes the
+The next release is **2.5.0** (`VERSION`; 2.0.0 was never tagged, the additive `pcbDesignRules.layerToLayer` below raised it to 2.1.0, the additive bobbin family `ei` to 2.2.0, the additive material `density`/`provenance` to 2.3.0, the additive wire-material `specificHeat` to 2.4.0, and the relaxed core/winding loss bounds to 2.5.0), a MAJOR one relative to 1.0.0: the *Breaking* block below removes the
 top-level `masVersion` and `masConformance` fields, renames/replaces material records
 (`TMFD`, `Metglas`, `Finemet`) and turns the core coating thickness from a number into a
 `dimensionWithTolerance`, so a document that uses any of them becomes invalid or stops
@@ -199,6 +199,14 @@ requirement relaxed.
   owner-approved change.
 
 ### Changed
+
+- **Core and winding losses may be 0.** `coreLosses`, `volumetricLosses` and `massLosses` in
+  `schemas/outputs/coreLossesOutput.json`, and `windingLosses` in `schemas/outputs.json`, are
+  relaxed from `exclusiveMinimum: 0` to `minimum: 0`, as `eddyCurrentCoreLosses` and
+  `hysteresisCoreLosses` were in 1.0.0. A DC-bias operating point (current, no AC flux) has
+  physically zero core losses, and an unexcited one zero losses of every kind; the old bounds made
+  every simulated document carrying such a point invalid (a user's design with 0 A and DC
+  170-700 A points, ABT #1725). Relaxing: every document valid before stays valid.
 
 - **`resistivity` is no longer required on a core material.** It stays a defined,
   documented property and every existing record keeps it; it is simply no longer

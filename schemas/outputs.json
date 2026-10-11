@@ -85,9 +85,9 @@
                     "type": "number"
                 },
                 "windingLosses": {
-                    "description": "Value of the winding losses",
+                    "description": "Value of the winding losses. 0 when the windings carry no current.",
                     "type": "number",
-                    "exclusiveMinimum": 0
+                    "minimum": 0
                 },
                 "windingLossesPerTurn": {
                     "type": "array",

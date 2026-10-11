@@ -23,14 +23,14 @@
             "type": "number"
         },
         "volumetricLosses": {
-            "description": "Volumetric value of the core losses. Unit: W/m^3.",
+            "description": "Volumetric value of the core losses. Unit: W/m^3. 0 when the core sees no AC flux (a DC-bias or unexcited operating point).",
             "type": "number",
-            "exclusiveMinimum": 0
+            "minimum": 0
         },
         "massLosses": {
-            "description": "Mass-specific value of the core losses. Unit: W/kg.",
+            "description": "Mass-specific value of the core losses. Unit: W/kg. 0 when the core sees no AC flux (a DC-bias or unexcited operating point).",
             "type": "number",
-            "exclusiveMinimum": 0
+            "minimum": 0
         },
         "eddyCurrentCoreLosses": {
             "description": "Part of the core losses due to eddy currents. Unit: W.",
@@ -43,9 +43,9 @@
             "minimum": 0
         },
         "coreLosses": {
-            "description": "Total core losses. Unit: W.",
+            "description": "Total core losses. Unit: W. 0 when the core sees no AC flux (a DC-bias or unexcited operating point).",
             "type": "number",
-            "exclusiveMinimum": 0
+            "minimum": 0
         }
     },
     "required": [
