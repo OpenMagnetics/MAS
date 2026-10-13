@@ -74,7 +74,7 @@
           "name": "Winding 2",
           "numberTurns": 30,
           "numberParallels": 1,
-          "isolationSide": "secondary",
+          "isolationSide": "primary",
           "wire": "Round 0.5 - Grade 1"
         }
       ]
