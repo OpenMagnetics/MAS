@@ -5,13 +5,13 @@
         "nominal": 5.647990558626356e-05
       },
       "name": "My Design Requirements",
+      "topology": "dualActiveBridgeConverter",
       "turnsRatios": [
         {
           "nominal": 3.75
         }
       ],
-      "wiringTechnology": "printed",
-      "topology": "dualActiveBridgeConverter"
+      "wiringTechnology": "printed"
     },
     "operatingPoints": [
       {
@@ -8329,7 +8329,7 @@
               "nominal": 0.00031318
             },
             "conductingWidth": {
-              "nominal": 0.0010400000000000001
+              "nominal": 0.001
             },
             "material": "copper",
             "name": "Planar 313.18 \u00b5m",
@@ -8338,7 +8338,7 @@
               "nominal": 0.00031318
             },
             "outerWidth": {
-              "nominal": 0.0010400000000000001
+              "nominal": 0.001
             },
             "standard": "IPC-6012",
             "standardName": "9 oz.",
@@ -8352,13 +8352,13 @@
           "numberTurns": 4,
           "wire": {
             "conductingArea": {
-              "nominal": 3.61894e-07
+              "nominal": 3.47975e-07
             },
             "conductingHeight": {
               "nominal": 0.00027838
             },
             "conductingWidth": {
-              "nominal": 0.0013000000000000002
+              "nominal": 0.00125
             },
             "material": "copper",
             "name": "Planar 278.38 \u00b5m",
@@ -8367,7 +8367,7 @@
               "nominal": 0.00027838
             },
             "outerWidth": {
-              "nominal": 0.0013000000000000002
+              "nominal": 0.00125
             },
             "standard": "IPC-6012",
             "standardName": "8 oz.",
@@ -8383,29 +8383,37 @@
             -1.0842021724855044e-19
           ],
           "dimensions": [
-            0.0056500000000000005,
-            0.0022746800000000003
+            0.005550000000000001,
+            0.0022746799999999994
           ],
           "name": "Default group",
           "partialWindings": [
             {
               "parallelsProportion": [
-                1
+                1.0
               ],
               "winding": "Primary"
             },
             {
               "parallelsProportion": [
-                1,
-                1,
-                1
+                1.0,
+                1.0,
+                1.0
               ],
               "winding": "Secondary"
             }
           ],
-          "sectionsOrientation": "contiguous",
-          "type": "printed",
           "pcb": {
+            "designRules": {
+              "coreToTrack": 0.0003,
+              "trackToTrack": 9e-05,
+              "viaToTrack": 0.0003,
+              "viaToVia": 0.0003
+            },
+            "outline": {
+              "depth": 0.03,
+              "width": 0.045
+            },
             "vias": {
               "diameter": {
                 "nominal": 0.0004
@@ -8414,18 +8422,10 @@
                 "nominal": 0.0003
               },
               "type": "through"
-            },
-            "designRules": {
-              "trackToTrack": 9e-05,
-              "coreToTrack": 0.0003,
-              "viaToVia": 0.0003,
-              "viaToTrack": 0.0003
-            },
-            "outline": {
-              "width": 0.045,
-              "depth": 0.03
             }
-          }
+          },
+          "sectionsOrientation": "contiguous",
+          "type": "printed"
         }
       ],
       "layersDescription": [
@@ -8433,13 +8433,13 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            0.0009807499999999999
+            0.0009807499999999994
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00031318
           ],
-          "fillingFactor": 0.3034068001863065,
+          "fillingFactor": 0.2969938359412043,
           "name": "Primary layer 0",
           "orientation": "contiguous",
           "partialWindings": [
@@ -8462,10 +8462,10 @@
             0.0007741599999999999
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "insulationMaterial": "FR4",
           "name": "Insulation layer between stack index 0 and 1",
           "orientation": "contiguous",
@@ -8477,21 +8477,21 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            0.0005849699999999999
+            0.0005849699999999998
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00027838
           ],
-          "fillingFactor": 0.2696927806241267,
+          "fillingFactor": 0.26399241346609764,
           "name": "Secondary layer 0",
           "orientation": "contiguous",
           "partialWindings": [
             {
               "parallelsProportion": [
-                1,
-                0,
-                0
+                1.0,
+                0.0,
+                0.0
               ],
               "winding": "Secondary"
             }
@@ -8505,13 +8505,13 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            0.0003957799999999999
+            0.0003957800000000001
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "insulationMaterial": "FR4",
           "name": "Insulation layer between stack index 1 and 2",
           "orientation": "contiguous",
@@ -8523,13 +8523,13 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            0.00018918999999999986
+            0.00018918999999999967
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00031318
           ],
-          "fillingFactor": 0.3034068001863065,
+          "fillingFactor": 0.2969938359412043,
           "name": "Primary layer 1",
           "orientation": "contiguous",
           "partialWindings": [
@@ -8549,13 +8549,13 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -1.740000000000013e-05
+            -1.739999999999988e-05
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "insulationMaterial": "FR4",
           "name": "Insulation layer between stack index 2 and 3",
           "orientation": "contiguous",
@@ -8567,21 +8567,21 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.00020659000000000015
+            -0.00020659000000000042
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00027838
           ],
-          "fillingFactor": 0.2696927806241267,
+          "fillingFactor": 0.26399241346609764,
           "name": "Secondary layer 1",
           "orientation": "contiguous",
           "partialWindings": [
             {
               "parallelsProportion": [
-                0,
-                1,
-                0
+                0.0,
+                1.0,
+                0.0
               ],
               "winding": "Secondary"
             }
@@ -8595,13 +8595,13 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.0003957800000000002
+            -0.0003957800000000001
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "insulationMaterial": "FR4",
           "name": "Insulation layer between stack index 3 and 4",
           "orientation": "contiguous",
@@ -8613,13 +8613,13 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.0006023700000000002
+            -0.0006023700000000005
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00031318
           ],
-          "fillingFactor": 0.3034068001863065,
+          "fillingFactor": 0.2969938359412043,
           "name": "Primary layer 2",
           "orientation": "contiguous",
           "partialWindings": [
@@ -8639,13 +8639,13 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.0008089600000000002
+            -0.0008089600000000001
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "insulationMaterial": "FR4",
           "name": "Insulation layer between stack index 4 and 5",
           "orientation": "contiguous",
@@ -8657,21 +8657,21 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.0009981500000000002
+            -0.0009981499999999997
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00027838
           ],
-          "fillingFactor": 0.2696927806241267,
+          "fillingFactor": 0.26399241346609764,
           "name": "Secondary layer 2",
           "orientation": "contiguous",
           "partialWindings": [
             {
               "parallelsProportion": [
-                0,
-                0,
-                1
+                0.0,
+                0.0,
+                1.0
               ],
               "winding": "Secondary"
             }
@@ -8687,18 +8687,18 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            0.0009807499999999999
+            0.0009807499999999994
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00031318
           ],
-          "fillingFactor": 0.3034068001863065,
+          "fillingFactor": 0.2969938359412043,
           "group": "Default group",
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Primary section 0",
           "partialWindings": [
@@ -8719,14 +8719,14 @@
             0.0007741599999999999
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Insulation section between stack index 0 and 1",
           "partialWindings": [],
@@ -8736,26 +8736,26 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            0.0005849699999999999
+            0.0005849699999999998
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00027838
           ],
-          "fillingFactor": 0.2696927806241267,
+          "fillingFactor": 0.26399241346609764,
           "group": "Default group",
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Secondary section 0",
           "partialWindings": [
             {
               "parallelsProportion": [
-                1,
-                0,
-                0
+                1.0,
+                0.0,
+                0.0
               ],
               "winding": "Secondary"
             }
@@ -8767,17 +8767,17 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            0.0003957799999999999
+            0.0003957800000000001
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Insulation section between stack index 1 and 2",
           "partialWindings": [],
@@ -8787,18 +8787,18 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            0.00018918999999999986
+            0.00018918999999999967
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00031318
           ],
-          "fillingFactor": 0.3034068001863065,
+          "fillingFactor": 0.2969938359412043,
           "group": "Default group",
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Primary section 1",
           "partialWindings": [
@@ -8816,17 +8816,17 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -1.740000000000013e-05
+            -1.739999999999988e-05
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Insulation section between stack index 2 and 3",
           "partialWindings": [],
@@ -8836,26 +8836,26 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.00020659000000000015
+            -0.00020659000000000042
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00027838
           ],
-          "fillingFactor": 0.2696927806241267,
+          "fillingFactor": 0.26399241346609764,
           "group": "Default group",
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Secondary section 1",
           "partialWindings": [
             {
               "parallelsProportion": [
-                0,
-                1,
-                0
+                0.0,
+                1.0,
+                0.0
               ],
               "winding": "Secondary"
             }
@@ -8867,17 +8867,17 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.0003957800000000002
+            -0.0003957800000000001
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Insulation section between stack index 3 and 4",
           "partialWindings": [],
@@ -8887,18 +8887,18 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.0006023700000000002
+            -0.0006023700000000005
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00031318
           ],
-          "fillingFactor": 0.3034068001863065,
+          "fillingFactor": 0.2969938359412043,
           "group": "Default group",
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Primary section 2",
           "partialWindings": [
@@ -8916,17 +8916,17 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.0008089600000000002
+            -0.0008089600000000001
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.0001
           ],
-          "fillingFactor": 1,
+          "fillingFactor": 1.0,
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Insulation section between stack index 4 and 5",
           "partialWindings": [],
@@ -8936,26 +8936,26 @@
           "coordinateSystem": "cartesian",
           "coordinates": [
             0.007775,
-            -0.0009981500000000002
+            -0.0009981499999999997
           ],
           "dimensions": [
-            0.0056500000000000005,
+            0.005550000000000001,
             0.00027838
           ],
-          "fillingFactor": 0.2696927806241267,
+          "fillingFactor": 0.26399241346609764,
           "group": "Default group",
           "layersOrientation": "contiguous",
           "margin": [
-            0,
-            0
+            0.0,
+            0.0
           ],
           "name": "Secondary section 2",
           "partialWindings": [
             {
               "parallelsProportion": [
-                0,
-                0,
-                1
+                0.0,
+                0.0,
+                1.0
               ],
               "winding": "Secondary"
             }
@@ -8968,540 +8968,540 @@
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.005560000000000002,
-            0.0009807499999999999
+            0.005595,
+            0.0009807499999999994
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 0",
-          "length": 0.03493451030791851,
+          "length": 0.03515442179366979,
           "name": "Primary parallel 0 turn 0",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 0",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.006689999999999998,
-            0.0009807499999999999
+            0.006685,
+            0.0009807499999999994
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 0",
-          "length": 0.04203450970503142,
+          "length": 0.04200309377849554,
           "name": "Primary parallel 0 turn 1",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 0",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.007819999999999994,
-            0.0009807499999999999
+            0.007775,
+            0.0009807499999999994
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 0",
-          "length": 0.04913450910214433,
+          "length": 0.04885176576332128,
           "name": "Primary parallel 0 turn 2",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 0",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.00894999999999999,
-            0.0009807499999999999
+            0.008865,
+            0.0009807499999999994
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 0",
-          "length": 0.05623450849925723,
+          "length": 0.05570043774814703,
           "name": "Primary parallel 0 turn 3",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 0",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.010079999999999985,
-            0.0009807499999999999
+            0.009955,
+            0.0009807499999999994
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 0",
-          "length": 0.06333450789637013,
+          "length": 0.06254910973297279,
           "name": "Primary parallel 0 turn 4",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 0",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.0056900000000000015,
-            0.0005849699999999999
+            0.005765,
+            0.0005849699999999998
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 0",
-          "length": 0.03575132439785186,
+          "length": 0.03622256329589032,
           "name": "Secondary parallel 0 turn 0",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 0",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.007079999999999994,
-            0.0005849699999999999
+            0.007105,
+            0.0005849699999999998
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 0",
-          "length": 0.04448495197483143,
+          "length": 0.044642031607510964,
           "name": "Secondary parallel 0 turn 1",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 0",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.008469999999999988,
-            0.0005849699999999999
+            0.008445000000000001,
+            0.0005849699999999998
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 0",
-          "length": 0.05321857955181102,
+          "length": 0.053061499919131616,
           "name": "Secondary parallel 0 turn 2",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 0",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.009859999999999982,
-            0.0005849699999999999
+            0.009785000000000002,
+            0.0005849699999999998
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 0",
-          "length": 0.061952207128790605,
+          "length": 0.06148096823075226,
           "name": "Secondary parallel 0 turn 3",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 0",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.005560000000000002,
-            0.00018918999999999986
+            0.005595,
+            0.00018918999999999967
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 1",
-          "length": 0.03493451030791851,
+          "length": 0.03515442179366979,
           "name": "Primary parallel 0 turn 5",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 1",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.006689999999999998,
-            0.00018918999999999986
+            0.006685,
+            0.00018918999999999967
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 1",
-          "length": 0.04203450970503142,
+          "length": 0.04200309377849554,
           "name": "Primary parallel 0 turn 6",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 1",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.007819999999999994,
-            0.00018918999999999986
+            0.007775,
+            0.00018918999999999967
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 1",
-          "length": 0.04913450910214433,
+          "length": 0.04885176576332128,
           "name": "Primary parallel 0 turn 7",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 1",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.00894999999999999,
-            0.00018918999999999986
+            0.008865,
+            0.00018918999999999967
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 1",
-          "length": 0.05623450849925723,
+          "length": 0.05570043774814703,
           "name": "Primary parallel 0 turn 8",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 1",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.010079999999999985,
-            0.00018918999999999986
+            0.009955,
+            0.00018918999999999967
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 1",
-          "length": 0.06333450789637013,
+          "length": 0.06254910973297279,
           "name": "Primary parallel 0 turn 9",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 1",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.0056900000000000015,
-            -0.00020659000000000015
+            0.005765,
+            -0.00020659000000000042
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 1",
-          "length": 0.03575132439785186,
+          "length": 0.03622256329589032,
           "name": "Secondary parallel 1 turn 0",
           "orientation": "clockwise",
           "parallel": 1,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 1",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.007079999999999994,
-            -0.00020659000000000015
+            0.007105,
+            -0.00020659000000000042
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 1",
-          "length": 0.04448495197483143,
+          "length": 0.044642031607510964,
           "name": "Secondary parallel 1 turn 1",
           "orientation": "clockwise",
           "parallel": 1,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 1",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.008469999999999988,
-            -0.00020659000000000015
+            0.008445000000000001,
+            -0.00020659000000000042
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 1",
-          "length": 0.05321857955181102,
+          "length": 0.053061499919131616,
           "name": "Secondary parallel 1 turn 2",
           "orientation": "clockwise",
           "parallel": 1,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 1",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.009859999999999982,
-            -0.00020659000000000015
+            0.009785000000000002,
+            -0.00020659000000000042
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 1",
-          "length": 0.061952207128790605,
+          "length": 0.06148096823075226,
           "name": "Secondary parallel 1 turn 3",
           "orientation": "clockwise",
           "parallel": 1,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 1",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.005560000000000002,
-            -0.0006023700000000002
+            0.005595,
+            -0.0006023700000000005
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 2",
-          "length": 0.03493451030791851,
+          "length": 0.03515442179366979,
           "name": "Primary parallel 0 turn 10",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 2",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.006689999999999998,
-            -0.0006023700000000002
+            0.006685,
+            -0.0006023700000000005
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 2",
-          "length": 0.04203450970503142,
+          "length": 0.04200309377849554,
           "name": "Primary parallel 0 turn 11",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 2",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.007819999999999994,
-            -0.0006023700000000002
+            0.007775,
+            -0.0006023700000000005
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 2",
-          "length": 0.04913450910214433,
+          "length": 0.04885176576332128,
           "name": "Primary parallel 0 turn 12",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 2",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.00894999999999999,
-            -0.0006023700000000002
+            0.008865,
+            -0.0006023700000000005
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 2",
-          "length": 0.05623450849925723,
+          "length": 0.05570043774814703,
           "name": "Primary parallel 0 turn 13",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 2",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.010079999999999985,
-            -0.0006023700000000002
+            0.009955,
+            -0.0006023700000000005
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0010400000000000001,
+            0.001,
             0.00031318
           ],
           "layer": "Primary layer 2",
-          "length": 0.06333450789637013,
+          "length": 0.06254910973297279,
           "name": "Primary parallel 0 turn 14",
           "orientation": "clockwise",
           "parallel": 0,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Primary section 2",
           "winding": "Primary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.0056900000000000015,
-            -0.0009981500000000002
+            0.005765,
+            -0.0009981499999999997
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 2",
-          "length": 0.03575132439785186,
+          "length": 0.03622256329589032,
           "name": "Secondary parallel 2 turn 0",
           "orientation": "clockwise",
           "parallel": 2,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 2",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.007079999999999994,
-            -0.0009981500000000002
+            0.007105,
+            -0.0009981499999999997
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 2",
-          "length": 0.04448495197483143,
+          "length": 0.044642031607510964,
           "name": "Secondary parallel 2 turn 1",
           "orientation": "clockwise",
           "parallel": 2,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 2",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.008469999999999988,
-            -0.0009981500000000002
+            0.008445000000000001,
+            -0.0009981499999999997
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 2",
-          "length": 0.05321857955181102,
+          "length": 0.053061499919131616,
           "name": "Secondary parallel 2 turn 2",
           "orientation": "clockwise",
           "parallel": 2,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 2",
           "winding": "Secondary"
         },
         {
           "coordinateSystem": "cartesian",
           "coordinates": [
-            0.009859999999999982,
-            -0.0009981500000000002
+            0.009785000000000002,
+            -0.0009981499999999997
           ],
           "crossSectionalShape": "rectangular",
           "dimensions": [
-            0.0013000000000000002,
+            0.00125,
             0.00027838
           ],
           "layer": "Secondary layer 2",
-          "length": 0.061952207128790605,
+          "length": 0.06148096823075226,
           "name": "Secondary parallel 2 turn 3",
           "orientation": "clockwise",
           "parallel": 2,
-          "rotation": 0,
+          "rotation": 0.0,
           "section": "Secondary section 2",
           "winding": "Secondary"
         }
