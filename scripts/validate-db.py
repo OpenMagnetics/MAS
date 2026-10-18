@@ -136,4 +136,26 @@ def validate_core_references():
     return rc
 
 rc |= validate_core_references()
+
+def validate_bobbin_references():
+    """Every catalogue bobbin that names its material by string must name an insulation_materials
+    record by its NAME (not an alias: MKF's find_insulation_material_by_name looks the name up
+    exactly). Like a core's shape, a bobbin's `material` string is schema-valid whatever it says;
+    on 2026-10-18 fifteen bobbins named five materials no record defined, and MKF's thermal and
+    stray-capacitance models could not load them. A bobbin with no material is not checked here."""
+    names={json.loads(l)['name'] for l in open('data/insulation_materials.ndjson') if l.strip()}
+    n=bad=0; first=None
+    for line in open('data/bobbins.ndjson'):
+        line=line.strip()
+        if not line: continue
+        n+=1
+        b=json.loads(line)
+        material=b.get('functionalDescription',{}).get('material')
+        if isinstance(material,str) and material not in names:
+            bad+=1; first=first or f"'{b.get('name')}': material '{material}' is not an insulation_materials name"
+    status='OK ' if bad==0 else 'FAIL'
+    print(f'  {status} {"bobbins(refs)":18} {n-bad}/{n} resolve' + (f'  e.g. {first}' if bad else ''))
+    return 1 if bad else 0
+
+rc |= validate_bobbin_references()
 sys.exit(rc)
