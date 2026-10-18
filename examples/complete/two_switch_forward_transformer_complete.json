@@ -1180,7 +1180,19 @@
           "numberTurns": 2,
           "numberParallels": 8,
           "isolationSide": "secondary",
-          "wire": "Foil 0.2"
+          "wire": "Foil 0.2",
+          "connections": [
+            {
+              "end": "start",
+              "exit": "axial",
+              "leadConductor": "Round 0.5 - Grade 1"
+            },
+            {
+              "end": "finish",
+              "exit": "axial",
+              "leadConductor": "Round 0.5 - Grade 1"
+            }
+          ]
         }
       ]
     }
